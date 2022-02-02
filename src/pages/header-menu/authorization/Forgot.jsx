@@ -53,6 +53,18 @@ export default function Forgot() {
                 setLoader(true);
                 user.append("email", form.email.trim());
                 user.append("pass", form.repeatPass.trim());
+                // проверка на ввод
+                for (const [name, value] of user) {
+                    console.log(value);
+                    if (value.trim().length === 0) {
+                        setLoader(false);
+                        setIsInvalid({
+                            isInvalid: true,
+                            result: "Введите что-нибудь...",
+                        });
+                        return;
+                    }
+                }
 
                 response = await fetch("http://localhost:5600/login/forgot", {
                     method: "PATCH",

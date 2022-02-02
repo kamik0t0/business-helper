@@ -29,13 +29,31 @@ export default function Login() {
         document.forms.auth.elements.pass.setAttribute("type", "password");
         setIsVisible(!isVisible);
     }
+
+    function isEmpty(str) {
+        return str.length > 0 ? str : false;
+    }
     // обработка запроса авторизации
     async function auth_Handler(event) {
         setLoader(true);
         event.preventDefault();
         const user = new FormData();
+
         user.append("email", form.email.trim());
         user.append("pass", form.pass.trim());
+        // проверка на ввод
+        for (const [name, value] of user) {
+            console.log(value);
+            if (value.trim().length === 0) {
+                setLoader(false);
+                setIsInvalid({
+                    isInvalid: true,
+                    result: "Введите что-нибудь...",
+                });
+                return;
+            }
+        }
+
         try {
             let response = await fetch("http://localhost:5600/login", {
                 method: "POST",

@@ -24,7 +24,18 @@ export default function Registration() {
             const user = new FormData();
             user.append("email", form.email.trim());
             user.append("pass", form.pass.trim());
-            console.log(user);
+            // проверка на ввод
+            for (const [name, value] of user) {
+                console.log(value);
+                if (value.trim().length === 0) {
+                    setLoader(false);
+                    setIsInvalid({
+                        isInvalid: true,
+                        result: "Введите что-нибудь...",
+                    });
+                    return;
+                }
+            }
 
             let response = await fetch(
                 "http://localhost:5600/login/registration",
