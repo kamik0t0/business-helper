@@ -18,6 +18,10 @@ export default function Registration() {
     const dispatch = useDispatch();
     // регистрация
     async function addUser(event) {
+        setIsInvalid({
+            isInvalid: false,
+            result: "",
+        });
         setLoader(true);
         event.preventDefault();
         try {

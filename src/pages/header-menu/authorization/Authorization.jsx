@@ -30,11 +30,12 @@ export default function Login() {
         setIsVisible(!isVisible);
     }
 
-    function isEmpty(str) {
-        return str.length > 0 ? str : false;
-    }
     // обработка запроса авторизации
     async function auth_Handler(event) {
+        setIsInvalid({
+            isInvalid: false,
+            result: "",
+        });
         setLoader(true);
         event.preventDefault();
         const user = new FormData();

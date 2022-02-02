@@ -44,6 +44,10 @@ export default function Forgot() {
 
     // запрос обновления пароля
     async function sendAuthData(event) {
+        setIsInvalid({
+            isInvalid: false,
+            result: "",
+        });
         event.preventDefault();
         try {
             const user = new FormData();
@@ -71,7 +75,6 @@ export default function Forgot() {
                     body: user,
                 });
             } else {
-                console.log("Passwords not match! Try again!");
                 setIsInvalid({
                     isInvalid: true,
                     result: "Пароли не совпадают! Попробуйте снова!",
