@@ -1,0 +1,26 @@
+.loader {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px dashed #f0ebdc;
+    animation: rotate 3s infinite linear;
+    align-self: center;
+    justify-self: center;
+    z-index: 55;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg) scale(1);
+    }
+    to {
+        transform: rotate(360deg) scale(1.4);
+    }
+}
+
+.loader_text {
+    position: relative;
+    left: 46%;
+    transform: translate(0, -50%);
+    margin-top: -50px;
+}

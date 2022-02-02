@@ -1,0 +1,14 @@
+.footer {
+    width: 100%;
+    min-width: 320px;
+    height: 75px;
+    background-color: #465a75;
+    opacity: 1;
+    transition: all 3s ease-in;
+}
+
+@media (max-width: 767px) {
+    .footer {
+        height: 50px;
+    }
+}

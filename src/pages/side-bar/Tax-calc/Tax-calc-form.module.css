@@ -1,0 +1,413 @@
+.content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-line-pack: justify;
+      align-content: space-between;
+  height: 685px;
+  margin: 15px;
+  padding: 15px;
+  background-color: #485a71;
+  overflow: auto;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 1.1em;
+  font-weight: 500;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: #f0ebdc;
+  line-height: 1.3;
+  text-align: justify;
+}
+
+.calcForm {
+  overflow-y: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  height: 685px;
+  margin: 15px;
+  background-color: #485a71;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 15px;
+  font-size: 1.1em;
+  font-weight: 500;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: #f0ebdc;
+  line-height: 1.3;
+  text-align: justify;
+}
+.calcForm .data {
+  -ms-flex-preferred-size: 30%;
+      flex-basis: 30%;
+}
+.calcForm .data .infoData {
+  height: 70px;
+  margin-right: 15px;
+}
+.calcForm .data .inputData {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 130px;
+}
+.calcForm .data .inputData .incomes_block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.calcForm .data .inputData .incomes_block .inputText {
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 1em;
+  font-weight: 300;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: #1e2d42;
+  text-align: center;
+  width: 100px;
+}
+.calcForm .data .inputData .costs_block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.calcForm .data .inputData .costs_block .inputText {
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 1em;
+  font-weight: 300;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: #1e2d42;
+  text-align: center;
+  width: 100px;
+}
+.calcForm .data .inputData .salary_block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.calcForm .data .inputData .salary_block .inputText {
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 1em;
+  font-weight: 300;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: #1e2d42;
+  text-align: center;
+  width: 100px;
+}
+.calcForm .result {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-left: 15px;
+  -ms-flex-preferred-size: 70%;
+      flex-basis: 70%;
+  height: 300px;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 40px;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_header .result_fields_ie_header_name {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_incomes {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 40px;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_incomes .result_fields_name {
+  -ms-flex-preferred-size: 40%;
+      flex-basis: 40%;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_incomes .result_fields_calc {
+  -ms-flex-preferred-size: 15%;
+      flex-basis: 15%;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_costs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 40px;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_costs .result_fields_name {
+  -ms-flex-preferred-size: 40%;
+      flex-basis: 40%;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_costs .result_fields_calc {
+  -ms-flex-preferred-size: 15%;
+      flex-basis: 15%;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_common {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 40px;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_common .result_fields_name {
+  -ms-flex-preferred-size: 40%;
+      flex-basis: 40%;
+}
+.calcForm .result .result_fields_ie .result_fields_ie_common .result_fields_calc {
+  -ms-flex-preferred-size: 15%;
+      flex-basis: 15%;
+}
+.calcForm .result .result_fields_org .result_fields_org_header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 40px;
+}
+.calcForm .result .result_fields_org .result_fields_org_header .result_fields_org_header_name {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.calcForm .result .result_fields_org .result_fields_org_incomes {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 40px;
+}
+.calcForm .result .result_fields_org .result_fields_org_incomes .result_fields_name {
+  -ms-flex-preferred-size: 40%;
+      flex-basis: 40%;
+}
+.calcForm .result .result_fields_org .result_fields_org_incomes .result_fields_calc {
+  -ms-flex-preferred-size: 15%;
+      flex-basis: 15%;
+}
+.calcForm .result .result_fields_org .result_fields_org_costs {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 40px;
+}
+.calcForm .result .result_fields_org .result_fields_org_costs .result_fields_name {
+  -ms-flex-preferred-size: 40%;
+      flex-basis: 40%;
+}
+.calcForm .result .result_fields_org .result_fields_org_costs .result_fields_calc {
+  -ms-flex-preferred-size: 15%;
+      flex-basis: 15%;
+}
+.calcForm .result .result_fields_org .result_fields_org_common {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 40px;
+}
+.calcForm .result .result_fields_org .result_fields_org_common .result_fields_name {
+  -ms-flex-preferred-size: 40%;
+      flex-basis: 40%;
+}
+.calcForm .result .result_fields_org .result_fields_org_common .result_fields_calc {
+  -ms-flex-preferred-size: 15%;
+      flex-basis: 15%;
+}
+
+@media (max-width: 768px) {
+  .calcForm {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -ms-flex-line-pack: justify;
+        align-content: space-between;
+    font-size: 1.3em;
+  }
+  .calcForm .data {
+    -ms-flex-preferred-size: 50%;
+        flex-basis: 50%;
+  }
+  .calcForm .data .inputData {
+    height: auto;
+  }
+  .calcForm .data .inputData .incomes_block {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .calcForm .data .inputData .incomes_block .inputText {
+    font-size: 1em;
+    max-width: 320px;
+    width: 100%;
+    height: 25px;
+  }
+  .calcForm .data .inputData .costs_block {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .calcForm .data .inputData .costs_block .inputText {
+    font-size: 1em;
+    max-width: 320px;
+    width: 100%;
+    height: 25px;
+  }
+  .calcForm .data .inputData .salary_block {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .calcForm .data .inputData .salary_block .inputText {
+    font-size: 1em;
+    max-width: 320px;
+    width: 100%;
+    height: 25px;
+  }
+  .calcForm .result {
+    -ms-flex-preferred-size: 50%;
+        flex-basis: 50%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    margin-left: 10px;
+    -ms-flex-preferred-size: 65%;
+        flex-basis: 65%;
+    height: 300px;
+  }
+  .calcForm .result .result_fields_ie .result_fields_ie_header {
+    height: 70px;
+  }
+  .calcForm .result .result_fields_ie .result_fields_ie_incomes {
+    height: 70px;
+  }
+  .calcForm .result .result_fields_ie .result_fields_ie_costs {
+    height: 70px;
+  }
+  .calcForm .result .result_fields_ie .result_fields_ie_common {
+    height: 70px;
+  }
+  .calcForm .result .result_fields_org .result_fields_org_header {
+    height: 70px;
+  }
+  .calcForm .result .result_fields_org .result_fields_org_incomes {
+    height: 70px;
+  }
+  .calcForm .result .result_fields_org .result_fields_org_costs {
+    height: 70px;
+  }
+  .calcForm .result .result_fields_org .result_fields_org_common {
+    height: 70px;
+  }
+}
+@media (max-width: 320px) {
+  .calcForm .result .result_fields_ie .result_fields_ie_header {
+    height: 90px;
+  }
+  .calcForm .result .result_fields_org .result_fields_org_header {
+    height: 90px;
+  }
+}

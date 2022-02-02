@@ -1,0 +1,130 @@
+.content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-line-pack: justify;
+      align-content: space-between;
+  height: 685px;
+  margin: 15px;
+  padding: 15px;
+  background-color: #485a71;
+  overflow: auto;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 1.1em;
+  font-weight: 500;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: #f0ebdc;
+  line-height: 1.3;
+  text-align: justify;
+}
+
+.waybills_header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.waybills_header .waybills_header_add {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: #f0ebdc;
+  width: 25px;
+  height: 25px;
+  border-radius: 20px;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.waybills_header .waybills_header_add span {
+  position: absolute;
+  width: 15px;
+  height: 2px;
+  background-color: #768ca6;
+}
+.waybills_header .waybills_header_add span::before {
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 2px;
+  left: 0;
+  background-color: #768ca6;
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+.waybills_header .waybills_header_filter {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-preferred-size: 50%;
+      flex-basis: 50%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+.waybills_header .waybills_header_filter .waybills_header_filter_name {
+  font-size: 1.2em;
+}
+.waybills_header .waybills_header_name {
+  -ms-flex-preferred-size: 30%;
+      flex-basis: 30%;
+  font-size: 1.4em;
+  -ms-grid-column-align: center;
+      justify-self: center;
+}
+
+.waybills_list_header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+}
+.waybills_list_header .waybills_list_header_date {
+  text-align: center;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 15%;
+          flex: 0 0 15%;
+  border-right: 1px solid snow;
+}
+.waybills_list_header .waybills_list_header_num {
+  text-align: center;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 25%;
+          flex: 0 0 25%;
+  border-right: 1px solid snow;
+}
+.waybills_list_header .waybills_list_header_ctrpty {
+  text-align: center;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 45%;
+          flex: 0 0 45%;
+  border-right: 1px solid snow;
+}
+.waybills_list_header .waybills_list_header_summ {
+  text-align: center;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 15%;
+          flex: 0 0 15%;
+}

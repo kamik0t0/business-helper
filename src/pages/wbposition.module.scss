@@ -1,0 +1,69 @@
+@mixin border {
+    border-right: 1px solid #f0ebdd;
+    padding: 0 3px 0 3px;
+    height: 25px;
+    text-align: center;
+    margin-top: 4px;
+}
+
+.position {
+    display: flex;
+
+    flex-direction: row;
+    margin-top: 10px;
+
+    .position_number {
+        @include border;
+        width: 5%;
+    }
+    .position_nomenclature {
+        @include border;
+        width: 35%;
+        .position_nomenclature_input {
+            width: 100%;
+        }
+    }
+
+    .position_nomenclature:focus {
+        box-shadow: 5px, 5px, 10px, 5px yellow;
+    }
+
+    .position_quantity {
+        @include border;
+        width: 8%;
+        input {
+            width: 100%;
+        }
+    }
+    .position_price {
+        @include border;
+        width: 15%;
+        input {
+            width: 100%;
+        }
+    }
+    .position_summ {
+        @include border;
+        width: 15%;
+    }
+    .position_NDSprcnt {
+        @include border;
+        width: 5%;
+    }
+
+    .position_NDS {
+        @include border;
+        width: 15%;
+    }
+    .position_total {
+        padding: 0 5px 0 5px;
+        height: 25px;
+        text-align: center;
+        width: 15%;
+        margin-top: 4px;
+    }
+}
+
+.highlight {
+    background-color: #778ca4;
+}

@@ -1,0 +1,32 @@
+@import "./utils/zeroing-style.scss";
+
+.conteiner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    justify-self: center;
+    max-width: 1170px;
+    margin: 0 auto 0 auto;
+}
+
+@media (max-width: 1170px) {
+    .conteiner {
+        min-width: 970px;
+    }
+}
+
+@media (max-width: 992px) {
+    .conteiner {
+        min-width: 750px;
+    }
+}
+
+@media (max-width: 767px) {
+    body.lock {
+        overflow: hidden;
+    }
+    .conteiner {
+        max-width: none;
+        min-width: 320px;
+    }
+}

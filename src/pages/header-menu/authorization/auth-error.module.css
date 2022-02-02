@@ -1,0 +1,21 @@
+.wrong {
+  border-bottom: 1px solid red;
+}
+
+.login_incorrect {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  color: red;
+  font-size: 1em;
+  font-weight: bold;
+  max-width: 90%;
+  text-align: center;
+}
+
+.login_incorrect_none {
+  display: none;
+}

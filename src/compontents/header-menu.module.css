@@ -1,0 +1,90 @@
+.header_menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-preferred-size: 8%;
+      flex-basis: 8%;
+}
+.header_menu .header_option .link {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: center;
+  font-weight: 500;
+  color: #0d1320;
+  font-size: 1.2em;
+  text-decoration: underline;
+}
+.header_menu .header_option .link:visited {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: center;
+  font-weight: 500;
+  color: #0d1320;
+  font-size: 1.2em;
+  color: #0d1320;
+}
+.header_menu .header_option .link:hover {
+  font-weight: bold;
+}
+
+@media (max-width: 1170px) {
+  .header_menu {
+    margin-right: 10%;
+  }
+}
+@media (max-width: 992px) {
+  .header_menu {
+    margin-right: 6%;
+  }
+}
+@media (max-width: 767px) {
+  .header_menu {
+    z-index: 1;
+    position: fixed;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    background-color: #304157;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    display: block;
+    margin-top: 50px;
+    overflow: auto;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    text-align: center;
+  }
+  .header_menu .header_option {
+    margin-top: 20px;
+  }
+  .header_menu .header_option .link {
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    text-align: center;
+    font-weight: 500;
+    color: #0d1320;
+    font-size: 1.2em;
+    font-size: 1.4em;
+    color: #f0ebda;
+  }
+  .header_menu .header_option .link:visited {
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    text-align: center;
+    font-weight: 500;
+    color: #0d1320;
+    font-size: 1.2em;
+    color: #f0ebda;
+  }
+
+  .header_menu.active {
+    height: 100%;
+    top: 0;
+    z-index: 1;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+}

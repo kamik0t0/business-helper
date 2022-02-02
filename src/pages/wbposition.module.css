@@ -1,0 +1,90 @@
+.position {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  margin-top: 10px;
+}
+.position .position_number {
+  border-right: 1px solid #f0ebdd;
+  padding: 0 3px 0 3px;
+  height: 25px;
+  text-align: center;
+  margin-top: 4px;
+  width: 5%;
+}
+.position .position_nomenclature {
+  border-right: 1px solid #f0ebdd;
+  padding: 0 3px 0 3px;
+  height: 25px;
+  text-align: center;
+  margin-top: 4px;
+  width: 35%;
+}
+.position .position_nomenclature .position_nomenclature_input {
+  width: 100%;
+}
+.position .position_nomenclature:focus {
+  -webkit-box-shadow: 5px, 5px, 10px, 5px yellow;
+          box-shadow: 5px, 5px, 10px, 5px yellow;
+}
+.position .position_quantity {
+  border-right: 1px solid #f0ebdd;
+  padding: 0 3px 0 3px;
+  height: 25px;
+  text-align: center;
+  margin-top: 4px;
+  width: 8%;
+}
+.position .position_quantity input {
+  width: 100%;
+}
+.position .position_price {
+  border-right: 1px solid #f0ebdd;
+  padding: 0 3px 0 3px;
+  height: 25px;
+  text-align: center;
+  margin-top: 4px;
+  width: 15%;
+}
+.position .position_price input {
+  width: 100%;
+}
+.position .position_summ {
+  border-right: 1px solid #f0ebdd;
+  padding: 0 3px 0 3px;
+  height: 25px;
+  text-align: center;
+  margin-top: 4px;
+  width: 15%;
+}
+.position .position_NDSprcnt {
+  border-right: 1px solid #f0ebdd;
+  padding: 0 3px 0 3px;
+  height: 25px;
+  text-align: center;
+  margin-top: 4px;
+  width: 5%;
+}
+.position .position_NDS {
+  border-right: 1px solid #f0ebdd;
+  padding: 0 3px 0 3px;
+  height: 25px;
+  text-align: center;
+  margin-top: 4px;
+  width: 15%;
+}
+.position .position_total {
+  padding: 0 5px 0 5px;
+  height: 25px;
+  text-align: center;
+  width: 15%;
+  margin-top: 4px;
+}
+
+.highlight {
+  background-color: #778ca4;
+}

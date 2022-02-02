@@ -1,0 +1,53 @@
+@import "../../utils/content-frame.scss";
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    height: 135px;
+    justify-content: center;
+    margin-bottom: 25px;
+
+    .info_item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .info_value {
+            flex: 0 0 80%;
+            justify-self: center;
+            font-size: 1.2em;
+        }
+    }
+}
+
+.noorg {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    height: 90px;
+    font-size: 2em;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.buttons:hover {
+    cursor: pointer;
+}
+
+.link {
+    text-decoration: underline;
+}
+
+.link:visited {
+    color: #f0ebdd;
+}

@@ -1,0 +1,132 @@
+// @mixin incorrect {
+//     display: flex;
+//     align-self: center;
+//     color: red;
+//     font-size: 1em;
+//     font-weight: bold;
+//     max-width: 90%;
+//     text-align: center;
+// }
+@import "../../../utils/content-frame.scss";
+
+.login {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 685px;
+    margin: 15px;
+    padding: 15px;
+    background-color: #485a71;
+    overflow: auto;
+
+    color: #f0ebdc;
+
+    .login_frame {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: space-around;
+        height: 100%;
+        min-width: 50%;
+        max-width: 50%;
+        background-color: #f0ebdd;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+            sans-serif;
+
+        .login_header {
+            color: #495a6f;
+            font-size: 1.5em;
+            font-weight: normal;
+            align-self: center;
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+        .login_auth {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 200px;
+
+            .login_auth_user {
+                display: flex;
+                justify-content: start;
+                margin-left: 40px;
+                .login_auth_user_icon {
+                    background: url("../pic/login_small.png") no-repeat;
+                    width: 22px;
+                    height: 24px;
+                }
+                .login_auth_user_input {
+                    width: 70%;
+                    border-bottom: 1px solid #bdbbb7;
+                    background-color: #f0ebde;
+                    margin: 10px;
+                    font-size: 1.1em;
+                }
+
+                .wrong {
+                    border-bottom: 1px solid red;
+                }
+            }
+            .login_auth_pass {
+                display: flex;
+                justify-content: start;
+                margin-left: 40px;
+                .login_auth_pass_icon {
+                    background: url("../pic/pass_small.png") no-repeat;
+                    width: 24px;
+                    height: 24px;
+                }
+                .login_auth_pass_input {
+                    width: 70%;
+                    border-bottom: 1px solid #bdbbb7;
+                    background-color: #f0ebde;
+                    margin: 10px;
+                    font-size: 1.1em;
+                }
+                .login_auth_pass_eye {
+                    background: url("../pic/eye-small.png") no-repeat;
+                    width: 24px;
+                    height: 24px;
+                }
+                .login_auth_pass_eye_close {
+                    background: url("../pic/eye-close-small.png") no-repeat;
+                    width: 24px;
+                    height: 24px;
+                }
+                .wrong {
+                    border-bottom: 1px solid red;
+                }
+            }
+
+            .login_auth_enter {
+                width: 85%;
+                height: 35px;
+                background-color: #495a6f;
+                color: #f0ebde;
+                margin: 0 auto 0 auto;
+                font-size: 1.2em;
+                text-transform: uppercase;
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            }
+            .login_auth_enter:hover {
+                cursor: pointer;
+            }
+        }
+        .login_reg {
+            display: flex;
+            flex-direction: column;
+            color: #758ca8;
+            text-decoration: underline;
+            justify-content: space-between;
+            height: 50px;
+            margin-left: 20px;
+
+            .login_reg_forgot:hover {
+                cursor: pointer;
+            }
+            .login_reg_registration:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}
