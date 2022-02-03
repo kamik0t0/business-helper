@@ -18,9 +18,8 @@ export default function Registration() {
     const dispatch = useDispatch();
     // регистрация
     async function addUser(event) {
-        setIsInvalid({
-            isInvalid: false,
-            result: "",
+        setIsInvalid((prev) => {
+            return { ...prev, isInvalid: false };
         });
         setLoader(true);
         event.preventDefault();
@@ -33,9 +32,11 @@ export default function Registration() {
                 console.log(value);
                 if (value.trim().length === 0) {
                     setLoader(false);
-                    setIsInvalid({
-                        isInvalid: true,
-                        result: "Введите что-нибудь...",
+                    setIsInvalid(() => {
+                        return {
+                            isInvalid: true,
+                            result: "Введите что-нибудь...",
+                        };
                     });
                     return;
                 }

@@ -32,9 +32,8 @@ export default function Login() {
 
     // обработка запроса авторизации
     async function auth_Handler(event) {
-        setIsInvalid({
-            isInvalid: false,
-            result: "",
+        setIsInvalid((prev) => {
+            return { ...prev, isInvalid: false };
         });
         setLoader(true);
         event.preventDefault();
@@ -47,9 +46,11 @@ export default function Login() {
             console.log(value);
             if (value.trim().length === 0) {
                 setLoader(false);
-                setIsInvalid({
-                    isInvalid: true,
-                    result: "Введите что-нибудь...",
+                setIsInvalid(() => {
+                    return {
+                        isInvalid: true,
+                        result: "Введите что-нибудь...",
+                    };
                 });
                 return;
             }

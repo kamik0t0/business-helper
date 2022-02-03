@@ -44,9 +44,8 @@ export default function Forgot() {
 
     // запрос обновления пароля
     async function sendAuthData(event) {
-        setIsInvalid({
-            isInvalid: false,
-            result: "",
+        setIsInvalid((prev) => {
+            return { ...prev, isInvalid: false };
         });
         event.preventDefault();
         try {
@@ -62,9 +61,11 @@ export default function Forgot() {
                     console.log(value);
                     if (value.trim().length === 0) {
                         setLoader(false);
-                        setIsInvalid({
-                            isInvalid: true,
-                            result: "Введите что-нибудь...",
+                        setIsInvalid(() => {
+                            return {
+                                isInvalid: true,
+                                result: "Введите что-нибудь...",
+                            };
                         });
                         return;
                     }
