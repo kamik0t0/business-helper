@@ -70,10 +70,14 @@ export default function Forgot() {
                     }
                 }
 
-                response = await fetch("http://localhost:5600/login/forgot", {
-                    method: "PATCH",
-                    body: user,
-                });
+                response = await fetch(
+                    // "http://localhost:5600/login/forgot",
+                    "https://deploy-test-business-assist.herokuapp.com/login/forgot",
+                    {
+                        method: "PATCH",
+                        body: user,
+                    }
+                );
             } else {
                 setIsInvalid({
                     isInvalid: true,

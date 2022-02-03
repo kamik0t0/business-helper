@@ -14,14 +14,16 @@ export default function App() {
 
     useEffect(() => {
         authFetching(
-            "http://localhost:5600/",
+            // "http://localhost:5600/",
+            "https://deploy-test-business-assist.herokuapp.com",
             dispatch,
             localStorage.getItem("token")
         );
 
         const interval = setInterval(async () => {
             await authFetching(
-                "http://localhost:5600/",
+                // "http://localhost:5600/",
+                "https://deploy-test-business-assist.herokuapp.com",
                 dispatch,
                 localStorage.getItem("token")
             );

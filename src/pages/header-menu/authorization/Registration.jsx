@@ -42,7 +42,8 @@ export default function Registration() {
             }
 
             let response = await fetch(
-                "http://localhost:5600/login/registration",
+                // "http://localhost:5600/login/registration",
+                "https://deploy-test-business-assist.herokuapp.com/login/registration",
                 {
                     method: "POST",
                     body: user,

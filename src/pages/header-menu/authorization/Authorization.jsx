@@ -56,10 +56,14 @@ export default function Login() {
         }
 
         try {
-            let response = await fetch("http://localhost:5600/login", {
-                method: "POST",
-                body: user,
-            });
+            let response = await fetch(
+                // "http://localhost:5600/login",
+                "https://deploy-test-business-assist.herokuapp.com/login",
+                {
+                    method: "POST",
+                    body: user,
+                }
+            );
 
             let result = await response.json();
             if (result.auth) {
@@ -101,9 +105,12 @@ export default function Login() {
                                 .then(
                                     async () =>
                                         await getMyOrgsFromDB(
-                                            `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                                            `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
                                                 "UserId"
                                             )}`
+                                            // `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                                            //     "UserId"
+                                            // )}`
                                         )
                                 )
                                 .then(async () => await isOrgBelongsUser())
