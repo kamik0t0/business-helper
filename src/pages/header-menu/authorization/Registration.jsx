@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import classes from "./auth.module.css";
 import { Link, Navigate } from "react-router-dom";
 import AuthError from "./Auth-error.jsx";
@@ -8,7 +8,6 @@ import MyInput from "../../../utils/input/MyInput.jsx";
 
 export default function Registration() {
     const [isVisible, setIsVisible] = useState(false);
-    const [form, setForm] = useState({ email: "", pass: "" });
     const [isReg, setIsReg] = useState(false);
     const [isInvalid, setIsInvalid] = useState({
         isInvalid: false,
@@ -16,6 +15,9 @@ export default function Registration() {
     });
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
+
+    let email = useRef();
+    let pass = useRef();
     // регистрация
     async function addUser(event) {
         setIsInvalid((prev) => {
@@ -23,25 +25,23 @@ export default function Registration() {
         });
         setLoader(true);
         event.preventDefault();
-        try {
-            const user = new FormData();
-            user.append("email", form.email.trim());
-            user.append("pass", form.pass.trim());
-            // проверка на ввод
-            for (const [name, value] of user) {
-                console.log(value);
-                if (value.trim().length === 0) {
-                    setLoader(false);
-                    setIsInvalid(() => {
-                        return {
-                            isInvalid: true,
-                            result: "Введите что-нибудь...",
-                        };
-                    });
-                    return;
-                }
-            }
 
+        const user = new FormData();
+        user.append("email", email.current.trim());
+        user.append("pass", pass.current.trim());
+        // проверка на ввод
+        for (const [name, value] of user) {
+            if (value.trim().length === 0) {
+                setLoader(false);
+                setIsInvalid({
+                    isInvalid: true,
+                    result: "Введите что-нибудь...",
+                });
+                return;
+            }
+        }
+
+        try {
             let response = await fetch(
                 // "http://localhost:5600/login/registration",
                 "https://deploy-test-business-assist.herokuapp.com/login/registration",
@@ -52,21 +52,37 @@ export default function Registration() {
             );
 
             let result = await response.json();
-
-            // если registered = true
+            console.log(result);
             if (result.registered) {
                 // ... статус в локальном стейте меняется на зарегистрированный и перенаправляется на страницу авторизации
                 setIsReg(true);
                 console.log(result.message);
             } else {
                 setLoader(false);
-                setIsInvalid({ isInvalid: true, result: result.message });
+                if (typeof result.message === "object") {
+                    dispatch({
+                        type: "isERROR_TRUE",
+                        payload: true,
+                        message: result.message.code,
+                    });
+                } else {
+                    setIsInvalid({
+                        isInvalid: true,
+                        result: result.message,
+                    });
+                }
+
                 console.log(result.message);
             }
         } catch (error) {
+            // если запрос не проходит
+            console.log("Reg Error", error);
             setLoader(false);
-            dispatch({ type: "isERROR_TRUE", payload: true });
-            console.log("No connection to server.");
+            dispatch({
+                type: "isERROR_TRUE",
+                payload: true,
+                message: "No connection to server",
+            });
         }
     }
 
@@ -104,12 +120,11 @@ export default function Registration() {
                                             }
                                         ></div>
                                         <input
-                                            onChange={(event) =>
-                                                setForm({
-                                                    ...form,
-                                                    email: event.target.value,
-                                                })
-                                            }
+                                            defaultValue={email.current}
+                                            onChange={(event) => {
+                                                email.current =
+                                                    event.target.value;
+                                            }}
                                             name="email"
                                             type="email"
                                             className={
@@ -129,12 +144,11 @@ export default function Registration() {
                                             }
                                         ></div>
                                         <input
-                                            onChange={(event) =>
-                                                setForm({
-                                                    ...form,
-                                                    pass: event.target.value,
-                                                })
-                                            }
+                                            defaultValue={pass.current}
+                                            onChange={(event) => {
+                                                pass.current =
+                                                    event.target.value;
+                                            }}
                                             name="pass"
                                             type="password"
                                             className={

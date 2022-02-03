@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import classes from "./auth.module.css";
 import { Link, Navigate } from "react-router-dom";
 import AuthError from "./Auth-error.jsx";
@@ -8,11 +8,6 @@ import MyInput from "../../../utils/input/MyInput.jsx";
 
 export default function Forgot() {
     const [isVisible, setIsVisible] = useState(false);
-    const [form, setForm] = useState({
-        email: "",
-        newPass: "",
-        repeatPass: "",
-    });
     const [isRecover, setIsRecover] = useState(false);
     const [isInvalid, setIsInvalid] = useState({
         isInvalid: false,
@@ -20,6 +15,10 @@ export default function Forgot() {
     });
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
+
+    let email = useRef();
+    let newPass = useRef();
+    let repeatPass = useRef();
 
     function showPass() {
         document.forms.auth.elements.new_password.setAttribute("type", "text");
@@ -43,66 +42,75 @@ export default function Forgot() {
     }
 
     // запрос обновления пароля
-    async function sendAuthData(event) {
+    async function forgot(event) {
         setIsInvalid((prev) => {
             return { ...prev, isInvalid: false };
         });
+        setLoader(true);
         event.preventDefault();
-        try {
-            const user = new FormData();
-            const passCompare = form.newPass.localeCompare(form.repeatPass);
-            let response;
-            if (passCompare === 0) {
-                setLoader(true);
-                user.append("email", form.email.trim());
-                user.append("pass", form.repeatPass.trim());
-                // проверка на ввод
-                for (const [name, value] of user) {
-                    console.log(value);
-                    if (value.trim().length === 0) {
-                        setLoader(false);
-                        setIsInvalid(() => {
-                            return {
-                                isInvalid: true,
-                                result: "Введите что-нибудь...",
-                            };
-                        });
-                        return;
-                    }
-                }
+        // проверка идентичности введенных паролей
+        if (newPass.current.localeCompare(repeatPass.current) !== 0) {
+            setLoader(false);
+            setIsInvalid({ isInvalid: true, result: "Пароли не совпадают!" });
 
-                response = await fetch(
-                    // "http://localhost:5600/login/forgot",
-                    "https://deploy-test-business-assist.herokuapp.com/login/forgot",
-                    {
-                        method: "PATCH",
-                        body: user,
-                    }
-                );
-            } else {
+            return;
+        }
+
+        const user = new FormData();
+        user.append("email", email.current.trim());
+        user.append("pass", repeatPass.current.trim());
+
+        for (const [name, value] of user) {
+            if (value.trim().length === 0) {
+                setLoader(false);
                 setIsInvalid({
                     isInvalid: true,
-                    result: "Пароли не совпадают! Попробуйте снова!",
+                    result: "Введите что-нибудь...",
                 });
                 return;
             }
+        }
+        try {
+            let response = await fetch(
+                // "http://localhost:5600/login/forgot",
+                "https://deploy-test-business-assist.herokuapp.com/login/forgot",
+                {
+                    method: "PATCH",
+                    body: user,
+                }
+            );
 
             let result = await response.json();
-
-            // если registered = true
+            console.log(result);
             if (result.updated) {
                 // ... статус в локальном стейте меняется на зарегистрированный и перенаправляется на страницу авторизации
                 setIsRecover(true);
                 console.log(result.message);
             } else {
                 setLoader(false);
-                setIsInvalid({ isInvalid: true, result: result.message });
+                if (typeof result.message === "object") {
+                    dispatch({
+                        type: "isERROR_TRUE",
+                        payload: true,
+                        message: result.message.code,
+                    });
+                } else {
+                    setIsInvalid({
+                        isInvalid: true,
+                        result: result.message,
+                    });
+                }
                 console.log(result.message);
             }
         } catch (error) {
+            // если запрос не проходит
+            console.log("Recover Error", error);
             setLoader(false);
-            dispatch({ type: "isERROR_TRUE", payload: true });
-            console.log("No connection to server/");
+            dispatch({
+                type: "isERROR_TRUE",
+                payload: true,
+                message: "No connection to server",
+            });
         }
     }
     return (
@@ -113,7 +121,7 @@ export default function Forgot() {
             ) : (
                 <div className={classes.login}>
                     <form
-                        onSubmit={sendAuthData}
+                        onSubmit={forgot}
                         name="auth"
                         className={classes.login_frame}
                     >
@@ -136,12 +144,10 @@ export default function Forgot() {
                                         className={classes.login_auth_user_icon}
                                     ></div>
                                     <input
-                                        onChange={(event) =>
-                                            setForm({
-                                                ...form,
-                                                email: event.target.value,
-                                            })
-                                        }
+                                        defaultValue={email.current}
+                                        onChange={(event) => {
+                                            email.current = event.target.value;
+                                        }}
                                         name="email"
                                         type="email"
                                         className={
@@ -159,12 +165,11 @@ export default function Forgot() {
                                         className={classes.login_auth_pass_icon}
                                     ></div>
                                     <input
-                                        onChange={(event) =>
-                                            setForm({
-                                                ...form,
-                                                newPass: event.target.value,
-                                            })
-                                        }
+                                        defaultValue={newPass.current}
+                                        onChange={(event) => {
+                                            newPass.current =
+                                                event.target.value;
+                                        }}
                                         name="new_password"
                                         type="password"
                                         className={
@@ -191,12 +196,11 @@ export default function Forgot() {
                                         className={classes.login_auth_pass_icon}
                                     ></div>
                                     <input
-                                        onChange={(event) =>
-                                            setForm({
-                                                ...form,
-                                                repeatPass: event.target.value,
-                                            })
-                                        }
+                                        defaultValue={repeatPass.current}
+                                        onChange={(event) => {
+                                            repeatPass.current =
+                                                event.target.value;
+                                        }}
                                         name="repeat_password"
                                         type="password"
                                         className={

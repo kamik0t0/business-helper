@@ -10,6 +10,7 @@ import Error from "./UI/Error/Error.jsx";
 
 export default function App() {
     const isError = useSelector((state) => state.errorReducer.isError);
+    const message = useSelector((state) => state.errorReducer.message);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -23,13 +24,11 @@ export default function App() {
         const interval = setInterval(async () => {
             await authFetching(
                 // "http://localhost:5600/",
-                // "http://localhost:5600/",
-                // "http://localhost:5600/",
                 "https://deploy-test-business-assist.herokuapp.com",
                 dispatch,
                 localStorage.getItem("token")
             );
-        }, 300000);
+        }, 600000);
         return () => clearInterval(interval);
     });
 
@@ -40,7 +39,7 @@ export default function App() {
                     <BrowserRouter>
                         <Header />
                         <Content />
-                        {isError ? <Error /> : <Footer />}
+                        {isError ? <Error message={message} /> : <Footer />}
                     </BrowserRouter>
                 </div>
             </div>

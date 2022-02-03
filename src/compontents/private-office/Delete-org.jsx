@@ -23,12 +23,12 @@ export default function DeleteOrg({ setActive, org, setOrg }) {
                 console.log(result.message);
                 localStorage.removeItem("currentOrg");
                 await getMyOrgsFromDB(
-                    `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
-                        "UserId"
-                    )}`
-                    // `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                    // `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
                     //     "UserId"
                     // )}`
+                    `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                        "UserId"
+                    )}`
                 );
             } else {
                 console.log(result.message);
@@ -42,7 +42,11 @@ export default function DeleteOrg({ setActive, org, setOrg }) {
             setLoader(false);
         } catch (error) {
             setLoader(false);
-            dispatch({ type: "isERROR_TRUE", payload: true });
+            dispatch({
+                type: "isERROR_TRUE",
+                payload: true,
+                message: "No connection to server",
+            });
             dispatch({ type: "REG_FALSE", payload: false });
             setActive(false);
             console.log("No connection to server");

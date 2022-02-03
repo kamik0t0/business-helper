@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import classes from "./error.module.css";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function Error() {
+export default function Error({ message }) {
     const isError = useSelector((state) => state.errorReducer.isError);
     const dispatch = useDispatch();
 
@@ -25,7 +25,7 @@ export default function Error() {
         <>
             {isError && (
                 <div id="error" className={classes.error}>
-                    Нет соединения с сервером
+                    {message}
                 </div>
             )}
         </>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import classes from "./auth.module.css";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,6 @@ import MyInput from "../../../utils/input/MyInput.jsx";
 
 export default function Login() {
     const [isVisible, setIsVisible] = useState(false);
-    const [form, setForm] = useState({ email: "", pass: "" });
     const isAuth = useSelector((state) => state.authReducer.isAuth);
     const [isInvalid, setIsInvalid] = useState({
         isInvalid: false,
@@ -18,6 +17,9 @@ export default function Login() {
     });
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
+
+    let email = useRef();
+    let pass = useRef();
 
     // Показать пароль
     function showPass() {
@@ -31,26 +33,23 @@ export default function Login() {
     }
 
     // обработка запроса авторизации
-    async function auth_Handler(event) {
+    async function auth(event) {
         setIsInvalid((prev) => {
             return { ...prev, isInvalid: false };
         });
         setLoader(true);
         event.preventDefault();
-        const user = new FormData();
 
-        user.append("email", form.email.trim());
-        user.append("pass", form.pass.trim());
+        const user = new FormData();
+        user.set("email", email.current.trim());
+        user.set("pass", pass.current.trim());
         // проверка на ввод
         for (const [name, value] of user) {
-            console.log(value);
             if (value.trim().length === 0) {
                 setLoader(false);
-                setIsInvalid(() => {
-                    return {
-                        isInvalid: true,
-                        result: "Введите что-нибудь...",
-                    };
+                setIsInvalid({
+                    isInvalid: true,
+                    result: "Введите что-нибудь...",
                 });
                 return;
             }
@@ -67,20 +66,38 @@ export default function Login() {
             );
 
             let result = await response.json();
+            console.log(result);
             if (result.auth) {
                 // статус пользователя меняется на авторизованный
                 dispatch({ type: "REG_TRUE", payload: true });
-                return [result, form];
+                return result;
             } else {
                 setLoader(false);
-                setIsInvalid({ isInvalid: true, result: result.message });
-                console.log(result.message);
+                // запрос может пройти, но БД может ограничивать количество обращений за единицу времени и это приведет к ошибке. В этом случае получим объект result.message
+                if (typeof result.message === "object") {
+                    // в поле code содержится код ошибки
+                    dispatch({
+                        type: "isERROR_TRUE",
+                        payload: true,
+                        message: result.message.code,
+                    });
+                } else {
+                    setIsInvalid({
+                        isInvalid: true,
+                        result: "Неправильный пароль или email.",
+                    });
+                }
                 return false;
             }
         } catch (error) {
+            // если запрос не проходит
+            console.log("Auth Error", error);
             setLoader(false);
-            dispatch({ type: "isERROR_TRUE", payload: true });
-            console.log("No connection to server");
+            dispatch({
+                type: "isERROR_TRUE",
+                payload: true,
+                message: "No connection to server",
+            });
         }
     }
 
@@ -93,12 +110,15 @@ export default function Login() {
                 <div className={classes.login}>
                     <form
                         onSubmit={async (event) =>
-                            await auth_Handler(event)
-                                .then(([result, form]) => {
+                            await auth(event)
+                                .then((result) => {
                                     // устанавливаем токен
                                     localStorage.setItem("token", result.token);
                                     // email
-                                    localStorage.setItem("email", form.email);
+                                    localStorage.setItem(
+                                        "email",
+                                        email.current
+                                    );
                                     // вспомогательный флаг для сессии
                                     localStorage.setItem("session", true);
                                     localStorage.setItem("UserId", result.id);
@@ -141,11 +161,9 @@ export default function Login() {
                                         className={classes.login_auth_user_icon}
                                     ></div>
                                     <input
+                                        defaultValue={email.current}
                                         onChange={(event) => {
-                                            setForm({
-                                                ...form,
-                                                email: event.target.value,
-                                            });
+                                            email.current = event.target.value;
                                         }}
                                         name="email"
                                         type="email"
@@ -164,11 +182,9 @@ export default function Login() {
                                         className={classes.login_auth_pass_icon}
                                     ></div>
                                     <input
+                                        defaultValue={pass.current}
                                         onChange={(event) => {
-                                            setForm({
-                                                ...form,
-                                                pass: event.target.value,
-                                            });
+                                            pass.current = event.target.value;
                                         }}
                                         name="pass"
                                         type="password"

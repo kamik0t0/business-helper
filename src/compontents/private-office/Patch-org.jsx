@@ -89,7 +89,11 @@ export default function PatchOrg({ setActive, org, isORG, setOrg }) {
             }
         } catch (error) {
             setLoader(false);
-            dispatch({ type: "isERROR_TRUE", payload: true });
+            dispatch({
+                type: "isERROR_TRUE",
+                payload: true,
+                message: "No connection to server",
+            });
             dispatch({ type: "REG_FALSE", payload: false });
             setActive(false);
             console.log("no connection to server");

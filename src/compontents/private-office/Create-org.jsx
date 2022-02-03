@@ -61,25 +61,25 @@ export default function CreateOrg({ setActive, setOrg }) {
                     `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
                         "UserId"
                     )}`
-                )
-                    .then(() => {
-                        localStorage.setItem(
-                            "currentOrg",
-                            JSON.stringify(orgType)
-                        );
-                        setOrg(JSON.parse(localStorage.getItem("currentOrg")));
-                    })
-                    .then(() => {
-                        // очистка полей ввода
-                        clear(orgType.orgname);
-                        setLoader(false);
-                        setActive(false);
-                        // закрываем модальное окно
-                    });
+                );
+                // установили текущую организацию
+                let [currentOrg] = JSON.parse(
+                    localStorage.getItem("orgs")
+                ).filter((object) => object.orgname === orgType.orgname);
+                localStorage.setItem("currentOrg", JSON.stringify(currentOrg));
+
+                setOrg(JSON.parse(localStorage.getItem("currentOrg")));
+                clear(orgType.orgname);
+                setLoader(false);
+                setActive(false);
             }
         } catch (error) {
             setLoader(false);
-            dispatch({ type: "isERROR_TRUE", payload: true });
+            dispatch({
+                type: "isERROR_TRUE",
+                payload: true,
+                message: "No connection to server",
+            });
             dispatch({ type: "REG_FALSE", payload: false });
             setActive(false);
             console.log("No connection to server");

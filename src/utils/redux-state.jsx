@@ -28,15 +28,16 @@ function authReducer(state = REGSTATE, action) {
 
 const ERROR = {
     isError: false,
+    message: "",
 };
 
 function errorReducer(state = ERROR, action) {
     switch (action.type) {
         case "isERROR_TRUE":
-            return { isError: action.payload };
+            return { isError: action.payload, message: action.message };
 
         case "isERROR_FALSE":
-            return { isError: action.payload };
+            return { isError: action.payload, message: action.message };
         default:
             return state;
     }
