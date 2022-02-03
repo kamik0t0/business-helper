@@ -37,11 +37,15 @@ export default function CreateOrg({ setActive, setOrg }) {
         }
         try {
             // отправка запроса
-            let response = await fetch("http://localhost:5600/private", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(orgType),
-            });
+            let response = await fetch(
+                // "http://localhost:5600/private",
+                "https://deploy-test-business-assist.herokuapp.com/private",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(orgType),
+                }
+            );
             // получение ответа
             let result = await response.json();
             console.log(result);
@@ -51,7 +55,10 @@ export default function CreateOrg({ setActive, setOrg }) {
                 delete orgType.email;
                 // заружаем список организаций из БД (только наименования)
                 await getMyOrgsFromDB(
-                    `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                    // `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                    //     "UserId"
+                    // )}`
+                    `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
                         "UserId"
                     )}`
                 )

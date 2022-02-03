@@ -59,11 +59,15 @@ export default function PatchOrg({ setActive, org, isORG, setOrg }) {
                 delete Updated.current[prop];
         }
         try {
-            let response = await fetch("http://localhost:5600/private", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(Updated.current),
-            });
+            let response = await fetch(
+                "https://deploy-test-business-assist.herokuapp.com/private",
+                // "http://localhost:5600/private",
+                {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(Updated.current),
+                }
+            );
 
             let result = await response.json();
             console.log(result);
@@ -71,9 +75,12 @@ export default function PatchOrg({ setActive, org, isORG, setOrg }) {
             if (result.updated) {
                 // заружаем список организаций из БД
                 await getMyOrgsFromDB(
-                    `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                    `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
                         "UserId"
                     )}`
+                    // `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                    //     "UserId"
+                    // )}`
                 );
                 chooseOrg(org.id);
                 setOrg(JSON.parse(localStorage.getItem("currentOrg")));

@@ -23,9 +23,12 @@ export default function DeleteOrg({ setActive, org, setOrg }) {
                 console.log(result.message);
                 localStorage.removeItem("currentOrg");
                 await getMyOrgsFromDB(
-                    `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                    `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
                         "UserId"
                     )}`
+                    // `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                    //     "UserId"
+                    // )}`
                 );
             } else {
                 console.log(result.message);
@@ -68,7 +71,8 @@ export default function DeleteOrg({ setActive, org, setOrg }) {
                             <MyButton
                                 onClick={() =>
                                     deleteOrg(
-                                        `http://localhost:5600/private/?orgname=${org.orgname}`
+                                        `https://deploy-test-business-assist.herokuapp.com/private/?orgname=${org.orgname}`
+                                        // `http://localhost:5600/private/?orgname=${org.orgname}`
                                     )
                                 }
                             >
