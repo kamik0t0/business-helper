@@ -10,7 +10,16 @@ export default function Modal({ active, setActive, children, size }) {
                         ? classes.modal + " " + classes.active
                         : classes.modal
                 }
-                onClick={() => setActive(false)}
+                // onClick={() => {
+                //     setActive((prev) => {
+                //         return { ...prev, show: false };
+                //     });
+                //     setTimeout(() => {
+                //         setActive((prev) => {
+                //             return { ...prev, add: false };
+                //         });
+                //     }, 0);
+                // }}
             >
                 <div
                     style={size}

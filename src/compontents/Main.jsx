@@ -4,7 +4,7 @@ import classes from "./main.module.css";
 
 export default function Main() {
     return (
-        <div className={classes.main}>
+        <div id="main" className={classes.main}>
             {/* В этот компонент открываются страницы */}
             <AppRouter classes={classes} />
         </div>

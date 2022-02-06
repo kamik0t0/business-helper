@@ -1,8 +1,33 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import classes from "./my-input.module.css";
 
 const MyInput = React.forwardRef(
-    ({ name, field, type, getValue, style, ...props }, ref) => {
+    (
+        {
+            name,
+            field,
+            prevValue,
+            type,
+            getValue,
+            style,
+            length,
+            isNumber,
+            ...props
+        },
+        ref
+    ) => {
+        const [error, setError] = useState(false);
+        // Валидация ввода числовых значений
+        function check() {
+            let input = document.getElementById(field + prevValue);
+            if (!isNumber) return;
+            input.value = input.value.replace(/[^0-9]/g, "");
+            if (input.value.length === length) {
+                setError(false);
+            } else {
+                setError(true);
+            }
+        }
         return (
             <>
                 <div className={classes.fields__item}>
@@ -17,6 +42,9 @@ const MyInput = React.forwardRef(
                     )}
 
                     <input
+                        id={field + prevValue}
+                        maxLength={length}
+                        minLength={length}
                         style={style}
                         ref={ref}
                         className={
@@ -24,10 +52,15 @@ const MyInput = React.forwardRef(
                                 ? classes.fields__item_input +
                                   " " +
                                   classes.sumbit
+                                : error && isNumber
+                                ? classes.fields__item_input +
+                                  " " +
+                                  classes.error
                                 : classes.fields__item_input
                         }
                         type={`${type}`}
-                        onChange={(event) => getValue(event, field)}
+                        onInput={check}
+                        onChange={(event) => getValue(event, field, length)}
                         {...props}
                     />
                 </div>

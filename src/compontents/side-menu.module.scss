@@ -1,28 +1,24 @@
 .side {
-    width: 22%;
-    height: 730px;
-    background-color: #758ca8;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
-    align-self: flex-start;
+    flex: 1 1 14%;
+    border-right: 1px dashed white;
+    padding-top: 15px;
 
     .menu {
         display: flex;
         margin-top: 15%;
-        height: 40px;
-        width: 80%;
-        background-color: #f0ebda;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        font-size: 1.1em;
-        font-weight: 700;
+        height: 20px;
+
+        font-size: 1.3em;
+        font-weight: 900;
         font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
             sans-serif;
-        color: #1e2d42;
         text-align: center;
         align-items: center;
-        justify-content: center;
+        justify-items: flex-start;
     }
 }
 
@@ -32,6 +28,10 @@
         left: -100%;
         width: 80%;
         transition: all 0.3s ease 0s;
+        background-color: #405c74;
+        z-index: 25;
+        font-size: 1.4em;
+        font-weight: 1000;
     }
     .active {
         left: 0;

@@ -50,11 +50,33 @@ export default function ReadOrg({ setActive, org, isORG }) {
                     })}
                     <div className={classes.buttons}>
                         {" "}
-                        <MyButton onClick={() => setActive(false)}>
-                            Закрыть
-                        </MyButton>
-                        <MyButton onClick={() => setActive(false)}>
+                        <MyButton
+                            onClick={() => {
+                                setActive((prev) => {
+                                    return { ...prev, add: false };
+                                });
+                                setTimeout(() => {
+                                    setActive((prev) => {
+                                        return { ...prev, show: false };
+                                    });
+                                }, 500);
+                            }}
+                        >
                             EXCEL
+                        </MyButton>
+                        <MyButton
+                            onClick={() => {
+                                setActive((prev) => {
+                                    return { ...prev, add: false };
+                                });
+                                setTimeout(() => {
+                                    setActive((prev) => {
+                                        return { ...prev, show: false };
+                                    });
+                                }, 500);
+                            }}
+                        >
+                            Закрыть
                         </MyButton>
                     </div>
                 </div>

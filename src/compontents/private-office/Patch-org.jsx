@@ -4,7 +4,7 @@ import MyButton from "../../utils/input/MyButton";
 import { orgFields } from "../../utils/Org.js";
 import { IpFields } from "../../utils/Org.js";
 import { Organizaton } from "../../utils/Org.js";
-import PatchControl from "./Patch-control.jsx";
+import PatchFields from "./Patch-fields.jsx";
 import { getMyOrgsFromDB } from "../../utils/getOrgs.js";
 import { chooseOrg } from "../../utils/getOrgs.js";
 import Loader from "../../UI/Loader/Loader.jsx";
@@ -13,11 +13,12 @@ import { useDispatch } from "react-redux";
 export default function PatchOrg({ setActive, org, isORG, setOrg }) {
     // объект с обновленными значениями
     const Updated = useRef(new Organizaton());
+
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
     let currentOrg;
 
-    // определяется перечень полей для ренеринга - ООО или ИП
+    // определяется перечень полей для рендеринга - ООО или ИП
     try {
         currentOrg = isORG
             ? addReqValue(orgFields, org)
@@ -36,11 +37,38 @@ export default function PatchOrg({ setActive, org, isORG, setOrg }) {
     }
 
     function setValue(event, field, newValue) {
+        if (!Updated.current["lngth"]) {
+            Updated.current[field] = newValue.trim();
+            return true;
+        }
+        if (newValue.length !== Updated.current["lngth"]) return false;
         Updated.current[field] = newValue.trim();
+        return true;
+    }
+
+    function getValue(event, field, length) {
+        // получаем значение длины и создаем соответствующее поле для последующей проверки
+        delete Updated.current[`lngth`];
+        if (
+            length === undefined ||
+            length === "undefined" ||
+            length === null ||
+            length === "null" ||
+            !length
+        )
+            return;
+        Updated.current[`lngth`] = length !== undefined && length;
     }
 
     async function update(event) {
         event.preventDefault();
+        // оставляем обновленные свойства
+        for (const prop in Updated.current) {
+            if (Updated.current[prop] === undefined)
+                delete Updated.current[prop];
+        }
+        // если не обновили ни одного поля
+        if (Object.keys(Updated.current).length === 0) return;
         setLoader(true);
         try {
             // + email для идентификации пользователя
@@ -53,11 +81,6 @@ export default function PatchOrg({ setActive, org, isORG, setOrg }) {
             console.log("Session expired... Authorize again");
         }
 
-        // оставляем обновленные свойства
-        for (const prop in Updated.current) {
-            if (Updated.current[prop] === undefined)
-                delete Updated.current[prop];
-        }
         try {
             let response = await fetch(
                 "https://deploy-test-business-assist.herokuapp.com/private",
@@ -70,8 +93,6 @@ export default function PatchOrg({ setActive, org, isORG, setOrg }) {
             );
 
             let result = await response.json();
-            console.log(result);
-
             if (result.updated) {
                 // заружаем список организаций из БД
                 await getMyOrgsFromDB(
@@ -85,7 +106,16 @@ export default function PatchOrg({ setActive, org, isORG, setOrg }) {
                 chooseOrg(org.id);
                 setOrg(JSON.parse(localStorage.getItem("currentOrg")));
                 setLoader(false);
-                setActive(false);
+                {
+                    setActive((prev) => {
+                        return { ...prev, add: false };
+                    });
+                    setTimeout(() => {
+                        setActive((prev) => {
+                            return { ...prev, show: false };
+                        });
+                    }, 500);
+                }
             }
         } catch (error) {
             setLoader(false);
@@ -95,7 +125,16 @@ export default function PatchOrg({ setActive, org, isORG, setOrg }) {
                 message: "No connection to server",
             });
             dispatch({ type: "REG_FALSE", payload: false });
-            setActive(false);
+            {
+                setActive((prev) => {
+                    return { ...prev, add: false };
+                });
+                setTimeout(() => {
+                    setActive((prev) => {
+                        return { ...prev, show: false };
+                    });
+                }, 500);
+            }
             console.log("no connection to server");
         }
     }
@@ -119,11 +158,13 @@ export default function PatchOrg({ setActive, org, isORG, setOrg }) {
                     ) : (
                         currentOrg.map((obj, number) => {
                             return (
-                                <PatchControl
+                                <PatchFields
                                     key={obj.field}
                                     number={number}
                                     obj={obj}
-                                    getValue={(event) => event.target.value}
+                                    length={obj.lngth}
+                                    isNumber={obj.num}
+                                    getValue={getValue}
                                     setValue={setValue}
                                 />
                             );
@@ -133,7 +174,18 @@ export default function PatchOrg({ setActive, org, isORG, setOrg }) {
                     <div className={classes.buttons}>
                         {" "}
                         <MyButton onClick={update}>Обновить</MyButton>
-                        <MyButton onClick={() => setActive(false)}>
+                        <MyButton
+                            onClick={() => {
+                                setActive((prev) => {
+                                    return { ...prev, add: false };
+                                });
+                                setTimeout(() => {
+                                    setActive((prev) => {
+                                        return { ...prev, show: false };
+                                    });
+                                }, 500);
+                            }}
+                        >
                             Закрыть
                         </MyButton>
                     </div>

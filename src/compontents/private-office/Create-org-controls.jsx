@@ -11,7 +11,15 @@ export default function Controls({ create, clear, setActive }) {
                 <MyButton
                     onClick={() => {
                         clear();
-                        setActive(() => setActive(false));
+
+                        setActive((prev) => {
+                            return { ...prev, add: false };
+                        });
+                        setTimeout(() => {
+                            setActive((prev) => {
+                                return { ...prev, show: false };
+                            });
+                        }, 500);
                     }}
                 >
                     Закрыть

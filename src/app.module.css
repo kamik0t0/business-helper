@@ -86,6 +86,14 @@ h6 {
   font-weight: 400;
 }
 
+.app {
+  background-color: #758ca8;
+}
+
+body {
+  overflow: hidden;
+}
+
 .conteiner {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -99,7 +107,7 @@ h6 {
           justify-content: space-between;
   -ms-grid-column-align: center;
       justify-self: center;
-  max-width: 1170px;
+  max-width: 1360px;
   margin: 0 auto 0 auto;
 }
 

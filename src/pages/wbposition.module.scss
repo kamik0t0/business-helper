@@ -8,7 +8,6 @@
 
 .position {
     display: flex;
-
     flex-direction: row;
     margin-top: 10px;
 
@@ -19,9 +18,6 @@
     .position_nomenclature {
         @include border;
         width: 35%;
-        .position_nomenclature_input {
-            width: 100%;
-        }
     }
 
     .position_nomenclature:focus {
@@ -31,16 +27,10 @@
     .position_quantity {
         @include border;
         width: 8%;
-        input {
-            width: 100%;
-        }
     }
     .position_price {
         @include border;
         width: 15%;
-        input {
-            width: 100%;
-        }
     }
     .position_summ {
         @include border;
@@ -65,5 +55,5 @@
 }
 
 .highlight {
-    background-color: #778ca4;
+    background-color: #405c74;
 }

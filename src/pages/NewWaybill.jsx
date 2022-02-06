@@ -40,6 +40,8 @@ export default function NewWaybill({ wbType, path /* , wbItems  */ }) {
     function getNomenclature(event, number) {
         let nomenclature = event.target.value;
         wbItems[number - 1].nomenclature = nomenclature;
+        console.log(event.target.value);
+        console.log(number);
     }
 
     // считывание и сохранение количества товара
@@ -129,7 +131,6 @@ export default function NewWaybill({ wbType, path /* , wbItems  */ }) {
                 <div className={classes.waybill_form_header_date}>
                     <div className={classes.waybill_form_header_date_date}>
                         <MyInput
-                            style={{ color: "#F0EBDE" }}
                             id="waybillDate"
                             name="Дата:"
                             type="date"
@@ -141,7 +142,7 @@ export default function NewWaybill({ wbType, path /* , wbItems  */ }) {
                         />
                     </div>
                     <MyInput
-                        style={{ color: "#F0EBDE", width: "350px" }}
+                        style={{ width: "350px" }}
                         name={wbType[1]}
                         type="text"
                         getValue={(event) =>

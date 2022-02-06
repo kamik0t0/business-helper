@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import classes from "./patch-control.module.css";
+import classes from "./patch-fields.module.css";
 import MyInput from "../../utils/input/MyInput.jsx";
 import MyButton from "../../utils/input/MyButton.jsx";
 
-export default function PatchControl({ obj, number, getValue, setValue }) {
+export default function PatchFields({
+    obj,
+    number,
+    getValue,
+    setValue,
+    length,
+    isNumber,
+}) {
     const [refresh, setRefresh] = useState(false);
-    // ref для чтения значения текущего значения и подставноки в input
+    // ref для чтения значения текущего значения и подстановки в input
     let prevValue = useRef();
     // ref для чтения нового значения из input
     let value = useRef();
@@ -37,8 +44,12 @@ export default function PatchControl({ obj, number, getValue, setValue }) {
                 <div className={classes.redactable}>
                     <MyInput
                         ref={value}
+                        prevValue={prevValue.current}
+                        field={obj.field}
                         name={obj.name}
                         type="text"
+                        length={length}
+                        isNumber={isNumber}
                         getValue={getValue}
                         defaultValue={
                             prevValue.current === null
@@ -49,8 +60,11 @@ export default function PatchControl({ obj, number, getValue, setValue }) {
                     <div className={classes.buttons}>
                         <MyButton
                             onClick={(event) => {
-                                setValue(event, obj.field, value.current.value);
-                                setRefresh(!refresh);
+                                setValue(
+                                    event,
+                                    obj.field,
+                                    value.current.value
+                                ) && setRefresh(!refresh);
                             }}
                             style={{
                                 width: "50px",
@@ -58,7 +72,12 @@ export default function PatchControl({ obj, number, getValue, setValue }) {
                         >
                             Ок
                         </MyButton>
-                        <MyButton onClick={() => setRefresh(!refresh)}>
+                        <MyButton
+                            onClick={() => {
+                                value.current.value = obj.value;
+                                setRefresh(!refresh);
+                            }}
+                        >
                             Отмена
                         </MyButton>
                     </div>

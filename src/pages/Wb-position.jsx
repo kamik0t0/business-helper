@@ -1,6 +1,7 @@
 // строка в создаваемой накладной (позиция)
 import React from "react";
 import classes from "./wbposition.module.css";
+import MyInput from "../utils/input/MyInput.jsx";
 
 export default function WbPosition({
     highlight,
@@ -25,21 +26,35 @@ export default function WbPosition({
             >
                 <div className={classes.position_number}>{number}</div>
                 <div className={classes.position_nomenclature}>
-                    <input
-                        className={classes.position_nomenclature_input}
-                        onChange={(event) => getNomenclature(event, number)}
+                    <MyInput
+                        style={{
+                            display: "flex",
+                            flex: "1 1 100%",
+                            width: "100%",
+                        }}
+                        getValue={(event) => getNomenclature(event, number)}
                         type="text"
                     />
                 </div>
                 <div className={classes.position_quantity}>
-                    <input
-                        onChange={(event) => getQuantity(event, number)}
+                    <MyInput
+                        style={{
+                            display: "flex",
+                            flex: "1 1 100%",
+                            width: "100%",
+                        }}
+                        getValue={(event) => getQuantity(event, number)}
                         type="number"
                     />
                 </div>
                 <div className={classes.position_price}>
-                    <input
-                        onChange={(event) => getPrice(event, number)}
+                    <MyInput
+                        style={{
+                            display: "flex",
+                            flex: "1 1 100%",
+                            width: "100%",
+                        }}
+                        getValue={(event) => getPrice(event, number)}
                         type="number"
                     />
                 </div>

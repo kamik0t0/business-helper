@@ -38,3 +38,6 @@
           box-shadow: none;
   background-color: #1e2d42;
 }
+.fields__item .error {
+  border: 2px solid red;
+}

@@ -7,6 +7,7 @@ import { getMyOrgsFromDB } from "../../../utils/getOrgs.js";
 import { isOrgBelongsUser } from "../../../utils/getOrgs.js";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import MyInput from "../../../utils/input/MyInput.jsx";
+import MyLink from "../../../utils/link/MyLink.jsx";
 
 export default function Login() {
     const [isVisible, setIsVisible] = useState(false);
@@ -37,16 +38,21 @@ export default function Login() {
         setIsInvalid((prev) => {
             return { ...prev, isInvalid: false };
         });
-        setLoader(true);
+
         event.preventDefault();
 
         const user = new FormData();
-        user.set("email", email.current.trim());
-        user.set("pass", pass.current.trim());
+        user.set("email", "");
+        user.set("pass", "");
+
+        if (email.current && pass.current !== undefined) {
+            user.set("email", email.current.trim());
+            user.set("pass", pass.current.trim());
+        }
+
         // проверка на ввод
         for (const [name, value] of user) {
             if (value.trim().length === 0) {
-                setLoader(false);
                 setIsInvalid({
                     isInvalid: true,
                     result: "Введите что-нибудь...",
@@ -56,6 +62,7 @@ export default function Login() {
         }
 
         try {
+            setLoader(true);
             let response = await fetch(
                 // "http://localhost:5600/login",
                 "https://deploy-test-business-assist.herokuapp.com/login",
@@ -225,12 +232,20 @@ export default function Login() {
 
                         <div className={classes.login_reg}>
                             <div className={classes.login_reg_forgot}>
-                                <Link to="/login/forgot">Забыли пароль?</Link>
+                                <MyLink
+                                    style={{ color: "#0D1320" }}
+                                    path="/login/forgot"
+                                >
+                                    Забыли пароль?
+                                </MyLink>
                             </div>
                             <div className={classes.login_reg_registration}>
-                                <Link to="/login/registration">
+                                <MyLink
+                                    style={{ color: "#0D1320" }}
+                                    path="/login/registration"
+                                >
                                     Регистрация
-                                </Link>
+                                </MyLink>
                             </div>
                         </div>
                     </form>

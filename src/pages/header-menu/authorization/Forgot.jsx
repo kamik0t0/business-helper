@@ -5,6 +5,8 @@ import AuthError from "./Auth-error.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import { useDispatch } from "react-redux";
 import MyInput from "../../../utils/input/MyInput.jsx";
+import MyLink from "../../../utils/link/MyLink.jsx";
+import { validatePass } from "../../../utils/validatePass.js";
 
 export default function Forgot() {
     const [isVisible, setIsVisible] = useState(false);
@@ -46,19 +48,41 @@ export default function Forgot() {
         setIsInvalid((prev) => {
             return { ...prev, isInvalid: false };
         });
-        setLoader(true);
-        event.preventDefault();
-        // проверка идентичности введенных паролей
-        if (newPass.current.localeCompare(repeatPass.current) !== 0) {
-            setLoader(false);
-            setIsInvalid({ isInvalid: true, result: "Пароли не совпадают!" });
 
-            return;
-        }
+        event.preventDefault();
 
         const user = new FormData();
-        user.append("email", email.current.trim());
-        user.append("pass", repeatPass.current.trim());
+
+        user.set("email", "");
+        user.set("pass", "");
+
+        if (
+            email.current &&
+            repeatPass.current &&
+            newPass.current !== undefined
+        ) {
+            user.set("email", email.current.trim());
+            user.set("pass", repeatPass.current.trim());
+            user.set("pass", newPass.current.trim());
+            // проверка идентичности введенных паролей
+            if (newPass.current.localeCompare(repeatPass.current) !== 0) {
+                setLoader(false);
+                setIsInvalid({
+                    isInvalid: true,
+                    result: "Пароли не совпадают!",
+                });
+
+                return;
+            }
+
+            if (!validatePass(newPass.current.trim())) {
+                setIsInvalid({
+                    isInvalid: true,
+                    result: "Пароль должен содержать буквы и цифры. Не должен начинаться с цифры. Не должен содержать  -, (, ),  , /",
+                });
+                return;
+            }
+        }
 
         for (const [name, value] of user) {
             if (value.trim().length === 0) {
@@ -240,12 +264,20 @@ export default function Forgot() {
 
                         <div className={classes.login_reg}>
                             <div className={classes.login_reg_registration}>
-                                <Link to="/login">Авторизация</Link>
+                                <MyLink
+                                    style={{ color: "#0D1320" }}
+                                    path="/login"
+                                >
+                                    Авторизация
+                                </MyLink>
                             </div>
                             <div className={classes.login_reg_registration}>
-                                <Link to="/login/registration">
+                                <MyLink
+                                    style={{ color: "#0D1320" }}
+                                    path="/login/registration"
+                                >
                                     Регистрация
-                                </Link>
+                                </MyLink>
                             </div>
                         </div>
                     </form>

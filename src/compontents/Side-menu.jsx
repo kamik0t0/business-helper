@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
 import { CurtainContext } from "./Content.jsx";
 import classes from "./side-menu.module.css";
+import MyLink from "../utils/link/MyLink.jsx";
 
 export default function Side({ showCurtain }) {
     const { curtain } = useContext(CurtainContext);
@@ -13,24 +13,21 @@ export default function Side({ showCurtain }) {
             }
         >
             <div className={classes.menu}>
-                <Link to="/calculator">Калькулятор налогов</Link>
+                <MyLink style={{ textDecoration: "none" }} path="/calculator">
+                    Калькулятор налогов
+                </MyLink>
             </div>
 
-            {/* <div className={classes.menu}>
-                <Link to="/bank">Банк</Link>
-            </div> */}
             <div className={classes.menu}>
-                <Link to="/sales">Продажи</Link>
+                <MyLink style={{ textDecoration: "none" }} path="/sales">
+                    Продажи
+                </MyLink>
             </div>
             <div className={classes.menu}>
-                <Link to="/purchases">Покупки</Link>
+                <MyLink style={{ textDecoration: "none" }} path="/purchases">
+                    Покупки
+                </MyLink>
             </div>
-            {/* <div className={classes.menu}>
-                <Link to="/employees">Кадры</Link>
-            </div>
-            <div className={classes.menu}>
-                <Link to="/salary">Зарплата</Link>
-            </div> */}
         </div>
     );
 }

@@ -32,5 +32,11 @@ export async function authFetching(url, dispatch, token) {
         }
     } catch (error) {
         console.log("No connection to server");
+        dispatch({ type: "REG_FALSE", payload: false });
+        dispatch({
+            type: "isERROR_TRUE",
+            payload: true,
+            message: "No connection to server",
+        });
     }
 }

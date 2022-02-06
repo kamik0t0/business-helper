@@ -39,6 +39,7 @@ body {
     -ms-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
+    // overflow: auto;
 }
 
 input,
@@ -80,3 +81,9 @@ h6 {
     font-size: inherit;
     font-weight: 400;
 }
+
+// @media (height: 900) {
+//     body {
+//         overflow: auto;
+//     }
+// }

@@ -12,6 +12,8 @@ export default function OrgInputs({ fields, getValue }) {
                         field={fields.field}
                         name={fields.name}
                         type={fields.type}
+                        length={fields.lngth}
+                        isNumber={fields.num}
                         getValue={getValue}
                     />
                 );

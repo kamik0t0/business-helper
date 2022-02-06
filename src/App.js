@@ -14,6 +14,7 @@ export default function App() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        console.log(isError);
         authFetching(
             // "http://localhost:5600/",
             "https://deploy-test-business-assist.herokuapp.com",
@@ -34,13 +35,17 @@ export default function App() {
 
     return (
         <>
-            <div className="App">
+            <div className={classes.app}>
                 <div id="conteiner" className={classes.conteiner}>
                     <BrowserRouter>
                         <Header />
                         <Content />
-                        {isError ? <Error message={message} /> : <Footer />}
+                        {/* <Footer /> */}
+                        {/* {isError ? <Error message={message} /> : <Footer />} */}
+
+                        {/* <Error message={message} /> */}
                     </BrowserRouter>
+                    {isError && <Error message={message} />}
                 </div>
             </div>
         </>

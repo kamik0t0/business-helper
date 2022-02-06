@@ -1,12 +1,3 @@
-// @mixin incorrect {
-//     display: flex;
-//     align-self: center;
-//     color: red;
-//     font-size: 1em;
-//     font-weight: bold;
-//     max-width: 90%;
-//     text-align: center;
-// }
 @import "../../../utils/content-frame.scss";
 
 .login {
@@ -16,8 +7,8 @@
     height: 685px;
     margin: 15px;
     padding: 15px;
-    background-color: #485a71;
-    overflow: auto;
+    // background-color: #485a71;
+    overflow: hidden;
 
     color: #f0ebdc;
 
@@ -27,11 +18,12 @@
         align-items: stretch;
         justify-content: space-around;
         height: 100%;
-        min-width: 50%;
-        max-width: 50%;
+
         background-color: #f0ebdd;
         font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
             sans-serif;
+        min-width: 375px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
         .login_header {
             color: #495a6f;
@@ -96,20 +88,14 @@
                 .wrong {
                     border-bottom: 1px solid red;
                 }
-            }
 
-            .login_auth_enter {
-                width: 85%;
-                height: 35px;
-                background-color: #495a6f;
-                color: #f0ebde;
-                margin: 0 auto 0 auto;
-                font-size: 1.2em;
-                text-transform: uppercase;
-                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            }
-            .login_auth_enter:hover {
-                cursor: pointer;
+                .login_auth_pass_eye:hover {
+                    cursor: pointer;
+                }
+
+                .login_auth_pass_eye_close:hover {
+                    cursor: pointer;
+                }
             }
         }
         .login_reg {
@@ -120,13 +106,6 @@
             justify-content: space-between;
             height: 50px;
             margin-left: 20px;
-
-            .login_reg_forgot:hover {
-                cursor: pointer;
-            }
-            .login_reg_registration:hover {
-                cursor: pointer;
-            }
         }
     }
 }

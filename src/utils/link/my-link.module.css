@@ -1,0 +1,45 @@
+.link {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: center;
+  font-weight: 500;
+  color: #f0ebda;
+  font-size: 1.2em;
+  text-decoration: underline;
+}
+
+.link:visited {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: center;
+  font-weight: 500;
+  color: #f0ebda;
+  font-size: 1.2em;
+  text-decoration: underline;
+  color: #f0ebda;
+}
+
+.link:hover {
+  font-weight: bold;
+}
+
+@media (max-width: 767px) {
+  .link {
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    text-align: center;
+    font-weight: 500;
+    color: #f0ebda;
+    font-size: 1.2em;
+    text-decoration: underline;
+    font-size: 1.4em;
+    color: #f0ebda;
+  }
+
+  .link:visited {
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    text-align: center;
+    font-weight: 500;
+    color: #f0ebda;
+    font-size: 1.2em;
+    text-decoration: underline;
+    color: #f0ebda;
+  }
+}

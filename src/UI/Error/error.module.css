@@ -1,9 +1,10 @@
 .error {
-  width: 100%;
+  position: fixed;
+  width: 1360px;
   min-width: 320px;
   height: 75px;
   background-color: #cc9a9a;
-  z-index: 25;
+  z-index: 20;
   text-align: center;
   font-size: 1.5em;
   font-weight: 700;
@@ -12,6 +13,7 @@
   opacity: 0.5;
   -webkit-transition: all 2s ease-in;
   transition: all 2s ease-in;
+  bottom: 0vh;
 }
 
 @media (max-width: 767px) {

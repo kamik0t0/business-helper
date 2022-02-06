@@ -2,8 +2,8 @@
 
 .header {
     display: flex;
-    justify-content: space-between;
-    height: 50px;
+    justify-content: flex-end;
+    height: 40px;
 }
 
 .info {
@@ -50,4 +50,8 @@
 
 .link:visited {
     color: #f0ebdd;
+}
+
+.modalanimate {
+    transition: 0.5s;
 }

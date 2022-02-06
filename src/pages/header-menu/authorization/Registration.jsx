@@ -5,6 +5,8 @@ import AuthError from "./Auth-error.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import { useDispatch } from "react-redux";
 import MyInput from "../../../utils/input/MyInput.jsx";
+import MyLink from "../../../utils/link/MyLink.jsx";
+import { validatePass } from "../../../utils/validatePass.js";
 
 export default function Registration() {
     const [isVisible, setIsVisible] = useState(false);
@@ -18,21 +20,36 @@ export default function Registration() {
 
     let email = useRef();
     let pass = useRef();
+
     // регистрация
     async function addUser(event) {
         setIsInvalid((prev) => {
             return { ...prev, isInvalid: false };
         });
-        setLoader(true);
+
         event.preventDefault();
 
         const user = new FormData();
-        user.append("email", email.current.trim());
-        user.append("pass", pass.current.trim());
+
+        user.set("email", "");
+        user.set("pass", "");
+
+        if (email.current && pass.current !== undefined) {
+            user.set("email", email.current.trim());
+            user.set("pass", pass.current.trim());
+
+            if (!validatePass(pass.current.trim())) {
+                setIsInvalid({
+                    isInvalid: true,
+                    result: "Пароль должен содержать буквы и цифры. Не должен начинаться с цифры. Не должен содержать  -, (, ),  , /",
+                });
+                return;
+            }
+        }
+
         // проверка на ввод
         for (const [name, value] of user) {
             if (value.trim().length === 0) {
-                setLoader(false);
                 setIsInvalid({
                     isInvalid: true,
                     result: "Введите что-нибудь...",
@@ -42,6 +59,7 @@ export default function Registration() {
         }
 
         try {
+            setLoader(true);
             let response = await fetch(
                 // "http://localhost:5600/login/registration",
                 "https://deploy-test-business-assist.herokuapp.com/login/registration",
@@ -145,6 +163,7 @@ export default function Registration() {
                                         ></div>
                                         <input
                                             defaultValue={pass.current}
+                                            minLength={10}
                                             onChange={(event) => {
                                                 pass.current =
                                                     event.target.value;
@@ -200,12 +219,20 @@ export default function Registration() {
 
                             <div className={classes.login_reg}>
                                 <div className={classes.login_reg_registration}>
-                                    <Link to="/login">Авторизация</Link>
+                                    <MyLink
+                                        style={{ color: "#0D1320" }}
+                                        path="/login"
+                                    >
+                                        Авторизация
+                                    </MyLink>
                                 </div>
                                 <div className={classes.login_reg_registration}>
-                                    <Link to="/login/forgot">
+                                    <MyLink
+                                        style={{ color: "#0D1320" }}
+                                        path="/login/forgot"
+                                    >
                                         Забыли пароль?
-                                    </Link>
+                                    </MyLink>
                                 </div>
                             </div>
                         </form>

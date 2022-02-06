@@ -41,16 +41,21 @@ export let orgFields = [
         field: "orgname",
         name: "Наименование:",
         type: "text",
+        num: false,
     },
     {
         field: "inn",
         name: "ИНН:",
         type: "text",
+        lngth: 12,
+        num: true,
     },
     {
         field: "kpp",
         name: "КПП:",
         type: "text",
+        lngth: 9,
+        num: true,
     },
     // {
     //     field: "ogrn",
@@ -81,11 +86,13 @@ export let orgFields = [
         field: "address",
         name: "Адрес:",
         type: "text",
+        num: false,
     },
     {
         field: "director",
         name: "Руководитель:",
         type: "text",
+        num: false,
     },
     // {
     //     field: "position",
@@ -148,11 +155,14 @@ export let IpFields = [
         field: "orgname",
         name: "Наименование:",
         type: "text",
+        num: false,
     },
     {
         field: "inn",
         name: "ИНН:",
         type: "text",
+        lngth: 12,
+        num: true,
     },
 
     // {
@@ -184,6 +194,7 @@ export let IpFields = [
         field: "address",
         name: "Адрес:",
         type: "text",
+        num: false,
     },
     // {
     //     field: "okopf",

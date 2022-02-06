@@ -2,17 +2,13 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin: 75px 5% auto 5%;
+  margin: 70px 0 auto 0;
   max-width: 100%;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
   -ms-grid-column-align: center;
       justify-self: center;
-  background-color: #cac6ba;
 }
 
 @media (max-width: 1170px) {

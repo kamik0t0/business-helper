@@ -1,17 +1,23 @@
-.inner {
-  max-height: 685px;
-  margin: 15px;
-  font-size: 1.3em;
+.content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 15px;
+  font-size: 1.1em;
   font-weight: 500;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   color: #f0ebdc;
   line-height: 1.3;
-  text-indent: 20px;
   text-align: justify;
-  padding: 15px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  background-color: #485a71;
-  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.inner {
+  font-size: 1.2em;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: #f0ebdc;
+  text-indent: 15px;
 }

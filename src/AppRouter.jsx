@@ -15,10 +15,10 @@ import Registration from "../src/pages/header-menu/authorization/Registration.js
 import Private from "../src/compontents/private-office/private-office.jsx";
 import OrgList from "../src/compontents/private-office/Org-list.jsx";
 
-export default function AppRouter({ classes }) {
+export default function AppRouter() {
     return (
         <Routes>
-            <Route exact path="/" element={<Inner classes={classes} />}></Route>
+            <Route exact path="/" element={<Inner />}></Route>
             <Route exact path="/calculator" element={<CalcForm />}></Route>
             <Route exact path="/bank" element={<Bank />}></Route>
             <Route exact path="/sales" element={<Sales />}></Route>

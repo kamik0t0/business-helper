@@ -14,10 +14,12 @@ import MySelect from "../../utils/input/MySelect.jsx";
 
 export default function Office() {
     const isAuth = useSelector((state) => state.authReducer.isAuth);
-    const [modalAdd, setModalAdd] = useState(false);
-    const [modalRead, setModalRead] = useState(false);
-    const [modalUpdate, setModalUpdate] = useState(false);
-    const [modalDelete, setModalDelete] = useState(false);
+
+    // const [showModal, setShowModal] = useState({ show: false, add: false });
+    const [modalAdd, setModalAdd] = useState({ show: false, add: false });
+    const [modalRead, setModalRead] = useState({ show: false, add: false });
+    const [modalUpdate, setModalUpdate] = useState({ show: false, add: false });
+    const [modalDelete, setModalDelete] = useState({ show: false, add: false });
     const [activeOrg, setActiveOrg] = useState();
     // загрузка
 
@@ -60,10 +62,6 @@ export default function Office() {
             {localStorage.getItem("session") === "true" || isAuth ? (
                 <div className={classes.content}>
                     <div className={classes.header}>
-                        <Link className={classes.link} to="/">
-                            На главную
-                        </Link>
-
                         <div className={classes.header_items}>
                             {localStorage.getItem("email")}
                         </div>
@@ -149,16 +147,60 @@ export default function Office() {
 
                     <div className={classes.buttons}>
                         {" "}
-                        <MyButton onClick={() => setModalAdd(!modalAdd)}>
+                        <MyButton
+                            onClick={() => {
+                                setModalAdd((prev) => {
+                                    return { ...prev, show: true };
+                                });
+                                setTimeout(() => {
+                                    setModalAdd((prev) => {
+                                        return { ...prev, add: true };
+                                    });
+                                }, 0);
+                            }}
+                        >
                             Добавить
                         </MyButton>
-                        <MyButton onClick={() => setModalRead(!modalRead)}>
+                        <MyButton
+                            onClick={() => {
+                                setModalRead((prev) => {
+                                    return { ...prev, show: true };
+                                });
+                                setTimeout(() => {
+                                    setModalRead((prev) => {
+                                        return { ...prev, add: true };
+                                    });
+                                }, 0);
+                            }}
+                        >
                             Реквизиты
                         </MyButton>
-                        <MyButton onClick={() => setModalUpdate(!modalAdd)}>
+                        <MyButton
+                            onClick={() => {
+                                setModalUpdate((prev) => {
+                                    return { ...prev, show: true };
+                                });
+                                setTimeout(() => {
+                                    setModalUpdate((prev) => {
+                                        return { ...prev, add: true };
+                                    });
+                                }, 0);
+                            }}
+                        >
                             Изменить
                         </MyButton>
-                        <MyButton onClick={() => setModalDelete(!modalAdd)}>
+                        <MyButton
+                            onClick={() => {
+                                setModalDelete((prev) => {
+                                    return { ...prev, show: true };
+                                });
+                                setTimeout(() => {
+                                    setModalDelete((prev) => {
+                                        return { ...prev, add: true };
+                                    });
+                                }, 0);
+                            }}
+                        >
                             Удалить
                         </MyButton>
                     </div>
@@ -166,39 +208,57 @@ export default function Office() {
             ) : (
                 <Navigate to="/" />
             )}
-            <Modal
-                size={{ height: "75vh", width: "75vw" }}
-                active={modalAdd}
-                setActive={setModalAdd}
-            >
-                <CreateOrg setActive={setModalAdd} setOrg={setActiveOrg} />
-            </Modal>
-            <Modal active={modalRead} setActive={setModalRead}>
-                <ReadOrg
-                    setActive={setModalRead}
-                    org={activeOrg}
-                    isORG={isORG.current}
-                />
-            </Modal>
-            <Modal active={modalUpdate} setActive={setModalUpdate}>
-                <PatchOrg
-                    setActive={setModalUpdate}
-                    org={activeOrg}
-                    setOrg={setActiveOrg}
-                    isORG={isORG.current}
-                />
-            </Modal>
-            <Modal
-                size={{ height: "25vh", width: "40vw" }}
-                active={modalDelete}
-                setActive={setModalDelete}
-            >
-                <DeleteOrg
-                    setActive={setModalDelete}
-                    org={activeOrg}
-                    setOrg={setActiveOrg}
-                />
-            </Modal>
+            {
+                <>
+                    {modalAdd.show && (
+                        <Modal
+                            size={{ height: "75vh", width: "75vw" }}
+                            active={modalAdd.add}
+                            setActive={setModalAdd}
+                        >
+                            <CreateOrg
+                                setActive={setModalAdd}
+                                setOrg={setActiveOrg}
+                            />
+                        </Modal>
+                    )}
+                    {modalRead.show && (
+                        <Modal active={modalRead.add} setActive={setModalRead}>
+                            <ReadOrg
+                                setActive={setModalRead}
+                                org={activeOrg}
+                                isORG={isORG.current}
+                            />
+                        </Modal>
+                    )}
+                    {modalUpdate.show && (
+                        <Modal
+                            active={modalUpdate.add}
+                            setActive={setModalUpdate}
+                        >
+                            <PatchOrg
+                                setActive={setModalUpdate}
+                                org={activeOrg}
+                                setOrg={setActiveOrg}
+                                isORG={isORG.current}
+                            />
+                        </Modal>
+                    )}
+                    {modalDelete.show && (
+                        <Modal
+                            size={{ height: "25vh", width: "40vw" }}
+                            active={modalDelete.add}
+                            setActive={setModalDelete}
+                        >
+                            <DeleteOrg
+                                setActive={setModalDelete}
+                                org={activeOrg}
+                                setOrg={setActiveOrg}
+                            />
+                        </Modal>
+                    )}
+                </>
+            }
         </>
     );
 }

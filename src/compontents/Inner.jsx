@@ -3,7 +3,7 @@ import classes from "./inner.module.css";
 
 export default function Inner() {
     return (
-        <div className={classes.inner}>
+        <div className={classes.content + " " + classes.inner}>
             Приветствую всех на моем "PET"-проекте - Web-приложение "Accounter
             Helper"!
             <br />

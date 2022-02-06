@@ -20,9 +20,12 @@
       -ms-grid-row-align: center;
       align-self: center;
   height: 40px;
-  width: 40px;
-  background: url("../pages/header-menu/authorization/profile-removebg-preview_small.png") no-repeat;
-  border-radius: 20px;
+  width: 60px;
+  background: url("../pages/header-menu/authorization/enter-button.png") no-repeat;
+}
+.header_auth .header_auth_icon:hover {
+  cursor: pointer;
+  background-size: 105%;
 }
 .header_auth .header_auth_menu {
   display: -webkit-box;
@@ -35,7 +38,7 @@
   -ms-flex-pack: distribute;
       justify-content: space-around;
   opacity: 0.9;
-  background-color: #f0ebdd;
+  background-color: #405c74;
   -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
           box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   z-index: 22;
@@ -73,6 +76,10 @@
 }
 
 @media (max-width: 767px) {
+  .header_auth_menu {
+    margin-bottom: 23px;
+  }
+
   .header_auth:hover {
     height: 300px;
   }

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import classes from "./create-org.module.css";
 import OrgInputs from "./Org-field.jsx";
 import MySelect from "../../utils/input/MySelect";
@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 export default function CreateOrg({ setActive, setOrg }) {
     const ORG = useRef(new Organizaton());
     const IE = useRef(new Individual());
+
     // задание начальных значений, поскольку пользователь
     ORG.current["opf"] = "Общество с ограниченной ответственностью";
     IE.current["opf"] = "Индивидуальный предприниматель";
@@ -25,10 +26,21 @@ export default function CreateOrg({ setActive, setOrg }) {
     const dispatch = useDispatch();
     // запрос на создание новой организации
     async function create(event, orgType) {
-        setLoader(true);
         event.preventDefault();
-        // проверка введены ли все данные
-        for (const key in orgType) if (orgType[key] === undefined) return;
+
+        // проверка ввода
+        for (const key in orgType) {
+            if (orgType[key] === undefined) return;
+            // проверка полей
+            if (
+                (orgType["inn"] !== undefined &&
+                    orgType["inn"].length !== orgType["innLength"]) ||
+                (orgType["kpp"] !== undefined &&
+                    orgType["kpp"].length !== orgType["kppLength"])
+            )
+                return;
+        }
+
         // добавление в тело запроса email авторизованного пользователя
         try {
             orgType["email"] = localStorage.getItem("email");
@@ -36,6 +48,7 @@ export default function CreateOrg({ setActive, setOrg }) {
             console.log("Session expired... Authorize again");
         }
         try {
+            setLoader(true);
             // отправка запроса
             let response = await fetch(
                 // "http://localhost:5600/private",
@@ -71,7 +84,29 @@ export default function CreateOrg({ setActive, setOrg }) {
                 setOrg(JSON.parse(localStorage.getItem("currentOrg")));
                 clear(orgType.orgname);
                 setLoader(false);
-                setActive(false);
+                setActive((prev) => {
+                    return { ...prev, add: false };
+                });
+
+                // обновляем поля
+                ORG.current = new Organizaton();
+                IE.current = new Individual();
+            } else {
+                setLoader(false);
+                {
+                    setActive((prev) => {
+                        return { ...prev, add: false };
+                    });
+                    setTimeout(() => {
+                        setActive((prev) => {
+                            return { ...prev, show: false };
+                        });
+                    }, 500);
+                }
+                console.log("error");
+                // обновляем поля
+                ORG.current = new Organizaton();
+                IE.current = new Individual();
             }
         } catch (error) {
             setLoader(false);
@@ -81,8 +116,20 @@ export default function CreateOrg({ setActive, setOrg }) {
                 message: "No connection to server",
             });
             dispatch({ type: "REG_FALSE", payload: false });
-            setActive(false);
+            {
+                setActive((prev) => {
+                    return { ...prev, add: false };
+                });
+                setTimeout(() => {
+                    setActive((prev) => {
+                        return { ...prev, show: false };
+                    });
+                }, 500);
+            }
             console.log("No connection to server");
+            // обновляем поля
+            ORG.current = new Organizaton();
+            IE.current = new Individual();
         }
     }
     // выбор организационно-правовой формы - изменяем поля ввода
@@ -94,13 +141,28 @@ export default function CreateOrg({ setActive, setOrg }) {
         }
     }
     // получаем остальные реквизиты
-    function getValue(event, field) {
+    function getValue(event, field, length) {
         if (opf === "ORG") {
             if (field in ORG.current)
                 ORG.current[field] = event.target.value.trim();
+            // получение длины ИНН
+            ORG.current["kppLength"] =
+                length !== undefined && field === "kpp"
+                    ? length
+                    : ORG.current["kppLength"];
+            // получение длины КПП
+            ORG.current["innLength"] =
+                length !== undefined && field === "inn"
+                    ? length
+                    : ORG.current["innLength"];
         } else {
             if (field in IE.current)
                 IE.current[field] = event.target.value.trim();
+            // получение длины ИНН
+            IE.current["innLength"] =
+                length !== undefined && field === "inn"
+                    ? length
+                    : IE.current["innLength"];
         }
     }
 

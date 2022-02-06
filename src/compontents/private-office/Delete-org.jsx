@@ -23,12 +23,12 @@ export default function DeleteOrg({ setActive, org, setOrg }) {
                 console.log(result.message);
                 localStorage.removeItem("currentOrg");
                 await getMyOrgsFromDB(
-                    // `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
-                    //     "UserId"
-                    // )}`
-                    `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                    `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
                         "UserId"
                     )}`
+                    // `http://localhost:5600/private/?UserId=${localStorage.getItem(
+                    //     "UserId"
+                    // )}`
                 );
             } else {
                 console.log(result.message);
@@ -38,7 +38,16 @@ export default function DeleteOrg({ setActive, org, setOrg }) {
             // перендер компонента (убирается currentOrg и информация об организации удаляется из личного кабинета)
             setOrg(localStorage.removeItem("currentOrg"));
             // модальное окно скрывается
-            setActive(false);
+            {
+                setActive((prev) => {
+                    return { ...prev, add: false };
+                });
+                setTimeout(() => {
+                    setActive((prev) => {
+                        return { ...prev, show: false };
+                    });
+                }, 500);
+            }
             setLoader(false);
         } catch (error) {
             setLoader(false);
@@ -48,7 +57,16 @@ export default function DeleteOrg({ setActive, org, setOrg }) {
                 message: "No connection to server",
             });
             dispatch({ type: "REG_FALSE", payload: false });
-            setActive(false);
+            {
+                setActive((prev) => {
+                    return { ...prev, add: false };
+                });
+                setTimeout(() => {
+                    setActive((prev) => {
+                        return { ...prev, show: false };
+                    });
+                }, 500);
+            }
             console.log("No connection to server");
         }
     }
@@ -75,14 +93,25 @@ export default function DeleteOrg({ setActive, org, setOrg }) {
                             <MyButton
                                 onClick={() =>
                                     deleteOrg(
-                                        `https://deploy-test-business-assist.herokuapp.com/private/?orgname=${org.orgname}`
-                                        // `http://localhost:5600/private/?orgname=${org.orgname}`
+                                        // `https://deploy-test-business-assist.herokuapp.com/private/?orgname=${org.orgname}`
+                                        `http://localhost:5600/private/?orgname=${org.orgname}`
                                     )
                                 }
                             >
                                 Yes
                             </MyButton>
-                            <MyButton onClick={() => setActive(false)}>
+                            <MyButton
+                                onClick={() => {
+                                    setActive((prev) => {
+                                        return { ...prev, add: false };
+                                    });
+                                    setTimeout(() => {
+                                        setActive((prev) => {
+                                            return { ...prev, show: false };
+                                        });
+                                    }, 500);
+                                }}
+                            >
                                 No
                             </MyButton>
                         </div>

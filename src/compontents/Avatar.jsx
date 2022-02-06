@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import classes from "./avatar.module.css";
+import MyLink from "../../src/utils/link/MyLink.jsx";
 
 export default function Avatar() {
     const isAuth = useSelector((state) => state.authReducer.isAuth);
@@ -53,17 +53,29 @@ export default function Avatar() {
                     onClick={hideIconMenu}
                     className={classes.header_auth_menu_item}
                 >
-                    <Link className={classes.link} to="/private">
+                    {/* <Link className={classes.link} to="/private">
                         Личный кабинет
-                    </Link>
+                    </Link> */}
+                    <MyLink
+                        style={{ textDecoration: "none", fontSize: "1em" }}
+                        path="/private"
+                    >
+                        Личный кабинет
+                    </MyLink>
                 </div>
                 <div
                     onClick={auth_Handler}
                     className={classes.header_auth_menu_item}
                 >
-                    <Link className={classes.link} to="/">
+                    {/* <Link className={classes.link} to="/">
                         Выйти
-                    </Link>
+                    </Link> */}
+                    <MyLink
+                        style={{ textDecoration: "none", fontSize: "1em" }}
+                        path="/"
+                    >
+                        Выйти
+                    </MyLink>
                 </div>
             </div>
             <div id="enter" className={classes.displaynone} ref={enter}>
@@ -73,9 +85,15 @@ export default function Avatar() {
                     className={classes.header_auth_menu_item}
                 >
                     {" "}
-                    <Link className={classes.link} to="/login">
+                    {/* <Link className={classes.link} to="/login">
                         Войти
-                    </Link>
+                    </Link> */}
+                    <MyLink
+                        style={{ textDecoration: "none", fontSize: "1em" }}
+                        path="/login"
+                    >
+                        Войти
+                    </MyLink>
                 </div>
             </div>
         </div>
