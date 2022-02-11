@@ -1,0 +1,31 @@
+@import "../../../utils/content-frame.scss";
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+    height: 40px;
+}
+
+.noorg {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    height: 90px;
+    font-size: 2em;
+}
+
+// .buttons:hover {
+//     cursor: pointer;
+// }
+
+// .link {
+//     text-decoration: underline;
+// }
+
+// .link:visited {
+//     color: #f0ebdd;
+// }
+
+// .modalanimate {
+//     transition: 0.5s;
+// }

@@ -1,0 +1,94 @@
+.header_auth {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 40px;
+  width: 150px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-left: 50px;
+  z-index: 2;
+}
+.header_auth .header_auth_icon {
+  display: inline-block;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  height: 40px;
+  width: 60px;
+  background: url("../../pictures/enter-button.png") no-repeat;
+}
+.header_auth .header_auth_icon:hover {
+  cursor: pointer;
+  background-size: 105%;
+}
+.header_auth .header_auth_menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  opacity: 0.9;
+  background-color: #405c74;
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  z-index: 22;
+}
+.header_auth .header_auth_menu .header_auth_menu_item {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: center;
+  font-weight: 500;
+  color: #0d1320;
+  font-weight: 100;
+}
+.header_auth .header_auth_menu .header_auth_menu_item .link {
+  display: block;
+  cursor: pointer;
+}
+.header_auth .header_auth_menu .header_auth_menu_item:hover {
+  cursor: pointer;
+  color: #0d1320;
+  font-weight: 500;
+}
+
+.header_auth:not(.nohover):hover {
+  height: 200px;
+}
+.header_auth:not(.nohover):hover .header_auth_icon {
+  height: 100px;
+  margin-top: 80px;
+}
+.header_auth:not(.nohover):hover .header_auth_menu {
+  height: 107px;
+}
+
+.displaynone {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .header_auth_menu {
+    margin-bottom: 23px;
+  }
+
+  .header_auth:hover {
+    height: 300px;
+  }
+  .header_auth:hover .header_auth_icon {
+    height: 50px;
+    margin-top: 130px;
+  }
+  .header_auth:hover .header_auth_menu {
+    height: 150px;
+    font-size: 1.3em;
+  }
+}

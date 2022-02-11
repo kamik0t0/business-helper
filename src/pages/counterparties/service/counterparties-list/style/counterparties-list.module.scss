@@ -1,0 +1,54 @@
+.header {
+    margin: 20px auto 0 auto;
+    font-size: 1.4em;
+}
+.counterparties {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 400px;
+    margin: 30px auto 70px auto;
+    max-height: 60vh;
+    overflow: auto;
+    .col_header {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        min-width: 400px;
+        font-size: 1.2em;
+        .header__number {
+            flex: 1 1 7%;
+            text-align: center;
+        }
+        .header__name {
+            flex: 1 1 70%;
+            text-align: center;
+            border-left: 1px solid #f0ebda;
+            border-right: 1px solid #f0ebda;
+        }
+        .header__inn {
+            flex: 1 1 23%;
+            text-align: center;
+        }
+    }
+}
+
+*::-webkit-scrollbar {
+    background-color: #768ca6;
+    width: 6px;
+}
+
+*:hover:-webkit-scrollbar {
+    background-color: #768ca6;
+    width: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #768ca6;
+    border-radius: 6px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: #343c54;
+    border-radius: 6px;
+}

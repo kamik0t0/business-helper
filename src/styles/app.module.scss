@@ -1,0 +1,61 @@
+@import "./utils/zeroing-style.scss";
+
+.app {
+    background-color: #758ca8;
+    // height: 800px;
+}
+
+body {
+    overflow: hidden;
+}
+.conteiner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    justify-self: center;
+    max-width: 1360px;
+    margin: 0 auto 0 auto;
+    // overflow: hidden;
+}
+
+*::-webkit-scrollbar {
+    // background-color: #768ca6;
+    width: 0px;
+}
+
+*:hover:-webkit-scrollbar {
+    // background-color: #768ca6;
+    width: 0px;
+}
+
+*::-webkit-scrollbar-thumb {
+    // background-color: #768ca6;
+    border-radius: 0px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    // background-color: #343c54;
+    border-radius: 0px;
+}
+
+@media (max-width: 1170px) {
+    .conteiner {
+        min-width: 970px;
+    }
+}
+
+@media (max-width: 992px) {
+    .conteiner {
+        min-width: 750px;
+    }
+}
+
+@media (max-width: 767px) {
+    body.lock {
+        overflow: hidden;
+    }
+    .conteiner {
+        max-width: none;
+        min-width: 320px;
+    }
+}

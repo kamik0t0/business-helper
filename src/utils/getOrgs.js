@@ -1,17 +1,5 @@
-// запрос на все организации пользователя из БД
-export async function getMyOrgsFromDB(url) {
-    try {
-        let getOrgs = await fetch(url);
-        let orgs = await getOrgs.json();
-        localStorage.setItem("orgs", JSON.stringify(orgs));
-        console.log(orgs);
-        return orgs;
-    } catch (error) {
-        console.log(`Can't get Orgs from DB - no connection to server`);
-    }
-}
-// выбор организации
-export function chooseOrg(event) {
+// выбор организации черезе меню select
+export function chooseOrg(event, type) {
     let id;
     try {
         let orgname = event.target.value;
@@ -23,13 +11,14 @@ export function chooseOrg(event) {
         id = event;
     }
     // получили объект с реквизитами выбранной организации
-    let [currentOrg] = JSON.parse(localStorage.getItem("orgs")).filter(
+    let [activeOrg] = JSON.parse(localStorage.getItem("orgs")).filter(
         (object) => object.id === id
     );
-    // localStorage
-    localStorage.setItem("currentOrg", JSON.stringify(currentOrg));
-    // currentOrg = JSON.parse(localStorage.getItem("currentOrg"));
-    return currentOrg;
+    // localStorage активная организация
+    localStorage.setItem(type, JSON.stringify(activeOrg));
+    // id
+    localStorage.setItem("OrgsId", JSON.parse(localStorage.getItem(type)).id);
+    return activeOrg;
 }
 // проверка относится ли организация к пользователю
 export async function isOrgBelongsUser() {
@@ -37,12 +26,10 @@ export async function isOrgBelongsUser() {
         if (
             !localStorage
                 .getItem("orgs")
-                .includes(
-                    JSON.parse(localStorage.getItem("currentOrg")).orgname
-                )
+                .includes(JSON.parse(localStorage.getItem("activeOrg")).orgname)
         ) {
             console.log("remove??");
-            localStorage.removeItem("currentOrg");
+            localStorage.removeItem("activeOrg");
             return;
         }
     } catch (error) {

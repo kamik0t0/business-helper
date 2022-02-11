@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import classes from "./error.module.css";
+import classes from "./styles/error.module.css";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Error({ message }) {

@@ -1,0 +1,19 @@
+.info {
+    display: flex;
+    flex-direction: column;
+    height: 135px;
+    justify-content: center;
+    margin-bottom: 25px;
+
+    .info_item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .info_value {
+            flex: 0 0 80%;
+            justify-self: center;
+            font-size: 1.2em;
+        }
+    }
+}

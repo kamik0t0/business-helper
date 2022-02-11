@@ -1,0 +1,29 @@
+.counterparty {
+    display: flex;
+    flex-direction: row;
+    border-top: 1px solid #f0ebda;
+    width: 100%;
+    min-width: 400px;
+    height: 30px;
+    min-height: 30px;
+
+    .counterparty__number {
+        flex: 1 1 7%;
+        text-align: center;
+    }
+    .counterparty__name {
+        flex: 1 1 70%;
+        text-align: center;
+        border-left: 1px solid #f0ebda;
+        border-right: 1px solid #f0ebda;
+    }
+    .counterparty__inn {
+        flex: 1 1 23%;
+        text-align: center;
+    }
+}
+
+.counterparty:hover {
+    cursor: pointer;
+    background-color: #405c74;
+}

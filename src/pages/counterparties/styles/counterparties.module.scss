@@ -1,0 +1,6 @@
+@import "../../utils/content-frame.scss";
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

@@ -1,0 +1,38 @@
+.tab {
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    color: #f0ebdc;
+    margin: 20px auto 0 auto;
+    width: 80%;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    border: 1px solid #0d1320;
+    background-color: #405c74;
+    height: 50px;
+    transition: height 0.5s ease;
+    font-size: 1.2em;
+    padding: 10px;
+    overflow: hidden;
+
+    .header {
+        font-size: 1.4em;
+        text-align: center;
+    }
+
+    .textcontent {
+        line-height: 20px;
+        padding-top: 15px;
+        text-indent: 15px;
+    }
+}
+
+.tab:hover {
+    cursor: pointer;
+    background-color: #1e2d42;
+    box-shadow: none;
+}
+
+.show {
+    height: 250px;
+    overflow: auto;
+}

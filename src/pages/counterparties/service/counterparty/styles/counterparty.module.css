@@ -1,0 +1,39 @@
+.counterparty {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  border-top: 1px solid #f0ebda;
+  width: 100%;
+  min-width: 400px;
+  height: 30px;
+  min-height: 30px;
+}
+.counterparty .counterparty__number {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 7%;
+          flex: 1 1 7%;
+  text-align: center;
+}
+.counterparty .counterparty__name {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 70%;
+          flex: 1 1 70%;
+  text-align: center;
+  border-left: 1px solid #f0ebda;
+  border-right: 1px solid #f0ebda;
+}
+.counterparty .counterparty__inn {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 23%;
+          flex: 1 1 23%;
+  text-align: center;
+}
+
+.counterparty:hover {
+  cursor: pointer;
+  background-color: #405c74;
+}
