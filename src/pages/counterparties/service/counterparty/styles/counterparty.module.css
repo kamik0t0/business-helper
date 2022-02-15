@@ -35,5 +35,8 @@
 
 .counterparty:hover {
   cursor: pointer;
+}
+
+.highlight {
   background-color: #405c74;
 }

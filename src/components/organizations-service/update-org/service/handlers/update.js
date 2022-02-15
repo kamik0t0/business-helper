@@ -1,7 +1,7 @@
-import { getMyOrgsFromDB } from "../../../../../utils/getDataByForeignKey.js";
-import { chooseOrg } from "../../../../../utils/getOrgs.js";
+import { getDataByForeignKey } from "../../../../../utils/getDataByForeignKey.js";
 import { hideAnimatedModal } from "../../../../../UI/modal/service/handlers/modal-control.js";
 import { checkInputs } from "./check-inputs.js";
+import { showUpdateChanges } from "../../../../../utils/showUpdateChanges.js";
 
 export async function update(
     event,
@@ -11,8 +11,9 @@ export async function update(
     setModal,
     type,
     org,
-    setActiveOrg,
-    dispatch
+    setOrg,
+    dispatch,
+    idType
 ) {
     event.preventDefault();
     try {
@@ -35,11 +36,8 @@ export async function update(
         if (result.updated) {
             console.log(result);
             // заружаем список организаций из БД
-            await getMyOrgsFromDB(
-                `${url}/?UserId=${localStorage.getItem("UserId")}`
-            );
-            chooseOrg(org.id, type);
-            setActiveOrg(JSON.parse(localStorage.getItem(type)));
+            let [orgs] = await getDataByForeignKey(url, idType);
+            showUpdateChanges(orgs, setOrg, org, type);
             setLoader(false);
             hideAnimatedModal(setModal);
         }

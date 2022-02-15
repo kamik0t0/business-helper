@@ -14,13 +14,29 @@ function authReducer(state = REGSTATE, action) {
         case "REG_FALSE":
             const keys = Object.keys(localStorage);
             for (const key of keys) {
-                if (key !== "currentOrg") {
+                if (key !== "myOrg") {
                     localStorage.removeItem(key);
                 }
             }
 
             return { isAuth: action.payload };
 
+        default:
+            return state;
+    }
+}
+
+const MYORGSTATE = {
+    isMyOrgSelected: false,
+};
+
+function myOrgReducer(state = MYORGSTATE, action) {
+    switch (action.type) {
+        case "isMYORGSELECTED_TRUE":
+            return { isMyOrgSelected: action.payload };
+
+        case "isMYORGSELECTED_FALSE":
+            return { isMyOrgSelected: action.payload };
         default:
             return state;
     }
@@ -47,6 +63,7 @@ function errorReducer(state = ERROR, action) {
 const rootReducer = combineReducers({
     authReducer: authReducer,
     errorReducer: errorReducer,
+    myOrgReducer: myOrgReducer,
 });
 
 export const store = createStore(rootReducer);

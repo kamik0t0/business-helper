@@ -6,21 +6,23 @@ import Loader from "../../../UI/Loader/Loader.jsx";
 
 import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
 import { deleteOrg } from "./service/handlers/delete.js";
+import PropTypes from "prop-types";
 
 export default function DeleteOrg({
     setModal,
-    setActiveOrg,
-    myOrg,
+    setOrgs,
+    org,
     url,
     type,
     noselected,
+    idType,
 }) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
 
     return (
         <>
-            {myOrg === undefined || myOrg === null ? (
+            {org === undefined || org === null ? (
                 <div className={classes.delete}>
                     <div className={classes.noorg}>{noselected}</div>
                 </div>
@@ -28,7 +30,7 @@ export default function DeleteOrg({
                 <div className={classes.delete}>
                     <div
                         className={classes.text}
-                    >{`Вы действительно хотите удалить ${myOrg.orgname}?`}</div>
+                    >{`Вы действительно хотите удалить ${org.orgname}?`}</div>
                     {loader ? (
                         <Loader />
                     ) : (
@@ -37,12 +39,13 @@ export default function DeleteOrg({
                                 onClick={() =>
                                     deleteOrg(
                                         setModal,
-                                        setActiveOrg,
-                                        myOrg,
+                                        setOrgs,
+                                        org,
                                         type,
                                         url,
                                         setLoader,
-                                        dispatch
+                                        dispatch,
+                                        idType
                                     )
                                 }
                             >
@@ -60,3 +63,13 @@ export default function DeleteOrg({
         </>
     );
 }
+
+DeleteOrg.propTypes = {
+    setModal: PropTypes.func.isRequired,
+    setOrgs: PropTypes.func,
+    org: PropTypes.object.isRequired,
+    url: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    noselected: PropTypes.string.isRequired,
+    idType: PropTypes.string.isRequired,
+};

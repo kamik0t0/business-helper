@@ -1,5 +1,6 @@
 import React from "react";
 import classes from "./styles/org-info.module.css";
+import PropTypes from "prop-types";
 
 export default function OrgInfo({ myOrg, isORG }) {
     return (
@@ -10,12 +11,12 @@ export default function OrgInfo({ myOrg, isORG }) {
 
                     <div className={classes.info_value}>
                         {`${myOrg.opf} `}
-                        {isORG.current ? `"${myOrg.orgname}"` : myOrg.orgname}
+                        {isORG ? `"${myOrg.orgname}"` : myOrg.orgname}
                     </div>
                 </div>
                 <div className={classes.info_item}>
                     <div className={classes.info_name}>ИНН / КПП: </div>
-                    {isORG.current ? (
+                    {isORG ? (
                         <div className={classes.info_value}>
                             {`${myOrg.inn} / ${myOrg.kpp}`}
                         </div>
@@ -29,7 +30,7 @@ export default function OrgInfo({ myOrg, isORG }) {
                     <div className={classes.info_name}>Адрес: </div>
                     <div className={classes.info_value}>{myOrg.address}</div>
                 </div>
-                {isORG.current && (
+                {isORG && (
                     <div className={classes.info_item}>
                         <div className={classes.info_name}>Руководитель: </div>
                         <div className={classes.info_value}>
@@ -41,3 +42,8 @@ export default function OrgInfo({ myOrg, isORG }) {
         </>
     );
 }
+
+OrgInfo.propTypes = {
+    myOrg: PropTypes.object.isRequired,
+    isORG: PropTypes.bool.isRequired,
+};

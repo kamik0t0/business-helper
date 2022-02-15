@@ -5,6 +5,9 @@ import MyLink from "../../../UI/link/MyLink.jsx";
 
 export default function Avatar() {
     const isAuth = useSelector((state) => state.authReducer.isAuth);
+    const isMyOrgSelected = useSelector(
+        (state) => state.myOrgReducer.isMyOrgSelected
+    );
     const dispatch = useDispatch();
 
     const auth = useRef();
@@ -14,6 +17,7 @@ export default function Avatar() {
     function auth_Handler(event) {
         event.preventDefault();
         dispatch({ type: "REG_FALSE", payload: !isAuth });
+        dispatch({ type: "isMYORGSELECTED_FALSE", payload: false });
         hideIconMenu();
     }
 

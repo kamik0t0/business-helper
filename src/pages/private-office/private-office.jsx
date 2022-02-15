@@ -1,42 +1,28 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import classes from "./styles/private-office.module.css";
 import { Navigate } from "react-router-dom";
-import Modal from "../../UI/modal/modal.jsx";
-import CreateOrg from "../../components/organizations-service/create-org/Create-org.jsx";
+import PrivateOfficeModals from "./service/modals/Private-office-modals.jsx";
 import { chooseOrg } from "../../utils/getOrgs.js";
-import { useSelector } from "react-redux";
-import DeleteOrg from "../../components/organizations-service/delete-org/Delete-org.jsx";
-import PatchOrg from "../../components/organizations-service/update-org/Patch-org.jsx";
-import ReadOrg from "../../components/organizations-service/read-org/Read-org.jsx";
+import { useSelector, useDispatch } from "react-redux";
 import { makeOrgsArr } from "../../utils/orgsList.js";
 import MySelect from "../../UI/input/MySelect/MySelect.jsx";
 import OrgInfo from "./service/org-info.jsx";
 import Buttons from "./service/buttons/buttons.jsx";
-import { isOrganization } from "./service/handlers/isOrg.js";
-import { getCounterpartiesFromDB } from "../../utils/getDataByForeignKey.js";
+import { isOrganization } from "../../utils/isOrg.js";
 
 export default function Office() {
     const isAuth = useSelector((state) => state.authReducer.isAuth);
-
+    const dispatch = useDispatch();
     const [modalAdd, setModalAdd] = useState({ show: false, add: false });
     const [modalRead, setModalRead] = useState({ show: false, add: false });
     const [modalUpdate, setModalUpdate] = useState({ show: false, add: false });
     const [modalDelete, setModalDelete] = useState({ show: false, add: false });
-
-    const [myOrg, setActiveOrg] = useState();
-
-    // попытка отрендерить компонент с заданной организацией если таковая уже есть, т.е. если пользователь в предыдущей сессии работал с некоторой организацией, то при новом входе в систему должен видеть эту же активную организацию в личном кабинете
-    useEffect(() => {
-        try {
-            setActiveOrg(JSON.parse(localStorage.getItem("myOrg")));
-        } catch (error) {
-            localStorage.removeItem("myOrg");
-        }
-    }, []);
+    const [myOrg, setOrg] = useState();
     // значение переменной должно быть доступно после перерендирнга => useRef
     let isORG = useRef();
     // ООО или ИП
     isORG.current = isOrganization(myOrg);
+
     return (
         <>
             {/* если одно из условий верно, то компонент рендерится */}
@@ -57,14 +43,9 @@ export default function Office() {
                         id="ORG"
                         multiple={false}
                         defaultValue={["Выбрать организацию"][0]}
-                        func={(event) => {
-                            setActiveOrg(chooseOrg(event, "myOrg"));
-                            getCounterpartiesFromDB(
-                                `http://localhost:5600/counterparty/?OrgsId=${localStorage.getItem(
-                                    "OrgsId"
-                                )}`
-                            );
-                        }}
+                        func={(event) =>
+                            setOrg(chooseOrg(event, "myOrg", dispatch))
+                        }
                         options={makeOrgsArr(
                             JSON.parse(localStorage.getItem("orgs"))
                         )}
@@ -74,7 +55,7 @@ export default function Office() {
                             Выберите или добавьте фирму
                         </div>
                     ) : (
-                        <OrgInfo myOrg={myOrg} isORG={isORG} />
+                        <OrgInfo myOrg={myOrg} isORG={isORG.current} />
                     )}
                     <Buttons
                         setModalAdd={setModalAdd}
@@ -86,69 +67,19 @@ export default function Office() {
             ) : (
                 <Navigate to="/" />
             )}
-            {
-                <>
-                    {modalAdd.show && (
-                        <Modal
-                            size={{ height: "75vh", width: "75vw" }}
-                            active={modalAdd.add}
-                            setActive={setModalAdd}
-                        >
-                            <CreateOrg
-                                setModal={setModalAdd}
-                                setActiveOrg={setActiveOrg}
-                                url="http://localhost:5600/private"
-                                // url="https://deploy-test-business-assist.herokuapp.com/private"
-                                type="myOrg"
-                                idType="UserId"
-                            />
-                        </Modal>
-                    )}
-                    {modalRead.show && (
-                        <Modal active={modalRead.add} setActive={setModalRead}>
-                            <ReadOrg
-                                setModal={setModalRead}
-                                org={myOrg}
-                                noselected="Организация не выбрана"
-                            />
-                        </Modal>
-                    )}
-                    {modalUpdate.show && (
-                        <Modal
-                            active={modalUpdate.add}
-                            setActive={setModalUpdate}
-                        >
-                            <PatchOrg
-                                setModal={setModalUpdate}
-                                org={myOrg}
-                                setActiveOrg={setActiveOrg}
-                                isORG={isORG.current}
-                                type="myOrg"
-                                noselected="Организация не выбрана"
-                                url="http://localhost:5600/private"
-                                // url="https://deploy-test-business-assist.herokuapp.com/private"
-                            />
-                        </Modal>
-                    )}
-                    {modalDelete.show && (
-                        <Modal
-                            size={{ height: "25vh", width: "40vw" }}
-                            active={modalDelete.add}
-                            setActive={setModalDelete}
-                        >
-                            <DeleteOrg
-                                setModal={setModalDelete}
-                                setActiveOrg={setActiveOrg}
-                                myOrg={myOrg}
-                                type="myOrg"
-                                url="http://localhost:5600/private"
-                                // url="https://deploy-test-business-assist.herokuapp.com/private"
-                                noselected="Организация не выбрана"
-                            />
-                        </Modal>
-                    )}
-                </>
-            }
+            <PrivateOfficeModals
+                setModalAdd={setModalAdd}
+                setModalRead={setModalRead}
+                setModalUpdate={setModalUpdate}
+                setModalDelete={setModalDelete}
+                modalAdd={modalAdd}
+                modalRead={modalRead}
+                modalUpdate={modalUpdate}
+                modalDelete={modalDelete}
+                isORG={isORG}
+                myOrg={myOrg}
+                setOrg={setOrg}
+            />
         </>
     );
 }

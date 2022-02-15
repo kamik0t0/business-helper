@@ -27,9 +27,6 @@
 
 .tab:hover {
   cursor: pointer;
-  background-color: #1e2d42;
-  -webkit-box-shadow: none;
-          box-shadow: none;
 }
 
 .show {

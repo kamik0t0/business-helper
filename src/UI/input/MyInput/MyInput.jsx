@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import classes from "./styles/my-input.module.css";
+import { check } from "./service/preventStrInput";
+import PropTypes, { func } from "prop-types";
 
 const MyInput = React.forwardRef(
     (
@@ -17,17 +19,6 @@ const MyInput = React.forwardRef(
         ref
     ) => {
         const [error, setError] = useState(false);
-        // Валидация ввода числовых значений
-        function check() {
-            let input = document.getElementById(field + prevValue);
-            if (!isNumber) return;
-            input.value = input.value.replace(/[^0-9]/g, "");
-            if (input.value.length === length) {
-                setError(false);
-            } else {
-                setError(true);
-            }
-        }
         return (
             <>
                 <div className={classes.fields__item}>
@@ -37,7 +28,7 @@ const MyInput = React.forwardRef(
                     )}
 
                     <input
-                        id={field + prevValue}
+                        id={field + prevValue + ""}
                         maxLength={length}
                         minLength={length}
                         style={style}
@@ -54,7 +45,9 @@ const MyInput = React.forwardRef(
                                 : classes.fields__item_input
                         }
                         type={`${type}`}
-                        onInput={check}
+                        onInput={() =>
+                            check(isNumber, field, prevValue, setError, length)
+                        }
                         onChange={(event) => getValue(event, field, length)}
                         {...props}
                     />
@@ -65,3 +58,14 @@ const MyInput = React.forwardRef(
 );
 
 export default MyInput;
+
+MyInput.propTypes = {
+    name: PropTypes.string,
+    field: PropTypes.string,
+    prevValue: PropTypes.object,
+    type: PropTypes.string,
+    getValue: PropTypes.func,
+    style: PropTypes.object,
+    length: PropTypes.number,
+    isNumber: PropTypes.bool,
+};

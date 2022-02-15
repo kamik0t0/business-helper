@@ -1,6 +1,7 @@
 import React from "react";
 import classes from "./styles/modal.module.css";
 import { hideAnimatedModal } from "./service/handlers/modal-control.js";
+import PropTypes from "prop-types";
 
 export default function Modal({ active, setActive, children, size }) {
     return (
@@ -28,3 +29,10 @@ export default function Modal({ active, setActive, children, size }) {
         </>
     );
 }
+
+Modal.propTypes = {
+    active: PropTypes.bool.isRequired,
+    setActive: PropTypes.func.isRequired,
+    children: PropTypes.element.isRequired,
+    size: PropTypes.object,
+};

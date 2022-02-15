@@ -8,11 +8,10 @@ async function create(
     event,
     organization,
     setLoader,
-    setActiveOrg,
+    setOrgs,
     url,
     dispatch,
     setModal,
-    type,
     idType
 ) {
     event.preventDefault();
@@ -37,17 +36,9 @@ async function create(
         // если в ответе есть поле created
         if (result.created) {
             // заружаем список организаций из БД
-            let [orgs, id] = await getDataByForeignKey(url, idType);
-            // выбрали созданную сущность
-            let [newOrg] = orgs.filter(
-                (org) => org.orgname === organization.orgname
-            );
-            // установили в качестве активной
-            localStorage.setItem(`${type}`, JSON.stringify(newOrg));
-            // id
-            localStorage.setItem(id, JSON.parse(localStorage.getItem(type)).id);
+            let [orgs] = await getDataByForeignKey(url, idType);
             // показали в личном кабинете
-            setActiveOrg(JSON.parse(localStorage.getItem(`${type}`)));
+            setOrgs(orgs);
             // убрали анимацию загрузки
             setLoader(false);
             // анимация модального окна

@@ -4,40 +4,26 @@ import { Requisites } from "../../../utils/Org.js";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
 import { addRequisitesValues } from "../handlers/addRequisitesValues.js";
+import Requisite from "./service/components/ReqField.jsx";
+import PropTypes from "prop-types";
 
 export default function ReadOrg({ setModal, org, noselected }) {
     // если выбрана организация, то добавляются значения реквизитов
-    let myOrg = org !== null && addRequisitesValues(Requisites, org);
+    let propsSet = addRequisitesValues(Requisites, org);
+    console.log(propsSet);
 
     return (
         <>
             {/* если параметр организации = null (т.е. отсутствует в localStorage), то компонент не рендерится */}
-            {org === null ? (
+            {propsSet === null ? (
                 <div className={classes.read}>
                     <div className={classes.noorg}>{noselected}</div>
                 </div>
             ) : (
                 <div className={classes.read}>
                     <div className={classes.header}>Реквизиты</div>
-
-                    {myOrg.map((requisite) => {
-                        return (
-                            <>
-                                {requisite.value !== "null" && (
-                                    <div
-                                        key={requisite.field}
-                                        className={classes.content}
-                                    >
-                                        <div className={classes.requisit_name}>
-                                            {requisite.name}
-                                        </div>
-                                        <div className={classes.requisit_value}>
-                                            {requisite.value}
-                                        </div>
-                                    </div>
-                                )}
-                            </>
-                        );
+                    {propsSet.map((requisite) => {
+                        return <Requisite requisite={requisite} />;
                     })}
                     <div className={classes.buttons}>
                         <MyButton onClick={() => hideAnimatedModal(setModal)}>
@@ -52,3 +38,9 @@ export default function ReadOrg({ setModal, org, noselected }) {
         </>
     );
 }
+
+ReadOrg.propTypes = {
+    setModal: PropTypes.func.isRequired,
+    org: PropTypes.object.isRequired,
+    noselected: PropTypes.string,
+};

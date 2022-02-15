@@ -16,11 +16,12 @@ import { filterRequisites } from "../handlers/filter-requisites.js";
 export default function PatchOrg({
     setModal,
     org,
-    setActiveOrg,
+    setOrg,
     type,
     url,
     noselected,
     isORG,
+    idType,
 }) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
@@ -33,7 +34,7 @@ export default function PatchOrg({
 
     return (
         <>
-            {org === null ? (
+            {myOrg === null ? (
                 <div className={classes.read}>
                     <div className={classes.noorg}>{noselected}</div>
                 </div>
@@ -74,8 +75,9 @@ export default function PatchOrg({
                                     setModal,
                                     type,
                                     org,
-                                    setActiveOrg,
-                                    dispatch
+                                    setOrg,
+                                    dispatch,
+                                    idType
                                 )
                             }
                         >

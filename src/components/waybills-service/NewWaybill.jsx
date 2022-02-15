@@ -9,7 +9,7 @@ import TotalWrapper from "./Wb-total-wrapper.js";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../UI/input/MyButton/MyButton.jsx";
 
-export default function NewWaybill({ wbType, path /* , wbItems  */ }) {
+export default function NewWaybill({ wbType, path }) {
     const [pos, setPosition] = useState([]);
     const [counter, setCounter] = useState(0);
     // useRef - запоминаем значение при ререндеринге
@@ -145,12 +145,20 @@ export default function NewWaybill({ wbType, path /* , wbItems  */ }) {
                         style={{ width: "350px" }}
                         name={wbType[1]}
                         type="text"
+                        defaultValue={
+                            JSON.parse(localStorage.getItem("counterparty")) !==
+                                null || undefined
+                                ? JSON.parse(
+                                      localStorage.getItem("counterparty")
+                                  ).orgname
+                                : ""
+                        }
                         getValue={(event) =>
                             (WB.current.counterparty = event.target.value)
                         }
                     />
                     <Link to="/counterparties">
-                        <MyButton style={{ width: "30px" }}>...</MyButton>
+                        <MyButton>Выбрать...</MyButton>
                     </Link>
                 </div>
                 <div className={classes.waybill_form_header_usage}>

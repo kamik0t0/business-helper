@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 // получаем некоторые значения через props из родительского компонента
 export default function CalcResult({
@@ -85,3 +86,11 @@ export default function CalcResult({
         </div>
     );
 }
+
+CalcResult.propTypes = {
+    classes: PropTypes.object.isRequired,
+    taxIncomeIE: PropTypes.number.isRequired,
+    burdenIncomeIE: PropTypes.number.isRequired,
+    taxIncomeLLC: PropTypes.number.isRequired,
+    burdenIncomeLLC: PropTypes.number.isRequired,
+};

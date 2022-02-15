@@ -1,4 +1,5 @@
 export function checkInnKpp(organization) {
+    console.log(organization);
     for (const key in organization) {
         // если поле не заполнено
         if (organization[key] === undefined) return false;

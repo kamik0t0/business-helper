@@ -1,5 +1,7 @@
 // загружает данные в зависимости от ForeignKey
 export async function getDataByForeignKey(url, idType) {
+    /* UserId - запрос организаций пользователя
+        OrgsId - запрос контрагентов организации */
     switch (idType) {
         case "UserId":
             return [
@@ -23,12 +25,12 @@ export async function getDataByForeignKey(url, idType) {
 // запрос на все организации пользователя из БД
 export async function getMyOrgsFromDB(url) {
     console.log(url);
-    /* UserId - значит запрос организаций пользователя
-        OrgId - значит запрос контрагентов организации */
+
     try {
         let getOrgs = await fetch(url);
         let orgs = await getOrgs.json();
         localStorage.setItem("orgs", JSON.stringify(orgs));
+        localStorage.removeItem("counterparty");
         console.log(orgs);
         return orgs;
     } catch (error) {
@@ -38,12 +40,10 @@ export async function getMyOrgsFromDB(url) {
 
 // запрос контрагентов
 export async function getCounterpartiesFromDB(url) {
-    console.log(url);
     try {
         let getcounterparties = await fetch(url);
         let counterparties = await getcounterparties.json();
         localStorage.setItem("counterparties", JSON.stringify(counterparties));
-        console.log(counterparties);
         return counterparties;
     } catch (error) {
         console.log(

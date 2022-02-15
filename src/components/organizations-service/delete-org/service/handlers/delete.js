@@ -1,18 +1,19 @@
-import { getMyOrgsFromDB } from "../../../../../utils/getDataByForeignKey.js";
+import { getDataByForeignKey } from "../../../../../utils/getDataByForeignKey.js";
 import { hideAnimatedModal } from "../../../../../UI/modal/service/handlers/modal-control.js";
 
 export async function deleteOrg(
     setModal,
-    setActiveOrg,
-    myOrg,
+    setOrgs,
+    org,
     type,
     url,
     setLoader,
-    dispatch
+    dispatch,
+    idType
 ) {
     setLoader(true);
     try {
-        let response = await fetch(`${url}/?orgId=${myOrg.id}`, {
+        let response = await fetch(`${url}/?orgId=${org.id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -21,18 +22,17 @@ export async function deleteOrg(
         let result = await response.json();
         if (result.deleted) {
             console.log(result.message);
-            await getMyOrgsFromDB(
-                `${url}/?UserId=${localStorage.getItem("UserId")}`
-            );
+            let [orgs] = await getDataByForeignKey(url, idType);
+            // убираем организацию из localStorage
+            localStorage.removeItem(type);
+            setOrgs(orgs);
+            // модальное окно скрывается
+            hideAnimatedModal(setModal);
+            // убираем анимацию загрузки
+            setLoader(false);
         } else {
             console.log(result.message);
         }
-        // убираем организацию из localStorage
-        setActiveOrg(localStorage.removeItem(type));
-        // модальное окно скрывается
-        hideAnimatedModal(setModal);
-        // убираем анимацию загрузки
-        setLoader(false);
     } catch (error) {
         setLoader(false);
         // если проблема с сервером / базой данных или еще что-то

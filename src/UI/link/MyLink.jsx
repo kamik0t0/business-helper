@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import classes from "./styles/my-link.module.css";
+import PropTypes from "prop-types";
 
 export default function MyLink({ children, path, style }) {
     return (
@@ -11,3 +12,9 @@ export default function MyLink({ children, path, style }) {
         </>
     );
 }
+
+MyLink.propTypes = {
+    children: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    style: PropTypes.object,
+};

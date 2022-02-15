@@ -1,4 +1,5 @@
-export function addRequisitesValues(requisitesNames, requisitesValues) {
+export function addRequisitesValues(requisitesNames, requisitesValues = false) {
+    if (requisitesValues === false) return null;
     for (const requisiteName of requisitesNames) {
         requisiteName.value = requisitesValues[requisiteName.field];
     }

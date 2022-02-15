@@ -1,5 +1,6 @@
 import React from "react";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
+import PropTypes from "prop-types";
 
 // получаем callback которые изменяют state в родительском компоненте
 export default function CalcData({ classes, getIncome, getSalary }) {
@@ -37,3 +38,9 @@ export default function CalcData({ classes, getIncome, getSalary }) {
         </div>
     );
 }
+
+CalcData.propTypes = {
+    classes: PropTypes.object.isRequired,
+    getIncome: PropTypes.func.isRequired,
+    getSalary: PropTypes.func.isRequired,
+};

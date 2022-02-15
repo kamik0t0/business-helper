@@ -16,20 +16,7 @@
         font-size: 1.5em;
         @include font();
     }
-    .content {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
 
-        .requisit_name {
-            @include font();
-            font-size: 1.2em;
-        }
-        .requisit_value {
-            @include font();
-            font-size: 1.3em;
-        }
-    }
     .buttons {
         display: flex;
         flex-direction: row;

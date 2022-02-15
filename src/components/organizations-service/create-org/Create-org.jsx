@@ -11,14 +11,9 @@ import { useDispatch } from "react-redux";
 import { create } from "./service/handlers/create.js";
 import { switchOPF } from "./service/handlers/switchOPF.js";
 import { getRequisites } from "./service/handlers/getRequisites.js";
+import PropTypes from "prop-types";
 
-export default function CreateOrg({
-    setModal,
-    setActiveOrg,
-    url,
-    type,
-    idType,
-}) {
+export default function CreateOrg({ setModal, setOrgs, url, idType }) {
     const [isORG, setIsOrg] = useState(true);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
@@ -37,11 +32,8 @@ export default function CreateOrg({
                         "Общество с ограниченной ответственностью",
                         "Индивидуальный предприниматель",
                     ]}
-                    func={(event) =>
-                        switchOPF(event, setIsOrg, ORG.current, Requisites)
-                    }
+                    func={(event) => switchOPF(event, setIsOrg, ORG.current)}
                 />
-
                 {loader ? (
                     <Loader />
                 ) : (
@@ -66,11 +58,10 @@ export default function CreateOrg({
                             event,
                             ORG.current,
                             setLoader,
-                            setActiveOrg,
+                            setOrgs,
                             url,
                             dispatch,
                             setModal,
-                            type,
                             idType
                         )
                     }
@@ -81,3 +72,10 @@ export default function CreateOrg({
         </>
     );
 }
+
+CreateOrg.propTypes = {
+    setModal: PropTypes.func.isRequired,
+    setOrgs: PropTypes.func.isRequired,
+    url: PropTypes.string.isRequired,
+    idType: PropTypes.string.isRequired,
+};

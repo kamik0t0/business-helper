@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import classes from "./styles/auth.module.css";
 import { Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import AuthError from "./service/components/Auth-error.jsx";
+import AuthError from "./service/error/Auth-error.jsx";
 import Loader from "../../UI/Loader/Loader.jsx";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";

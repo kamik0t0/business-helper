@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import classes from "./styles/tab.module.css";
+import PropTypes from "prop-types";
 
 export default function Tab({ children, header }) {
     const [showTab, setShowTab] = useState(false);
@@ -18,3 +19,8 @@ export default function Tab({ children, header }) {
         </>
     );
 }
+
+Tab.propTypes = {
+    children: PropTypes.string.isRequired,
+    header: PropTypes.string.isRequired,
+};
