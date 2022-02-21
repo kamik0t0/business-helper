@@ -1,12 +1,13 @@
 // компонент показывающий список существующих накладных
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
+import { v4 as uuid } from "uuid";
 import { Link } from "react-router-dom";
-import classes from "./waybillList.module.css";
-import Waybill from "./WaybillRow.jsx";
-import { Waybills } from "../../utils/waybillsTest.js";
-import Loader from "../../UI/Loader/Loader.jsx";
-import MySelect from "../../UI/input/MySelect/MySelect.jsx";
-import MyInput from "../../UI/input/MyInput/MyInput.jsx";
+import classes from "./styles/waybill-list.module.css";
+import Waybill from "./waybill/Waybill.jsx";
+import { Waybills } from "../../../utils/waybillsTest.js";
+import Loader from "../../../UI/Loader/Loader.jsx";
+import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
+import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 
 export default function WayBillsList({ CounterPartyType, path }) {
     console.log(CounterPartyType);
@@ -23,13 +24,6 @@ export default function WayBillsList({ CounterPartyType, path }) {
         savedArgs = useRef(),
         savedThis = useRef();
     console.log(search);
-    // эмуляция загрузки с сервера
-    useEffect(() => {
-        setTimeout(() => {
-            setLoader(false);
-        }, 1000);
-    }, []);
-
     // сортировки по:
     // - дате
     function sortByDate() {
@@ -186,7 +180,7 @@ export default function WayBillsList({ CounterPartyType, path }) {
                     wb.map((waybill) => {
                         return (
                             <Waybill
-                                key={waybill.number}
+                                key={uuid()}
                                 date={JSON.stringify(waybill.date)}
                                 number={waybill.number}
                                 counterparty={waybill.counterparty}

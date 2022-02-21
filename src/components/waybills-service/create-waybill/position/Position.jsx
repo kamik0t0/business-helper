@@ -1,15 +1,15 @@
 // строка в создаваемой накладной (позиция)
 import React from "react";
-import classes from "./wbposition.module.css";
-import MyInput from "../../UI/input/MyInput/MyInput.jsx";
+import classes from "./styles/position.module.css";
+import MyInput from "../../../../UI/input/MyInput/MyInput.jsx";
 
-export default function WbPosition({
+export default function Position({
     highlight,
     getDelRow,
     number,
-    summ,
-    NDS,
-    total,
+    getSumm,
+    getNDS,
+    getTotal,
     getNomenclature,
     getQuantity,
     getPrice,
@@ -58,10 +58,16 @@ export default function WbPosition({
                         type="number"
                     />
                 </div>
-                <div className={classes.position_summ}>{summ.toFixed(2)}</div>
+                <div className={classes.position_summ}>
+                    {getSumm().toFixed(2)}
+                </div>
                 <div className={classes.position_NDSprcnt}>{20}</div>
-                <div className={classes.position_NDS}>{NDS.toFixed(2)}</div>
-                <div className={classes.position_total}>{total.toFixed(2)}</div>
+                <div className={classes.position_NDS}>
+                    {getNDS().toFixed(2)}
+                </div>
+                <div className={classes.position_total}>
+                    {getTotal().toFixed(2)}
+                </div>
             </div>
         </>
     );

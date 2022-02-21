@@ -1,6 +1,6 @@
 // представление накладной в виде таблицы с 4 колонками и 1 строки в списке накладных: покупок или продаж
 import React from "react";
-import classes from "./wblist.module.css";
+import classes from "./styles/waybill-list.module.css";
 
 export default function Sale({ date, number, counterparty, summ }) {
     const parseDate = new Date(

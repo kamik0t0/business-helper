@@ -1,7 +1,7 @@
 import React from "react";
-import classes from "./wb-total.module.css";
+import classes from "./styles/total.module.css";
 
-export default function Total({ array, field, name, total }) {
+export function Total({ array, field, name, total }) {
     return (
         <div className={classes.total}>
             <div className={classes.total_name}>{name}</div>
@@ -10,4 +10,9 @@ export default function Total({ array, field, name, total }) {
             </div>
         </div>
     );
+}
+
+export function TotalWrapper({ children, arr }) {
+    console.log(arr);
+    return <div className={classes.totalWrapper}>{children}</div>;
 }

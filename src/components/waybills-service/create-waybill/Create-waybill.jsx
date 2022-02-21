@@ -1,15 +1,14 @@
 // компонент создания накладной
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import classes from "./newWaybill.module.css";
-import WbPosition from "./Wb-position.jsx";
-import { Position, wbItems } from "../../utils/wbpositionClass.js";
-import Total from "./Wb-total";
-import TotalWrapper from "./Wb-total-wrapper.js";
-import MyInput from "../../UI/input/MyInput/MyInput.jsx";
-import MyButton from "../../UI/input/MyButton/MyButton.jsx";
+import classes from "./styles/create-waybill.module.css";
+import Position from "./position/Position.jsx";
+import { Positions, wbItems } from "../../../utils/wbpositionClass.js";
+import { Total, TotalWrapper } from "./total/Total.jsx";
+import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
+import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 
-export default function NewWaybill({ wbType, path }) {
+export default function CreateWaybill({ wbType, path }) {
     const [pos, setPosition] = useState([]);
     const [counter, setCounter] = useState(0);
     // useRef - запоминаем значение при ререндеринге
@@ -32,7 +31,7 @@ export default function NewWaybill({ wbType, path }) {
         event.preventDefault();
         setCounter((prev) => prev + 1);
         // добавление объекта строки
-        wbItems.push(new Position(counter));
+        wbItems.push(new Positions(counter));
         setPosition([...wbItems]);
     }
 
@@ -114,12 +113,39 @@ export default function NewWaybill({ wbType, path }) {
         return WB.current[field];
     }
 
+    async function create(event, url) {
+        event.preventDefault();
+        WB.current["myOrg"] = JSON.parse(localStorage.getItem("myOrg"));
+        WB.current["counterparty"] = JSON.parse(
+            localStorage.getItem("counterparty")
+        );
+        WB.current["counterpartyId"] = localStorage.getItem("counterpartyId");
+
+        console.log(WB.current);
+        // отправка запроса
+        let response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(WB.current),
+        });
+        // получение ответа
+        let result = await response.json();
+        // если в ответе есть поле created
+        console.log(result);
+    }
+
     return (
         <form className={classes.content}>
             <div className={classes.waybill_form_header}>
                 <div className={classes.waybill_form_header_save}>
                     {" "}
-                    <MyButton>Сохранить</MyButton>
+                    <MyButton
+                        onClick={(event) =>
+                            create(event, "http://localhost:5600/sales")
+                        }
+                    >
+                        Сохранить
+                    </MyButton>
                     <MyButton>Excel</MyButton>
                     <div className={classes.waybill_form_header_save_name}>
                         {wbType[0]}
@@ -134,6 +160,7 @@ export default function NewWaybill({ wbType, path }) {
                             id="waybillDate"
                             name="Дата:"
                             type="date"
+                            defaultValue={new Date(Date.now())}
                             getValue={(event) =>
                                 (WB.current.date = new Date(
                                     `${event.target.value}`
@@ -185,15 +212,15 @@ export default function NewWaybill({ wbType, path }) {
             </div>
             {pos.map((item, index) => {
                 return (
-                    <WbPosition
+                    <Position
                         highlight={item.highlight}
                         getDelRow={getDelRow}
                         key={item.number}
                         classes={classes}
                         number={index + 1}
-                        summ={item.summ}
-                        NDS={item.NDS}
-                        total={item.total}
+                        getSumm={item.getSumm.bind(item)}
+                        getNDS={item.getNDS.bind(item)}
+                        getTotal={item.getTotal.bind(item)}
                         getNomenclature={getNomenclature}
                         getQuantity={getQuantity}
                         getPrice={getPrice}

@@ -1,9 +1,10 @@
 import React from "react";
 import classes from "./styles/req-field.module.css";
+import { v4 as uuid } from "uuid";
 
 export default function Requisite({ requisite }) {
     return (
-        <div key={requisite.value}>
+        <div key={uuid()}>
             {requisite.value !== "null" && (
                 <div className={classes.content}>
                     <div className={classes.requisit_name}>

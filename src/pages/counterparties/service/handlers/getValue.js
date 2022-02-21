@@ -10,6 +10,7 @@ export function getValue(
         "counterparty",
         JSON.stringify(counterparties[number - 1])
     );
+    localStorage.setItem("counterpartyId", counterparties[number - 1].id);
     highlight(number, counterparties, setCounterparties, row);
     let counterparty = JSON.parse(localStorage.getItem("counterparty"));
     setCounterparty(counterparty);
