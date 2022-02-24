@@ -14,9 +14,7 @@ function authReducer(state = REGSTATE, action) {
         case "REG_FALSE":
             const keys = Object.keys(localStorage);
             for (const key of keys) {
-                if (key !== "myOrg") {
-                    localStorage.removeItem(key);
-                }
+                localStorage.removeItem(key);
             }
 
             return { isAuth: action.payload };

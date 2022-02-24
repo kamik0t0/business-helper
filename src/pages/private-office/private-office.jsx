@@ -14,6 +14,7 @@ import {
     getSalesFromDB,
     getPurchasesFromDB,
 } from "../../utils/getDataByForeignKey";
+import Loader from "../../UI/Loader/Loader.jsx";
 
 export default function Office() {
     const isAuth = useSelector((state) => state.authReducer.isAuth);
@@ -23,6 +24,7 @@ export default function Office() {
     const [modalUpdate, setModalUpdate] = useState({ show: false, add: false });
     const [modalDelete, setModalDelete] = useState({ show: false, add: false });
     const [myOrg, setOrg] = useState();
+    const [loader, setLoader] = useState(false);
     // значение переменной должно быть доступно после перерендирнга => useRef
     let isORG = useRef();
     // ООО или ИП
@@ -49,22 +51,28 @@ export default function Office() {
                         multiple={false}
                         defaultValue={["Выбрать организацию"][0]}
                         func={async (event) => {
+                            setLoader(true);
                             setOrg(chooseOrg(event, "myOrg", dispatch));
                             getCounterpartiesFromDB(
                                 `http://localhost:5600/counterparty/?OrgsId=${localStorage.getItem(
                                     "OrgsId"
                                 )}`
-                            );
-                            getSalesFromDB(
-                                `http://localhost:5600/sales/?CounterpartyId=${localStorage.getItem(
-                                    "counterpartyId"
-                                )}`
-                            );
-                            getPurchasesFromDB(
-                                `http://localhost:5600/purchases/?CounterpartyId=${localStorage.getItem(
-                                    "counterpartyId"
-                                )}`
-                            );
+                            )
+                                .then(() =>
+                                    getSalesFromDB(
+                                        `http://localhost:5600/sales/?OrgId=${localStorage.getItem(
+                                            "OrgsId"
+                                        )}`
+                                    )
+                                )
+                                .then(() => {
+                                    getPurchasesFromDB(
+                                        `http://localhost:5600/purchases/?OrgId=${localStorage.getItem(
+                                            "OrgsId"
+                                        )}`
+                                    );
+                                })
+                                .then(() => setLoader(false));
                         }}
                         options={makeOrgsArr(
                             JSON.parse(localStorage.getItem("orgs"))

@@ -123,6 +123,7 @@ export default function CreateWaybill({ wbType, path, waybills, setWaybills }) {
             localStorage.getItem("counterparty")
         );
         WB.current["counterpartyId"] = localStorage.getItem("counterpartyId");
+        WB.current["orgId"] = localStorage.getItem("OrgsId");
 
         console.log(WB.current);
         // отправка запроса
@@ -135,7 +136,9 @@ export default function CreateWaybill({ wbType, path, waybills, setWaybills }) {
         let result = await response.json();
         // если в ответе есть поле created
         if (result.created) {
-            // запрос на накладные
+            console.log(url);
+            console.log(idType);
+            // // запрос на накладные
             let [res] = await getDataByForeignKey(url, idType);
             console.log(res);
             setWaybills(res);
@@ -158,8 +161,10 @@ export default function CreateWaybill({ wbType, path, waybills, setWaybills }) {
                                 onClick={(event) =>
                                     create(
                                         event,
-                                        "http://localhost:5600" + path,
-                                        "CounterpartyId" + path
+                                        `http://localhost:5600${path}/?OrgId=${localStorage.getItem(
+                                            "OrgsId"
+                                        )}`,
+                                        path.slice(1)
                                     )
                                 }
                             >

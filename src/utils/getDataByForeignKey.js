@@ -17,24 +17,10 @@ export async function getDataByForeignKey(url, idType) {
                 ),
                 "CounterpartyId",
             ];
-        case "CounterpartyId/sales":
-            return [
-                await getSalesFromDB(
-                    `${url}/?${idType}=${localStorage.getItem(
-                        idType.slice(0, -6)
-                    )}`
-                ),
-                "SaleId",
-            ];
-        case "CounterpartyId/purchases":
-            return [
-                await getPurchasesFromDB(
-                    `${url}/?${idType}=${localStorage.getItem(
-                        idType.slice(0, -10)
-                    )}`
-                ),
-                "PurchaseId",
-            ];
+        case "sales":
+            return [await getSalesFromDB(url), "SaleId"];
+        case "purchases":
+            return [await getPurchasesFromDB(url), "PurchaseId"];
         default:
             break;
     }

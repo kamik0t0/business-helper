@@ -1,7 +1,3 @@
-import {
-    getCounterpartiesFromDB,
-    getWaybillsFromDB,
-} from "./getDataByForeignKey.js";
 // выбор организации черезе меню select
 export function chooseOrg(event, type, dispatch) {
     // когда мы выбираем организацию, то загружаем её контрагентов, и накладные

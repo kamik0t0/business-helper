@@ -1,5 +1,5 @@
 // компонент показывающий список существующих накладных
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { v4 as uuid } from "uuid";
 import { Link } from "react-router-dom";
 import classes from "./styles/waybill-list.module.css";
@@ -7,6 +7,8 @@ import Waybill from "./waybill/Waybill.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
+import MyLink from "../../../UI/link/MyLink.jsx";
+import { useSelector } from "react-redux";
 
 export default function WayBillsList({
     CounterPartyType,
@@ -14,7 +16,25 @@ export default function WayBillsList({
     waybills,
     setWaybills,
 }) {
-    console.log(waybills);
+    const isMyOrgSelected = useSelector(
+        (state) => state.myOrgReducer.isMyOrgSelected
+    );
+    console.log(isMyOrgSelected);
+    useEffect(() => {
+        switch (path) {
+            case "/sales/createwaybill":
+                setWaybills(JSON.parse(localStorage.getItem("Sales")));
+                break;
+            case "/purchases/createwaybill":
+                setWaybills(JSON.parse(localStorage.getItem("Purchases")));
+                break;
+
+            default:
+                break;
+        }
+    }, []);
+
+    // setWaybills(localStorage.getItem(''))
     // загрузка
     // const [loader, setLoader] = useState(true);
     // Порядок фильтрации
@@ -29,9 +49,22 @@ export default function WayBillsList({
     // сортировки по:
     // - дате
     function sortByDate() {
+        console.log(waybills);
         sortOrder
-            ? setWaybills([...waybills.sort((a, b) => a.date - b.date)])
-            : setWaybills([...waybills.sort((a, b) => b.date - a.date)]);
+            ? setWaybills([
+                  ...waybills.sort(
+                      (a, b) =>
+                          Date.parse(a.waybill_date) -
+                          Date.parse(b.waybill_date)
+                  ),
+              ])
+            : setWaybills([
+                  ...waybills.sort(
+                      (a, b) =>
+                          Date.parse(b.waybill_date) -
+                          Date.parse(a.waybill_date)
+                  ),
+              ]);
 
         setSortOrder(!sortOrder);
     }
@@ -40,12 +73,12 @@ export default function WayBillsList({
         sortOrder
             ? setWaybills([
                   ...waybills.sort((a, b) =>
-                      a.counterparty.localeCompare(b.counterparty)
+                      a.cl_orgname.localeCompare(b.cl_orgname)
                   ),
               ])
             : setWaybills([
                   ...waybills.sort((a, b) =>
-                      b.counterparty.localeCompare(a.counterparty)
+                      b.cl_orgname.localeCompare(a.cl_orgname)
                   ),
               ]);
 
@@ -56,6 +89,14 @@ export default function WayBillsList({
         sortOrder
             ? setWaybills([...waybills.sort((a, b) => a.summ - b.summ)])
             : setWaybills([...waybills.sort((a, b) => b.summ - a.summ)]);
+
+        setSortOrder(!sortOrder);
+    }
+    // - id
+    function sortById() {
+        sortOrder
+            ? setWaybills([...waybills.sort((a, b) => a.id - b.id)])
+            : setWaybills([...waybills.sort((a, b) => b.id - a.id)]);
 
         setSortOrder(!sortOrder);
     }
@@ -98,96 +139,111 @@ export default function WayBillsList({
     return (
         /* основной контейнер */
         <>
-            <div className={classes.content}>
-                {/* заголовок */}
-                <div className={classes.waybills_header}>
-                    {/* фильтр */}
-                    <Link to={path}>
-                        <div className={classes.waybills_header_add}>
-                            <span></span>
+            {isMyOrgSelected ? (
+                <div className={classes.content}>
+                    {/* заголовок */}
+                    <div className={classes.waybills_header}>
+                        {/* фильтр */}
+                        <Link to={path}>
+                            <div className={classes.waybills_header_add}>
+                                <span></span>
+                            </div>
+                        </Link>
+                        <Link to={path}>
+                            <div className={classes.waybills_header_delete}>
+                                <span></span>
+                            </div>
+                        </Link>
+                        {/* <MyButton>Изменить</MyButton> */}
+                        <div className={classes.waybills_header_redact}>
+                            <div
+                                className={classes.waybills_header_redact_icon}
+                            ></div>
                         </div>
-                    </Link>
-                    <Link to={path}>
-                        <div className={classes.waybills_header_delete}>
-                            <span></span>
-                        </div>
-                    </Link>
-                    {/* <MyButton>Изменить</MyButton> */}
-                    <div className={classes.waybills_header_redact}>
-                        <div
-                            className={classes.waybills_header_redact_icon}
-                        ></div>
-                    </div>
-                    <div className={classes.waybills_header_filter}>
-                        <div className={classes.waybills_header_filter_name}>
-                            Поиск по:
-                            <MySelect
-                                defaultValue="counterparty"
-                                func={(event) => {
-                                    setSearch(event.target.value);
-                                }}
-                                options={[
-                                    {
-                                        value: "counterparty",
-                                        name: CounterPartyType[1],
-                                    },
-                                    { value: "summ", name: "Сумме" },
-                                ]}
+                        <div className={classes.waybills_header_filter}>
+                            <div
+                                className={classes.waybills_header_filter_name}
+                            >
+                                Поиск по:
+                                <MySelect
+                                    defaultValue="counterparty"
+                                    func={(event) => {
+                                        setSearch(event.target.value);
+                                    }}
+                                    options={[
+                                        {
+                                            value: "counterparty",
+                                            name: CounterPartyType[1],
+                                        },
+                                        { value: "summ", name: "Сумме" },
+                                    ]}
+                                />
+                            </div>
+                            <MyInput
+                                id="filter_input"
+                                placeholder="Поиск..."
+                                type="text"
+                                getValue={filter}
                             />
                         </div>
-                        <MyInput
-                            id="filter_input"
-                            placeholder="Поиск..."
-                            type="text"
-                            getValue={filter}
-                        />
+                        {/* наименование раздела */}
+                        <div className={classes.waybills_header_name}>
+                            {CounterPartyType[2]}
+                        </div>
                     </div>
-                    {/* наименование раздела */}
-                    <div className={classes.waybills_header_name}>
-                        {CounterPartyType[2]}
+                    {/* шапка */}
+                    <div className={classes.waybills_list_header}>
+                        {/* дата */}
+                        <div
+                            className={classes.waybills_list_header_date}
+                            onClick={sortByDate}
+                        >
+                            Дата
+                        </div>
+                        {/* номер */}
+                        <div
+                            className={classes.waybills_list_header_num}
+                            onClick={sortById}
+                        >
+                            Номер
+                        </div>
+                        {/* контрагент */}
+                        <div
+                            className={classes.waybills_list_header_ctrpty}
+                            onClick={sortByCtrprty}
+                        >
+                            {CounterPartyType[0]}
+                        </div>
+                        {/* сумма */}
+                        <div
+                            className={classes.waybills_list_header_summ}
+                            onClick={sortBySumm}
+                        >
+                            Сумма
+                        </div>
+                    </div>
+                    {/* список накладных */}
+                    {waybills.map((waybill, index) => {
+                        return (
+                            <Waybill
+                                key={uuid()}
+                                date={waybill.waybill_date}
+                                number={waybill.id}
+                                counterparty={waybill.cl_orgname}
+                                summ={waybill.summ}
+                            />
+                        );
+                    })}
+                </div>
+            ) : (
+                <div className={classes.content}>
+                    <div className={classes.nocounterparties}>
+                        Выберите организацию в
+                        <MyLink path="/private"> личном кабинете</MyLink> или{" "}
+                        <MyLink path="/login"> авторизуйтесь</MyLink>
                     </div>
                 </div>
-                {/* шапка */}
-                <div className={classes.waybills_list_header}>
-                    {/* дата */}
-                    <div
-                        className={classes.waybills_list_header_date}
-                        onClick={sortByDate}
-                    >
-                        Дата
-                    </div>
-                    {/* номер */}
-                    <div className={classes.waybills_list_header_num}>
-                        Номер
-                    </div>
-                    {/* контрагент */}
-                    <div
-                        className={classes.waybills_list_header_ctrpty}
-                        onClick={sortByCtrprty}
-                    >
-                        {CounterPartyType[0]}
-                    </div>
-                    {/* сумма */}
-                    <div
-                        className={classes.waybills_list_header_summ}
-                        onClick={sortBySumm}
-                    >
-                        Сумма
-                    </div>
-                </div>
-                {/* список накладных */}
-                {waybills.map((waybill) => {
-                    return (
-                        <Waybill
-                            key={uuid()}
-                            date={JSON.stringify(waybill.date)}
-                            number={waybill.number}
-                            counterparty={waybill.counterparty}
-                            summ={waybill.summ}
-                        />
-                    );
-                })}
-            </div>
+            )}
         </>
     );
 }
