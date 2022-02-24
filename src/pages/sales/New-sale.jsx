@@ -1,14 +1,14 @@
 // компонент создания накладной
 import React from "react";
 import CreateWaybill from "../../components/waybills-service/create-waybill/Create-waybill.jsx";
-import { sailsArr } from "../../utils/wbpositionClass.js";
 
-export default function NewSale() {
+export default function NewSale({ sales, setSales }) {
     return (
         <CreateWaybill
-            wbType={["Покупка товаров: создание", "Поставщик:"]}
+            wbType={["Продажа товаров: создание", "Покупатель:"]}
             path="/sales"
-            wbItems={sailsArr}
+            waybills={sales}
+            setWaybills={setSales}
         />
     );
 }

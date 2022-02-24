@@ -10,12 +10,13 @@ export default function Buttons({
     setModalRead,
     setModalUpdate,
     setModalDelete,
+    params,
 }) {
     const [selected, setselected] = useState(false);
     return (
         <>
             {selected ? (
-                <Navigate to="/purchases/createwaybill" />
+                <Navigate to={`/${params}/createwaybill`} />
             ) : (
                 <div className={classes.buttons}>
                     <MyButton onClick={() => setselected(true)}>

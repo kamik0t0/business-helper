@@ -1,6 +1,11 @@
-import { getCounterpartiesFromDB } from "./getDataByForeignKey.js";
+import {
+    getCounterpartiesFromDB,
+    getWaybillsFromDB,
+} from "./getDataByForeignKey.js";
 // выбор организации черезе меню select
 export function chooseOrg(event, type, dispatch) {
+    // когда мы выбираем организацию, то загружаем её контрагентов, и накладные
+    console.log(type);
     let orgname = event.target.value;
     let [org] = JSON.parse(localStorage.getItem("orgs")).filter(
         (object) => object.orgname === orgname
@@ -15,11 +20,6 @@ export function chooseOrg(event, type, dispatch) {
     // id
     localStorage.setItem("OrgsId", JSON.parse(localStorage.getItem(type)).id);
     localStorage.removeItem("counterparty");
-    getCounterpartiesFromDB(
-        `http://localhost:5600/counterparty/?OrgsId=${localStorage.getItem(
-            "OrgsId"
-        )}`
-    );
     dispatch({
         type: "isMYORGSELECTED_TRUE",
         payload: true,

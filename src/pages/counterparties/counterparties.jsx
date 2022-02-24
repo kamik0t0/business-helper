@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import classes from "./styles/counterparties.module.css";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CounterpartiesModals from "./service/modals/counterparties-modals.jsx";
 import CounterpartiesList from "./service/counterparties-list/counterparties-list";
@@ -10,7 +10,9 @@ import { getValue } from "./service/handlers/getValue.js";
 
 export const getCounterparty = React.createContext();
 
-export default function Counterparties() {
+export default function Counterparties({ path }) {
+    const { params } = useParams();
+
     const isAuth = useSelector((state) => state.authReducer.isAuth);
     const isMyOrgSelected = useSelector(
         (state) => state.myOrgReducer.isMyOrgSelected
@@ -62,6 +64,7 @@ export default function Counterparties() {
                                 setModalRead={setModalRead}
                                 setModalUpdate={setModalUpdate}
                                 setModalDelete={setModalDelete}
+                                params={params.slice(1)}
                             />
                         </getCounterparty.Provider>
                     ) : (

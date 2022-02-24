@@ -1,14 +1,14 @@
 // компонент создания накладной
 import React from "react";
 import CreateWaybill from "../../components/waybills-service/create-waybill/Create-waybill.jsx";
-import { purchaseArr } from "../../utils/wbpositionClass.js";
 
-export default function NewPurchase() {
+export default function NewPurchase({ purchases, setPurchases }) {
     return (
         <CreateWaybill
-            wbType={["Продажа товаров: создание", "Покупатель:"]}
+            wbType={["Покупка товаров: создание", "Поставщик:"]}
             path="/purchases"
-            wbItems={purchaseArr}
+            waybills={purchases}
+            setWaybills={setPurchases}
         />
     );
 }

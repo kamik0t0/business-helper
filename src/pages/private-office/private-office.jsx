@@ -9,6 +9,11 @@ import MySelect from "../../UI/input/MySelect/MySelect.jsx";
 import OrgInfo from "./service/org-info.jsx";
 import Buttons from "./service/buttons/buttons.jsx";
 import { isOrganization } from "../../utils/isOrg.js";
+import {
+    getCounterpartiesFromDB,
+    getSalesFromDB,
+    getPurchasesFromDB,
+} from "../../utils/getDataByForeignKey";
 
 export default function Office() {
     const isAuth = useSelector((state) => state.authReducer.isAuth);
@@ -43,9 +48,24 @@ export default function Office() {
                         id="ORG"
                         multiple={false}
                         defaultValue={["Выбрать организацию"][0]}
-                        func={(event) =>
-                            setOrg(chooseOrg(event, "myOrg", dispatch))
-                        }
+                        func={async (event) => {
+                            setOrg(chooseOrg(event, "myOrg", dispatch));
+                            getCounterpartiesFromDB(
+                                `http://localhost:5600/counterparty/?OrgsId=${localStorage.getItem(
+                                    "OrgsId"
+                                )}`
+                            );
+                            getSalesFromDB(
+                                `http://localhost:5600/sales/?CounterpartyId=${localStorage.getItem(
+                                    "counterpartyId"
+                                )}`
+                            );
+                            getPurchasesFromDB(
+                                `http://localhost:5600/purchases/?CounterpartyId=${localStorage.getItem(
+                                    "counterpartyId"
+                                )}`
+                            );
+                        }}
                         options={makeOrgsArr(
                             JSON.parse(localStorage.getItem("orgs"))
                         )}

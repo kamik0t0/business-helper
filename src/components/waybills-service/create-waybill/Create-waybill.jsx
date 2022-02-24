@@ -1,16 +1,19 @@
 // компонент создания накладной
 import React, { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import classes from "./styles/create-waybill.module.css";
 import Position from "./position/Position.jsx";
 import { Positions, wbItems } from "../../../utils/wbpositionClass.js";
 import { Total, TotalWrapper } from "./total/Total.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
+import { getDataByForeignKey } from "../../../utils/getDataByForeignKey";
 
-export default function CreateWaybill({ wbType, path }) {
+export default function CreateWaybill({ wbType, path, waybills, setWaybills }) {
+    console.log(path);
     const [pos, setPosition] = useState([]);
     const [counter, setCounter] = useState(0);
+    const [created, setCreated] = useState(false);
     // useRef - запоминаем значение при ререндеринге
     let delRow = useRef(null);
     // объект накладная для отправки на сервер
@@ -113,7 +116,7 @@ export default function CreateWaybill({ wbType, path }) {
         return WB.current[field];
     }
 
-    async function create(event, url) {
+    async function create(event, url, idType) {
         event.preventDefault();
         WB.current["myOrg"] = JSON.parse(localStorage.getItem("myOrg"));
         WB.current["counterparty"] = JSON.parse(
@@ -131,117 +134,170 @@ export default function CreateWaybill({ wbType, path }) {
         // получение ответа
         let result = await response.json();
         // если в ответе есть поле created
-        console.log(result);
+        if (result.created) {
+            // запрос на накладные
+            let [res] = await getDataByForeignKey(url, idType);
+            console.log(res);
+            setWaybills(res);
+
+            // навигация к списку накладных
+            setCreated(true);
+        }
     }
 
     return (
-        <form className={classes.content}>
-            <div className={classes.waybill_form_header}>
-                <div className={classes.waybill_form_header_save}>
-                    {" "}
-                    <MyButton
-                        onClick={(event) =>
-                            create(event, "http://localhost:5600/sales")
-                        }
-                    >
-                        Сохранить
-                    </MyButton>
-                    <MyButton>Excel</MyButton>
-                    <div className={classes.waybill_form_header_save_name}>
-                        {wbType[0]}
+        <>
+            {created ? (
+                <Navigate to={path} />
+            ) : (
+                <form className={classes.content}>
+                    <div className={classes.waybill_form_header}>
+                        <div className={classes.waybill_form_header_save}>
+                            {" "}
+                            <MyButton
+                                onClick={(event) =>
+                                    create(
+                                        event,
+                                        "http://localhost:5600" + path,
+                                        "CounterpartyId" + path
+                                    )
+                                }
+                            >
+                                Сохранить
+                            </MyButton>
+                            <MyButton>Excel</MyButton>
+                            <div
+                                className={
+                                    classes.waybill_form_header_save_name
+                                }
+                            >
+                                {wbType[0]}
+                            </div>
+                            <Link to={path}>
+                                <MyButton>Закрыть</MyButton>
+                            </Link>
+                        </div>
+                        <div className={classes.waybill_form_header_date}>
+                            <div
+                                className={
+                                    classes.waybill_form_header_date_date
+                                }
+                            >
+                                <MyInput
+                                    id="waybillDate"
+                                    name="Дата:"
+                                    type="date"
+                                    defaultValue={new Date(Date.now())}
+                                    getValue={(event) =>
+                                        (WB.current.date = new Date(
+                                            `${event.target.value}`
+                                        ))
+                                    }
+                                />
+                            </div>
+                            <MyInput
+                                style={{ width: "350px" }}
+                                name={wbType[1]}
+                                type="text"
+                                defaultValue={
+                                    JSON.parse(
+                                        localStorage.getItem("counterparty")
+                                    ) !== null || undefined
+                                        ? JSON.parse(
+                                              localStorage.getItem(
+                                                  "counterparty"
+                                              )
+                                          ).orgname
+                                        : ""
+                                }
+                                getValue={(event) =>
+                                    (WB.current.counterparty =
+                                        event.target.value)
+                                }
+                            />
+                            <Link to={`/counterparties:${path.slice(1)}`}>
+                                <MyButton>Выбрать...</MyButton>
+                            </Link>
+                        </div>
+                        <div className={classes.waybill_form_header_usage}>
+                            <MyButton onClick={addRow}>Добавить</MyButton>
+                            <MyButton onClick={deleteRow}>Удалить</MyButton>
+                        </div>
                     </div>
-                    <Link to={path}>
-                        <MyButton>Закрыть</MyButton>
-                    </Link>
-                </div>
-                <div className={classes.waybill_form_header_date}>
-                    <div className={classes.waybill_form_header_date_date}>
-                        <MyInput
-                            id="waybillDate"
-                            name="Дата:"
-                            type="date"
-                            defaultValue={new Date(Date.now())}
-                            getValue={(event) =>
-                                (WB.current.date = new Date(
-                                    `${event.target.value}`
-                                ))
-                            }
-                        />
-                    </div>
-                    <MyInput
-                        style={{ width: "350px" }}
-                        name={wbType[1]}
-                        type="text"
-                        defaultValue={
-                            JSON.parse(localStorage.getItem("counterparty")) !==
-                                null || undefined
-                                ? JSON.parse(
-                                      localStorage.getItem("counterparty")
-                                  ).orgname
-                                : ""
-                        }
-                        getValue={(event) =>
-                            (WB.current.counterparty = event.target.value)
-                        }
-                    />
-                    <Link to="/counterparties">
-                        <MyButton>Выбрать...</MyButton>
-                    </Link>
-                </div>
-                <div className={classes.waybill_form_header_usage}>
-                    <MyButton onClick={addRow}>Добавить</MyButton>
-                    <MyButton onClick={deleteRow}>Удалить</MyButton>
-                </div>
-            </div>
 
-            <div className={classes.waybill_form_wb_header}>
-                <div className={classes.waybill_form_wb_header_number}>№</div>
-                <div className={classes.waybill_form_wb_header_nomenclature}>
-                    Номенклатура
-                </div>
-                <div className={classes.waybill_form_wb_header_quantity}>
-                    Кол.
-                </div>
-                <div className={classes.waybill_form_wb_header_price}>Цена</div>
-                <div className={classes.waybill_form_wb_header_summ}>Сумма</div>
-                <div className={classes.waybill_form_wb_header_NDSprcnt}>%</div>
-                <div className={classes.waybill_form_wb_header_NDS}>НДС</div>
-                <div className={classes.waybill_form_wb_header_total}>
-                    Всего
-                </div>
-            </div>
-            {pos.map((item, index) => {
-                return (
-                    <Position
-                        highlight={item.highlight}
-                        getDelRow={getDelRow}
-                        key={item.number}
-                        classes={classes}
-                        number={index + 1}
-                        getSumm={item.getSumm.bind(item)}
-                        getNDS={item.getNDS.bind(item)}
-                        getTotal={item.getTotal.bind(item)}
-                        getNomenclature={getNomenclature}
-                        getQuantity={getQuantity}
-                        getPrice={getPrice}
-                    />
-                );
-            })}
-            <TotalWrapper arr={wbItems}>
-                <Total
-                    array={wbItems}
-                    field="summ"
-                    name="Сумма:"
-                    total={total}
-                />
-                <Total array={wbItems} field="NDS" name="НДС:" total={total} />
-                <Total
-                    array={wbItems}
-                    field="total"
-                    name="Итого:"
-                    total={total}
-                />
-            </TotalWrapper>
-        </form>
+                    <div className={classes.waybill_form_wb_header}>
+                        <div className={classes.waybill_form_wb_header_number}>
+                            №
+                        </div>
+                        <div
+                            className={
+                                classes.waybill_form_wb_header_nomenclature
+                            }
+                        >
+                            Номенклатура
+                        </div>
+                        <div
+                            className={classes.waybill_form_wb_header_quantity}
+                        >
+                            Кол.
+                        </div>
+                        <div className={classes.waybill_form_wb_header_price}>
+                            Цена
+                        </div>
+                        <div className={classes.waybill_form_wb_header_summ}>
+                            Сумма
+                        </div>
+                        <div
+                            className={classes.waybill_form_wb_header_NDSprcnt}
+                        >
+                            %
+                        </div>
+                        <div className={classes.waybill_form_wb_header_NDS}>
+                            НДС
+                        </div>
+                        <div className={classes.waybill_form_wb_header_total}>
+                            Всего
+                        </div>
+                    </div>
+                    {pos.map((item, index) => {
+                        return (
+                            <Position
+                                highlight={item.highlight}
+                                getDelRow={getDelRow}
+                                key={item.number}
+                                classes={classes}
+                                number={index + 1}
+                                getSumm={item.getSumm.bind(item)}
+                                getNDS={item.getNDS.bind(item)}
+                                getTotal={item.getTotal.bind(item)}
+                                getNomenclature={getNomenclature}
+                                getQuantity={getQuantity}
+                                getPrice={getPrice}
+                            />
+                        );
+                    })}
+                    <TotalWrapper arr={wbItems}>
+                        <Total
+                            array={wbItems}
+                            field="summ"
+                            name="Сумма:"
+                            total={total}
+                        />
+                        <Total
+                            array={wbItems}
+                            field="NDS"
+                            name="НДС:"
+                            total={total}
+                        />
+                        <Total
+                            array={wbItems}
+                            field="total"
+                            name="Итого:"
+                            total={total}
+                        />
+                    </TotalWrapper>
+                </form>
+            )}
+        </>
     );
 }

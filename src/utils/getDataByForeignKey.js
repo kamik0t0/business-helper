@@ -17,6 +17,24 @@ export async function getDataByForeignKey(url, idType) {
                 ),
                 "CounterpartyId",
             ];
+        case "CounterpartyId/sales":
+            return [
+                await getSalesFromDB(
+                    `${url}/?${idType}=${localStorage.getItem(
+                        idType.slice(0, -6)
+                    )}`
+                ),
+                "SaleId",
+            ];
+        case "CounterpartyId/purchases":
+            return [
+                await getPurchasesFromDB(
+                    `${url}/?${idType}=${localStorage.getItem(
+                        idType.slice(0, -10)
+                    )}`
+                ),
+                "PurchaseId",
+            ];
         default:
             break;
     }
@@ -49,5 +67,30 @@ export async function getCounterpartiesFromDB(url) {
         console.log(
             `Can't get counterparties from DB - no connection to server`
         );
+    }
+}
+
+// запрос продаж
+export async function getSalesFromDB(url) {
+    console.log("sales");
+    try {
+        let getSales = await fetch(url);
+        let sales = await getSales.json();
+        localStorage.setItem("Sales", JSON.stringify(sales));
+        return sales;
+    } catch (error) {
+        console.log(`Can't get sales from DB - no connection to server`);
+    }
+}
+// запрос покупок
+export async function getPurchasesFromDB(url) {
+    console.log("purchases");
+    try {
+        let getPurchases = await fetch(url);
+        let purchases = await getPurchases.json();
+        localStorage.setItem("Purchases", JSON.stringify(purchases));
+        return purchases;
+    } catch (error) {
+        console.log(`Can't get purchases from DB - no connection to server`);
     }
 }

@@ -4,18 +4,20 @@ import { v4 as uuid } from "uuid";
 import { Link } from "react-router-dom";
 import classes from "./styles/waybill-list.module.css";
 import Waybill from "./waybill/Waybill.jsx";
-import { Waybills } from "../../../utils/waybillsTest.js";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 
-export default function WayBillsList({ CounterPartyType, path }) {
-    console.log(CounterPartyType);
-    // массив накладных
-    const [wb, setWb] = useState([...Waybills]);
-    // эмулятор загрузки
-    const [loader, setLoader] = useState(true);
-    // Порядок фильрации
+export default function WayBillsList({
+    CounterPartyType,
+    path,
+    waybills,
+    setWaybills,
+}) {
+    console.log(waybills);
+    // загрузка
+    // const [loader, setLoader] = useState(true);
+    // Порядок фильтрации
     const [sortOrder, setSortOrder] = useState(true);
     // Поле поиска
     const [search, setSearch] = useState("counterparty");
@@ -28,21 +30,21 @@ export default function WayBillsList({ CounterPartyType, path }) {
     // - дате
     function sortByDate() {
         sortOrder
-            ? setWb([...Waybills.sort((a, b) => a.date - b.date)])
-            : setWb([...Waybills.sort((a, b) => b.date - a.date)]);
+            ? setWaybills([...waybills.sort((a, b) => a.date - b.date)])
+            : setWaybills([...waybills.sort((a, b) => b.date - a.date)]);
 
         setSortOrder(!sortOrder);
     }
     // - контрагенту
     function sortByCtrprty() {
         sortOrder
-            ? setWb([
-                  ...Waybills.sort((a, b) =>
+            ? setWaybills([
+                  ...waybills.sort((a, b) =>
                       a.counterparty.localeCompare(b.counterparty)
                   ),
               ])
-            : setWb([
-                  ...Waybills.sort((a, b) =>
+            : setWaybills([
+                  ...waybills.sort((a, b) =>
                       b.counterparty.localeCompare(a.counterparty)
                   ),
               ]);
@@ -52,8 +54,8 @@ export default function WayBillsList({ CounterPartyType, path }) {
     // - сумме
     function sortBySumm() {
         sortOrder
-            ? setWb([...Waybills.sort((a, b) => a.summ - b.summ)])
-            : setWb([...Waybills.sort((a, b) => b.summ - a.summ)]);
+            ? setWaybills([...waybills.sort((a, b) => a.summ - b.summ)])
+            : setWaybills([...waybills.sort((a, b) => b.summ - a.summ)]);
 
         setSortOrder(!sortOrder);
     }
@@ -61,8 +63,8 @@ export default function WayBillsList({ CounterPartyType, path }) {
     // фильтрующая функция
     function filterList(event) {
         let regexp = new RegExp(`${event.target.value.toLowerCase()}`, "g");
-        setWb([
-            ...Waybills.filter((item) => {
+        setWaybills([
+            ...waybills.filter((item) => {
                 return (
                     item[search].toString().toLowerCase().search(regexp) !== -1
                 );
@@ -174,21 +176,17 @@ export default function WayBillsList({ CounterPartyType, path }) {
                     </div>
                 </div>
                 {/* список накладных */}
-                {loader ? (
-                    <Loader />
-                ) : (
-                    wb.map((waybill) => {
-                        return (
-                            <Waybill
-                                key={uuid()}
-                                date={JSON.stringify(waybill.date)}
-                                number={waybill.number}
-                                counterparty={waybill.counterparty}
-                                summ={waybill.summ}
-                            />
-                        );
-                    })
-                )}
+                {waybills.map((waybill) => {
+                    return (
+                        <Waybill
+                            key={uuid()}
+                            date={JSON.stringify(waybill.date)}
+                            number={waybill.number}
+                            counterparty={waybill.counterparty}
+                            summ={waybill.summ}
+                        />
+                    );
+                })}
             </div>
         </>
     );

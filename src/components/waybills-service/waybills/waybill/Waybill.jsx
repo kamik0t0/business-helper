@@ -3,8 +3,10 @@ import React from "react";
 import classes from "./styles/waybill-list.module.css";
 
 export default function Sale({ date, number, counterparty, summ }) {
+    console.log(date, number, counterparty, summ);
     const parseDate = new Date(
-        Date.parse(date.slice(1, -1))
+        // Date.parse(date.slice(1, -1))
+        date
     ).toLocaleDateString();
 
     return (
@@ -12,17 +14,17 @@ export default function Sale({ date, number, counterparty, summ }) {
             {/* накладная */}
             <div className={classes.waybills_list_wb}>
                 {/* дата */}
-                <div className={classes.waybills_list_wb_date}>{parseDate}</div>
+                {/* <div className={classes.waybills_list_wb_date}>{parseDate}</div> */}
                 {/* номер */}
                 <div className={classes.waybills_list_wb_num}>
-                    {number.length > 14 ? number.slice(0, 15) + "..." : number}
+                    {/* {number.length > 14 ? number.slice(0, 15) + "..." : number} */}
                 </div>
                 {/* контрагент */}
                 <div className={classes.waybills_list_wb_ctrpty}>
-                    {counterparty}
+                    {/* {counterparty} */}
                 </div>
                 {/* сумма */}
-                <div className={classes.waybills_list_wb_summ}>{summ}</div>
+                {/* <div className={classes.waybills_list_wb_summ}>{summ}</div> */}
             </div>
         </div>
     );

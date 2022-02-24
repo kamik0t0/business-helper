@@ -129,6 +129,7 @@ export default function Login() {
                                     // вспомогательный флаг для сессии
                                     localStorage.setItem("session", true);
                                     localStorage.setItem("UserId", result.id);
+                                    console.log("lalaldkfjdkf");
                                 })
                                 .then(
                                     async () =>
