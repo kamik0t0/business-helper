@@ -13,7 +13,7 @@ import { switchOPF } from "./service/handlers/switchOPF.js";
 import { getRequisites } from "./service/handlers/getRequisites.js";
 import PropTypes from "prop-types";
 
-export default function CreateOrg({ setModal, setOrgs, url, idType }) {
+export default function CreateOrg({ setModal, setOrgs, url, idName }) {
     const [isORG, setIsOrg] = useState(true);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
@@ -62,7 +62,7 @@ export default function CreateOrg({ setModal, setOrgs, url, idType }) {
                             url,
                             dispatch,
                             setModal,
-                            idType
+                            idName
                         )
                     }
                     clear={clear}
@@ -77,5 +77,5 @@ CreateOrg.propTypes = {
     setModal: PropTypes.func.isRequired,
     setOrgs: PropTypes.func.isRequired,
     url: PropTypes.string.isRequired,
-    idType: PropTypes.string.isRequired,
+    idName: PropTypes.string.isRequired,
 };

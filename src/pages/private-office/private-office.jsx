@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import classes from "./styles/private-office.module.css";
 import { Navigate } from "react-router-dom";
 import PrivateOfficeModals from "./service/modals/Private-office-modals.jsx";
@@ -14,6 +14,7 @@ import {
     getSalesFromDB,
     getPurchasesFromDB,
 } from "../../utils/getDataByForeignKey";
+import { localStorateClearing } from "../../utils/localStorageClearing.js";
 import Loader from "../../UI/Loader/Loader.jsx";
 
 export default function Office() {
@@ -29,6 +30,10 @@ export default function Office() {
     let isORG = useRef();
     // ООО или ИП
     isORG.current = isOrganization(myOrg);
+
+    useEffect(() => {
+        localStorateClearing();
+    }, []);
 
     return (
         <>

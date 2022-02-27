@@ -1,28 +1,25 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import classes from "./styles/delete-org.module.css";
-import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
+import classes from "./styles/detel-waybill.module.css";
 import Loader from "../../../UI/Loader/Loader.jsx";
-
+import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
-import { deleteOrg } from "./service/handlers/delete.js";
+import { deleteWaybill } from "./service/delete.js";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 
-export default function DeleteOrg({
+export default function DeleteWaybill({
     setModal,
-    setOrgs,
-    org,
+    waybill,
+    setWaybills,
     url,
-    type,
     noselected,
-    idName,
+    path,
 }) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
-    console.log(type);
     return (
         <>
-            {org === undefined || org === null ? (
+            {waybill === undefined || waybill === null ? (
                 <div className={classes.noorg}>
                     <div className={classes.noorg__text}>{noselected}</div>
                     <MyButton onClick={() => hideAnimatedModal(setModal)}>
@@ -33,31 +30,35 @@ export default function DeleteOrg({
                 <div className={classes.delete}>
                     <div
                         className={classes.text}
-                    >{`Вы действительно хотите удалить ${org.orgname}?`}</div>
+                    >{`Вы действительно хотите удалить накладную № ${
+                        waybill.id
+                    } от ${waybill.waybill_date.slice(0, -14)} на ${
+                        waybill.total
+                    } рублей?`}</div>
                     {loader ? (
                         <Loader />
                     ) : (
                         <div className={classes.buttons}>
                             <MyButton
-                                onClick={() =>
-                                    deleteOrg(
+                                onClick={(event) =>
+                                    deleteWaybill(
+                                        event,
                                         setModal,
-                                        setOrgs,
-                                        org,
-                                        type,
+                                        waybill,
+                                        setWaybills,
+                                        path,
                                         url,
                                         setLoader,
-                                        dispatch,
-                                        idName
+                                        dispatch
                                     )
                                 }
                             >
-                                Yes
+                                Да
                             </MyButton>
                             <MyButton
                                 onClick={() => hideAnimatedModal(setModal)}
                             >
-                                No
+                                Нет
                             </MyButton>
                         </div>
                     )}
@@ -66,13 +67,3 @@ export default function DeleteOrg({
         </>
     );
 }
-
-DeleteOrg.propTypes = {
-    setModal: PropTypes.func.isRequired,
-    setOrgs: PropTypes.func,
-    org: PropTypes.object.isRequired,
-    url: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    noselected: PropTypes.string.isRequired,
-    idName: PropTypes.string.isRequired,
-};

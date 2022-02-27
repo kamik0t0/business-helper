@@ -9,7 +9,7 @@ export async function deleteOrg(
     url,
     setLoader,
     dispatch,
-    idType
+    idName
 ) {
     setLoader(true);
     try {
@@ -22,7 +22,7 @@ export async function deleteOrg(
         let result = await response.json();
         if (result.deleted) {
             console.log(result.message);
-            let [orgs] = await getDataByForeignKey(url, idType);
+            let [orgs] = await getDataByForeignKey(url, idName);
             // убираем организацию из localStorage
             localStorage.removeItem(type);
             setOrgs(orgs);

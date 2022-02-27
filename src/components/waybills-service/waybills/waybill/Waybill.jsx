@@ -2,14 +2,31 @@
 import React from "react";
 import classes from "./styles/waybill-list.module.css";
 
-export default function Sale({ date, number, counterparty, summ }) {
+export default function Sale({
+    index,
+    date,
+    number,
+    counterparty,
+    summ,
+    getWaybill,
+    highlight,
+    highlightWaybill,
+}) {
     const parseDate = new Date(Date.parse(date)).toLocaleDateString();
-    console.log(parseDate);
-
     return (
         <div className={classes.waybills_list}>
             {/* накладная */}
-            <div className={classes.waybills_list_wb}>
+            <div
+                className={
+                    highlight
+                        ? classes.waybills_list_wb + " " + classes.highlight
+                        : classes.waybills_list_wb
+                }
+                onClick={(event) => {
+                    getWaybill(event, index);
+                    highlightWaybill(index);
+                }}
+            >
                 {/* дата */}
                 <div className={classes.waybills_list_wb_date}>{parseDate}</div>
                 {/* номер */}

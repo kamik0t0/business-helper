@@ -1,19 +1,20 @@
 // загружает данные в зависимости от ForeignKey
-export async function getDataByForeignKey(url, idType) {
+export async function getDataByForeignKey(url, idName) {
+    console.log(url, idName);
     /* UserId - запрос организаций пользователя
         OrgsId - запрос контрагентов организации */
-    switch (idType) {
+    switch (idName) {
         case "UserId":
             return [
                 await getMyOrgsFromDB(
-                    `${url}/?${idType}=${localStorage.getItem(idType)}`
+                    `${url}/?${idName}=${localStorage.getItem(idName)}`
                 ),
                 "OrgsId",
             ];
         case "OrgsId":
             return [
                 await getCounterpartiesFromDB(
-                    `${url}/?${idType}=${localStorage.getItem(idType)}`
+                    `${url}/?${idName}=${localStorage.getItem(idName)}`
                 ),
                 "CounterpartyId",
             ];

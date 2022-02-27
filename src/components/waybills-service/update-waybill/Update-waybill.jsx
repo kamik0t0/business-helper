@@ -1,13 +1,12 @@
-// компонент создания накладной
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
-import classes from "./styles/create-waybill.module.css";
-import Position from "./position/Position.jsx";
+import classes from "./styles/update-waybill.module.css";
+import Position from "../create-waybill/position/Position.jsx";
 import { Positions } from "../../../utils/wbpositionClass.js";
-import { Total, TotalWrapper } from "./total/Total.jsx";
+import { Total, TotalWrapper } from "../create-waybill/total/Total.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
-import { create } from "./service/create.js";
+import { update } from "./service/update.js";
 import {
     addRow,
     getNomenclature,
@@ -16,20 +15,19 @@ import {
     getRow,
     deleteRow,
     total,
-} from "./service/handlers.js";
+} from "../create-waybill/service/handlers.js";
 
-export default function CreateWaybill({ wbType, path, setWaybills }) {
+export default function UpdateWaybill({ wbType, path, setWaybills }) {
     const [positions, setPositions] = useState([]);
     const [counter, setCounter] = useState(0);
-    const [created, setCreated] = useState(false);
-    // useRef - запоминаем значение при ререндеринге
+    const [updated, setUpdated] = useState(false);
     let row = useRef(null);
-    // объект накладная для отправки на сервер
-    const WB = useRef({});
+    const Waybill = useRef({});
+    console.log(path);
 
     return (
         <>
-            {created ? (
+            {updated ? (
                 <Navigate to={path} />
             ) : (
                 <form className={classes.content}>
@@ -38,16 +36,16 @@ export default function CreateWaybill({ wbType, path, setWaybills }) {
                             {" "}
                             <MyButton
                                 onClick={(event) =>
-                                    create(
+                                    update(
                                         event,
                                         `http://localhost:5600${path}/?OrgId=${localStorage.getItem(
                                             "OrgsId"
                                         )}`,
                                         path.slice(1),
-                                        WB,
+                                        Waybill,
                                         positions,
                                         setWaybills,
-                                        setCreated
+                                        setUpdated
                                     )
                                 }
                             >
@@ -75,12 +73,27 @@ export default function CreateWaybill({ wbType, path, setWaybills }) {
                                     id="waybillDate"
                                     name="Дата:"
                                     type="date"
-                                    defaultValue={new Date(Date.now())}
-                                    getValue={(event) =>
-                                        (WB.current.date = new Date(
-                                            `${event.target.value}`
-                                        ))
+                                    defaultValue={
+                                        localStorage.getItem("waybillDate") ===
+                                            null || undefined
+                                            ? JSON.parse(
+                                                  localStorage.getItem(
+                                                      wbType[2]
+                                                  )
+                                              ).waybill_date.slice(0, -14)
+                                            : localStorage.getItem(
+                                                  "waybillDate"
+                                              )
                                     }
+                                    getValue={(event) => {
+                                        Waybill.current["date"] = new Date(
+                                            `${event.target.value}`
+                                        );
+                                        localStorage.setItem(
+                                            "waybillDate",
+                                            event.target.value
+                                        );
+                                    }}
                                 />
                             </div>
                             <MyInput
@@ -90,23 +103,25 @@ export default function CreateWaybill({ wbType, path, setWaybills }) {
                                 defaultValue={
                                     JSON.parse(
                                         localStorage.getItem("counterparty")
-                                    ) !== null || undefined
+                                    ) === null || undefined
                                         ? JSON.parse(
+                                              localStorage.getItem(wbType[2])
+                                          ).cl_orgname
+                                        : JSON.parse(
                                               localStorage.getItem(
                                                   "counterparty"
                                               )
                                           ).orgname
-                                        : ""
                                 }
                                 getValue={(event) =>
-                                    (WB.current.counterparty =
+                                    (Waybill.current.counterparty =
                                         event.target.value)
                                 }
                             />
                             <Link
                                 to={`/counterparties:${path.slice(
                                     1
-                                )}:createwaybill`}
+                                )}:updatewaybill`}
                             >
                                 <MyButton>Выбрать...</MyButton>
                             </Link>
@@ -221,19 +236,25 @@ export default function CreateWaybill({ wbType, path, setWaybills }) {
                             array={positions}
                             field="summ"
                             name="Сумма:"
-                            total={(array, field) => total(array, field, WB)}
+                            total={(array, field) =>
+                                total(array, field, Waybill)
+                            }
                         />
                         <Total
                             array={positions}
                             field="NDS"
                             name="НДС:"
-                            total={(array, field) => total(array, field, WB)}
+                            total={(array, field) =>
+                                total(array, field, Waybill)
+                            }
                         />
                         <Total
                             array={positions}
                             field="total"
                             name="Итого:"
-                            total={(array, field) => total(array, field, WB)}
+                            total={(array, field) =>
+                                total(array, field, Waybill)
+                            }
                         />
                     </TotalWrapper>
                 </form>

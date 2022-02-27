@@ -12,6 +12,8 @@ import Forgot from "../pages/authorization/Forgot.jsx";
 import Registration from "../pages/authorization/Registration.jsx";
 import Private from "../pages/private-office/private-office.jsx";
 import Counterparties from "../pages/counterparties/counterparties.jsx";
+import UpdateSale from "../pages/sales/Update-sale.jsx";
+import UpdatePurchase from "../pages/purchases/Update-purchase.jsx";
 
 export const SalesContext = React.createContext();
 export const PurchasesContext = React.createContext();
@@ -34,6 +36,11 @@ export default function AppRouter() {
                 path="/sales/createwaybill"
                 element={<NewSale sales={sales} setSales={setSales} />}
             ></Route>
+            <Route
+                exact
+                path="/sales/updatewaybill"
+                element={<UpdateSale sales={sales} setSales={setSales} />}
+            ></Route>
 
             <Route
                 exact
@@ -50,6 +57,16 @@ export default function AppRouter() {
                 path="/purchases/createwaybill"
                 element={
                     <NewPurchase
+                        purchases={purchases}
+                        setPurchases={setPurchases}
+                    />
+                }
+            ></Route>
+            <Route
+                exact
+                path="/purchases/updatewaybill"
+                element={
+                    <UpdatePurchase
                         purchases={purchases}
                         setPurchases={setPurchases}
                     />

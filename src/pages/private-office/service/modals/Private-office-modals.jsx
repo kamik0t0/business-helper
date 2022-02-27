@@ -34,7 +34,7 @@ export default function PrivateOfficeModals({
                         url="http://localhost:5600/private"
                         // url="https://deploy-test-business-assist.herokuapp.com/private"
                         type="myOrg"
-                        idType="UserId"
+                        idName="UserId"
                     />
                 </Modal>
             )}
@@ -58,7 +58,7 @@ export default function PrivateOfficeModals({
                         noselected="Организация не выбрана"
                         url="http://localhost:5600/private"
                         // url="https://deploy-test-business-assist.herokuapp.com/private"
-                        idType="UserId"
+                        idName="UserId"
                     />
                 </Modal>
             )}
@@ -76,7 +76,7 @@ export default function PrivateOfficeModals({
                         url="http://localhost:5600/private"
                         // url="https://deploy-test-business-assist.herokuapp.com/private"
                         noselected="Организация не выбрана"
-                        idType="UserId"
+                        idName="UserId"
                     />
                 </Modal>
             )}

@@ -163,12 +163,18 @@
           flex: 0 0 15%;
   border-right: 1px solid snow;
 }
+.waybills_list_header .waybills_list_header_date:hover {
+  cursor: pointer;
+}
 .waybills_list_header .waybills_list_header_num {
   text-align: center;
   -webkit-box-flex: 0;
       -ms-flex: 0 0 25%;
           flex: 0 0 25%;
   border-right: 1px solid snow;
+}
+.waybills_list_header .waybills_list_header_num:hover {
+  cursor: pointer;
 }
 .waybills_list_header .waybills_list_header_ctrpty {
   text-align: center;
@@ -177,9 +183,15 @@
           flex: 0 0 45%;
   border-right: 1px solid snow;
 }
+.waybills_list_header .waybills_list_header_ctrpty:hover {
+  cursor: pointer;
+}
 .waybills_list_header .waybills_list_header_summ {
   text-align: center;
   -webkit-box-flex: 0;
       -ms-flex: 0 0 15%;
           flex: 0 0 15%;
+}
+.waybills_list_header .waybills_list_header_summ {
+  cursor: pointer;
 }

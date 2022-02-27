@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import classes from "./styles/info.module.css";
 import Tab from "../../components/Tab/Tab.jsx";
+import { localStorateClearing } from "../../utils/localStorageClearing.js";
 
 export default function Tabs() {
+    useEffect(() => {
+        localStorateClearing();
+    }, []);
     return (
         <div className={classes.inner}>
             {" "}

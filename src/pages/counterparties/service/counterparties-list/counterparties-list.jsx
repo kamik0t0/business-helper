@@ -22,7 +22,7 @@ export default function CounterpartiesList({ counterparties }) {
                                 <Counterparty
                                     key={counterparty.inn}
                                     highlight={counterparty.highlight}
-                                    number={number + 1}
+                                    number={number}
                                     name={counterparty.orgname}
                                     inn={counterparty.inn}
                                 />

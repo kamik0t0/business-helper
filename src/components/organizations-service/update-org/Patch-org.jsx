@@ -21,7 +21,7 @@ export default function PatchOrg({
     url,
     noselected,
     isORG,
-    idType,
+    idName,
 }) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
@@ -77,7 +77,7 @@ export default function PatchOrg({
                                     org,
                                     setOrg,
                                     dispatch,
-                                    idType
+                                    idName
                                 )
                             }
                         >

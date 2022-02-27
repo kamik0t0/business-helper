@@ -33,7 +33,7 @@ export default function CounterpartiesModals({
                         url="http://localhost:5600/counterparty"
                         // url="https://deploy-test-business-assist.herokuapp.com/counterparty"
                         type="counterparty"
-                        idType="OrgsId"
+                        idName="OrgsId"
                     />
                 </Modal>
             )}
@@ -57,7 +57,7 @@ export default function CounterpartiesModals({
                         noselected="Организация не выбрана"
                         url="http://localhost:5600/counterparty"
                         // url="https://deploy-test-business-assist.herokuapp.com/counterparty"
-                        idType="OrgsId"
+                        idName="OrgsId"
                     />
                 </Modal>
             )}
@@ -75,7 +75,7 @@ export default function CounterpartiesModals({
                         url="http://localhost:5600/counterparty"
                         // url="https://deploy-test-business-assist.herokuapp.com/counterparty"
                         noselected="Организация не выбрана"
-                        idType="OrgsId"
+                        idName="OrgsId"
                     />
                 </Modal>
             )}

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CalcData from "./Calc-data";
 import CalcResult from "./Calc-result";
 import classes from "./styles/Tax-calc-form.module.css";
+import { localStorateClearing } from "../../utils/localStorageClearing.js";
 
 // объект калькулятор инкапсулирует все расчеты
 import { incomesOnlyIE } from "./calc-obj.js";
@@ -9,6 +10,9 @@ import { incomesOnlyLLC } from "./calc-obj.js";
 
 // state в этом компоненте потому что данные нужны и CalcData и CalcResult
 export default function CalcForm() {
+    useEffect(() => {
+        localStorateClearing();
+    }, []);
     console.log("Component re-render");
     // УСН доходы ИП
     const [taxIncomeIE, setTaxIncIE] = useState(0);

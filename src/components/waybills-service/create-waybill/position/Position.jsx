@@ -5,7 +5,7 @@ import MyInput from "../../../../UI/input/MyInput/MyInput.jsx";
 
 export default function Position({
     highlight,
-    getDelRow,
+    getRow,
     number,
     getSumm,
     getNDS,
@@ -17,14 +17,14 @@ export default function Position({
     return (
         <>
             <div
-                onClick={(event) => getDelRow(event, number)}
+                onClick={(event) => getRow(event, number)}
                 className={
                     highlight === false
                         ? classes.position
                         : classes.position + " " + classes.highlight
                 }
             >
-                <div className={classes.position_number}>{number}</div>
+                <div className={classes.position_number}>{number + 1}</div>
                 <div className={classes.position_nomenclature}>
                     <MyInput
                         style={{

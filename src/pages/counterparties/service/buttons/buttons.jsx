@@ -12,11 +12,12 @@ export default function Buttons({
     setModalDelete,
     params,
 }) {
+    const wayback = params.split(":").join("/");
     const [selected, setselected] = useState(false);
     return (
         <>
             {selected ? (
-                <Navigate to={`/${params}/createwaybill`} />
+                <Navigate to={`/${wayback}`} />
             ) : (
                 <div className={classes.buttons}>
                     <MyButton onClick={() => setselected(true)}>
