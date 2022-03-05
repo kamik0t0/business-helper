@@ -1,14 +1,15 @@
 export class Positions {
-    constructor(number) {
+    constructor(number, nomenclature, quantity, price, summ, NDS, total, id) {
         this.number = +number;
-        this.nomenclature = "";
-        this.quantity = 0;
-        this.price = 0;
+        this.nomenclature = nomenclature || "";
+        this.quantity = quantity || 0;
+        this.price = price || 0;
         this.NDSprcnt = 20 / 100;
         this.highlight = false;
-        this.summ = 0;
-        this.NDS = 0;
-        this.total = 0;
+        this.summ = summ || 0;
+        this.NDS = NDS || 0;
+        this.total = total || 0;
+        this.id = id || null;
     }
     // синтаксис свойств-аксессоров используется поскольку не поулчилось передать через fetch
     getSumm() {

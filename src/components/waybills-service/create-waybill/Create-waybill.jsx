@@ -8,6 +8,7 @@ import { Total, TotalWrapper } from "./total/Total.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { create } from "./service/create.js";
+import { v4 as uuid } from "uuid";
 import {
     addRow,
     getNomenclature,

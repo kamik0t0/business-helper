@@ -10,8 +10,12 @@ import MyLink from "../../../UI/link/MyLink.jsx";
 import { useSelector } from "react-redux";
 import { highlight } from "../../../utils/highlight.js";
 import Modal from "../../../UI/modal/modal.jsx";
+import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import DeleteWaybill from "../delete-waybill/Delete-waybill.jsx";
-import { showAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
+import {
+    showAnimatedModal,
+    hideAnimatedModal,
+} from "../../../UI/modal/service/handlers/modal-control.js";
 
 export default function WayBillsList({
     CounterPartyType,
@@ -19,6 +23,7 @@ export default function WayBillsList({
     waybills,
     setWaybills,
 }) {
+    console.log(waybills);
     console.log(path);
     const isMyOrgSelected = useSelector(
         (state) => state.myOrgReducer.isMyOrgSelected
@@ -26,9 +31,12 @@ export default function WayBillsList({
     // Порядок фильтрации
     const [sortOrder, setSortOrder] = useState(true);
     // модальное окно для удаления накладной
-    const [modal, setModal] = useState({ show: false, add: false });
+    const [modalDelete, setModalDelete] = useState({ show: false, add: false });
+    const [modalUpdate, setModalUpdate] = useState({ show: false, add: false });
     // Поле поиска
     const [search, setSearch] = useState("counterparty");
+    // Выбрана ли накладная
+    const [Waybill_chosen, setWaybill_chosen] = useState(false);
     // useRef - запоминаем значение при ререндеринге
     let isCooldown = useRef(false),
         savedArgs = useRef(),
@@ -157,9 +165,10 @@ export default function WayBillsList({
     }
 
     function deleteWaybill(event) {
-        showAnimatedModal(setModal);
+        showAnimatedModal(setModalDelete);
         console.log(waybill.current);
     }
+
     return (
         /* основной контейнер */
         <>
@@ -172,16 +181,20 @@ export default function WayBillsList({
                                     <span></span>
                                 </div>
                             </Link>
-
                             <div
                                 onClick={(event) => deleteWaybill(event, row)}
                                 className={classes.waybills_header_delete}
                             >
                                 <span></span>
                             </div>
-                            <Link to="updatewaybill">
-                                {" "}
-                                <div className={classes.waybills_header_redact}>
+                            <Link to={Waybill_chosen && "updatewaybill"}>
+                                <div
+                                    onClick={() =>
+                                        Waybill_chosen === false &&
+                                        showAnimatedModal(setModalUpdate)
+                                    }
+                                    className={classes.waybills_header_redact}
+                                >
                                     <div
                                         className={
                                             classes.waybills_header_redact_icon
@@ -267,6 +280,7 @@ export default function WayBillsList({
                                         summ={waybill.summ}
                                         getWaybill={getWaybill}
                                         highlight={waybill.highlight}
+                                        setWaybill_chosen={setWaybill_chosen}
                                         highlightWaybill={(index) =>
                                             highlight(
                                                 index,
@@ -279,14 +293,14 @@ export default function WayBillsList({
                                 );
                             })}
                     </div>
-                    {modal.show && (
+                    {modalDelete.show && (
                         <Modal
                             size={{ height: "25vh", width: "40vw" }}
-                            active={modal.add}
-                            setActive={setModal}
+                            active={modalDelete.add}
+                            setActive={setModalDelete}
                         >
                             <DeleteWaybill
-                                setModal={setModal}
+                                setModal={setModalDelete}
                                 waybill={waybill.current}
                                 url={`http://localhost:5600${path.slice(
                                     0,
@@ -297,6 +311,26 @@ export default function WayBillsList({
                                 path={path}
                                 noselected="Накладная не выбрана"
                             />
+                        </Modal>
+                    )}
+                    {modalUpdate.show && (
+                        <Modal
+                            size={{ height: "25vh", width: "40vw" }}
+                            active={modalUpdate.add}
+                            setActive={setModalUpdate}
+                        >
+                            <div className={classes.noorg}>
+                                <div className={classes.noorg__text}>
+                                    Накладная не выбрана
+                                </div>
+                                <MyButton
+                                    onClick={() =>
+                                        hideAnimatedModal(setModalUpdate)
+                                    }
+                                >
+                                    Закрыть
+                                </MyButton>
+                            </div>
                         </Modal>
                     )}
                 </>

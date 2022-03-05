@@ -7,6 +7,11 @@ import { Total, TotalWrapper } from "../create-waybill/total/Total.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { update } from "./service/update.js";
+import { v4 as uuid } from "uuid";
+import {
+    getSaleItemsFromDB,
+    getPurchaseItemsFromDB,
+} from "../../../utils/getDataByForeignKey.js";
 import {
     addRow,
     getNomenclature,
@@ -23,7 +28,73 @@ export default function UpdateWaybill({ wbType, path, setWaybills }) {
     const [updated, setUpdated] = useState(false);
     let row = useRef(null);
     const Waybill = useRef({});
-    console.log(path);
+    const SaleId = JSON.parse(localStorage.getItem(wbType[2])).id;
+    const Waybill_date = JSON.parse(
+        localStorage.getItem(wbType[2])
+    ).waybill_date.slice(0, -14);
+    const counterparty = getCounterpartyRequisitesFromWaybill(
+        JSON.parse(localStorage.getItem(wbType[2]))
+    );
+
+    function getCounterpartyRequisitesFromWaybill(waybill) {
+        return Object.fromEntries(
+            Object.entries(waybill).filter(
+                (obj) =>
+                    Object.values(obj)[0].includes("cl_") ||
+                    Object.values(obj)[0].includes("CounterpartyId")
+            )
+        );
+    }
+
+    useEffect(async () => {
+        let result;
+        if (positions.length === 0) {
+            switch (path) {
+                case "/sales":
+                    result = await getSaleItemsFromDB(
+                        `http://localhost:5600${path.slice(0, -1)}/?SaleId=${
+                            JSON.parse(localStorage.getItem("Sale")).id
+                        }`
+                    );
+                    break;
+                case "/purchases":
+                    result = await getPurchaseItemsFromDB(
+                        `http://localhost:5600${path.slice(
+                            0,
+                            -1
+                        )}/?PurchaseId=${
+                            JSON.parse(localStorage.getItem("Purchase")).id
+                        }`
+                    );
+                    break;
+
+                default:
+                    break;
+            }
+            // setPositions(result);
+            console.log(result);
+            let startArr = [];
+            for (const position of result) {
+                console.log(position.nomenclature);
+                startArr.push(
+                    new Positions(
+                        position.item_number,
+                        position.nomenclature,
+                        position.quantity,
+                        position.price,
+                        position.summ,
+                        position.nds,
+                        position.total,
+                        position.id
+                    )
+                );
+            }
+            console.log(startArr);
+
+            setPositions([...startArr]);
+            setCounter(startArr.length);
+        }
+    }, []);
 
     return (
         <>
@@ -33,7 +104,6 @@ export default function UpdateWaybill({ wbType, path, setWaybills }) {
                 <form className={classes.content}>
                     <div className={classes.waybill_form_header}>
                         <div className={classes.waybill_form_header_save}>
-                            {" "}
                             <MyButton
                                 onClick={(event) =>
                                     update(
@@ -45,7 +115,23 @@ export default function UpdateWaybill({ wbType, path, setWaybills }) {
                                         Waybill,
                                         positions,
                                         setWaybills,
-                                        setUpdated
+                                        setUpdated,
+                                        localStorage.getItem("waybillDate") ===
+                                            null || undefined
+                                            ? Waybill_date
+                                            : localStorage.getItem(
+                                                  "waybillDate"
+                                              ),
+                                        localStorage.getItem("counterparty") ===
+                                            null || undefined
+                                            ? counterparty
+                                            : JSON.parse(
+                                                  localStorage.getItem(
+                                                      "counterparty"
+                                                  )
+                                              ),
+                                        SaleId,
+                                        localStorage.getItem("Sale_items")
                                     )
                                 }
                             >
@@ -76,11 +162,7 @@ export default function UpdateWaybill({ wbType, path, setWaybills }) {
                                     defaultValue={
                                         localStorage.getItem("waybillDate") ===
                                             null || undefined
-                                            ? JSON.parse(
-                                                  localStorage.getItem(
-                                                      wbType[2]
-                                                  )
-                                              ).waybill_date.slice(0, -14)
+                                            ? Waybill_date
                                             : localStorage.getItem(
                                                   "waybillDate"
                                               )
@@ -228,6 +310,9 @@ export default function UpdateWaybill({ wbType, path, setWaybills }) {
                                         setPositions
                                     )
                                 }
+                                nomenclature={item.nomenclature}
+                                quantity={item.quantity}
+                                price={item.price}
                             />
                         );
                     })}

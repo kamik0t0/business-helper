@@ -13,7 +13,11 @@ export default function Position({
     getNomenclature,
     getQuantity,
     getPrice,
+    nomenclature,
+    quantity,
+    price,
 }) {
+    console.log(nomenclature);
     return (
         <>
             <div
@@ -32,6 +36,7 @@ export default function Position({
                             flex: "1 1 100%",
                             width: "100%",
                         }}
+                        defaultValue={"" || nomenclature}
                         getValue={(event) => getNomenclature(event, number)}
                         type="text"
                     />
@@ -43,6 +48,7 @@ export default function Position({
                             flex: "1 1 100%",
                             width: "100%",
                         }}
+                        defaultValue={quantity || ""}
                         getValue={(event) => getQuantity(event, number)}
                         type="number"
                     />
@@ -54,6 +60,7 @@ export default function Position({
                             flex: "1 1 100%",
                             width: "100%",
                         }}
+                        defaultValue={price || ""}
                         getValue={(event) => getPrice(event, number)}
                         type="number"
                     />

@@ -10,6 +10,7 @@ export default function Sale({
     summ,
     getWaybill,
     highlight,
+    setWaybill_chosen,
     highlightWaybill,
 }) {
     const parseDate = new Date(Date.parse(date)).toLocaleDateString();
@@ -25,6 +26,7 @@ export default function Sale({
                 onClick={(event) => {
                     getWaybill(event, index);
                     highlightWaybill(index);
+                    setWaybill_chosen(true);
                 }}
             >
                 {/* дата */}

@@ -22,6 +22,10 @@ export async function getDataByForeignKey(url, idName) {
             return [await getSalesFromDB(url), "SaleId"];
         case "purchases":
             return [await getPurchasesFromDB(url), "PurchaseId"];
+        case "sales_items":
+            return [await getSaleItemsFromDB(url), "SaleId"];
+        case "purchases_items":
+            return [await getPurchaseItemsFromDB(url), "PurchaseId"];
         default:
             break;
     }
@@ -59,7 +63,6 @@ export async function getCounterpartiesFromDB(url) {
 
 // запрос продаж
 export async function getSalesFromDB(url) {
-    console.log("sales");
     try {
         let getSales = await fetch(url);
         let sales = await getSales.json();
@@ -71,7 +74,6 @@ export async function getSalesFromDB(url) {
 }
 // запрос покупок
 export async function getPurchasesFromDB(url) {
-    console.log("purchases");
     try {
         let getPurchases = await fetch(url);
         let purchases = await getPurchases.json();
@@ -79,5 +81,31 @@ export async function getPurchasesFromDB(url) {
         return purchases;
     } catch (error) {
         console.log(`Can't get purchases from DB - no connection to server`);
+    }
+}
+// запрос продаж
+export async function getSaleItemsFromDB(url) {
+    console.log("sales_items");
+    try {
+        let getSaleItems = await fetch(url);
+        let sale_items = await getSaleItems.json();
+        localStorage.setItem("Sale_items", JSON.stringify(sale_items));
+        return sale_items;
+    } catch (error) {
+        console.log(`Can't get sale_items from DB - no connection to server`);
+    }
+}
+// запрос покупок
+export async function getPurchaseItemsFromDB(url) {
+    console.log("purchases_items");
+    try {
+        let getPurchaseItems = await fetch(url);
+        let purchase_items = await getPurchaseItems.json();
+        localStorage.setItem("Purchase_items", JSON.stringify(purchase_items));
+        return purchase_items;
+    } catch (error) {
+        console.log(
+            `Can't get purchase_items from DB - no connection to server`
+        );
     }
 }

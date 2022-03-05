@@ -5,4 +5,7 @@ export function localStorateClearing() {
     localStorage.removeItem("PurchaseId");
     localStorage.removeItem("counterparty");
     localStorage.removeItem("counterpartyId");
+    localStorage.removeItem("Purchase_items");
+    localStorage.removeItem("Sale_items");
+    localStorage.removeItem("waybillDate");
 }
