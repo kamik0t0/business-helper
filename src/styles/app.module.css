@@ -90,10 +90,6 @@ h6 {
   background-color: #758ca8;
 }
 
-body {
-  overflow: hidden;
-}
-
 .conteiner {
   display: -webkit-box;
   display: -ms-flexbox;

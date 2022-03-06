@@ -47,7 +47,7 @@ export let Requisites = [
         field: "inn",
         name: "ИНН:",
         type: "text",
-        lngth: 12,
+        lngth: 10,
         num: true,
     },
     {

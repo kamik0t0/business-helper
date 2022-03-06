@@ -57,3 +57,30 @@ export function total(array, field, WB) {
     WB.current[field] = +array.reduce((prev, item) => prev + item[field], 0);
     return WB.current[field];
 }
+// формирование текущей даты
+export function makeDefaultDate() {
+    const date = new Date();
+    const month =
+        date.getMonth() >= 10
+            ? date.getMonth() + 1
+            : "0" + +(date.getMonth() + 1);
+    const day = date.getMonth() >= 10 ? date.getDate() : "0" + +date.getDate();
+    const hour =
+        date.getHours() >= 10 ? date.getHours() : "0" + +date.getHours();
+    const minute =
+        date.getMinutes() >= 10 ? date.getMinutes() : "0" + +date.getMinutes();
+    const seconds =
+        date.getSeconds() >= 10 ? date.getSeconds() : "0" + +date.getSeconds();
+    return `${date.getFullYear()}-${month}-${day}T${hour}:${minute}:${seconds}.000Z`;
+}
+
+export function makeDate() {
+    const date = new Date();
+    const hour =
+        date.getHours() >= 10 ? date.getHours() : "0" + +date.getHours();
+    const minute =
+        date.getMinutes() >= 10 ? date.getMinutes() : "0" + +date.getMinutes();
+    const seconds =
+        date.getSeconds() >= 10 ? date.getSeconds() : "0" + +date.getSeconds();
+    return `T${hour}:${minute}:${seconds}.000Z`;
+}

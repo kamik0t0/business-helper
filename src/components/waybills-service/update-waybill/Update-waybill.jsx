@@ -20,20 +20,22 @@ import {
     getRow,
     deleteRow,
     total,
+    makeDate,
 } from "../create-waybill/service/handlers.js";
 
-export default function UpdateWaybill({ wbType, path, setWaybills }) {
+export default function UpdateWaybill({ CounterPartyType, path }) {
+    console.log(CounterPartyType, path);
     const [positions, setPositions] = useState([]);
     const [counter, setCounter] = useState(0);
     const [updated, setUpdated] = useState(false);
     let row = useRef(null);
     const Waybill = useRef({});
-    const SaleId = JSON.parse(localStorage.getItem(wbType[2])).id;
+    const SaleId = JSON.parse(localStorage.getItem(CounterPartyType[2])).id;
     const Waybill_date = JSON.parse(
-        localStorage.getItem(wbType[2])
-    ).waybill_date.slice(0, -14);
+        localStorage.getItem(CounterPartyType[2])
+    ).waybill_date;
     const counterparty = getCounterpartyRequisitesFromWaybill(
-        JSON.parse(localStorage.getItem(wbType[2]))
+        JSON.parse(localStorage.getItem(CounterPartyType[2]))
     );
 
     function getCounterpartyRequisitesFromWaybill(waybill) {
@@ -114,7 +116,6 @@ export default function UpdateWaybill({ wbType, path, setWaybills }) {
                                         path.slice(1),
                                         Waybill,
                                         positions,
-                                        setWaybills,
                                         setUpdated,
                                         localStorage.getItem("waybillDate") ===
                                             null || undefined
@@ -130,8 +131,7 @@ export default function UpdateWaybill({ wbType, path, setWaybills }) {
                                                       "counterparty"
                                                   )
                                               ),
-                                        SaleId,
-                                        localStorage.getItem("Sale_items")
+                                        SaleId
                                     )
                                 }
                             >
@@ -143,51 +143,63 @@ export default function UpdateWaybill({ wbType, path, setWaybills }) {
                                     classes.waybill_form_header_save_name
                                 }
                             >
-                                {wbType[0]}
+                                {CounterPartyType[0]}
                             </div>
                             <Link to={path}>
                                 <MyButton>Закрыть</MyButton>
                             </Link>
                         </div>
                         <div className={classes.waybill_form_header_date}>
-                            <div
-                                className={
-                                    classes.waybill_form_header_date_date
+                            <MyInput
+                                id="waybillDate"
+                                name="Дата:"
+                                type="date"
+                                defaultValue={
+                                    localStorage.getItem("waybillDate") ===
+                                        null || undefined
+                                        ? Waybill_date.slice(0, -14)
+                                        : localStorage
+                                              .getItem("waybillDate")
+                                              .slice(0, -14)
                                 }
-                            >
+                                getValue={(event) => {
+                                    Waybill.current["date"] = `${
+                                        event.target.value
+                                    }${makeDate()}`;
+                                    localStorage.setItem(
+                                        "waybillDate",
+                                        Waybill.current["date"]
+                                    );
+                                }}
+                            />
+                            {path === "/purchases" && (
                                 <MyInput
-                                    id="waybillDate"
-                                    name="Дата:"
-                                    type="date"
+                                    name={CounterPartyType[3] + ": "}
+                                    type="text"
                                     defaultValue={
-                                        localStorage.getItem("waybillDate") ===
-                                            null || undefined
-                                            ? Waybill_date
-                                            : localStorage.getItem(
-                                                  "waybillDate"
-                                              )
+                                        JSON.parse(
+                                            localStorage.getItem("Purchase")
+                                        ).cl_waybill_number
                                     }
                                     getValue={(event) => {
-                                        Waybill.current["date"] = new Date(
-                                            `${event.target.value}`
-                                        );
-                                        localStorage.setItem(
-                                            "waybillDate",
-                                            event.target.value
-                                        );
+                                        Waybill.current["cl_waybill_number"] =
+                                            event.target.value;
                                     }}
+                                    style={{ width: "145px" }}
                                 />
-                            </div>
+                            )}
                             <MyInput
                                 style={{ width: "350px" }}
-                                name={wbType[1]}
+                                name={CounterPartyType[1] + ":"}
                                 type="text"
                                 defaultValue={
                                     JSON.parse(
                                         localStorage.getItem("counterparty")
                                     ) === null || undefined
                                         ? JSON.parse(
-                                              localStorage.getItem(wbType[2])
+                                              localStorage.getItem(
+                                                  CounterPartyType[2]
+                                              )
                                           ).cl_orgname
                                         : JSON.parse(
                                               localStorage.getItem(

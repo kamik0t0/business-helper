@@ -6,8 +6,6 @@ import classes from "./styles/waybill-list.module.css";
 import Waybill from "./waybill/Waybill.jsx";
 import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
-import MyLink from "../../../UI/link/MyLink.jsx";
-import { useSelector } from "react-redux";
 import { highlight } from "../../../utils/highlight.js";
 import Modal from "../../../UI/modal/modal.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
@@ -17,24 +15,18 @@ import {
     hideAnimatedModal,
 } from "../../../UI/modal/service/handlers/modal-control.js";
 
-export default function WayBillsList({
-    CounterPartyType,
-    path,
-    waybills,
-    setWaybills,
-}) {
-    console.log(waybills);
-    console.log(path);
-    const isMyOrgSelected = useSelector(
-        (state) => state.myOrgReducer.isMyOrgSelected
-    );
+export default function WayBillsList({ CounterPartyType, path, WB }) {
+    let bills = WB;
+
+    const [waybills, setWaybills] = useState([...bills]);
+
     // Порядок фильтрации
     const [sortOrder, setSortOrder] = useState(true);
     // модальное окно для удаления накладной
     const [modalDelete, setModalDelete] = useState({ show: false, add: false });
     const [modalUpdate, setModalUpdate] = useState({ show: false, add: false });
     // Поле поиска
-    const [search, setSearch] = useState("counterparty");
+    const [search, setSearch] = useState("cl_orgname");
     // Выбрана ли накладная
     const [Waybill_chosen, setWaybill_chosen] = useState(false);
     // useRef - запоминаем значение при ререндеринге
@@ -44,19 +36,6 @@ export default function WayBillsList({
         row = useRef(null),
         waybill = useRef(null);
 
-    useEffect(() => {
-        switch (path) {
-            case "/sales/createwaybill":
-                setWaybills(JSON.parse(localStorage.getItem("Sales")));
-                break;
-            case "/purchases/createwaybill":
-                setWaybills(JSON.parse(localStorage.getItem("Purchases")));
-                break;
-
-            default:
-                break;
-        }
-    }, []);
     // сортировки по:
     // - дате
     function sortByDate() {
@@ -114,9 +93,12 @@ export default function WayBillsList({
 
     // фильтрующая функция
     function filterList(event) {
+        console.log(search);
+        console.log(waybills);
         let regexp = new RegExp(`${event.target.value.toLowerCase()}`, "g");
+        console.log(regexp);
         setWaybills([
-            ...waybills.filter((item) => {
+            ...bills.filter((item) => {
                 return (
                     item[search].toString().toLowerCase().search(regexp) !== -1
                 );
@@ -172,7 +154,7 @@ export default function WayBillsList({
     return (
         /* основной контейнер */
         <>
-            {isMyOrgSelected ? (
+            {
                 <>
                     <div className={classes.content}>
                         <div className={classes.waybills_header}>
@@ -217,10 +199,10 @@ export default function WayBillsList({
                                         }}
                                         options={[
                                             {
-                                                value: "counterparty",
+                                                value: "cl_orgname",
                                                 name: CounterPartyType[1],
                                             },
-                                            { value: "summ", name: "Сумме" },
+                                            { value: "total", name: "Сумме" },
                                         ]}
                                     />
                                 </div>
@@ -228,7 +210,7 @@ export default function WayBillsList({
                                     id="filter_input"
                                     placeholder="Поиск..."
                                     type="text"
-                                    getValue={filter}
+                                    getValue={filterList}
                                 />
                             </div>
                             {/* наименование раздела */}
@@ -277,7 +259,7 @@ export default function WayBillsList({
                                         date={waybill.waybill_date}
                                         number={waybill.id}
                                         counterparty={waybill.cl_orgname}
-                                        summ={waybill.summ}
+                                        total={waybill.total}
                                         getWaybill={getWaybill}
                                         highlight={waybill.highlight}
                                         setWaybill_chosen={setWaybill_chosen}
@@ -334,15 +316,7 @@ export default function WayBillsList({
                         </Modal>
                     )}
                 </>
-            ) : (
-                <div className={classes.content}>
-                    <div className={classes.nocounterparties}>
-                        Выберите организацию в
-                        <MyLink path="/private"> личном кабинете</MyLink> или{" "}
-                        <MyLink path="/login"> авторизуйтесь</MyLink>
-                    </div>
-                </div>
-            )}
+            }
         </>
     );
 }

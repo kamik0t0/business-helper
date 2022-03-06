@@ -1,6 +1,6 @@
 export const Waybills = [
     {
-        date: new Date(2021, 7, 11),
+        date: new Date(),
         number: "210521127",
         counterparty: 'ООО "Возовоз"',
         summ: 14670.0,

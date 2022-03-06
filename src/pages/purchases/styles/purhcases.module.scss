@@ -1,0 +1,19 @@
+@mixin font {
+    font-weight: 700;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    color: #f0ebdd;
+}
+.noorg {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    justify-items: center;
+    height: 100%;
+
+    .noorg__text {
+        @include font();
+        font-size: 1.5em;
+    }
+}

@@ -6,6 +6,7 @@ import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-cont
 import { addRequisitesValues } from "../handlers/addRequisitesValues.js";
 import Requisite from "./service/components/ReqField.jsx";
 import PropTypes from "prop-types";
+import { v4 as uuid } from "uuid";
 
 export default function ReadOrg({ setModal, org, noselected }) {
     // если выбрана организация, то добавляются значения реквизитов

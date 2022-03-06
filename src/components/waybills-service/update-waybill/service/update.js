@@ -5,16 +5,11 @@ export async function update(
     idName,
     ObjToSend,
     array,
-    setArray,
     setNav,
     Waybill_date,
     counterparty,
-    id,
-    sale_items
+    id
 ) {
-    console.log(sale_items);
-    console.log(idName);
-    console.log(array);
     event.preventDefault();
     ObjToSend.current["Waybill_date"] = Waybill_date;
     ObjToSend.current["positions"] = array;
@@ -24,7 +19,6 @@ export async function update(
         counterparty.CounterpartyId || counterparty.id;
     ObjToSend.current["orgId"] = localStorage.getItem("OrgsId");
     ObjToSend.current["id"] = id;
-    // ObjToSend.current["saleItemsId"] = sale_items.id;
 
     console.log(ObjToSend.current);
     // отправка запроса
@@ -42,7 +36,7 @@ export async function update(
         // запрос на накладные
         let [res] = await getDataByForeignKey(url, idName);
         console.log(res);
-        setArray(res);
+
         // навигация к списку накладных
         setNav(true);
     }

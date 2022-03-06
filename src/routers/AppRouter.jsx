@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { BrowserHistory } from "history";
 import CalcForm from "../pages/Tax-calc/Tax-calc-form.jsx";
 import Inner from "../pages/info/info.jsx";
 import Sales from "../pages/sales/Sales.jsx";
@@ -19,58 +18,35 @@ export const SalesContext = React.createContext();
 export const PurchasesContext = React.createContext();
 
 export default function AppRouter() {
-    const [sales, setSales] = useState([]);
-    const [purchases, setPurchases] = useState([]);
+    // const [sales, setSales] = useState([]);
+    // const [purchases, setPurchases] = useState([]);
     return (
         <Routes>
             <Route exact path="/" element={<Inner />}></Route>
             <Route exact path="/calculator" element={<CalcForm />}></Route>
 
-            <Route
-                exact
-                path="/sales"
-                element={<Sales sales={sales} setSales={setSales} />}
-            ></Route>
+            <Route exact path="/sales" element={<Sales />}></Route>
             <Route
                 exact
                 path="/sales/createwaybill"
-                element={<NewSale sales={sales} setSales={setSales} />}
+                element={<NewSale />}
             ></Route>
             <Route
                 exact
                 path="/sales/updatewaybill"
-                element={<UpdateSale sales={sales} setSales={setSales} />}
+                element={<UpdateSale />}
             ></Route>
 
-            <Route
-                exact
-                path="/purchases"
-                element={
-                    <Purchases
-                        purchases={purchases}
-                        setPurchases={setPurchases}
-                    />
-                }
-            ></Route>
+            <Route exact path="/purchases" element={<Purchases />}></Route>
             <Route
                 exact
                 path="/purchases/createwaybill"
-                element={
-                    <NewPurchase
-                        purchases={purchases}
-                        setPurchases={setPurchases}
-                    />
-                }
+                element={<NewPurchase />}
             ></Route>
             <Route
                 exact
                 path="/purchases/updatewaybill"
-                element={
-                    <UpdatePurchase
-                        purchases={purchases}
-                        setPurchases={setPurchases}
-                    />
-                }
+                element={<UpdatePurchase />}
             ></Route>
 
             <Route exact path="/login" element={<Login />}></Route>

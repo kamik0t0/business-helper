@@ -1,6 +1,7 @@
 // получение реквизитов + контроль ИНН и КПП. Надо сделать декомпозицию.
 export function getRequisites(event, field, length, ORG, isORG) {
-    console.log(field);
+    console.log(length);
+    console.log(isORG);
     if (isORG) {
         if (field in ORG) ORG[field] = event.target.value.trim();
         ORG["kppLength"] =

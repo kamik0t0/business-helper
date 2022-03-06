@@ -1,15 +1,7 @@
 import { getDataByForeignKey } from "../../../../utils/getDataByForeignKey.js";
 
 // создание накладной
-export async function create(
-    event,
-    url,
-    idName,
-    ObjToSend,
-    array,
-    setArray,
-    setNav
-) {
+export async function create(event, url, idName, ObjToSend, array, setNav) {
     event.preventDefault();
     ObjToSend.current["positions"] = array;
     ObjToSend.current["myOrg"] = JSON.parse(localStorage.getItem("myOrg"));
@@ -33,10 +25,9 @@ export async function create(
     if (result.created) {
         console.log(url);
         console.log(idName);
-        // // запрос на накладные
+        // запрос на накладные
         let [res] = await getDataByForeignKey(url, idName);
         console.log(res);
-        setArray(res);
         // навигация к списку накладных
         setNav(true);
     }

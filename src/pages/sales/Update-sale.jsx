@@ -1,13 +1,12 @@
 import React from "react";
 import UpdateWaybill from "../../components/waybills-service/update-waybill/Update-waybill.jsx";
 
-export default function UpdateSale({ sales, setSales }) {
+export default function UpdateSale() {
     return (
         <UpdateWaybill
-            wbType={["Продажа товаров: создание", "Покупатель:", "Sale"]}
+            CounterPartyType={["Реализация: изменение", "Покупатель", "Sale"]}
             path="/sales"
-            waybills={sales}
-            setWaybills={setSales}
+            // WB={JSON.parse(localStorage.getItem("Sales"))}
         />
     );
 }

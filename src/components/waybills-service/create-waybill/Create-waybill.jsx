@@ -1,5 +1,5 @@
 // компонент создания накладной
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import classes from "./styles/create-waybill.module.css";
 import Position from "./position/Position.jsx";
@@ -17,9 +17,11 @@ import {
     getRow,
     deleteRow,
     total,
+    makeDefaultDate,
+    makeDate,
 } from "./service/handlers.js";
 
-export default function CreateWaybill({ wbType, path, setWaybills }) {
+export default function CreateWaybill({ wbType, path }) {
     const [positions, setPositions] = useState([]);
     const [counter, setCounter] = useState(0);
     const [created, setCreated] = useState(false);
@@ -27,6 +29,10 @@ export default function CreateWaybill({ wbType, path, setWaybills }) {
     let row = useRef(null);
     // объект накладная для отправки на сервер
     const WB = useRef({});
+
+    useEffect(() => {
+        WB.current["date"] = makeDefaultDate();
+    });
 
     return (
         <>
@@ -47,7 +53,7 @@ export default function CreateWaybill({ wbType, path, setWaybills }) {
                                         path.slice(1),
                                         WB,
                                         positions,
-                                        setWaybills,
+                                        // setWaybills,
                                         setCreated
                                     )
                                 }
@@ -76,12 +82,17 @@ export default function CreateWaybill({ wbType, path, setWaybills }) {
                                     id="waybillDate"
                                     name="Дата:"
                                     type="date"
-                                    defaultValue={new Date(Date.now())}
-                                    getValue={(event) =>
-                                        (WB.current.date = new Date(
-                                            `${event.target.value}`
-                                        ))
+                                    defaultValue={
+                                        WB.current.date === undefined
+                                            ? null
+                                            : WB.current.date.slice(0, -14)
                                     }
+                                    getValue={(event) => {
+                                        WB.current.date =
+                                            `${
+                                                event.target.value
+                                            }${makeDate()}` || WB.current.date;
+                                    }}
                                 />
                             </div>
                             <MyInput

@@ -2,13 +2,12 @@
 import React from "react";
 import CreateWaybill from "../../components/waybills-service/create-waybill/Create-waybill.jsx";
 
-export default function NewSale({ sales, setSales }) {
+export default function NewSale() {
     return (
         <CreateWaybill
             wbType={["Продажа товаров: создание", "Покупатель:"]}
             path="/sales"
-            waybills={sales}
-            setWaybills={setSales}
+            WB={JSON.parse(localStorage.getItem("Sales"))}
         />
     );
 }

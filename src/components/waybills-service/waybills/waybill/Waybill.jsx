@@ -7,7 +7,7 @@ export default function Sale({
     date,
     number,
     counterparty,
-    summ,
+    total,
     getWaybill,
     highlight,
     setWaybill_chosen,
@@ -40,7 +40,7 @@ export default function Sale({
                     {counterparty}
                 </div>
                 {/* сумма */}
-                <div className={classes.waybills_list_wb_summ}>{summ}</div>
+                <div className={classes.waybills_list_wb_summ}>{total}</div>
             </div>
         </div>
     );
