@@ -2,6 +2,7 @@
 import React from "react";
 import MyInput from "../../../../../UI/input/MyInput/MyInput.jsx";
 import { filterRequisites } from "../../../handlers/filter-requisites.js";
+import PropTypes from "prop-types";
 
 export default function Inputs({ fields, getValue, isORG }) {
     // фильтрация полей если создается ИП
@@ -24,3 +25,9 @@ export default function Inputs({ fields, getValue, isORG }) {
         </>
     );
 }
+
+Inputs.propTypes = {
+    fields: PropTypes.array.isRequired,
+    getValue: PropTypes.func.isRequired,
+    isORG: PropTypes.bool.isRequired,
+};

@@ -3,6 +3,7 @@ import classes from "./styles/patch-fields.module.css";
 import MyButton from "../../../../../UI/input/MyButton/MyButton.jsx";
 import MyInput from "../../../../../UI/input/MyInput/MyInput.jsx";
 import { setFocus } from "../handlers/set-focus.js";
+import PropTypes from "prop-types";
 
 export default function PatchFields({
     requisite,
@@ -86,3 +87,12 @@ export default function PatchFields({
         </div>
     );
 }
+
+PatchFields.propTypes = {
+    requisite: PropTypes.object.isRequired,
+    number: PropTypes.number.isRequired,
+    getValue: PropTypes.func.isRequired,
+    setValue: PropTypes.func.isRequired,
+    length: PropTypes.number,
+    isNumber: PropTypes.bool.isRequired,
+};

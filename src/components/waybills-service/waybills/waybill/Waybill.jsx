@@ -1,8 +1,9 @@
 // представление накладной в виде таблицы с 4 колонками и 1 строки в списке накладных: покупок или продаж
 import React from "react";
 import classes from "./styles/waybill-list.module.css";
+import PropTypes from "prop-types";
 
-export default function Sale({
+export default function Waybill({
     index,
     date,
     number,
@@ -10,7 +11,7 @@ export default function Sale({
     total,
     getWaybill,
     highlight,
-    setWaybill_chosen,
+    setWaybillChosen,
     highlightWaybill,
 }) {
     const parseDate = new Date(Date.parse(date)).toLocaleDateString();
@@ -26,7 +27,7 @@ export default function Sale({
                 onClick={(event) => {
                     getWaybill(event, index);
                     highlightWaybill(index);
-                    setWaybill_chosen(true);
+                    setWaybillChosen(true);
                 }}
             >
                 {/* дата */}
@@ -45,3 +46,15 @@ export default function Sale({
         </div>
     );
 }
+
+Waybill.propTypes = {
+    index: PropTypes.number.isRequired,
+    date: PropTypes.string.isRequired,
+    number: PropTypes.number.isRequired,
+    counterparty: PropTypes.string.isRequired,
+    total: PropTypes.string.isRequired,
+    getWaybil: PropTypes.func,
+    highlight: PropTypes.bool,
+    setWaybillChosen: PropTypes.func.isRequired,
+    highlightWaybill: PropTypes.func.isRequired,
+};

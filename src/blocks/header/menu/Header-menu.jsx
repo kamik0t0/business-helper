@@ -15,7 +15,6 @@ export default function Menu() {
             }
         >
             <div className={classes.header_option}>
-                {" "}
                 <MyLink path="/">Главная</MyLink>
             </div>
         </div>

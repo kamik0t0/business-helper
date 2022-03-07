@@ -1,6 +1,7 @@
 import React from "react";
 import classes from "./styles/req-field.module.css";
 import { v4 as uuid } from "uuid";
+import PropTypes from "prop-types";
 
 export default function Requisite({ requisite }) {
     return (
@@ -18,3 +19,7 @@ export default function Requisite({ requisite }) {
         </div>
     );
 }
+
+Requisite.propTypes = {
+    requisite: PropTypes.object.isRequired,
+};

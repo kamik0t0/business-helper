@@ -6,7 +6,6 @@ export default function UpdateSale() {
         <UpdateWaybill
             CounterPartyType={["Реализация: изменение", "Покупатель", "Sale"]}
             path="/sales"
-            // WB={JSON.parse(localStorage.getItem("Sales"))}
         />
     );
 }

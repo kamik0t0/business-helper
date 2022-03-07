@@ -9,17 +9,24 @@ import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import { highlight } from "../../../utils/highlight.js";
 import Modal from "../../../UI/modal/modal.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
+import PropTypes from "prop-types";
 import DeleteWaybill from "../delete-waybill/Delete-waybill.jsx";
 import {
     showAnimatedModal,
     hideAnimatedModal,
 } from "../../../UI/modal/service/handlers/modal-control.js";
+import {
+    sortByDate,
+    sortByCtrprty,
+    sortBySumm,
+    sortById,
+} from "./service/hanlders.js";
+import { throttle, filterList } from "./service/hanlders.js";
 
 export default function WayBillsList({ CounterPartyType, path, WB }) {
     let bills = WB;
-
+    // перерендер списка накладных
     const [waybills, setWaybills] = useState([...bills]);
-
     // Порядок фильтрации
     const [sortOrder, setSortOrder] = useState(true);
     // модальное окно для удаления накладной
@@ -28,107 +35,17 @@ export default function WayBillsList({ CounterPartyType, path, WB }) {
     // Поле поиска
     const [search, setSearch] = useState("cl_orgname");
     // Выбрана ли накладная
-    const [Waybill_chosen, setWaybill_chosen] = useState(false);
-    // useRef - запоминаем значение при ререндеринге
+    const [waybillChosen, setWaybillChosen] = useState(false);
+    const waybill = useRef(null);
+
     let isCooldown = useRef(false),
         savedArgs = useRef(),
         savedThis = useRef(),
-        row = useRef(null),
-        waybill = useRef(null);
-
-    // сортировки по:
-    // - дате
-    function sortByDate() {
-        console.log(waybills);
-        sortOrder
-            ? setWaybills([
-                  ...waybills.sort(
-                      (a, b) =>
-                          Date.parse(a.waybill_date) -
-                          Date.parse(b.waybill_date)
-                  ),
-              ])
-            : setWaybills([
-                  ...waybills.sort(
-                      (a, b) =>
-                          Date.parse(b.waybill_date) -
-                          Date.parse(a.waybill_date)
-                  ),
-              ]);
-
-        setSortOrder(!sortOrder);
-    }
-    // - контрагенту
-    function sortByCtrprty() {
-        sortOrder
-            ? setWaybills([
-                  ...waybills.sort((a, b) =>
-                      a.cl_orgname.localeCompare(b.cl_orgname)
-                  ),
-              ])
-            : setWaybills([
-                  ...waybills.sort((a, b) =>
-                      b.cl_orgname.localeCompare(a.cl_orgname)
-                  ),
-              ]);
-
-        setSortOrder(!sortOrder);
-    }
-    // - сумме
-    function sortBySumm() {
-        sortOrder
-            ? setWaybills([...waybills.sort((a, b) => a.summ - b.summ)])
-            : setWaybills([...waybills.sort((a, b) => b.summ - a.summ)]);
-
-        setSortOrder(!sortOrder);
-    }
-    // - id
-    function sortById() {
-        sortOrder
-            ? setWaybills([...waybills.sort((a, b) => a.id - b.id)])
-            : setWaybills([...waybills.sort((a, b) => b.id - a.id)]);
-
-        setSortOrder(!sortOrder);
-    }
-
-    // фильтрующая функция
-    function filterList(event) {
-        console.log(search);
-        console.log(waybills);
-        let regexp = new RegExp(`${event.target.value.toLowerCase()}`, "g");
-        console.log(regexp);
-        setWaybills([
-            ...bills.filter((item) => {
-                return (
-                    item[search].toString().toLowerCase().search(regexp) !== -1
-                );
-            }),
-        ]);
-    }
-
-    // тормозящий декоратор - оптимизация чтобы не вызывать ререндер на каждое нажатие клавиши при поиске
-    function throttle(func) {
-        const wrapper = (...args) => {
-            if (isCooldown.current) {
-                savedArgs.current = args;
-                console.log(args);
-                return;
-            }
-            func.apply(this, args);
-            isCooldown.current = true;
-            setTimeout(() => {
-                isCooldown.current = false;
-                if (savedArgs.current) {
-                    wrapper.apply(savedThis.current, savedArgs.current);
-                    savedArgs.current = savedThis.current = null;
-                }
-            }, 1000);
-        };
-        return wrapper;
-    }
-
-    const filter = throttle(filterList);
-
+        // выделенная позиция
+        row = useRef(null);
+    // фильтр с декоратором
+    const filter = throttle(filterList, isCooldown, savedArgs, savedThis);
+    // получение накладной
     function getWaybill(event, number) {
         waybill.current = waybills[number];
         switch (path) {
@@ -145,14 +62,13 @@ export default function WayBillsList({ CounterPartyType, path, WB }) {
                 break;
         }
     }
-
+    // удаление накладной
     function deleteWaybill(event) {
         showAnimatedModal(setModalDelete);
         console.log(waybill.current);
     }
 
     return (
-        /* основной контейнер */
         <>
             {
                 <>
@@ -169,10 +85,10 @@ export default function WayBillsList({ CounterPartyType, path, WB }) {
                             >
                                 <span></span>
                             </div>
-                            <Link to={Waybill_chosen && "updatewaybill"}>
+                            <Link to={waybillChosen && "updatewaybill"}>
                                 <div
                                     onClick={() =>
-                                        Waybill_chosen === false &&
+                                        waybillChosen === false &&
                                         showAnimatedModal(setModalUpdate)
                                     }
                                     className={classes.waybills_header_redact}
@@ -210,7 +126,14 @@ export default function WayBillsList({ CounterPartyType, path, WB }) {
                                     id="filter_input"
                                     placeholder="Поиск..."
                                     type="text"
-                                    getValue={filterList}
+                                    getValue={(event) =>
+                                        filter(
+                                            event,
+                                            bills,
+                                            setWaybills,
+                                            search
+                                        )
+                                    }
                                 />
                             </div>
                             {/* наименование раздела */}
@@ -223,28 +146,56 @@ export default function WayBillsList({ CounterPartyType, path, WB }) {
                             {/* дата */}
                             <div
                                 className={classes.waybills_list_header_date}
-                                onClick={sortByDate}
+                                onClick={() =>
+                                    sortByDate(
+                                        waybills,
+                                        setWaybills,
+                                        sortOrder,
+                                        setSortOrder
+                                    )
+                                }
                             >
                                 Дата
                             </div>
                             {/* номер */}
                             <div
                                 className={classes.waybills_list_header_num}
-                                onClick={sortById}
+                                onClick={() =>
+                                    sortById(
+                                        waybills,
+                                        setWaybills,
+                                        sortOrder,
+                                        setSortOrder
+                                    )
+                                }
                             >
                                 Номер
                             </div>
                             {/* контрагент */}
                             <div
                                 className={classes.waybills_list_header_ctrpty}
-                                onClick={sortByCtrprty}
+                                onClick={() =>
+                                    sortByCtrprty(
+                                        waybills,
+                                        setWaybills,
+                                        sortOrder,
+                                        setSortOrder
+                                    )
+                                }
                             >
                                 {CounterPartyType[0]}
                             </div>
                             {/* сумма */}
                             <div
                                 className={classes.waybills_list_header_summ}
-                                onClick={sortBySumm}
+                                onClick={() =>
+                                    sortBySumm(
+                                        waybills,
+                                        setWaybills,
+                                        sortOrder,
+                                        setSortOrder
+                                    )
+                                }
                             >
                                 Сумма
                             </div>
@@ -262,7 +213,7 @@ export default function WayBillsList({ CounterPartyType, path, WB }) {
                                         total={waybill.total}
                                         getWaybill={getWaybill}
                                         highlight={waybill.highlight}
-                                        setWaybill_chosen={setWaybill_chosen}
+                                        setWaybillChosen={setWaybillChosen}
                                         highlightWaybill={(index) =>
                                             highlight(
                                                 index,
@@ -320,3 +271,9 @@ export default function WayBillsList({ CounterPartyType, path, WB }) {
         </>
     );
 }
+
+WayBillsList.propTypes = {
+    CounterPartyType: PropTypes.array.isRequired,
+    path: PropTypes.string.isRequired,
+    WB: PropTypes.array.isRequired,
+};

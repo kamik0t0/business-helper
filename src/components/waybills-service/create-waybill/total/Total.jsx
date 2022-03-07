@@ -1,5 +1,6 @@
 import React from "react";
 import classes from "./styles/total.module.css";
+import PropTypes from "prop-types";
 
 export function Total({ array, field, name, total }) {
     return (
@@ -13,6 +14,12 @@ export function Total({ array, field, name, total }) {
 }
 
 export function TotalWrapper({ children, arr }) {
-    console.log(arr);
     return <div className={classes.totalWrapper}>{children}</div>;
 }
+
+Total.propTypes = {
+    array: PropTypes.array.isRequired,
+    field: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    total: PropTypes.func.isRequired,
+};

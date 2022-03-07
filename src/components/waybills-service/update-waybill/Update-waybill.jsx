@@ -1,17 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
-import classes from "./styles/update-waybill.module.css";
+import classes from "../styles/update-waybill.module.css";
 import Position from "../create-waybill/position/Position.jsx";
+import Loader from "../../../UI/Loader/Loader.jsx";
+import PositionHeaders from "../common/Position-headers.jsx";
 import { Positions } from "../../../utils/wbpositionClass.js";
 import { Total, TotalWrapper } from "../create-waybill/total/Total.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { update } from "./service/update.js";
-import { v4 as uuid } from "uuid";
-import {
-    getSaleItemsFromDB,
-    getPurchaseItemsFromDB,
-} from "../../../utils/getDataByForeignKey.js";
 import {
     addRow,
     getNomenclature,
@@ -22,62 +19,42 @@ import {
     total,
     makeDate,
 } from "../create-waybill/service/handlers.js";
+import {
+    getCounterpartyRequisitesFromWaybill,
+    getPositions,
+} from "./service/handlers";
+import PropTypes from "prop-types";
 
 export default function UpdateWaybill({ CounterPartyType, path }) {
-    console.log(CounterPartyType, path);
+    // индикатор загрузки
+    const [loader, setLoader] = useState(true);
+    // рендер позиций
     const [positions, setPositions] = useState([]);
+    // счетчик позиций
     const [counter, setCounter] = useState(0);
-    const [updated, setUpdated] = useState(false);
-    let row = useRef(null);
-    const Waybill = useRef({});
-    const SaleId = JSON.parse(localStorage.getItem(CounterPartyType[2])).id;
-    const Waybill_date = JSON.parse(
-        localStorage.getItem(CounterPartyType[2])
-    ).waybill_date;
+    // редирект к списку если накладная обновлена
+    const [navToList, setNavToList] = useState(false);
+    // активная позиция
+    const row = useRef(null);
+    // объект накладная для отправки на сервер
+    const PatchWaybillObj = useRef({});
+    // контрагент из localStorage
     const counterparty = getCounterpartyRequisitesFromWaybill(
         JSON.parse(localStorage.getItem(CounterPartyType[2]))
     );
-
-    function getCounterpartyRequisitesFromWaybill(waybill) {
-        return Object.fromEntries(
-            Object.entries(waybill).filter(
-                (obj) =>
-                    Object.values(obj)[0].includes("cl_") ||
-                    Object.values(obj)[0].includes("CounterpartyId")
-            )
-        );
-    }
+    // id накладной
+    const WaybillId = JSON.parse(localStorage.getItem(CounterPartyType[2])).id;
+    // дата накладной
+    const Waybill_date = JSON.parse(
+        localStorage.getItem(CounterPartyType[2])
+    ).waybill_date;
 
     useEffect(async () => {
-        let result;
+        // заполнение стартового массива позиций и новый рендер
         if (positions.length === 0) {
-            switch (path) {
-                case "/sales":
-                    result = await getSaleItemsFromDB(
-                        `http://localhost:5600${path.slice(0, -1)}/?SaleId=${
-                            JSON.parse(localStorage.getItem("Sale")).id
-                        }`
-                    );
-                    break;
-                case "/purchases":
-                    result = await getPurchaseItemsFromDB(
-                        `http://localhost:5600${path.slice(
-                            0,
-                            -1
-                        )}/?PurchaseId=${
-                            JSON.parse(localStorage.getItem("Purchase")).id
-                        }`
-                    );
-                    break;
-
-                default:
-                    break;
-            }
-            // setPositions(result);
-            console.log(result);
+            const PositionsFromDB = await getPositions(path);
             let startArr = [];
-            for (const position of result) {
-                console.log(position.nomenclature);
+            for (const position of PositionsFromDB) {
                 startArr.push(
                     new Positions(
                         position.item_number,
@@ -91,16 +68,15 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                     )
                 );
             }
-            console.log(startArr);
-
             setPositions([...startArr]);
             setCounter(startArr.length);
+            setLoader(false);
         }
     }, []);
 
     return (
         <>
-            {updated ? (
+            {navToList ? (
                 <Navigate to={path} />
             ) : (
                 <form className={classes.content}>
@@ -114,9 +90,9 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                                             "OrgsId"
                                         )}`,
                                         path.slice(1),
-                                        Waybill,
+                                        PatchWaybillObj,
                                         positions,
-                                        setUpdated,
+                                        setNavToList,
                                         localStorage.getItem("waybillDate") ===
                                             null || undefined
                                             ? Waybill_date
@@ -131,7 +107,7 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                                                       "counterparty"
                                                   )
                                               ),
-                                        SaleId
+                                        WaybillId
                                     )
                                 }
                             >
@@ -163,12 +139,12 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                                               .slice(0, -14)
                                 }
                                 getValue={(event) => {
-                                    Waybill.current["date"] = `${
+                                    PatchWaybillObj.current["date"] = `${
                                         event.target.value
                                     }${makeDate()}`;
                                     localStorage.setItem(
                                         "waybillDate",
-                                        Waybill.current["date"]
+                                        PatchWaybillObj.current["date"]
                                     );
                                 }}
                             />
@@ -182,8 +158,9 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                                         ).cl_waybill_number
                                     }
                                     getValue={(event) => {
-                                        Waybill.current["cl_waybill_number"] =
-                                            event.target.value;
+                                        PatchWaybillObj.current[
+                                            "cl_waybill_number"
+                                        ] = event.target.value;
                                     }}
                                     style={{ width: "145px" }}
                                 />
@@ -208,7 +185,7 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                                           ).orgname
                                 }
                                 getValue={(event) =>
-                                    (Waybill.current.counterparty =
+                                    (PatchWaybillObj.current.counterparty =
                                         event.target.value)
                                 }
                             />
@@ -249,92 +226,66 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                             </MyButton>
                         </div>
                     </div>
-
-                    <div className={classes.waybill_form_wb_header}>
-                        <div className={classes.waybill_form_wb_header_number}>
-                            №
-                        </div>
-                        <div
-                            className={
-                                classes.waybill_form_wb_header_nomenclature
-                            }
-                        >
-                            Номенклатура
-                        </div>
-                        <div
-                            className={classes.waybill_form_wb_header_quantity}
-                        >
-                            Кол.
-                        </div>
-                        <div className={classes.waybill_form_wb_header_price}>
-                            Цена
-                        </div>
-                        <div className={classes.waybill_form_wb_header_summ}>
-                            Сумма
-                        </div>
-                        <div
-                            className={classes.waybill_form_wb_header_NDSprcnt}
-                        >
-                            %
-                        </div>
-                        <div className={classes.waybill_form_wb_header_NDS}>
-                            НДС
-                        </div>
-                        <div className={classes.waybill_form_wb_header_total}>
-                            Всего
-                        </div>
-                    </div>
-                    {positions.map((item, index) => {
-                        return (
-                            <Position
-                                highlight={item.highlight}
-                                getRow={(event, number) =>
-                                    getRow(
-                                        event,
-                                        number,
-                                        positions,
-                                        setPositions,
-                                        row
-                                    )
-                                }
-                                key={item.number}
-                                classes={classes}
-                                number={index}
-                                getSumm={item.getSumm.bind(item)}
-                                getNDS={item.getNDS.bind(item)}
-                                getTotal={item.getTotal.bind(item)}
-                                getNomenclature={(event, number) =>
-                                    getNomenclature(event, number, positions)
-                                }
-                                getQuantity={(event, number) =>
-                                    getQuantity(
-                                        event,
-                                        number,
-                                        positions,
-                                        setPositions
-                                    )
-                                }
-                                getPrice={(event, number) =>
-                                    getPrice(
-                                        event,
-                                        number,
-                                        positions,
-                                        setPositions
-                                    )
-                                }
-                                nomenclature={item.nomenclature}
-                                quantity={item.quantity}
-                                price={item.price}
-                            />
-                        );
-                    })}
+                    <PositionHeaders />
+                    {loader ? (
+                        <Loader />
+                    ) : (
+                        positions.map((item, index) => {
+                            return (
+                                <Position
+                                    highlight={item.highlight}
+                                    getRow={(event, number) =>
+                                        getRow(
+                                            event,
+                                            number,
+                                            positions,
+                                            setPositions,
+                                            row
+                                        )
+                                    }
+                                    key={item.number + item.nomenclature}
+                                    classes={classes}
+                                    number={index}
+                                    getSumm={item.getSumm.bind(item)}
+                                    getNDS={item.getNDS.bind(item)}
+                                    getTotal={item.getTotal.bind(item)}
+                                    getNomenclature={(event, number) =>
+                                        getNomenclature(
+                                            event,
+                                            number,
+                                            positions
+                                        )
+                                    }
+                                    getQuantity={(event, number) =>
+                                        getQuantity(
+                                            event,
+                                            number,
+                                            positions,
+                                            setPositions
+                                        )
+                                    }
+                                    getPrice={(event, number) =>
+                                        getPrice(
+                                            event,
+                                            number,
+                                            positions,
+                                            setPositions
+                                        )
+                                    }
+                                    nomenclature={item.nomenclature}
+                                    quantity={item.quantity}
+                                    price={+item.price}
+                                />
+                            );
+                        })
+                    )}
                     <TotalWrapper arr={positions}>
                         <Total
                             array={positions}
                             field="summ"
                             name="Сумма:"
                             total={(array, field) =>
-                                total(array, field, Waybill)
+                                total(array, field, PatchWaybillObj)
                             }
                         />
                         <Total
@@ -342,7 +293,7 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                             field="NDS"
                             name="НДС:"
                             total={(array, field) =>
-                                total(array, field, Waybill)
+                                total(array, field, PatchWaybillObj)
                             }
                         />
                         <Total
@@ -350,7 +301,7 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                             field="total"
                             name="Итого:"
                             total={(array, field) =>
-                                total(array, field, Waybill)
+                                total(array, field, PatchWaybillObj)
                             }
                         />
                     </TotalWrapper>
@@ -359,3 +310,8 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
         </>
     );
 }
+
+UpdateWaybill.propTypes = {
+    CounterPartyType: PropTypes.array.isRequired,
+    path: PropTypes.string.isRequired,
+};

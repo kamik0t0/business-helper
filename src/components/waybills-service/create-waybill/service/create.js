@@ -1,23 +1,30 @@
 import { getDataByForeignKey } from "../../../../utils/getDataByForeignKey.js";
 
 // создание накладной
-export async function create(event, url, idName, ObjToSend, array, setNav) {
+export async function create(
+    event,
+    url,
+    idName,
+    PostWaybillObj,
+    array,
+    setNavToList
+) {
     event.preventDefault();
-    ObjToSend.current["positions"] = array;
-    ObjToSend.current["myOrg"] = JSON.parse(localStorage.getItem("myOrg"));
-    ObjToSend.current["counterparty"] = JSON.parse(
+    PostWaybillObj.current["positions"] = array;
+    PostWaybillObj.current["myOrg"] = JSON.parse(localStorage.getItem("myOrg"));
+    PostWaybillObj.current["counterparty"] = JSON.parse(
         localStorage.getItem("counterparty")
     );
-    ObjToSend.current["counterpartyId"] =
+    PostWaybillObj.current["counterpartyId"] =
         localStorage.getItem("counterpartyId");
-    ObjToSend.current["orgId"] = localStorage.getItem("OrgsId");
+    PostWaybillObj.current["orgId"] = localStorage.getItem("OrgsId");
 
-    console.log(ObjToSend.current);
+    console.log(PostWaybillObj.current);
     // отправка запроса
     let response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(ObjToSend.current),
+        body: JSON.stringify(PostWaybillObj.current),
     });
     // получение ответа
     let result = await response.json();
@@ -29,6 +36,6 @@ export async function create(event, url, idName, ObjToSend, array, setNav) {
         let [res] = await getDataByForeignKey(url, idName);
         console.log(res);
         // навигация к списку накладных
-        setNav(true);
+        setNavToList(true);
     }
 }

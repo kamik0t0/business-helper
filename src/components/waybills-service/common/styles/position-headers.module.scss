@@ -1,0 +1,50 @@
+@mixin border {
+    border-right: 1px solid #f0ebdd;
+    padding: 0 3px 0 3px;
+    height: 25px;
+    text-align: center;
+    margin-top: 4px;
+}
+.waybill_form_wb_header {
+    display: flex;
+    flex-direction: row;
+    margin: 15px 0;
+    border-bottom: 1px solid #f0ebdd;
+
+    .waybill_form_wb_header_number {
+        @include border;
+        width: 5%;
+    }
+    .waybill_form_wb_header_nomenclature {
+        @include border;
+        width: 35%;
+    }
+    .waybill_form_wb_header_quantity {
+        @include border;
+        width: 8%;
+    }
+    .waybill_form_wb_header_price {
+        @include border;
+        width: 15%;
+    }
+    .waybill_form_wb_header_summ {
+        @include border;
+        width: 15%;
+    }
+    .waybill_form_wb_header_NDSprcnt {
+        @include border;
+        width: 5%;
+    }
+
+    .waybill_form_wb_header_NDS {
+        @include border;
+        width: 15%;
+    }
+    .waybill_form_wb_header_total {
+        padding: 0 5px 0 5px;
+        height: 25px;
+        text-align: center;
+        width: 15%;
+        margin-top: 4px;
+    }
+}

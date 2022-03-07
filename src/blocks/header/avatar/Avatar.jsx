@@ -5,15 +5,13 @@ import MyLink from "../../../UI/link/MyLink.jsx";
 
 export default function Avatar() {
     const isAuth = useSelector((state) => state.authReducer.isAuth);
-    const isMyOrgSelected = useSelector(
-        (state) => state.myOrgReducer.isMyOrgSelected
-    );
     const dispatch = useDispatch();
 
     const auth = useRef();
     const enter = useRef();
     const exit = useRef();
 
+    // меняет состояние в redux
     function auth_Handler(event) {
         event.preventDefault();
         dispatch({ type: "REG_FALSE", payload: !isAuth });

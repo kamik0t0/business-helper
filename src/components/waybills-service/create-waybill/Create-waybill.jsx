@@ -1,14 +1,14 @@
 // компонент создания накладной
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Link, Navigate } from "react-router-dom";
-import classes from "./styles/create-waybill.module.css";
+import classes from "../styles/update-waybill.module.css";
 import Position from "./position/Position.jsx";
+import PositionHeaders from "../common/Position-headers.jsx";
 import { Positions } from "../../../utils/wbpositionClass.js";
 import { Total, TotalWrapper } from "./total/Total.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { create } from "./service/create.js";
-import { v4 as uuid } from "uuid";
 import {
     addRow,
     getNomenclature,
@@ -20,29 +20,28 @@ import {
     makeDefaultDate,
     makeDate,
 } from "./service/handlers.js";
+import PropTypes from "prop-types";
 
-export default function CreateWaybill({ wbType, path }) {
+export default function CreateWaybill({ CounterpartyType, path }) {
+    // массив позиций в накладной
     const [positions, setPositions] = useState([]);
+    // номер позиции
     const [counter, setCounter] = useState(0);
-    const [created, setCreated] = useState(false);
+    // редирект к списку если накладная создана
+    const [navToList, setNavToList] = useState(false);
     // useRef - запоминаем значение при ререндеринге
     let row = useRef(null);
     // объект накладная для отправки на сервер
-    const WB = useRef({});
-
-    useEffect(() => {
-        WB.current["date"] = makeDefaultDate();
-    });
+    const PostWaybillObj = useRef({ date: makeDefaultDate() });
 
     return (
         <>
-            {created ? (
+            {navToList ? (
                 <Navigate to={path} />
             ) : (
                 <form className={classes.content}>
                     <div className={classes.waybill_form_header}>
                         <div className={classes.waybill_form_header_save}>
-                            {" "}
                             <MyButton
                                 onClick={(event) =>
                                     create(
@@ -51,10 +50,9 @@ export default function CreateWaybill({ wbType, path }) {
                                             "OrgsId"
                                         )}`,
                                         path.slice(1),
-                                        WB,
+                                        PostWaybillObj,
                                         positions,
-                                        // setWaybills,
-                                        setCreated
+                                        setNavToList
                                     )
                                 }
                             >
@@ -66,7 +64,7 @@ export default function CreateWaybill({ wbType, path }) {
                                     classes.waybill_form_header_save_name
                                 }
                             >
-                                {wbType[0]}
+                                {CounterpartyType[0]}
                             </div>
                             <Link to={path}>
                                 <MyButton>Закрыть</MyButton>
@@ -83,21 +81,26 @@ export default function CreateWaybill({ wbType, path }) {
                                     name="Дата:"
                                     type="date"
                                     defaultValue={
-                                        WB.current.date === undefined
+                                        PostWaybillObj.current.date ===
+                                        undefined
                                             ? null
-                                            : WB.current.date.slice(0, -14)
+                                            : PostWaybillObj.current.date.slice(
+                                                  0,
+                                                  -14
+                                              )
                                     }
                                     getValue={(event) => {
-                                        WB.current.date =
+                                        PostWaybillObj.current.date =
                                             `${
                                                 event.target.value
-                                            }${makeDate()}` || WB.current.date;
+                                            }${makeDate()}` ||
+                                            PostWaybillObj.current.date;
                                     }}
                                 />
                             </div>
                             <MyInput
                                 style={{ width: "350px" }}
-                                name={wbType[1]}
+                                name={CounterpartyType[1]}
                                 type="text"
                                 defaultValue={
                                     JSON.parse(
@@ -111,7 +114,7 @@ export default function CreateWaybill({ wbType, path }) {
                                         : ""
                                 }
                                 getValue={(event) =>
-                                    (WB.current.counterparty =
+                                    (PostWaybillObj.current.counterparty =
                                         event.target.value)
                                 }
                             />
@@ -153,40 +156,7 @@ export default function CreateWaybill({ wbType, path }) {
                         </div>
                     </div>
 
-                    <div className={classes.waybill_form_wb_header}>
-                        <div className={classes.waybill_form_wb_header_number}>
-                            №
-                        </div>
-                        <div
-                            className={
-                                classes.waybill_form_wb_header_nomenclature
-                            }
-                        >
-                            Номенклатура
-                        </div>
-                        <div
-                            className={classes.waybill_form_wb_header_quantity}
-                        >
-                            Кол.
-                        </div>
-                        <div className={classes.waybill_form_wb_header_price}>
-                            Цена
-                        </div>
-                        <div className={classes.waybill_form_wb_header_summ}>
-                            Сумма
-                        </div>
-                        <div
-                            className={classes.waybill_form_wb_header_NDSprcnt}
-                        >
-                            %
-                        </div>
-                        <div className={classes.waybill_form_wb_header_NDS}>
-                            НДС
-                        </div>
-                        <div className={classes.waybill_form_wb_header_total}>
-                            Всего
-                        </div>
-                    </div>
+                    <PositionHeaders />
                     {positions.map((item, index) => {
                         return (
                             <Position
@@ -233,19 +203,25 @@ export default function CreateWaybill({ wbType, path }) {
                             array={positions}
                             field="summ"
                             name="Сумма:"
-                            total={(array, field) => total(array, field, WB)}
+                            total={(array, field) =>
+                                total(array, field, PostWaybillObj)
+                            }
                         />
                         <Total
                             array={positions}
                             field="NDS"
                             name="НДС:"
-                            total={(array, field) => total(array, field, WB)}
+                            total={(array, field) =>
+                                total(array, field, PostWaybillObj)
+                            }
                         />
                         <Total
                             array={positions}
                             field="total"
                             name="Итого:"
-                            total={(array, field) => total(array, field, WB)}
+                            total={(array, field) =>
+                                total(array, field, PostWaybillObj)
+                            }
                         />
                     </TotalWrapper>
                 </form>
@@ -253,3 +229,8 @@ export default function CreateWaybill({ wbType, path }) {
         </>
     );
 }
+
+CreateWaybill.propTypes = {
+    CounterpartyType: PropTypes.array.isRequired,
+    path: PropTypes.string.isRequired,
+};

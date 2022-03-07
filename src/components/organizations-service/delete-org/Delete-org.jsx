@@ -5,7 +5,7 @@ import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 
 import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
-import { deleteOrg } from "./service/handlers/delete.js";
+import { deleteOrg } from "./service/delete.js";
 import PropTypes from "prop-types";
 
 export default function DeleteOrg({
@@ -17,9 +17,10 @@ export default function DeleteOrg({
     noselected,
     idName,
 }) {
+    // анимация
     const [loader, setLoader] = useState(false);
+    // redux
     const dispatch = useDispatch();
-    console.log(type);
     return (
         <>
             {org === undefined || org === null ? (

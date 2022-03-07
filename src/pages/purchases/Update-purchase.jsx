@@ -11,7 +11,6 @@ export default function UpdatePurchase() {
                 "№",
             ]}
             path="/purchases"
-            // WB={JSON.parse(localStorage.getItem("Purchases"))}
         />
     );
 }

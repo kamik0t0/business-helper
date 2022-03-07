@@ -1,5 +1,5 @@
-import { getDataByForeignKey } from "../../../../../utils/getDataByForeignKey.js";
-import { hideAnimatedModal } from "../../../../../UI/modal/service/handlers/modal-control.js";
+import { getDataByForeignKey } from "../../../../utils/getDataByForeignKey.js";
+import { hideAnimatedModal } from "../../../../UI/modal/service/handlers/modal-control.js";
 
 export async function deleteOrg(
     setModal,

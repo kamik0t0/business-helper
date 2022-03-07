@@ -12,6 +12,7 @@ import { setValue } from "./service/handlers/set-value";
 import { getValue } from "./service/handlers/get-value";
 import { update } from "./service/handlers/update.js";
 import { filterRequisites } from "../handlers/filter-requisites.js";
+import PropTypes from "prop-types";
 
 export default function PatchOrg({
     setModal,
@@ -92,3 +93,14 @@ export default function PatchOrg({
         </>
     );
 }
+
+PatchOrg.propTypes = {
+    setModal: PropTypes.func.isRequired,
+    org: PropTypes.object.isRequired,
+    setOrg: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    noselected: PropTypes.string.isRequired,
+    isORG: PropTypes.bool.isRequired,
+    idName: PropTypes.string.isRequired,
+};

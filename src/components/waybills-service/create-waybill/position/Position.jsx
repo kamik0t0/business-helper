@@ -2,6 +2,7 @@
 import React from "react";
 import classes from "./styles/position.module.css";
 import MyInput from "../../../../UI/input/MyInput/MyInput.jsx";
+import PropTypes from "prop-types";
 
 export default function Position({
     highlight,
@@ -17,7 +18,6 @@ export default function Position({
     quantity,
     price,
 }) {
-    console.log(nomenclature);
     return (
         <>
             <div
@@ -79,3 +79,17 @@ export default function Position({
         </>
     );
 }
+
+Position.propTypes = {
+    highlight: PropTypes.bool.isRequired,
+    getRow: PropTypes.func.isRequired,
+    number: PropTypes.number.isRequired,
+    getSumm: PropTypes.func.isRequired,
+    getNDS: PropTypes.func.isRequired,
+    getNomenclature: PropTypes.func.isRequired,
+    getQuantity: PropTypes.func.isRequired,
+    getPrice: PropTypes.func.isRequired,
+    nomenclature: PropTypes.string,
+    quantity: PropTypes.number,
+    price: PropTypes.number,
+};

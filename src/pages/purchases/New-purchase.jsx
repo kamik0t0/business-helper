@@ -5,9 +5,8 @@ import CreateWaybill from "../../components/waybills-service/create-waybill/Crea
 export default function NewPurchase() {
     return (
         <CreateWaybill
-            wbType={["Покупка товаров: создание", "Поставщик:"]}
+            CounterpartyType={["Покупка товаров: создание", "Поставщик:"]}
             path="/purchases"
-            WB={JSON.parse(localStorage.getItem("Purchases"))}
         />
     );
 }

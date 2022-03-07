@@ -15,6 +15,7 @@ export default function DeleteWaybill({
     noselected,
     path,
 }) {
+    console.log(setModal, waybill, setWaybills, url, noselected, path);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
     return (
@@ -67,3 +68,12 @@ export default function DeleteWaybill({
         </>
     );
 }
+
+DeleteWaybill.propTypes = {
+    setModal: PropTypes.func.isRequired,
+    waybill: PropTypes.object,
+    setWaybills: PropTypes.func.isRequired,
+    url: PropTypes.string.isRequired,
+    noselected: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+};
