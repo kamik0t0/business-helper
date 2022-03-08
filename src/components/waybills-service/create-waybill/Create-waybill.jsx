@@ -23,6 +23,7 @@ import {
 import PropTypes from "prop-types";
 
 export default function CreateWaybill({ CounterpartyType, path }) {
+    console.log(CounterpartyType);
     // массив позиций в накладной
     const [positions, setPositions] = useState([]);
     // номер позиции
@@ -98,6 +99,18 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                                     }}
                                 />
                             </div>
+                            {path === "/purchases" && (
+                                <MyInput
+                                    name={CounterpartyType[2] + ": "}
+                                    type="text"
+                                    getValue={(event) => {
+                                        PostWaybillObj.current[
+                                            "cl_waybill_number"
+                                        ] = event.target.value;
+                                    }}
+                                    style={{ width: "145px" }}
+                                />
+                            )}
                             <MyInput
                                 style={{ width: "350px" }}
                                 name={CounterpartyType[1]}
