@@ -70,18 +70,17 @@ export default function Registration() {
             );
 
             let result = await response.json();
-            console.log(result);
             if (result.registered) {
                 // ... статус в локальном стейте меняется на зарегистрированный и перенаправляется на страницу авторизации
                 setIsReg(true);
                 console.log(result.message);
             } else {
                 setLoader(false);
-                if (typeof result.message === "object") {
+                if (result.error) {
                     dispatch({
                         type: "isERROR_TRUE",
                         payload: true,
-                        message: result.message.code,
+                        message: result.error,
                     });
                 } else {
                     setIsInvalid({
@@ -90,7 +89,7 @@ export default function Registration() {
                     });
                 }
 
-                console.log(result.message);
+                console.log(result);
             }
         } catch (error) {
             // если запрос не проходит

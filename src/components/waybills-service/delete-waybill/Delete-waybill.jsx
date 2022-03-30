@@ -15,7 +15,6 @@ export default function DeleteWaybill({
     noselected,
     path,
 }) {
-    console.log(setModal, waybill, setWaybills, url, noselected, path);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
     return (

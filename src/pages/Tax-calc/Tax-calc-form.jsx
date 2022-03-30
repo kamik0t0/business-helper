@@ -13,7 +13,6 @@ export default function CalcForm() {
     useEffect(() => {
         localStorateClearing();
     }, []);
-    console.log("Component re-render");
     // УСН доходы ИП
     const [taxIncomeIE, setTaxIncIE] = useState(0);
     const [burdenIncomeIE, setBurIncIE] = useState(0);

@@ -20,6 +20,7 @@ export default function PrivateOfficeModals({
     setOrg,
 }) {
     const [orgs, setOrgs] = useState();
+
     return (
         <>
             {modalAdd.show && (
@@ -31,7 +32,7 @@ export default function PrivateOfficeModals({
                     <CreateOrg
                         setModal={setModalAdd}
                         setOrgs={setOrgs}
-                        url="http://localhost:5600/private"
+                        url="http://localhost:5600/private?table=Orgs&foreignKey=UserId"
                         // url="https://deploy-test-business-assist.herokuapp.com/private"
                         type="myOrg"
                         idName="UserId"
@@ -56,7 +57,7 @@ export default function PrivateOfficeModals({
                         isORG={isORG.current}
                         type="myOrg"
                         noselected="Организация не выбрана"
-                        url="http://localhost:5600/private"
+                        url="http://localhost:5600/private?table=Orgs"
                         // url="https://deploy-test-business-assist.herokuapp.com/private"
                         idName="UserId"
                     />
@@ -73,7 +74,7 @@ export default function PrivateOfficeModals({
                         org={myOrg}
                         setOrgs={setOrgs}
                         type="myOrg"
-                        url="http://localhost:5600/private"
+                        url={`http://localhost:5600/private?orgId=${myOrg.id}&table=Orgs`}
                         // url="https://deploy-test-business-assist.herokuapp.com/private"
                         noselected="Организация не выбрана"
                         idName="UserId"

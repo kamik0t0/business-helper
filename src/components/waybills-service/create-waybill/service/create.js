@@ -15,17 +15,20 @@ export async function create(
     PostWaybillObj.current["counterparty"] = JSON.parse(
         localStorage.getItem("counterparty")
     );
-    PostWaybillObj.current["counterpartyId"] =
-        localStorage.getItem("counterpartyId");
+    // PostWaybillObj.current["counterpartyId"] =
+    //     localStorage.getItem("counterpartyId");
     PostWaybillObj.current["orgId"] = localStorage.getItem("OrgsId");
 
     console.log(PostWaybillObj.current);
     // отправка запроса
-    let response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(PostWaybillObj.current),
-    });
+    let response = await fetch(
+        `${url}&CounterpartyId=${localStorage.getItem("counterpartyId")}`,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(PostWaybillObj.current),
+        }
+    );
     // получение ответа
     let result = await response.json();
     // если в ответе есть поле created

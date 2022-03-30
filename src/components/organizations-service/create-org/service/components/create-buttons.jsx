@@ -5,7 +5,6 @@ import { hideAnimatedModal } from "../../../../../UI/modal/service/handlers/moda
 import PropTypes from "prop-types";
 
 export default function Buttons({ create, clear, setModal }) {
-    console.log(create, clear, setModal);
     return (
         <>
             <div className={classes.controls}>

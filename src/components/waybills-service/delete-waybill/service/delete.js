@@ -13,8 +13,6 @@ export async function deleteWaybill(
 ) {
     event.preventDefault();
     setLoader(true);
-    console.log(url);
-    console.log(path);
     let idName = path.slice(1).slice(0, -14);
     const WaybillId = waybill.id;
 
@@ -32,7 +30,6 @@ export async function deleteWaybill(
                 `${url}/?OrgId=${localStorage.getItem("OrgsId")}`,
                 idName
             );
-            console.log(waybills);
             setWaybills([...waybills]);
             hideAnimatedModal(setModal);
             setLoader(false);

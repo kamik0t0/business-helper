@@ -30,7 +30,7 @@ export default function CounterpartiesModals({
                     <CreateOrg
                         setModal={setModalAdd}
                         setOrgs={setCounterparties}
-                        url="http://localhost:5600/counterparty"
+                        url="http://localhost:5600/counterparty?table=counterparties&foreignKey=OrgsId"
                         // url="https://deploy-test-business-assist.herokuapp.com/counterparty"
                         type="counterparty"
                         idName="OrgsId"
@@ -55,7 +55,7 @@ export default function CounterpartiesModals({
                         isORG={isORG.current}
                         type="counterparty"
                         noselected="Организация не выбрана"
-                        url="http://localhost:5600/counterparty"
+                        url="http://localhost:5600/counterparty?table=counterparties"
                         // url="https://deploy-test-business-assist.herokuapp.com/counterparty"
                         idName="OrgsId"
                     />
@@ -72,7 +72,7 @@ export default function CounterpartiesModals({
                         org={counterparty}
                         setOrgs={setCounterparties}
                         type="counterparty"
-                        url="http://localhost:5600/counterparty"
+                        url={`http://localhost:5600/counterparty?counterpartyId=${counterparty.id}&table=counterparties`}
                         // url="https://deploy-test-business-assist.herokuapp.com/counterparty"
                         noselected="Организация не выбрана"
                         idName="OrgsId"

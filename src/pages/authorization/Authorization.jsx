@@ -129,7 +129,6 @@ export default function Login() {
                                     // вспомогательный флаг для сессии
                                     localStorage.setItem("session", true);
                                     localStorage.setItem("UserId", result.id);
-                                    console.log("lalaldkfjdkf");
                                 })
                                 .then(
                                     async () =>
@@ -140,6 +139,7 @@ export default function Login() {
                                             `http://localhost:5600/private/?UserId=${localStorage.getItem(
                                                 "UserId"
                                             )}`
+                                            // &table=Orgs&foreignKey=UserId
                                         )
                                 )
                                 .then(async () => await isOrgBelongsUser())

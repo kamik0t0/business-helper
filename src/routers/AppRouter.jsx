@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import CalcForm from "../pages/Tax-calc/Tax-calc-form.jsx";
 import Inner from "../pages/info/info.jsx";
@@ -18,8 +18,6 @@ export const SalesContext = React.createContext();
 export const PurchasesContext = React.createContext();
 
 export default function AppRouter() {
-    // const [sales, setSales] = useState([]);
-    // const [purchases, setPurchases] = useState([]);
     return (
         <Routes>
             <Route exact path="/" element={<Inner />}></Route>

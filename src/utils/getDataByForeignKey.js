@@ -7,14 +7,16 @@ export async function getDataByForeignKey(url, idName) {
         case "UserId":
             return [
                 await getMyOrgsFromDB(
-                    `${url}/?${idName}=${localStorage.getItem(idName)}`
+                    `${url.slice(0, 29)}/?UserId=${localStorage.getItem(
+                        idName
+                    )}`
                 ),
                 "OrgsId",
             ];
         case "OrgsId":
             return [
                 await getCounterpartiesFromDB(
-                    `${url}/?${idName}=${localStorage.getItem(idName)}`
+                    `${url.slice(0, 34)}/?OrgId=${localStorage.getItem(idName)}`
                 ),
                 "CounterpartyId",
             ];
@@ -36,11 +38,11 @@ export async function getMyOrgsFromDB(url) {
     console.log(url);
 
     try {
-        let getOrgs = await fetch(url);
-        let orgs = await getOrgs.json();
+        let orgs = await (await fetch(url)).json();
+        console.log(orgs);
         localStorage.setItem("orgs", JSON.stringify(orgs));
         localStorage.removeItem("counterparty");
-        console.log(orgs);
+
         return orgs;
     } catch (error) {
         console.log(`Can't get Orgs from DB - no connection to server`);
@@ -49,6 +51,7 @@ export async function getMyOrgsFromDB(url) {
 
 // запрос контрагентов
 export async function getCounterpartiesFromDB(url) {
+    console.log(url);
     try {
         let getcounterparties = await fetch(url);
         let counterparties = await getcounterparties.json();
@@ -64,6 +67,7 @@ export async function getCounterpartiesFromDB(url) {
 // запрос продаж
 export async function getSalesFromDB(url) {
     try {
+        console.log(url);
         let getSales = await fetch(url);
         let sales = await getSales.json();
         localStorage.setItem("Sales", JSON.stringify(sales));
@@ -89,9 +93,11 @@ export async function getSaleItemsFromDB(url) {
     try {
         let getSaleItems = await fetch(url);
         let sale_items = await getSaleItems.json();
+        console.log(sale_items);
         localStorage.setItem("Sale_items", JSON.stringify(sale_items));
         return sale_items;
     } catch (error) {
+        console.log(error);
         console.log(`Can't get sale_items from DB - no connection to server`);
     }
 }

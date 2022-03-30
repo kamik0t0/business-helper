@@ -18,7 +18,7 @@ export async function update(
     event.preventDefault();
     try {
         // + ИНН для идентификации обновляемой организации
-        Updated["upINN"] = JSON.parse(localStorage.getItem(type)).inn;
+        Updated["id"] = JSON.parse(localStorage.getItem(type)).id;
     } catch (error) {
         console.log("Session expired... Authorize again");
     }

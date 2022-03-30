@@ -12,8 +12,9 @@ export async function deleteOrg(
     idName
 ) {
     setLoader(true);
+    console.log(org.id);
     try {
-        let response = await fetch(`${url}/?orgId=${org.id}`, {
+        let response = await fetch(url, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

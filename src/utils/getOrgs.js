@@ -35,7 +35,6 @@ export async function isOrgBelongsUser() {
             return;
         }
     } catch (error) {
-        console.log("No current org");
         return;
     }
 }

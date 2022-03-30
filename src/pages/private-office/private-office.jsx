@@ -59,7 +59,7 @@ export default function Office() {
                             setLoader(true);
                             setOrg(chooseOrg(event, "myOrg", dispatch));
                             getCounterpartiesFromDB(
-                                `http://localhost:5600/counterparty/?OrgsId=${localStorage.getItem(
+                                `http://localhost:5600/counterparty/?OrgId=${localStorage.getItem(
                                     "OrgsId"
                                 )}`
                             )

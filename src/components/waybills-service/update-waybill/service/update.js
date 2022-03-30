@@ -8,7 +8,7 @@ export async function update(
     setNav,
     Waybill_date,
     counterparty,
-    id
+    WaybillId
 ) {
     event.preventDefault();
     PatchWaybillObj.current["Waybill_date"] = Waybill_date;
@@ -19,27 +19,23 @@ export async function update(
     PatchWaybillObj.current["counterparty"] = counterparty;
     PatchWaybillObj.current["counterpartyId"] =
         counterparty.CounterpartyId || counterparty.id;
-    PatchWaybillObj.current["orgId"] = localStorage.getItem("OrgsId");
-    PatchWaybillObj.current["id"] = id;
 
     console.log(PatchWaybillObj.current);
     // отправка запроса
-    let response = await fetch(url, {
+    let response = await fetch(`${url}?table=${idName}&id=${WaybillId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(PatchWaybillObj.current),
     });
     // получение ответа
     let result = await response.json();
-    // если в ответе есть поле created
-    if (result.updated) {
-        console.log(url);
-        console.log(idName);
-        // запрос на накладные
-        let [res] = await getDataByForeignKey(url, idName);
-        console.log(res);
 
-        // навигация к списку накладных
+    if (result.updated) {
+        // запрос на накладные
+        await getDataByForeignKey(
+            `${url}?OrgId=${JSON.parse(localStorage.getItem("myOrg")).id}`,
+            idName
+        );
         setNav(true);
     }
 }

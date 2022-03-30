@@ -47,7 +47,9 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                                 onClick={(event) =>
                                     create(
                                         event,
-                                        `http://localhost:5600${path}/?OrgId=${localStorage.getItem(
+                                        `http://localhost:5600${path}/?table=${path.slice(
+                                            1
+                                        )}&OrgId=${localStorage.getItem(
                                             "OrgsId"
                                         )}`,
                                         path.slice(1),

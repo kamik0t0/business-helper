@@ -52,25 +52,29 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
     useEffect(async () => {
         // заполнение стартового массива позиций и новый рендер
         if (positions.length === 0) {
-            const PositionsFromDB = await getPositions(path);
-            let startArr = [];
-            for (const position of PositionsFromDB) {
-                startArr.push(
-                    new Positions(
-                        position.item_number,
-                        position.nomenclature,
-                        position.quantity,
-                        position.price,
-                        position.summ,
-                        position.nds,
-                        position.total,
-                        position.id
-                    )
-                );
+            try {
+                const PositionsFromDB = await getPositions(path);
+                let startArr = [];
+                for (const position of PositionsFromDB) {
+                    startArr.push(
+                        new Positions(
+                            position.item_number,
+                            position.nomenclature,
+                            position.quantity,
+                            position.price,
+                            position.summ,
+                            position.nds,
+                            position.total,
+                            position.id
+                        )
+                    );
+                }
+                setPositions([...startArr]);
+                setCounter(startArr.length);
+                setLoader(false);
+            } catch (error) {
+                console.log(error);
             }
-            setPositions([...startArr]);
-            setCounter(startArr.length);
-            setLoader(false);
         }
     }, []);
 
@@ -86,9 +90,7 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                                 onClick={(event) =>
                                     update(
                                         event,
-                                        `http://localhost:5600${path}/?OrgId=${localStorage.getItem(
-                                            "OrgsId"
-                                        )}`,
+                                        `http://localhost:5600${path}/`,
                                         path.slice(1),
                                         PatchWaybillObj,
                                         positions,
