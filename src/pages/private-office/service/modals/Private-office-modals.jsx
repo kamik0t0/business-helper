@@ -15,12 +15,7 @@ export default function PrivateOfficeModals({
     modalRead,
     modalUpdate,
     modalDelete,
-    isORG,
-    myOrg,
-    setOrg,
 }) {
-    const [orgs, setOrgs] = useState();
-
     return (
         <>
             {modalAdd.show && (
@@ -29,38 +24,17 @@ export default function PrivateOfficeModals({
                     active={modalAdd.add}
                     setActive={setModalAdd}
                 >
-                    <CreateOrg
-                        setModal={setModalAdd}
-                        setOrgs={setOrgs}
-                        url="http://localhost:5600/private?table=Orgs&foreignKey=UserId"
-                        // url="https://deploy-test-business-assist.herokuapp.com/private"
-                        type="myOrg"
-                        idName="UserId"
-                    />
+                    <CreateOrg setModal={setModalAdd} />
                 </Modal>
             )}
             {modalRead.show && (
                 <Modal active={modalRead.add} setActive={setModalRead}>
-                    <ReadOrg
-                        setModal={setModalRead}
-                        org={myOrg}
-                        noselected="Организация не выбрана"
-                    />
+                    <ReadOrg setModal={setModalRead} />
                 </Modal>
             )}
             {modalUpdate.show && (
                 <Modal active={modalUpdate.add} setActive={setModalUpdate}>
-                    <PatchOrg
-                        setModal={setModalUpdate}
-                        org={myOrg}
-                        setOrg={setOrg}
-                        isORG={isORG.current}
-                        type="myOrg"
-                        noselected="Организация не выбрана"
-                        url="http://localhost:5600/private?table=Orgs"
-                        // url="https://deploy-test-business-assist.herokuapp.com/private"
-                        idName="UserId"
-                    />
+                    <PatchOrg setModal={setModalUpdate} />
                 </Modal>
             )}
             {modalDelete.show && (
@@ -69,16 +43,7 @@ export default function PrivateOfficeModals({
                     active={modalDelete.add}
                     setActive={setModalDelete}
                 >
-                    <DeleteOrg
-                        setModal={setModalDelete}
-                        org={myOrg}
-                        setOrgs={setOrgs}
-                        type="myOrg"
-                        url={`http://localhost:5600/private?orgId=${myOrg.id}&table=Orgs`}
-                        // url="https://deploy-test-business-assist.herokuapp.com/private"
-                        noselected="Организация не выбрана"
-                        idName="UserId"
-                    />
+                    <DeleteOrg setModal={setModalDelete} />
                 </Modal>
             )}
         </>
@@ -94,7 +59,4 @@ PrivateOfficeModals.propTypes = {
     modalRead: PropTypes.object.isRequired,
     modalUpdate: PropTypes.object.isRequired,
     modalDelete: PropTypes.object.isRequired,
-    isORG: PropTypes.object.isRequired,
-    myOrg: PropTypes.object,
-    setOrg: PropTypes.func,
 };

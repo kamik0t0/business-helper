@@ -1,0 +1,42 @@
+@mixin font {
+    font-weight: 700;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    color: #f0ebdd;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 20px;
+
+    .redactable {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        width: 200px;
+        justify-content: space-between;
+        align-self: flex-end;
+        margin-top: 10px;
+    }
+
+    .requisit_name {
+        @include font();
+        font-size: 1.2em;
+    }
+    .requisit_value {
+        @include font();
+        font-size: 1.3em;
+    }
+
+    .requisit_value:hover {
+        cursor: pointer;
+        color: #cac6bb;
+        font-size: 1.33em;
+    }
+}

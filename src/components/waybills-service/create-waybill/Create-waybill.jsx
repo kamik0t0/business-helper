@@ -1,5 +1,6 @@
 // компонент создания накладной
 import React, { useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import classes from "../styles/update-waybill.module.css";
 import Position from "./position/Position.jsx";
@@ -9,21 +10,28 @@ import { Total, TotalWrapper } from "./total/Total.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { create } from "./service/create.js";
+import { highlight } from "../../../utils/highlight.js";
 import {
-    addRow,
     getNomenclature,
     getQuantity,
     getPrice,
-    getRow,
-    deleteRow,
     total,
     makeDefaultDate,
     makeDate,
 } from "./service/handlers.js";
 import PropTypes from "prop-types";
 
-export default function CreateWaybill({ CounterpartyType, path }) {
-    console.log(CounterpartyType);
+export default function CreateWaybill({ CounterpartyInfo, path }) {
+    const dispatch = useDispatch();
+    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
+    const COUNTERPARTY = useSelector(
+        (state) => state.setCounterpartyReducer.counterparty
+    );
+    const DATA = path === "/sales" ? "SALES" : "PURCHASES";
+    // объект накладная для отправки на сервер
+    const WAYBILL = useRef({ date: makeDefaultDate() });
+    WAYBILL.current["myOrg"] = MYORG;
+    WAYBILL.current["counterparty"] = COUNTERPARTY;
     // массив позиций в накладной
     const [positions, setPositions] = useState([]);
     // номер позиции
@@ -32,8 +40,23 @@ export default function CreateWaybill({ CounterpartyType, path }) {
     const [navToList, setNavToList] = useState(false);
     // useRef - запоминаем значение при ререндеринге
     let row = useRef(null);
-    // объект накладная для отправки на сервер
-    const PostWaybillObj = useRef({ date: makeDefaultDate() });
+
+    const addRow = (event) => {
+        event.preventDefault();
+        positions.push(new Positions(counter));
+        setPositions();
+        setCounter((prev) => prev + 1);
+        setPositions([...positions]);
+    };
+
+    const deleteRow = (event) => {
+        event.preventDefault();
+        if (row.current != null) {
+            positions.splice(row.current - 1, 1);
+            setPositions();
+            row.current = null;
+        }
+    };
 
     return (
         <>
@@ -44,20 +67,24 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                     <div className={classes.waybill_form_header}>
                         <div className={classes.waybill_form_header_save}>
                             <MyButton
-                                onClick={(event) =>
-                                    create(
+                                onClick={async (event) => {
+                                    const result = await create(
                                         event,
-                                        `http://localhost:5600${path}/?table=${path.slice(
-                                            1
-                                        )}&OrgId=${localStorage.getItem(
-                                            "OrgsId"
-                                        )}`,
-                                        path.slice(1),
-                                        PostWaybillObj,
+                                        path,
+                                        WAYBILL,
                                         positions,
-                                        setNavToList
-                                    )
-                                }
+                                        () => setNavToList(true),
+                                        () =>
+                                            dispatch({
+                                                type: "REG_FALSE",
+                                                payload: false,
+                                            })
+                                    );
+                                    dispatch({
+                                        type: DATA,
+                                        payload: result,
+                                    });
+                                }}
                             >
                                 Сохранить
                             </MyButton>
@@ -67,7 +94,7 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                                     classes.waybill_form_header_save_name
                                 }
                             >
-                                {CounterpartyType[0]}
+                                {CounterpartyInfo[0]}
                             </div>
                             <Link to={path}>
                                 <MyButton>Закрыть</MyButton>
@@ -84,52 +111,37 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                                     name="Дата:"
                                     type="date"
                                     defaultValue={
-                                        PostWaybillObj.current.date ===
-                                        undefined
+                                        WAYBILL.current.date === undefined
                                             ? null
-                                            : PostWaybillObj.current.date.slice(
-                                                  0,
-                                                  -14
-                                              )
+                                            : WAYBILL.current.date.slice(0, -14)
                                     }
                                     getValue={(event) => {
-                                        PostWaybillObj.current.date =
+                                        WAYBILL.current.date =
                                             `${
                                                 event.target.value
                                             }${makeDate()}` ||
-                                            PostWaybillObj.current.date;
+                                            WAYBILL.current.date;
                                     }}
                                 />
                             </div>
                             {path === "/purchases" && (
                                 <MyInput
-                                    name={CounterpartyType[2] + ": "}
+                                    name={CounterpartyInfo[2] + ": "}
                                     type="text"
                                     getValue={(event) => {
-                                        PostWaybillObj.current[
-                                            "cl_waybill_number"
-                                        ] = event.target.value;
+                                        WAYBILL.current["cl_waybill_number"] =
+                                            event.target.value;
                                     }}
                                     style={{ width: "145px" }}
                                 />
                             )}
                             <MyInput
                                 style={{ width: "350px" }}
-                                name={CounterpartyType[1]}
+                                name={CounterpartyInfo[1]}
                                 type="text"
-                                defaultValue={
-                                    JSON.parse(
-                                        localStorage.getItem("counterparty")
-                                    ) !== null || undefined
-                                        ? JSON.parse(
-                                              localStorage.getItem(
-                                                  "counterparty"
-                                              )
-                                          ).orgname
-                                        : ""
-                                }
+                                defaultValue={COUNTERPARTY.orgname}
                                 getValue={(event) =>
-                                    (PostWaybillObj.current.counterparty =
+                                    (WAYBILL.current.counterparty =
                                         event.target.value)
                                 }
                             />
@@ -142,32 +154,8 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                             </Link>
                         </div>
                         <div className={classes.waybill_form_header_usage}>
-                            <MyButton
-                                onClick={(event) =>
-                                    addRow(
-                                        event,
-                                        positions,
-                                        Positions,
-                                        counter,
-                                        setCounter,
-                                        setPositions
-                                    )
-                                }
-                            >
-                                Добавить
-                            </MyButton>
-                            <MyButton
-                                onClick={(event) =>
-                                    deleteRow(
-                                        event,
-                                        positions,
-                                        setPositions,
-                                        row
-                                    )
-                                }
-                            >
-                                Удалить
-                            </MyButton>
+                            <MyButton onClick={addRow}>Добавить</MyButton>
+                            <MyButton onClick={deleteRow}>Удалить</MyButton>
                         </div>
                     </div>
 
@@ -177,11 +165,10 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                             <Position
                                 highlight={item.highlight}
                                 getRow={(event, number) =>
-                                    getRow(
-                                        event,
+                                    highlight(
                                         number,
                                         positions,
-                                        setPositions,
+                                        () => setPositions([...positions]),
                                         row
                                     )
                                 }
@@ -195,19 +182,13 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                                     getNomenclature(event, number, positions)
                                 }
                                 getQuantity={(event, number) =>
-                                    getQuantity(
-                                        event,
-                                        number,
-                                        positions,
-                                        setPositions
+                                    getQuantity(event, number, positions, () =>
+                                        setPositions([...positions])
                                     )
                                 }
                                 getPrice={(event, number) =>
-                                    getPrice(
-                                        event,
-                                        number,
-                                        positions,
-                                        setPositions
+                                    getPrice(event, number, positions, () =>
+                                        setPositions([...positions])
                                     )
                                 }
                             />
@@ -219,7 +200,7 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                             field="summ"
                             name="Сумма:"
                             total={(array, field) =>
-                                total(array, field, PostWaybillObj)
+                                total(array, field, WAYBILL)
                             }
                         />
                         <Total
@@ -227,7 +208,7 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                             field="NDS"
                             name="НДС:"
                             total={(array, field) =>
-                                total(array, field, PostWaybillObj)
+                                total(array, field, WAYBILL)
                             }
                         />
                         <Total
@@ -235,7 +216,7 @@ export default function CreateWaybill({ CounterpartyType, path }) {
                             field="total"
                             name="Итого:"
                             total={(array, field) =>
-                                total(array, field, PostWaybillObj)
+                                total(array, field, WAYBILL)
                             }
                         />
                     </TotalWrapper>
@@ -246,6 +227,6 @@ export default function CreateWaybill({ CounterpartyType, path }) {
 }
 
 CreateWaybill.propTypes = {
-    CounterpartyType: PropTypes.array.isRequired,
+    CounterpartyInfo: PropTypes.array.isRequired,
     path: PropTypes.string.isRequired,
 };

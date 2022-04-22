@@ -25,7 +25,6 @@ export async function deleteWaybill(
         });
         let result = await response.json();
         if (result.deleted) {
-            console.log(result.message);
             let [waybills] = await getDataByForeignKey(
                 `${url}/?OrgId=${localStorage.getItem("OrgsId")}`,
                 idName
@@ -33,20 +32,10 @@ export async function deleteWaybill(
             setWaybills([...waybills]);
             hideAnimatedModal(setModal);
             setLoader(false);
-        } else {
-            console.log(result.message);
         }
     } catch (error) {
         setLoader(false);
-        // dispatch({
-        //     type: "isERROR_TRUE",
-        //     payload: true,
-        //     message: "No connection to server",
-        // });
-        // // меняем статус пользователя на неавторизованный
-        // dispatch({ type: "REG_FALSE", payload: false });
-        // // модальное окно скрывается
         hideAnimatedModal(setModal);
-        console.log("No connection to server");
+        console.log(error.message);
     }
 }

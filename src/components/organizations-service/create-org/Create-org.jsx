@@ -4,16 +4,17 @@ import Inputs from "./service/components/create-inputs.jsx";
 import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
 import Buttons from "./service/components/create-buttons.jsx";
 import { Organizaton } from "../../../utils/Org.js";
-import { Requisites } from "../../../utils/Org.js";
+import { OrgFields } from "../../../utils/Org.js";
+import { IpFields } from "../../../utils/Org.js";
 import { clear } from "../../../utils/clear.js";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import { useDispatch } from "react-redux";
-import { create } from "./service/handlers/create.js";
+import { create } from "./service/handlers/create-org.js";
 import { switchOPF } from "./service/handlers/switchOPF.js";
 import { getRequisites } from "./service/handlers/getRequisites.js";
 import PropTypes from "prop-types";
 
-export default function CreateOrg({ setModal, setOrgs, url, idName }) {
+export default function CreateOrg({ setModal }) {
     const [isORG, setIsOrg] = useState(true);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
@@ -39,7 +40,7 @@ export default function CreateOrg({ setModal, setOrgs, url, idName }) {
                 ) : (
                     <Inputs
                         isORG={isORG}
-                        fields={Requisites}
+                        fields={isORG ? OrgFields : IpFields}
                         getValue={(event, field, length) =>
                             getRequisites(
                                 event,
@@ -51,18 +52,15 @@ export default function CreateOrg({ setModal, setOrgs, url, idName }) {
                         }
                     />
                 )}
-
                 <Buttons
                     create={(event) =>
-                        create(
-                            event,
-                            ORG.current,
-                            setLoader,
-                            setOrgs,
-                            url,
-                            dispatch,
-                            setModal,
-                            idName
+                        dispatch(
+                            create(
+                                event,
+                                ORG.current,
+                                () => setLoader(!loader),
+                                setModal
+                            )
                         )
                     }
                     clear={clear}
@@ -75,7 +73,4 @@ export default function CreateOrg({ setModal, setOrgs, url, idName }) {
 
 CreateOrg.propTypes = {
     setModal: PropTypes.func.isRequired,
-    setOrgs: PropTypes.func.isRequired,
-    url: PropTypes.string.isRequired,
-    idName: PropTypes.string.isRequired,
 };

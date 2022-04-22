@@ -1,16 +1,5 @@
-export function showUpdateChanges(orgs, setOrg, org, type) {
-    let id = org.id;
-    switch (type) {
-        case "myOrg":
-            let [activeOrg] = orgs.filter((org) => org.id === id);
-            localStorage.setItem(type, JSON.stringify(activeOrg));
-            setOrg(activeOrg);
-            break;
-        case "counterparty":
-            setOrg(orgs);
-            break;
-
-        default:
-            break;
-    }
+export function showUpdateChanges(ORGS, myOrg) {
+    const id = myOrg.id;
+    const [activeOrg] = ORGS.filter((org) => org.id === id);
+    return activeOrg;
 }

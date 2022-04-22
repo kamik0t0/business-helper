@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import classes from "../styles/update-waybill.module.css";
 import Position from "../create-waybill/position/Position.jsx";
@@ -9,13 +10,11 @@ import { Total, TotalWrapper } from "../create-waybill/total/Total.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { update } from "./service/update.js";
+import { highlight } from "../../../utils/highlight.js";
 import {
-    addRow,
     getNomenclature,
     getQuantity,
     getPrice,
-    getRow,
-    deleteRow,
     total,
     makeDate,
 } from "../create-waybill/service/handlers.js";
@@ -25,7 +24,22 @@ import {
 } from "./service/handlers";
 import PropTypes from "prop-types";
 
-export default function UpdateWaybill({ CounterPartyType, path }) {
+export default function UpdateWaybill({ CounterpartyInfo, path }) {
+    const myOrg = useSelector((state) => state.setMyOrgReducer.myOrg);
+    console.log(path);
+    const WaybillData =
+        path === "/sales"
+            ? ["setSale", "SALE", "sale"]
+            : ["setPurchase", "PURCHASE", "purchase"];
+    const WAYBILL = useSelector(
+        (state) => state[`${WaybillData[0]}`][`${WaybillData[2]}`]
+    );
+    const CUOUNTERPARTY = useSelector(
+        (state) => state.setCounterpartyReducer.counterparty
+    );
+    console.log(WAYBILL);
+    const DATE = WAYBILL?.waybill_date?.slice(0, -14);
+    const id = WAYBILL?.id;
     // индикатор загрузки
     const [loader, setLoader] = useState(true);
     // рендер позиций
@@ -39,43 +53,59 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
     // объект накладная для отправки на сервер
     const PatchWaybillObj = useRef({});
     // контрагент из localStorage
-    const counterparty = getCounterpartyRequisitesFromWaybill(
-        JSON.parse(localStorage.getItem(CounterPartyType[2]))
-    );
-    // id накладной
-    const WaybillId = JSON.parse(localStorage.getItem(CounterPartyType[2])).id;
-    // дата накладной
-    const Waybill_date = JSON.parse(
-        localStorage.getItem(CounterPartyType[2])
-    ).waybill_date;
+    // const counterparty = getCounterpartyRequisitesFromWaybill(WAYBILL);
+    // // id накладной
+    // const WaybillId = WAYBILL.id;
+    // // дата накладной
 
-    useEffect(async () => {
-        // заполнение стартового массива позиций и новый рендер
-        if (positions.length === 0) {
-            try {
-                const PositionsFromDB = await getPositions(path);
-                let startArr = [];
-                for (const position of PositionsFromDB) {
-                    startArr.push(
-                        new Positions(
-                            position.item_number,
-                            position.nomenclature,
-                            position.quantity,
-                            position.price,
-                            position.summ,
-                            position.nds,
-                            position.total,
-                            position.id
-                        )
-                    );
+    const addRow = (event) => {
+        event.preventDefault();
+        positions.push(new Positions(counter));
+        setPositions();
+        setCounter((prev) => prev + 1);
+        setPositions([...positions]);
+    };
+
+    const deleteRow = (event) => {
+        event.preventDefault();
+        if (row.current != null) {
+            positions.splice(row.current - 1, 1);
+            setPositions();
+            row.current = null;
+        }
+    };
+
+    useEffect(() => {
+        async function fillStartPositions() {
+            // заполнение стартового массива позиций и новый рендер
+            if (positions.length === 0) {
+                try {
+                    const PositionsFromDB = await getPositions(path, id);
+                    let startArr = [];
+                    for (const position of PositionsFromDB) {
+                        startArr.push(
+                            new Positions(
+                                position.item_number,
+                                position.nomenclature,
+                                position.quantity,
+                                position.price,
+                                position.summ,
+                                position.nds,
+                                position.total,
+                                position.id
+                            )
+                        );
+                    }
+                    setPositions([...startArr]);
+                    setCounter(startArr.length);
+                    setLoader(false);
+                } catch (error) {
+                    console.log(error);
                 }
-                setPositions([...startArr]);
-                setCounter(startArr.length);
-                setLoader(false);
-            } catch (error) {
-                console.log(error);
             }
         }
+
+        fillStartPositions();
     }, []);
 
     return (
@@ -94,22 +124,11 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                                         path.slice(1),
                                         PatchWaybillObj,
                                         positions,
-                                        setNavToList,
-                                        localStorage.getItem("waybillDate") ===
-                                            null || undefined
-                                            ? Waybill_date
-                                            : localStorage.getItem(
-                                                  "waybillDate"
-                                              ),
-                                        localStorage.getItem("counterparty") ===
-                                            null || undefined
-                                            ? counterparty
-                                            : JSON.parse(
-                                                  localStorage.getItem(
-                                                      "counterparty"
-                                                  )
-                                              ),
-                                        WaybillId
+                                        () => setNavToList(true),
+                                        WAYBILL.waybill_date,
+                                        CUOUNTERPARTY,
+                                        WAYBILL.id,
+                                        myOrg
                                     )
                                 }
                             >
@@ -121,7 +140,7 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                                     classes.waybill_form_header_save_name
                                 }
                             >
-                                {CounterPartyType[0]}
+                                {CounterpartyInfo[0]}
                             </div>
                             <Link to={path}>
                                 <MyButton>Закрыть</MyButton>
@@ -132,33 +151,18 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                                 id="waybillDate"
                                 name="Дата:"
                                 type="date"
-                                defaultValue={
-                                    localStorage.getItem("waybillDate") ===
-                                        null || undefined
-                                        ? Waybill_date.slice(0, -14)
-                                        : localStorage
-                                              .getItem("waybillDate")
-                                              .slice(0, -14)
-                                }
-                                getValue={(event) => {
-                                    PatchWaybillObj.current["date"] = `${
+                                defaultValue={DATE}
+                                getValue={(event) =>
+                                    (PatchWaybillObj.current["date"] = `${
                                         event.target.value
-                                    }${makeDate()}`;
-                                    localStorage.setItem(
-                                        "waybillDate",
-                                        PatchWaybillObj.current["date"]
-                                    );
-                                }}
+                                    }${makeDate()}`)
+                                }
                             />
                             {path === "/purchases" && (
                                 <MyInput
-                                    name={CounterPartyType[3] + ": "}
+                                    name={CounterpartyInfo[3] + ": "}
                                     type="text"
-                                    defaultValue={
-                                        JSON.parse(
-                                            localStorage.getItem("Purchase")
-                                        ).cl_waybill_number
-                                    }
+                                    defaultValue={WAYBILL.cl_waybill_number}
                                     getValue={(event) => {
                                         PatchWaybillObj.current[
                                             "cl_waybill_number"
@@ -169,23 +173,9 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                             )}
                             <MyInput
                                 style={{ width: "350px" }}
-                                name={CounterPartyType[1] + ":"}
+                                name={CounterpartyInfo[1] + ":"}
                                 type="text"
-                                defaultValue={
-                                    JSON.parse(
-                                        localStorage.getItem("counterparty")
-                                    ) === null || undefined
-                                        ? JSON.parse(
-                                              localStorage.getItem(
-                                                  CounterPartyType[2]
-                                              )
-                                          ).cl_orgname
-                                        : JSON.parse(
-                                              localStorage.getItem(
-                                                  "counterparty"
-                                              )
-                                          ).orgname
-                                }
+                                defaultValue={WAYBILL.cl_orgname}
                                 getValue={(event) =>
                                     (PatchWaybillObj.current.counterparty =
                                         event.target.value)
@@ -200,32 +190,8 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                             </Link>
                         </div>
                         <div className={classes.waybill_form_header_usage}>
-                            <MyButton
-                                onClick={(event) =>
-                                    addRow(
-                                        event,
-                                        positions,
-                                        Positions,
-                                        counter,
-                                        setCounter,
-                                        setPositions
-                                    )
-                                }
-                            >
-                                Добавить
-                            </MyButton>
-                            <MyButton
-                                onClick={(event) =>
-                                    deleteRow(
-                                        event,
-                                        positions,
-                                        setPositions,
-                                        row
-                                    )
-                                }
-                            >
-                                Удалить
-                            </MyButton>
+                            <MyButton onClick={addRow}>Добавить</MyButton>
+                            <MyButton onClick={deleteRow}>Удалить</MyButton>
                         </div>
                     </div>
                     <PositionHeaders />
@@ -235,22 +201,18 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                         positions.map((item, index) => {
                             return (
                                 <Position
+                                    key={item.number + item.nomenclature}
+                                    item={item}
                                     highlight={item.highlight}
                                     getRow={(event, number) =>
-                                        getRow(
-                                            event,
+                                        highlight(
                                             number,
                                             positions,
-                                            setPositions,
+                                            () => setPositions([...positions]),
                                             row
                                         )
                                     }
-                                    key={item.number + item.nomenclature}
-                                    classes={classes}
                                     number={index}
-                                    getSumm={item.getSumm.bind(item)}
-                                    getNDS={item.getNDS.bind(item)}
-                                    getTotal={item.getTotal.bind(item)}
                                     getNomenclature={(event, number) =>
                                         getNomenclature(
                                             event,
@@ -263,20 +225,14 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
                                             event,
                                             number,
                                             positions,
-                                            setPositions
+                                            () => setPositions([...positions])
                                         )
                                     }
                                     getPrice={(event, number) =>
-                                        getPrice(
-                                            event,
-                                            number,
-                                            positions,
-                                            setPositions
+                                        getPrice(event, number, positions, () =>
+                                            setPositions([...positions])
                                         )
                                     }
-                                    nomenclature={item.nomenclature}
-                                    quantity={item.quantity}
-                                    price={+item.price}
                                 />
                             );
                         })
@@ -314,6 +270,6 @@ export default function UpdateWaybill({ CounterPartyType, path }) {
 }
 
 UpdateWaybill.propTypes = {
-    CounterPartyType: PropTypes.array.isRequired,
+    CounterpartyInfo: PropTypes.array.isRequired,
     path: PropTypes.string.isRequired,
 };

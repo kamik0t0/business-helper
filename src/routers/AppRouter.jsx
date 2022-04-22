@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import CalcForm from "../pages/Tax-calc/Tax-calc-form.jsx";
-import Inner from "../pages/info/info.jsx";
+import Tabs from "../pages/info/info.jsx";
 import Sales from "../pages/sales/Sales.jsx";
 import Purchases from "../pages/purchases/Purchases.jsx";
 import NewPurchase from "../pages/purchases/New-purchase.jsx";
@@ -20,7 +20,7 @@ export const PurchasesContext = React.createContext();
 export default function AppRouter() {
     return (
         <Routes>
-            <Route exact path="/" element={<Inner />}></Route>
+            <Route exact path="/" element={<Tabs />}></Route>
             <Route exact path="/calculator" element={<CalcForm />}></Route>
 
             <Route exact path="/sales" element={<Sales />}></Route>

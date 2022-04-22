@@ -1,6 +1,5 @@
 // выделение позиции
 export function highlight(number, array, setArray, row) {
-    /* number - индекс элемента в массиве + 1, array - state([array]), setArray - функция изменения состояния, row - useRef(null) */
     number++;
     // если позиция не была задана
     if (!row.current) {
@@ -9,7 +8,7 @@ export function highlight(number, array, setArray, row) {
         // подсветка
         array[row.current - 1].highlight = true;
         // рендер
-        setArray([...array]);
+        setArray();
         return;
     }
     // клик по выделенной позиции
@@ -27,7 +26,7 @@ export function highlight(number, array, setArray, row) {
             row.current = number;
         }
         // рендер
-        setArray([...array]);
+        setArray();
         return;
     }
 }

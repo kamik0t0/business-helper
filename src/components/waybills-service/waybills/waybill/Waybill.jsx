@@ -5,22 +5,20 @@ import PropTypes from "prop-types";
 
 export default function Waybill({
     index,
-    date,
-    number,
-    counterparty,
-    total,
+    waybill,
     getWaybill,
-    highlight,
     setWaybillChosen,
     highlightWaybill,
 }) {
-    const parseDate = new Date(Date.parse(date)).toLocaleDateString();
+    const parseDate = new Date(
+        Date.parse(waybill.waybill_date)
+    ).toLocaleDateString();
     return (
         <div className={classes.waybills_list}>
             {/* накладная */}
             <div
                 className={
-                    highlight
+                    waybill.highlight
                         ? classes.waybills_list_wb + " " + classes.highlight
                         : classes.waybills_list_wb
                 }
@@ -34,14 +32,18 @@ export default function Waybill({
                 <div className={classes.waybills_list_wb_date}>{parseDate}</div>
                 {/* номер */}
                 <div className={classes.waybills_list_wb_num}>
-                    {number.length > 14 ? number.slice(0, 15) + "..." : number}
+                    {waybill.id.length > 14
+                        ? waybill.id.slice(0, 15) + "..."
+                        : waybill.id}
                 </div>
                 {/* контрагент */}
                 <div className={classes.waybills_list_wb_ctrpty}>
-                    {counterparty}
+                    {waybill.cl_orgname}
                 </div>
                 {/* сумма */}
-                <div className={classes.waybills_list_wb_summ}>{total}</div>
+                <div className={classes.waybills_list_wb_summ}>
+                    {waybill.total}
+                </div>
             </div>
         </div>
     );
@@ -49,12 +51,8 @@ export default function Waybill({
 
 Waybill.propTypes = {
     index: PropTypes.number.isRequired,
-    date: PropTypes.string.isRequired,
-    number: PropTypes.number.isRequired,
-    counterparty: PropTypes.string.isRequired,
-    total: PropTypes.string.isRequired,
+    waybill: PropTypes.object.isRequired,
     getWaybil: PropTypes.func,
-    highlight: PropTypes.bool,
     setWaybillChosen: PropTypes.func.isRequired,
     highlightWaybill: PropTypes.func.isRequired,
 };

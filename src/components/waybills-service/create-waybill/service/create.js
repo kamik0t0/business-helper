@@ -1,44 +1,37 @@
-import { getDataByForeignKey } from "../../../../utils/getDataByForeignKey.js";
+import axios from "axios";
+import { getData } from "../../../../utils/getData.js";
 
 // создание накладной
 export async function create(
     event,
-    url,
-    idName,
-    PostWaybillObj,
-    array,
-    setNavToList
+    path,
+    WAYBILL,
+    positions,
+    setNavToList,
+    errorCheck
 ) {
     event.preventDefault();
-    PostWaybillObj.current["positions"] = array;
-    PostWaybillObj.current["myOrg"] = JSON.parse(localStorage.getItem("myOrg"));
-    PostWaybillObj.current["counterparty"] = JSON.parse(
-        localStorage.getItem("counterparty")
-    );
-    // PostWaybillObj.current["counterpartyId"] =
-    //     localStorage.getItem("counterpartyId");
-    PostWaybillObj.current["orgId"] = localStorage.getItem("OrgsId");
-
-    console.log(PostWaybillObj.current);
-    // отправка запроса
-    let response = await fetch(
-        `${url}&CounterpartyId=${localStorage.getItem("counterpartyId")}`,
-        {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(PostWaybillObj.current),
+    WAYBILL.current["positions"] = positions;
+    const OrgId = localStorage.getItem("OrgsId");
+    WAYBILL.current["OrgId"] = OrgId;
+    try {
+        const response = await axios.post(
+            `http://localhost:5600${path}/`,
+            WAYBILL.current,
+            {
+                params: {
+                    table: path.slice(1),
+                    OrgId: OrgId,
+                    CounterpartyId: localStorage.getItem("counterpartyId"),
+                },
+            }
+        );
+        if (response.data.created) {
+            const result = await getData(`${path}/?OrgId=${OrgId}`, errorCheck);
+            setNavToList();
+            return result;
         }
-    );
-    // получение ответа
-    let result = await response.json();
-    // если в ответе есть поле created
-    if (result.created) {
-        console.log(url);
-        console.log(idName);
-        // запрос на накладные
-        let [res] = await getDataByForeignKey(url, idName);
-        console.log(res);
-        // навигация к списку накладных
-        setNavToList(true);
+    } catch (error) {
+        console.log(error);
     }
 }

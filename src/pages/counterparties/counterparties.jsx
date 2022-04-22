@@ -1,63 +1,63 @@
 import React, { useState, useRef } from "react";
 import classes from "./styles/counterparties.module.css";
 import { Navigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import CounterpartiesModals from "./service/modals/counterparties-modals.jsx";
 import CounterpartiesList from "./service/counterparties-list/counterparties-list";
 import Buttons from "./service/buttons/buttons.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
-import { getValue } from "./service/handlers/getValue.js";
+import { highlight } from "../../utils/highlight.js";
 
 export const getCounterparty = React.createContext();
 
-export default function Counterparties({ path }) {
+export default function Counterparties() {
     const { params } = useParams();
-
     const isAuth = useSelector((state) => state.authReducer.isAuth);
-    const isMyOrgSelected = useSelector(
-        (state) => state.myOrgReducer.isMyOrgSelected
+    const myOrg = useSelector((state) => state.setMyOrgReducer.myOrg);
+    const COUNTERPARTIES = useSelector(
+        (state) => state.setCounterparties.counterparties
     );
+    const dispatch = useDispatch();
     const [modalAdd, setModalAdd] = useState({ show: false, add: false });
     const [modalRead, setModalRead] = useState({ show: false, add: false });
     const [modalUpdate, setModalUpdate] = useState({ show: false, add: false });
     const [modalDelete, setModalDelete] = useState({ show: false, add: false });
-    const [counterparty, setCounterparty] = useState();
-    const [counterparties, setCounterparties] = useState(
-        JSON.parse(localStorage.getItem("counterparties")) === null
-            ? []
-            : JSON.parse(localStorage.getItem("counterparties"))
-    );
-    // значение переменной должно быть доступно после перерендирнга => useRef
-    let isORG = useRef();
     let row = useRef(null);
+
     return (
         <>
-            {/* если одно из условий верно, то компонент рендерится */}
-            {localStorage.getItem("session") === "true" || isAuth ? (
+            {isAuth ? (
                 <div className={classes.content}>
                     <div className={classes.header}>
                         <div className={classes.header_items}>
                             {localStorage.getItem("email")}
                         </div>
                     </div>
-                    {localStorage.getItem("session") === "true" &&
-                    isMyOrgSelected ? (
+                    {myOrg ? (
                         <getCounterparty.Provider
-                            value={(event, number) =>
-                                getValue(
-                                    event,
+                            value={(event, number) => {
+                                dispatch({
+                                    type: "COUNTERPARTY",
+                                    payload: COUNTERPARTIES[number],
+                                });
+                                localStorage.setItem(
+                                    "counterpartyId",
+                                    COUNTERPARTIES[number].id
+                                );
+                                highlight(
                                     number,
-                                    counterparties,
-                                    setCounterparties,
-                                    row,
-                                    setCounterparty
-                                )
-                            }
+                                    COUNTERPARTIES,
+                                    () =>
+                                        dispatch({
+                                            type: "COUNTERPARTIES",
+                                            payload: [...COUNTERPARTIES],
+                                        }),
+                                    row
+                                );
+                            }}
                         >
                             <CounterpartiesList
-                                counterparties={
-                                    counterparties ? counterparties : []
-                                }
+                                counterparties={COUNTERPARTIES}
                             />
                             <Buttons
                                 setModalAdd={setModalAdd}
@@ -86,9 +86,6 @@ export default function Counterparties({ path }) {
                 modalRead={modalRead}
                 modalUpdate={modalUpdate}
                 modalDelete={modalDelete}
-                isORG={isORG}
-                setCounterparties={setCounterparties}
-                counterparty={counterparty}
             />
         </>
     );

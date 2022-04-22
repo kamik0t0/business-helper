@@ -36,7 +36,7 @@ export class Organizaton {
     }
 }
 
-export let Requisites = [
+export let OrgFields = [
     {
         field: "orgname",
         name: "Наименование:",

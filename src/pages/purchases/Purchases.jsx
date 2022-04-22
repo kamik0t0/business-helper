@@ -10,16 +10,15 @@ export default function Purchases() {
     useEffect(() => {
         localStorateClearing();
     }, []);
-    const isMyOrgSelected = useSelector(
-        (state) => state.myOrgReducer.isMyOrgSelected
-    );
+    const myOrg = useSelector((state) => state.setMyOrgReducer.myOrg);
+    const PURCHASES = useSelector((state) => state.setPurchases.purchases);
     return (
         <>
-            {isMyOrgSelected ? (
+            {myOrg ? (
                 <WayBillsList
-                    CounterPartyType={["Продавец", "Продавцу", "Покупки", "№"]}
+                    CounterpartyInfo={["Продавец", "Продавцу", "Покупки", "№"]}
                     path="/purchases/createwaybill"
-                    WB={JSON.parse(localStorage.getItem("Purchases"))}
+                    WAYBILLS={PURCHASES}
                 />
             ) : (
                 <div className={classes.content}>

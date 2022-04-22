@@ -1,3 +1,4 @@
+import axios from "axios";
 // загружает данные в зависимости от ForeignKey
 export async function getDataByForeignKey(url, idName) {
     console.log(url, idName);
@@ -34,16 +35,14 @@ export async function getDataByForeignKey(url, idName) {
 }
 
 // запрос на все организации пользователя из БД
-export async function getMyOrgsFromDB(url) {
+export async function getMyOrgsFromDB(url, callDispatch) {
     console.log(url);
 
     try {
-        let orgs = await (await fetch(url)).json();
+        let orgs = await axios.get(url);
         console.log(orgs);
-        localStorage.setItem("orgs", JSON.stringify(orgs));
-        localStorage.removeItem("counterparty");
-
-        return orgs;
+        localStorage.setItem("orgs", JSON.stringify(orgs.data));
+        return orgs.data;
     } catch (error) {
         console.log(`Can't get Orgs from DB - no connection to server`);
     }
@@ -53,10 +52,13 @@ export async function getMyOrgsFromDB(url) {
 export async function getCounterpartiesFromDB(url) {
     console.log(url);
     try {
-        let getcounterparties = await fetch(url);
-        let counterparties = await getcounterparties.json();
-        localStorage.setItem("counterparties", JSON.stringify(counterparties));
-        return counterparties;
+        let counterparties = await axios.get(url);
+
+        localStorage.setItem(
+            "counterparties",
+            JSON.stringify(counterparties.data)
+        );
+        return counterparties.data;
     } catch (error) {
         console.log(
             `Can't get counterparties from DB - no connection to server`
@@ -65,24 +67,58 @@ export async function getCounterpartiesFromDB(url) {
 }
 
 // запрос продаж
-export async function getSalesFromDB(url) {
+export async function getSalesFromDB(url, callDispatch) {
     try {
+        axios.interceptors.request.use(
+            function (config) {
+                axios.defaults.headers.get[
+                    "authorization"
+                ] = `Bearer ${localStorage.getItem("token")}`;
+                return config;
+            },
+            function (error) {
+                callDispatch();
+                return Promise.reject(error);
+            }
+        );
         console.log(url);
-        let getSales = await fetch(url);
-        let sales = await getSales.json();
-        localStorage.setItem("Sales", JSON.stringify(sales));
-        return sales;
+        let getSales = await axios.get(url);
+        localStorage.setItem("Sales", JSON.stringify(getSales.data));
+        return getSales.data;
     } catch (error) {
         console.log(`Can't get sales from DB - no connection to server`);
     }
 }
 // запрос покупок
-export async function getPurchasesFromDB(url) {
+export async function getPurchasesFromDB(url, callDispatch) {
     try {
-        let getPurchases = await fetch(url);
-        let purchases = await getPurchases.json();
-        localStorage.setItem("Purchases", JSON.stringify(purchases));
-        return purchases;
+        axios.interceptors.request.use(
+            async function (config) {
+                axios.defaults.headers.get[
+                    "authorization"
+                ] = `Bearer ${localStorage.getItem("token")}`;
+                return config;
+            },
+            function (error) {
+                callDispatch();
+                return Promise.reject(error);
+            }
+        );
+
+        axios.interceptors.response.use(
+            function (config) {
+                console.log(config);
+                return config;
+            },
+            function (error) {
+                console.log("error");
+                // callDispatch();
+                return Promise.reject(error);
+            }
+        );
+        let getPurchases = await axios.get(url);
+        localStorage.setItem("Purchases", JSON.stringify(getPurchases.data));
+        return getPurchases.data;
     } catch (error) {
         console.log(`Can't get purchases from DB - no connection to server`);
     }

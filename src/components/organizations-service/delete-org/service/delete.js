@@ -1,51 +1,39 @@
-import { getDataByForeignKey } from "../../../../utils/getDataByForeignKey.js";
+import axios from "axios";
 import { hideAnimatedModal } from "../../../../UI/modal/service/handlers/modal-control.js";
+import { getData } from "../../../../utils/getData.js";
+import { setOrgsAction } from "../../../../redux/orgs-reducer.js";
+import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
+import { setRegFalseAction } from "../../../../redux/auth-reducer.js";
+import { setMyOrgAction } from "../../../../redux/setMyOrg-reducer.js";
 
-export async function deleteOrg(
-    setModal,
-    setOrgs,
-    org,
-    type,
-    url,
-    setLoader,
-    dispatch,
-    idName
-) {
-    setLoader(true);
-    console.log(org.id);
-    try {
-        let response = await fetch(url, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        let result = await response.json();
-        if (result.deleted) {
-            console.log(result.message);
-            let [orgs] = await getDataByForeignKey(url, idName);
-            // убираем организацию из localStorage
-            localStorage.removeItem(type);
-            setOrgs(orgs);
-            // модальное окно скрывается
+export function deleteOrg(setModal, setLoader) {
+    return async function deleteWithThunk(dispatch) {
+        setLoader();
+        try {
+            const UserId = localStorage.getItem("UserId");
+            const OrgId = localStorage.getItem("OrgsId");
+
+            await axios.delete(`http://localhost:5600/private`, {
+                params: {
+                    orgId: OrgId,
+                    table: "Orgs",
+                },
+            });
+
+            const ORGS = await getData(`/private/?UserId=${UserId}`, () =>
+                dispatch(setRegFalseAction(false))
+            );
+            dispatch(setMyOrgAction({}));
             hideAnimatedModal(setModal);
-            // убираем анимацию загрузки
-            setLoader(false);
-        } else {
-            console.log(result.message);
+            setLoader();
+            dispatch(setOrgsAction(ORGS));
+        } catch (error) {
+            setLoader();
+            dispatch(setErrorTrueAction(true, error.message));
+            hideAnimatedModal(setModal);
+            console.log(error.message);
         }
-    } catch (error) {
-        setLoader(false);
-        // если проблема с сервером / базой данных или еще что-то
-        dispatch({
-            type: "isERROR_TRUE",
-            payload: true,
-            message: "No connection to server",
-        });
-        // меняем статус пользователя на неавторизованный
-        dispatch({ type: "REG_FALSE", payload: false });
-        // модальное окно скрывается
-        hideAnimatedModal(setModal);
-        console.log("No connection to server");
-    }
+    };
 }
+
+// url="https://deploy-test-business-assist.herokuapp.com/private"

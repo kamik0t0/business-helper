@@ -1,43 +1,41 @@
 import React, { useRef, useState } from "react";
 import classes from "./styles/patch-org.module.css";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
-import { Requisites } from "../../../utils/Org.js";
+import { OrgFields } from "../../../utils/Org.js";
+import { IpFields } from "../../../utils/Org.js";
 import { Organizaton } from "../../../utils/Org.js";
 import PatchFields from "./service/components/Patch-fields.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
 import { addRequisitesValues } from "../handlers/addRequisitesValues.js";
 import { setValue } from "./service/handlers/set-value";
 import { getValue } from "./service/handlers/get-value";
 import { update } from "./service/handlers/update.js";
 import { filterRequisites } from "../handlers/filter-requisites.js";
+import { isOrganization } from "../../../utils/isOrg";
 import PropTypes from "prop-types";
 
-export default function PatchOrg({
-    setModal,
-    org,
-    setOrg,
-    type,
-    url,
-    noselected,
-    isORG,
-    idName,
-}) {
+export default function PatchOrg({ setModal }) {
     const [loader, setLoader] = useState(false);
+    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
+    const isORG = useRef();
+    isORG.current = isOrganization(MYORG);
     const dispatch = useDispatch();
     // объект с обновленными значениями
     const Updated = useRef(new Organizaton());
-    // добавляем значения к соответствующим полям
-    const myOrg = org !== null && addRequisitesValues(Requisites, org);
-    // фильтрация полей если изменяется ИП
-    const filtered = org !== null && filterRequisites(myOrg, isORG);
+    // добавляем значения к соответствующим реквизитам
+    const myOrg =
+        MYORG !== null &&
+        addRequisitesValues(OrgFields, IpFields, MYORG, isORG);
+    // фильтрация полей если изменяется на ИП
+    const filtered = MYORG !== null && filterRequisites(myOrg, isORG);
 
     return (
         <>
             {myOrg === null ? (
                 <div className={classes.read}>
-                    <div className={classes.noorg}>{noselected}</div>
+                    <div className={classes.noorg}>Организация не выбрана</div>
                 </div>
             ) : (
                 <div className={classes.read}>
@@ -65,22 +63,35 @@ export default function PatchOrg({
                     )}
 
                     <div className={classes.buttons}>
-                        {" "}
                         <MyButton
-                            onClick={(event) =>
-                                update(
+                            onClick={async (event) => {
+                                const [ORGS, UpOrg] = await update(
                                     event,
-                                    url,
                                     Updated.current,
-                                    setLoader,
+                                    () => setLoader(!loader),
                                     setModal,
-                                    type,
-                                    org,
-                                    setOrg,
-                                    dispatch,
-                                    idName
-                                )
-                            }
+                                    MYORG,
+                                    () =>
+                                        dispatch({
+                                            type: "REG_FALSE",
+                                            payload: false,
+                                        }),
+                                    () =>
+                                        dispatch({
+                                            type: "isERROR_TRUE",
+                                            payload: true,
+                                            message: "No connection to server",
+                                        })
+                                );
+                                dispatch({
+                                    type: "ORGS",
+                                    payload: ORGS,
+                                });
+                                dispatch({
+                                    type: "MYORG",
+                                    payload: UpOrg,
+                                });
+                            }}
                         >
                             Обновить
                         </MyButton>
@@ -96,11 +107,4 @@ export default function PatchOrg({
 
 PatchOrg.propTypes = {
     setModal: PropTypes.func.isRequired,
-    org: PropTypes.object.isRequired,
-    setOrg: PropTypes.func.isRequired,
-    type: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    noselected: PropTypes.string.isRequired,
-    isORG: PropTypes.bool.isRequired,
-    idName: PropTypes.string.isRequired,
 };

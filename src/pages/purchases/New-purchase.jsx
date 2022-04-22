@@ -5,7 +5,7 @@ import CreateWaybill from "../../components/waybills-service/create-waybill/Crea
 export default function NewPurchase() {
     return (
         <CreateWaybill
-            CounterpartyType={["Покупка товаров: создание", "Поставщик:", "№"]}
+            CounterpartyInfo={["Покупка товаров: создание", "Поставщик:", "№"]}
             path="/purchases"
         />
     );

@@ -1,25 +1,21 @@
 // компонент показывающий список существующих накладных
-import React, { useEffect } from "react";
+import React from "react";
 import MyLink from "../../UI/link/MyLink.jsx";
 import classes from "./styles/sales.module.css";
 import { useSelector } from "react-redux";
 import WayBillsList from "../../components/waybills-service/waybills/Waybill-list.jsx";
-import { localStorateClearing } from "../../utils/localStorageClearing.js";
 
 export default function Sales() {
-    useEffect(() => {
-        localStorateClearing();
-    }, []);
-    const isMyOrgSelected = useSelector(
-        (state) => state.myOrgReducer.isMyOrgSelected
-    );
+    const myOrg = useSelector((state) => state.setMyOrgReducer.myOrg);
+    const SALES = useSelector((state) => state.setSales.sales);
+
     return (
         <>
-            {isMyOrgSelected ? (
+            {myOrg ? (
                 <WayBillsList
-                    CounterPartyType={["Покупатель", "Покупателю", "Продажи"]}
+                    CounterpartyInfo={["Покупатель", "Покупателю", "Продажи"]}
                     path="/sales/createwaybill"
-                    WB={JSON.parse(localStorage.getItem("Sales"))}
+                    WAYBILLS={SALES}
                 />
             ) : (
                 <div className={classes.content}>

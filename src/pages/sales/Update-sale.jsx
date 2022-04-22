@@ -4,7 +4,7 @@ import UpdateWaybill from "../../components/waybills-service/update-waybill/Upda
 export default function UpdateSale() {
     return (
         <UpdateWaybill
-            CounterPartyType={["Реализация: изменение", "Покупатель", "Sale"]}
+            CounterpartyInfo={["Реализация: изменение", "Покупатель", "Sale"]}
             path="/sales"
         />
     );

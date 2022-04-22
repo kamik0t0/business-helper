@@ -4,22 +4,26 @@ import Loader from "../../../UI/Loader/Loader.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
 import { deleteWaybill } from "./service/delete.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 export default function DeleteWaybill({
     setModal,
-    waybill,
-    setWaybills,
+    WAYBILLTYPE,
+    setWAYBILLs,
     url,
     noselected,
     path,
 }) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
+    const WAYBILL = useSelector(
+        (state) => state[`${WAYBILLTYPE[0]}`][`${WAYBILLTYPE[2]}`]
+    );
+    console.log(WAYBILL);
     return (
         <>
-            {waybill === undefined || waybill === null ? (
+            {WAYBILL === undefined || WAYBILL === null ? (
                 <div className={classes.noorg}>
                     <div className={classes.noorg__text}>{noselected}</div>
                     <MyButton onClick={() => hideAnimatedModal(setModal)}>
@@ -31,9 +35,9 @@ export default function DeleteWaybill({
                     <div
                         className={classes.text}
                     >{`Вы действительно хотите удалить накладную № ${
-                        waybill.id
-                    } от ${waybill.waybill_date.slice(0, -14)} на ${
-                        waybill.total
+                        WAYBILL.id
+                    } от ${WAYBILL.waybill_date.slice(0, -14)} на ${
+                        WAYBILL.total
                     } рублей?`}</div>
                     {loader ? (
                         <Loader />
@@ -44,8 +48,8 @@ export default function DeleteWaybill({
                                     deleteWaybill(
                                         event,
                                         setModal,
-                                        waybill,
-                                        setWaybills,
+                                        WAYBILL,
+                                        setWAYBILLs,
                                         path,
                                         url,
                                         setLoader,
@@ -70,7 +74,7 @@ export default function DeleteWaybill({
 
 DeleteWaybill.propTypes = {
     setModal: PropTypes.func.isRequired,
-    waybill: PropTypes.object,
+    WAYBILL: PropTypes.object,
     setWaybills: PropTypes.func.isRequired,
     url: PropTypes.string.isRequired,
     noselected: PropTypes.string.isRequired,

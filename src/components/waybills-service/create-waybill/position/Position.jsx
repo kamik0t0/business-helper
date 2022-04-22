@@ -5,18 +5,13 @@ import MyInput from "../../../../UI/input/MyInput/MyInput.jsx";
 import PropTypes from "prop-types";
 
 export default function Position({
+    item,
     highlight,
     getRow,
     number,
-    getSumm,
-    getNDS,
-    getTotal,
     getNomenclature,
     getQuantity,
     getPrice,
-    nomenclature,
-    quantity,
-    price,
 }) {
     return (
         <>
@@ -36,7 +31,7 @@ export default function Position({
                             flex: "1 1 100%",
                             width: "100%",
                         }}
-                        defaultValue={"" || nomenclature}
+                        defaultValue={"" || item.nomenclature}
                         getValue={(event) => getNomenclature(event, number)}
                         type="text"
                     />
@@ -48,7 +43,7 @@ export default function Position({
                             flex: "1 1 100%",
                             width: "100%",
                         }}
-                        defaultValue={quantity || ""}
+                        defaultValue={+item.quantity || ""}
                         getValue={(event) => getQuantity(event, number)}
                         type="number"
                     />
@@ -60,20 +55,20 @@ export default function Position({
                             flex: "1 1 100%",
                             width: "100%",
                         }}
-                        defaultValue={price || ""}
+                        defaultValue={+item.price || ""}
                         getValue={(event) => getPrice(event, number)}
                         type="number"
                     />
                 </div>
                 <div className={classes.position_summ}>
-                    {getSumm().toFixed(2)}
+                    {item.getSumm().toFixed(2)}
                 </div>
                 <div className={classes.position_NDSprcnt}>{20}</div>
                 <div className={classes.position_NDS}>
-                    {getNDS().toFixed(2)}
+                    {item.getNDS().toFixed(2)}
                 </div>
                 <div className={classes.position_total}>
-                    {getTotal().toFixed(2)}
+                    {item.getTotal().toFixed(2)}
                 </div>
             </div>
         </>
@@ -81,15 +76,11 @@ export default function Position({
 }
 
 Position.propTypes = {
+    item: PropTypes.object.isRequired,
     highlight: PropTypes.bool.isRequired,
     getRow: PropTypes.func.isRequired,
     number: PropTypes.number.isRequired,
-    getSumm: PropTypes.func.isRequired,
-    getNDS: PropTypes.func.isRequired,
     getNomenclature: PropTypes.func.isRequired,
     getQuantity: PropTypes.func.isRequired,
     getPrice: PropTypes.func.isRequired,
-    nomenclature: PropTypes.string,
-    quantity: PropTypes.number,
-    price: PropTypes.number,
 };

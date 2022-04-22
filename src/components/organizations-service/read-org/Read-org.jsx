@@ -1,29 +1,37 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useSelector } from "react-redux";
 import classes from "./styles/read-org.module.css";
-import { Requisites } from "../../../utils/Org.js";
+import { OrgFields } from "../../../utils/Org.js";
+import { IpFields } from "../../../utils/Org.js";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
 import { addRequisitesValues } from "../handlers/addRequisitesValues.js";
 import Requisite from "./service/components/ReqField.jsx";
 import PropTypes from "prop-types";
-import { v4 as uuid } from "uuid";
+import { isOrganization } from "../../../utils/isOrg";
 
-export default function ReadOrg({ setModal, org, noselected }) {
+export default function ReadOrg({ setModal }) {
+    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
+    const isORG = useRef();
+    isORG.current = isOrganization(MYORG);
     // если выбрана организация, то добавляются значения реквизитов
-    let propsSet = addRequisitesValues(Requisites, org);
-    console.log(propsSet);
+    let Requisites = addRequisitesValues(
+        OrgFields,
+        IpFields,
+        MYORG,
+        isORG.current
+    );
 
     return (
         <>
-            {/* если параметр организации = null (т.е. отсутствует в localStorage), то компонент не рендерится */}
-            {propsSet === null ? (
+            {Requisites === null ? (
                 <div className={classes.read}>
-                    <div className={classes.noorg}>{noselected}</div>
+                    <div className={classes.noorg}>Организация не выбрана</div>
                 </div>
             ) : (
                 <div className={classes.read}>
                     <div className={classes.header}>Реквизиты</div>
-                    {propsSet.map((requisite) => {
+                    {Requisites.map((requisite) => {
                         return <Requisite requisite={requisite} />;
                     })}
                     <div className={classes.buttons}>
@@ -42,6 +50,4 @@ export default function ReadOrg({ setModal, org, noselected }) {
 
 ReadOrg.propTypes = {
     setModal: PropTypes.func.isRequired,
-    org: PropTypes.object.isRequired,
-    noselected: PropTypes.string,
 };

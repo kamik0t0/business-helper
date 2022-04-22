@@ -13,19 +13,15 @@ export function getCounterpartyRequisitesFromWaybill(waybill) {
     );
 }
 
-export function getPositions(path) {
+export function getPositions(path, id) {
     switch (path) {
         case "/sales":
             return getSaleItemsFromDB(
-                `http://localhost:5600${path.slice(0, -1)}/?SaleId=${
-                    JSON.parse(localStorage.getItem("Sale")).id
-                }`
+                `http://localhost:5600${path.slice(0, -1)}/?SaleId=${id}`
             );
         case "/purchases":
             return getPurchaseItemsFromDB(
-                `http://localhost:5600${path.slice(0, -1)}/?PurchaseId=${
-                    JSON.parse(localStorage.getItem("Purchase")).id
-                }`
+                `http://localhost:5600${path.slice(0, -1)}/?PurchaseId=${id}`
             );
         default:
             break;

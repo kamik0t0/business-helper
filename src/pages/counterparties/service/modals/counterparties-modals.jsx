@@ -1,9 +1,9 @@
 import React from "react";
 import Modal from "../../../../UI/modal/modal.jsx";
-import CreateOrg from "../../../../components/organizations-service/create-org/Create-org.jsx";
-import ReadOrg from "../../../../components/organizations-service/read-org/Read-org.jsx";
-import PatchOrg from "../../../../components/organizations-service/update-org/Patch-org.jsx";
-import DeleteOrg from "../../../../components/organizations-service/delete-org/Delete-org.jsx";
+import CreateCounterparty from "../../../../components/counterparties-service/create-counterparty/Create-counterparty.jsx";
+import ReadCounterparty from "../../../../components/counterparties-service/read-counterparty/Read-counterparty.jsx";
+import PatchCounterparty from "../../../../components/counterparties-service/update-counterparty/Patch-counterparty.jsx";
+import DeleteCounterparty from "../../../../components/counterparties-service/delete-counterparty/Delete-counterparty.jsx";
 import PropTypes from "prop-types";
 
 export default function CounterpartiesModals({
@@ -15,8 +15,6 @@ export default function CounterpartiesModals({
     modalRead,
     modalUpdate,
     modalDelete,
-    isORG,
-    setCounterparties,
     counterparty,
 }) {
     return (
@@ -27,37 +25,22 @@ export default function CounterpartiesModals({
                     active={modalAdd.add}
                     setActive={setModalAdd}
                 >
-                    <CreateOrg
-                        setModal={setModalAdd}
-                        setOrgs={setCounterparties}
-                        url="http://localhost:5600/counterparty?table=counterparties&foreignKey=OrgsId"
-                        // url="https://deploy-test-business-assist.herokuapp.com/counterparty"
-                        type="counterparty"
-                        idName="OrgsId"
-                    />
+                    <CreateCounterparty setModal={setModalAdd} />
                 </Modal>
             )}
             {modalRead.show && (
                 <Modal active={modalRead.add} setActive={setModalRead}>
-                    <ReadOrg
+                    <ReadCounterparty
                         setModal={setModalRead}
-                        org={counterparty}
-                        noselected="Организация не выбрана"
+                        counterparty={counterparty}
                     />
                 </Modal>
             )}
             {modalUpdate.show && (
                 <Modal active={modalUpdate.add} setActive={setModalUpdate}>
-                    <PatchOrg
+                    <PatchCounterparty
                         setModal={setModalUpdate}
-                        org={counterparty}
-                        setOrg={setCounterparties}
-                        isORG={isORG.current}
-                        type="counterparty"
-                        noselected="Организация не выбрана"
-                        url="http://localhost:5600/counterparty?table=counterparties"
-                        // url="https://deploy-test-business-assist.herokuapp.com/counterparty"
-                        idName="OrgsId"
+                        counterparty={counterparty}
                     />
                 </Modal>
             )}
@@ -67,15 +50,9 @@ export default function CounterpartiesModals({
                     active={modalDelete.add}
                     setActive={setModalDelete}
                 >
-                    <DeleteOrg
+                    <DeleteCounterparty
                         setModal={setModalDelete}
-                        org={counterparty}
-                        setOrgs={setCounterparties}
-                        type="counterparty"
-                        url={`http://localhost:5600/counterparty?counterpartyId=${counterparty.id}&table=counterparties`}
-                        // url="https://deploy-test-business-assist.herokuapp.com/counterparty"
-                        noselected="Организация не выбрана"
-                        idName="OrgsId"
+                        counterparty={counterparty}
                     />
                 </Modal>
             )}
@@ -92,7 +69,4 @@ CounterpartiesModals.propTypes = {
     modalRead: PropTypes.object.isRequired,
     modalUpdate: PropTypes.object.isRequired,
     modalDelete: PropTypes.object.isRequired,
-    isORG: PropTypes.object.isRequired,
-    counterparty: PropTypes.object,
-    setCounterparties: PropTypes.func.isRequired,
 };

@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import classes from "./styles/app.module.css";
 import Content from "../src/UI/Curtain/Content/Content.jsx";
-import Footer from "../src/blocks/footer/Footer.jsx";
 import Header from "../src/blocks/header/Header.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { authFetching } from "../src/utils/authFetching.js";
+import { isAuth } from "../src/utils/authFetching.js";
 import Error from "./UI/Error/Error.jsx";
 
 export default function App() {
@@ -14,22 +13,16 @@ export default function App() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        authFetching(
-            "http://localhost:5600/",
-            // "https://deploy-test-business-assist.herokuapp.com",
-            dispatch,
-            localStorage.getItem("token")
-        );
-
-        const interval = setInterval(async () => {
-            await authFetching(
+        try {
+            isAuth(
                 "http://localhost:5600/",
-                // "https://deploy-test-business-assist.herokuapp.com",
-                dispatch,
-                localStorage.getItem("token")
+                localStorage.getItem("token"),
+                () => dispatch({ type: "REG_TRUE", payload: true }),
+                () => dispatch({ type: "REG_FALSE", payload: false })
             );
-        }, 600000);
-        return () => clearInterval(interval);
+        } catch (error) {
+            console.log(error.message);
+        }
     });
 
     return (
@@ -39,10 +32,6 @@ export default function App() {
                     <BrowserRouter>
                         <Header />
                         <Content />
-                        {/* <Footer /> */}
-                        {/* {isError ? <Error message={message} /> : <Footer />} */}
-
-                        {/* <Error message={message} /> */}
                     </BrowserRouter>
                     {isError && <Error message={message} />}
                 </div>
@@ -50,3 +39,5 @@ export default function App() {
         </>
     );
 }
+
+// "https://deploy-test-business-assist.herokuapp.com",

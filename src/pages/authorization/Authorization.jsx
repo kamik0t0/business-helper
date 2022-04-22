@@ -3,13 +3,16 @@ import classes from "./styles/auth.module.css";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AuthError from "./service/error/Auth-error.jsx";
-import { getMyOrgsFromDB } from "../../utils/getDataByForeignKey";
-import { isOrgBelongsUser } from "../../utils/getOrgs.js";
 import Loader from "../../UI/Loader/Loader.jsx";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
+import { getData } from "../../utils/getData.js";
+import { setRegTrueAction } from "../../redux/auth-reducer.js";
+import { setRegFalseAction } from "../../redux/auth-reducer.js";
+import { setErrorTrueAction } from "../../redux/error-reducer.js";
+import { setOrgsAction } from "../../redux/orgs-reducer.js";
 
-export default function Login() {
+function Login() {
     const [isVisible, setIsVisible] = useState(false);
     const isAuth = useSelector((state) => state.authReducer.isAuth);
     const [isInvalid, setIsInvalid] = useState({
@@ -75,20 +78,11 @@ export default function Login() {
             let result = await response.json();
             console.log(result);
             if (result.auth) {
-                // статус пользователя меняется на авторизованный
-                dispatch({ type: "REG_TRUE", payload: true });
+                dispatch(setRegTrueAction(true));
                 return result;
             } else {
                 setLoader(false);
-                // запрос может пройти, но БД может ограничивать количество обращений за единицу времени и это приведет к ошибке. В этом случае получим объект result.message
-                if (typeof result.message === "object") {
-                    // в поле code содержится код ошибки
-                    dispatch({
-                        type: "isERROR_TRUE",
-                        payload: true,
-                        message: result.message.code,
-                    });
-                } else {
+                if (typeof result.message !== "object") {
                     setIsInvalid({
                         isInvalid: true,
                         result: "Неправильный пароль или email.",
@@ -97,14 +91,8 @@ export default function Login() {
                 return false;
             }
         } catch (error) {
-            // если запрос не проходит
-            console.log("Auth Error", error);
             setLoader(false);
-            dispatch({
-                type: "isERROR_TRUE",
-                payload: true,
-                message: "No connection to server",
-            });
+            dispatch(setErrorTrueAction(true, error.message));
         }
     }
 
@@ -114,41 +102,23 @@ export default function Login() {
             {isAuth ? (
                 <Navigate to="/" />
             ) : (
-                <div className={classes.login}>
+                <div id="form" className={classes.login}>
                     <form
-                        onSubmit={async (event) =>
-                            await auth(event)
-                                .then((result) => {
-                                    // устанавливаем токен
-                                    localStorage.setItem("token", result.token);
-                                    // email
-                                    localStorage.setItem(
-                                        "email",
-                                        email.current
-                                    );
-                                    // вспомогательный флаг для сессии
-                                    localStorage.setItem("session", true);
-                                    localStorage.setItem("UserId", result.id);
-                                })
-                                .then(
-                                    async () =>
-                                        await getMyOrgsFromDB(
-                                            // `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
-                                            //     "UserId"
-                                            // )}`
-                                            `http://localhost:5600/private/?UserId=${localStorage.getItem(
-                                                "UserId"
-                                            )}`
-                                            // &table=Orgs&foreignKey=UserId
-                                        )
-                                )
-                                .then(async () => await isOrgBelongsUser())
-                                .catch((error) => {
-                                    console.log(error, "session faild");
-                                    // флаг текущей сессии удаляется
-                                    localStorage.removeItem("session");
-                                })
-                        }
+                        onSubmit={async (event) => {
+                            const user = await auth(event);
+                            // устанавливаем токен
+                            localStorage.setItem("token", user.token);
+                            // email
+                            localStorage.setItem("email", email.current);
+                            localStorage.setItem("UserId", user.id);
+                            const ORGS = await getData(
+                                `/private/?UserId=${localStorage.getItem(
+                                    "UserId"
+                                )}`,
+                                () => dispatch(setRegFalseAction(false))
+                            );
+                            dispatch(setOrgsAction(ORGS));
+                        }}
                         name="auth"
                         className={classes.login_frame}
                     >
@@ -169,6 +139,7 @@ export default function Login() {
                                         className={classes.login_auth_user_icon}
                                     ></div>
                                     <input
+                                        id="auth-input"
                                         defaultValue={email.current}
                                         onChange={(event) => {
                                             email.current = event.target.value;
@@ -190,6 +161,7 @@ export default function Login() {
                                         className={classes.login_auth_pass_icon}
                                     ></div>
                                     <input
+                                        id="pass-input"
                                         defaultValue={pass.current}
                                         onChange={(event) => {
                                             pass.current = event.target.value;
@@ -255,3 +227,9 @@ export default function Login() {
         </>
     );
 }
+
+// `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
+//     "UserId"
+// )}`
+
+export default Login;

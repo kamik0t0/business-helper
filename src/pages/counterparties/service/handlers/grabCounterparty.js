@@ -1,11 +1,7 @@
-import { highlight } from "../../../../utils/highlight.js";
-
-export function getValue(
-    event,
+export function grabCounterparty(
     number,
     counterparties,
-    setCounterparties,
-    row,
+
     setCounterparty
 ) {
     localStorage.setItem(
@@ -13,7 +9,7 @@ export function getValue(
         JSON.stringify(counterparties[number])
     );
     localStorage.setItem("counterpartyId", counterparties[number].id);
-    highlight(number, counterparties, setCounterparties, row);
+
     let counterparty = JSON.parse(localStorage.getItem("counterparty"));
     setCounterparty(counterparty);
 }

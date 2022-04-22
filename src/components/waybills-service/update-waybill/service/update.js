@@ -8,14 +8,13 @@ export async function update(
     setNav,
     Waybill_date,
     counterparty,
-    WaybillId
+    WaybillId,
+    myOrg
 ) {
     event.preventDefault();
     PatchWaybillObj.current["Waybill_date"] = Waybill_date;
     PatchWaybillObj.current["positions"] = array;
-    PatchWaybillObj.current["myOrg"] = JSON.parse(
-        localStorage.getItem("myOrg")
-    );
+    PatchWaybillObj.current["myOrg"] = myOrg;
     PatchWaybillObj.current["counterparty"] = counterparty;
     PatchWaybillObj.current["counterpartyId"] =
         counterparty.CounterpartyId || counterparty.id;
@@ -36,6 +35,6 @@ export async function update(
             `${url}?OrgId=${JSON.parse(localStorage.getItem("myOrg")).id}`,
             idName
         );
-        setNav(true);
+        setNav();
     }
 }

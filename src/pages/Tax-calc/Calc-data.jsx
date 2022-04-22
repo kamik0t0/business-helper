@@ -13,19 +13,16 @@ export default function CalcData({ classes, getIncome, getSalary }) {
 
             <div className={classes.inputData}>
                 <div className={classes.incomes_block}>
-                    {" "}
                     <div className={classes.inputName}>Доходы: </div>
                     <MyInput id="incomeLE" type="text" onChange={getIncome} />
                 </div>
 
                 <div className={classes.costs_block}>
-                    {" "}
                     <div className={classes.inputName}>Расходы: </div>
                     <MyInput id="costs" type="text" />
                 </div>
 
                 <div className={classes.salary_block}>
-                    {" "}
                     <div className={classes.inputName}>в т.ч. зарплата: </div>
                     <MyInput
                         id="salaryCosts"

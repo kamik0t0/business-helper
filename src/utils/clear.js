@@ -1,6 +1,5 @@
-export function clear(org) {
+export function clear() {
     for (const input of document.querySelectorAll("input")) {
         input.value = "";
     }
-    // document.getElementById("ORG").value = org || "Выбрать организацию";
 }

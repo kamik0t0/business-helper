@@ -1,0 +1,43 @@
+@mixin font {
+    font-weight: 700;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    color: #f0ebdd;
+}
+
+.delete {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    justify-items: center;
+    height: 100%;
+
+    .text {
+        align-self: center;
+        font-size: 1.5em;
+        font-weight: 700;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+            sans-serif;
+        color: #f0ebdd;
+        text-align: center;
+    }
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+}
+
+.noorg {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    justify-items: center;
+    height: 100%;
+
+    .noorg__text {
+        @include font();
+        font-size: 1.5em;
+    }
+}

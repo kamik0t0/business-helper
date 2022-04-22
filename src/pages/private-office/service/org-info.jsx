@@ -2,7 +2,8 @@ import React from "react";
 import classes from "./styles/org-info.module.css";
 import PropTypes from "prop-types";
 
-export default function OrgInfo({ myOrg, isORG }) {
+export default function OrgInfo({ MYORG, isORG }) {
+    console.log(isORG);
     return (
         <>
             <div className={classes.info}>
@@ -10,31 +11,31 @@ export default function OrgInfo({ myOrg, isORG }) {
                     <div className={classes.info_name}>Активная фирма: </div>
 
                     <div className={classes.info_value}>
-                        {`${myOrg.opf} `}
-                        {isORG ? `"${myOrg.orgname}"` : myOrg.orgname}
+                        {`${MYORG.opf} `}
+                        {isORG ? `"${MYORG.orgname}"` : MYORG.orgname}
                     </div>
                 </div>
                 <div className={classes.info_item}>
                     <div className={classes.info_name}>ИНН / КПП: </div>
                     {isORG ? (
                         <div className={classes.info_value}>
-                            {`${myOrg.inn} / ${myOrg.kpp}`}
+                            {`${MYORG.inn} / ${MYORG.kpp}`}
                         </div>
                     ) : (
                         <div className={classes.info_value}>
-                            {`${myOrg.inn} `}
+                            {`${MYORG.inn} `}
                         </div>
                     )}
                 </div>
                 <div className={classes.info_item}>
                     <div className={classes.info_name}>Адрес: </div>
-                    <div className={classes.info_value}>{myOrg.address}</div>
+                    <div className={classes.info_value}>{MYORG.address}</div>
                 </div>
                 {isORG && (
                     <div className={classes.info_item}>
                         <div className={classes.info_name}>Руководитель: </div>
                         <div className={classes.info_value}>
-                            {myOrg.director}
+                            {MYORG.director}
                         </div>
                     </div>
                 )}
@@ -44,6 +45,6 @@ export default function OrgInfo({ myOrg, isORG }) {
 }
 
 OrgInfo.propTypes = {
-    myOrg: PropTypes.object.isRequired,
+    MYORG: PropTypes.object.isRequired,
     isORG: PropTypes.bool.isRequired,
 };

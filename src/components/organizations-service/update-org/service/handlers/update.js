@@ -2,54 +2,52 @@ import { getDataByForeignKey } from "../../../../../utils/getDataByForeignKey.js
 import { hideAnimatedModal } from "../../../../../UI/modal/service/handlers/modal-control.js";
 import { checkInputs } from "./check-inputs.js";
 import { showUpdateChanges } from "../../../../../utils/showUpdateChanges.js";
+import { getData } from "../../../../../utils/getData.js";
+import axios from "axios";
 
 export async function update(
     event,
-    url,
     Updated,
     setLoader,
     setModal,
-    type,
-    org,
-    setOrg,
-    dispatch,
-    idType
+    MYORG,
+    authCheck,
+    errorCheck
 ) {
     event.preventDefault();
-    try {
-        // + ИНН для идентификации обновляемой организации
-        Updated["id"] = JSON.parse(localStorage.getItem(type)).id;
-    } catch (error) {
-        console.log("Session expired... Authorize again");
-    }
+    Updated["id"] = localStorage.getItem("OrgsId");
     // проверка ввода
-    if (checkInputs(Updated, org) === false) return;
-    setLoader(true);
+    if (!checkInputs(Updated, MYORG)) return;
+    setLoader();
     try {
-        let response = await fetch(url, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(Updated),
-        });
+        const result = await axios.patch(
+            "http://localhost:5600/private/",
+            Updated,
+            {
+                params: {
+                    table: "Orgs",
+                },
+            }
+        );
 
-        let result = await response.json();
-        if (result.updated) {
-            console.log(result);
-            // заружаем список организаций из БД
-            let [orgs] = await getDataByForeignKey(url, idType);
-            showUpdateChanges(orgs, setOrg, org, type);
-            setLoader(false);
+        if (result.data.updated) {
+            const UserId = localStorage.getItem("UserId");
+            const ORGS = await getData(
+                `/private/?table=Orgs&UserId=${UserId}`,
+                "orgs",
+                authCheck
+            );
+
+            const UpOrg = showUpdateChanges(ORGS, MYORG);
+            setLoader();
             hideAnimatedModal(setModal);
+            return [ORGS, UpOrg];
         }
     } catch (error) {
+        console.log(error);
         setLoader(false);
-        dispatch({
-            type: "isERROR_TRUE",
-            payload: true,
-            message: "No connection to server",
-        });
-        dispatch({ type: "REG_FALSE", payload: false });
+        errorCheck();
+        authCheck();
         hideAnimatedModal(setModal);
-        console.log("no connection to server");
     }
 }

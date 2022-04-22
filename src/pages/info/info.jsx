@@ -8,7 +8,7 @@ export default function Tabs() {
         localStorateClearing();
     }, []);
     return (
-        <div className={classes.inner}>
+        <div id="flash" className={classes.inner}>
             {" "}
             <Tab header="О проекте">
                 Приветствую всех на моем "PET"-проекте - Web-приложение
