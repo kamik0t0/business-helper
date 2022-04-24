@@ -1,41 +1,53 @@
-import { getDataByForeignKey } from "../../../../utils/getDataByForeignKey.js";
 import { hideAnimatedModal } from "../../../../UI/modal/service/handlers/modal-control.js";
+import axios from "axios";
+import { getData } from "../../../../utils/getData.js";
+// import { setRegFalseAction } from "../../../../redux/auth-reducer.js";
+import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
+import { setAuthAction } from "../../../../redux/auth-reducer.js";
 
-export async function deleteWaybill(
+export function deleteWaybill(
     event,
     setModal,
-    waybill,
-    setWaybills,
+    id,
     path,
-    url,
     setLoader,
-    dispatch
+    setWaybills
 ) {
-    event.preventDefault();
-    setLoader(true);
-    let idName = path.slice(1).slice(0, -14);
-    const WaybillId = waybill.id;
+    return async function (dispatch) {
+        event.preventDefault();
+        console.log(path.slice(0, -14));
+        const [type, idType] =
+            path.slice(0, -14) === "/sales"
+                ? ["SALES", "SaleId"]
+                : ["PURCHASES", "PurchaseId"];
+        console.log(type);
+        setLoader();
 
-    try {
-        let response = await fetch(`${url}/?${idName}Id=${WaybillId}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        let result = await response.json();
-        if (result.deleted) {
-            let [waybills] = await getDataByForeignKey(
-                `${url}/?OrgId=${localStorage.getItem("OrgsId")}`,
-                idName
+        const OrgId = localStorage.getItem("OrgsId");
+        try {
+            await axios.delete(`http://localhost:5600${path.slice(0, -14)}/`, {
+                params: {
+                    [idType]: id,
+                },
+            });
+
+            const WAYBILLS = await getData(
+                `http://localhost:5600${path.slice(0, -14)}/?OrgId=${OrgId}`,
+                () => dispatch(setAuthAction(true))
             );
-            setWaybills([...waybills]);
+            console.log(WAYBILLS);
+            dispatch({ type, payload: WAYBILLS });
+            // дополнительно обновляется локальный стейт в Waybill-list
+            setWaybills([...WAYBILLS]);
             hideAnimatedModal(setModal);
-            setLoader(false);
+            setLoader();
+        } catch (error) {
+            console.log(error);
+            dispatch(setErrorTrueAction(true, error.message));
+            hideAnimatedModal(setModal);
+            setLoader();
         }
-    } catch (error) {
-        setLoader(false);
-        hideAnimatedModal(setModal);
-        console.log(error.message);
-    }
+    };
 }
+
+// `http://localhost:5600${path.slice(0, -14)}`;

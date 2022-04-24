@@ -118,10 +118,7 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
             type: WaybillsReducerTypePayload,
             payload: [
                 WAYBILLS.forEach((pos) => {
-                    if (pos.highlight) {
-                        console.log(pos);
-                        pos.highlight = false;
-                    }
+                    if (pos.highlight) pos.highlight = false;
                 }),
             ],
         });
@@ -253,19 +250,13 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                         <Modal
                             size={{ height: "25vh", width: "40vw" }}
                             active={modalDelete.add}
-                            setActive={setModalDelete}
+                            setModal={setModalDelete}
                         >
                             <DeleteWaybill
                                 setModal={setModalDelete}
                                 WAYBILLTYPE={WaybillReducerTypePayload}
-                                url={`http://localhost:5600${path.slice(
-                                    0,
-                                    -14
-                                )}`}
-                                waybills={WAYBILLS}
-                                setWaybills={setWaybills}
                                 path={path}
-                                noselected="Накладная не выбрана"
+                                setWaybills={setWaybills}
                             />
                         </Modal>
                     )}
@@ -273,7 +264,7 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                         <Modal
                             size={{ height: "25vh", width: "40vw" }}
                             active={modalUpdate.add}
-                            setActive={setModalUpdate}
+                            setModal={setModalUpdate}
                         >
                             <div className={classes.noorg}>
                                 <div className={classes.noorg__text}>

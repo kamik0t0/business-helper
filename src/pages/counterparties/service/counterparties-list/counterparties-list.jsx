@@ -2,9 +2,13 @@ import React from "react";
 import classes from "./style/counterparties-list.module.css";
 import Counterparty from "../counterparty/counterparty.jsx";
 import PropTypes from "prop-types";
+import { v4 as uuid } from "uuid";
+import { useSelector } from "react-redux";
 
-export default function CounterpartiesList({ counterparties }) {
-    console.log(counterparties);
+export default function CounterpartiesList() {
+    const COUNTERPARTIES = useSelector(
+        (state) => state.setCounterparties.counterparties
+    );
     return (
         <>
             <div className={classes.header}>Контрагенты</div>
@@ -16,15 +20,13 @@ export default function CounterpartiesList({ counterparties }) {
                         <div className={classes.header__name}>Наименование</div>
                         <div className={classes.header__inn}>ИНН</div>
                     </div>
-                    {counterparties.length !== 0 ? (
-                        counterparties.map((counterparty, number) => {
+                    {COUNTERPARTIES.length !== 0 ? (
+                        COUNTERPARTIES.map((counterparty, number) => {
                             return (
                                 <Counterparty
-                                    key={counterparty.inn}
-                                    highlight={counterparty.highlight}
+                                    key={uuid()}
                                     number={number}
-                                    name={counterparty.orgname}
-                                    inn={counterparty.inn}
+                                    counterparty={counterparty}
                                 />
                             );
                         })

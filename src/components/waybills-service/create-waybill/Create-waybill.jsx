@@ -27,7 +27,7 @@ export default function CreateWaybill({ CounterpartyInfo, path }) {
     const COUNTERPARTY = useSelector(
         (state) => state.setCounterpartyReducer.counterparty
     );
-    const DATA = path === "/sales" ? "SALES" : "PURCHASES";
+    const type = path === "/sales" ? "SALES" : "PURCHASES";
     // объект накладная для отправки на сервер
     const WAYBILL = useRef({ date: makeDefaultDate() });
     WAYBILL.current["myOrg"] = MYORG;
@@ -67,24 +67,18 @@ export default function CreateWaybill({ CounterpartyInfo, path }) {
                     <div className={classes.waybill_form_header}>
                         <div className={classes.waybill_form_header_save}>
                             <MyButton
-                                onClick={async (event) => {
-                                    const result = await create(
-                                        event,
-                                        path,
-                                        WAYBILL,
-                                        positions,
-                                        () => setNavToList(true),
-                                        () =>
-                                            dispatch({
-                                                type: "REG_FALSE",
-                                                payload: false,
-                                            })
-                                    );
-                                    dispatch({
-                                        type: DATA,
-                                        payload: result,
-                                    });
-                                }}
+                                onClick={(event) =>
+                                    dispatch(
+                                        create(
+                                            event,
+                                            path,
+                                            WAYBILL,
+                                            positions,
+                                            () => setNavToList(true),
+                                            type
+                                        )
+                                    )
+                                }
                             >
                                 Сохранить
                             </MyButton>
@@ -163,6 +157,8 @@ export default function CreateWaybill({ CounterpartyInfo, path }) {
                     {positions.map((item, index) => {
                         return (
                             <Position
+                                key={item.number}
+                                item={item}
                                 highlight={item.highlight}
                                 getRow={(event, number) =>
                                     highlight(
@@ -172,12 +168,7 @@ export default function CreateWaybill({ CounterpartyInfo, path }) {
                                         row
                                     )
                                 }
-                                key={item.number}
-                                classes={classes}
                                 number={index}
-                                getSumm={item.getSumm.bind(item)}
-                                getNDS={item.getNDS.bind(item)}
-                                getTotal={item.getTotal.bind(item)}
                                 getNomenclature={(event, number) =>
                                     getNomenclature(event, number, positions)
                                 }

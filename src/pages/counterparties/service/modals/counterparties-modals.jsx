@@ -15,7 +15,6 @@ export default function CounterpartiesModals({
     modalRead,
     modalUpdate,
     modalDelete,
-    counterparty,
 }) {
     return (
         <>
@@ -30,18 +29,12 @@ export default function CounterpartiesModals({
             )}
             {modalRead.show && (
                 <Modal active={modalRead.add} setActive={setModalRead}>
-                    <ReadCounterparty
-                        setModal={setModalRead}
-                        counterparty={counterparty}
-                    />
+                    <ReadCounterparty setModal={setModalRead} />
                 </Modal>
             )}
             {modalUpdate.show && (
                 <Modal active={modalUpdate.add} setActive={setModalUpdate}>
-                    <PatchCounterparty
-                        setModal={setModalUpdate}
-                        counterparty={counterparty}
-                    />
+                    <PatchCounterparty setModal={setModalUpdate} />
                 </Modal>
             )}
             {modalDelete.show && (
@@ -50,10 +43,7 @@ export default function CounterpartiesModals({
                     active={modalDelete.add}
                     setActive={setModalDelete}
                 >
-                    <DeleteCounterparty
-                        setModal={setModalDelete}
-                        counterparty={counterparty}
-                    />
+                    <DeleteCounterparty setModal={setModalDelete} />
                 </Modal>
             )}
         </>

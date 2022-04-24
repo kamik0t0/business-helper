@@ -3,21 +3,25 @@ import { getCounterparty } from "../../counterparties.jsx";
 import classes from "./styles/counterparty.module.css";
 import PropTypes from "prop-types";
 
-export default function Counterparty({ number, name, inn, highlight }) {
+export default function Counterparty({ number, counterparty }) {
     const getValue = useContext(getCounterparty);
     return (
         <>
             <div
                 onClick={(event) => getValue(event, number)}
                 className={
-                    highlight
+                    counterparty.highlight
                         ? classes.counterparty + " " + classes.highlight
                         : classes.counterparty
                 }
             >
                 <div className={classes.counterparty__number}>{number}</div>
-                <div className={classes.counterparty__name}>{name}</div>
-                <div className={classes.counterparty__inn}>{inn}</div>
+                <div className={classes.counterparty__name}>
+                    {counterparty.orgname}
+                </div>
+                <div className={classes.counterparty__inn}>
+                    {counterparty.inn}
+                </div>
             </div>
         </>
     );

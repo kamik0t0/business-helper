@@ -33,13 +33,12 @@ export default function DeleteOrg({ setModal }) {
                     ) : (
                         <div className={classes.buttons}>
                             <MyButton
-                                onClick={() =>
+                                onClick={() => {
                                     dispatch(
-                                        deleteOrg(setModal, () =>
-                                            setLoader(!loader)
-                                        )
-                                    )
-                                }
+                                        deleteOrg(() => setLoader(!loader))
+                                    );
+                                    hideAnimatedModal(setModal);
+                                }}
                             >
                                 Yes
                             </MyButton>

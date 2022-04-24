@@ -1,12 +1,12 @@
 import axios from "axios";
-import { hideAnimatedModal } from "../../../../UI/modal/service/handlers/modal-control.js";
 import { getData } from "../../../../utils/getData.js";
 import { setOrgsAction } from "../../../../redux/orgs-reducer.js";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
-import { setRegFalseAction } from "../../../../redux/auth-reducer.js";
+// import { setRegFalseAction } from "../../../../redux/auth-reducer.js";
 import { setMyOrgAction } from "../../../../redux/setMyOrg-reducer.js";
+import { setAuthAction } from "../../../../redux/auth-reducer.js";
 
-export function deleteOrg(setModal, setLoader) {
+export function deleteOrg(setLoader) {
     return async function deleteWithThunk(dispatch) {
         setLoader();
         try {
@@ -21,16 +21,14 @@ export function deleteOrg(setModal, setLoader) {
             });
 
             const ORGS = await getData(`/private/?UserId=${UserId}`, () =>
-                dispatch(setRegFalseAction(false))
+                dispatch(setAuthAction(false))
             );
             dispatch(setMyOrgAction({}));
-            hideAnimatedModal(setModal);
             setLoader();
             dispatch(setOrgsAction(ORGS));
         } catch (error) {
             setLoader();
             dispatch(setErrorTrueAction(true, error.message));
-            hideAnimatedModal(setModal);
             console.log(error.message);
         }
     };

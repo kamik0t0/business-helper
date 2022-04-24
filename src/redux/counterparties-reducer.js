@@ -1,13 +1,20 @@
-const COUNTERPARTIES = {
+const DEFAULTSTATE = {
     counterparties: [],
 };
 
-export function setCounterparties(state = COUNTERPARTIES, action) {
+const COUNTERPARTIES = "COUNTERPARTIES";
+
+export function setCounterparties(state = DEFAULTSTATE, action) {
     switch (action.type) {
-        case "COUNTERPARTIES":
+        case COUNTERPARTIES:
             return { counterparties: [...action.payload] };
 
         default:
             return state;
     }
 }
+
+export const setCounterpartiesAction = (payload) => ({
+    type: COUNTERPARTIES,
+    payload,
+});

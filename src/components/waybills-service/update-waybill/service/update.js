@@ -1,40 +1,37 @@
-import { getDataByForeignKey } from "../../../../utils/getDataByForeignKey.js";
-export async function update(
-    event,
-    url,
-    idName,
-    PatchWaybillObj,
-    array,
-    setNav,
-    Waybill_date,
-    counterparty,
-    WaybillId,
-    myOrg
-) {
-    event.preventDefault();
-    PatchWaybillObj.current["Waybill_date"] = Waybill_date;
-    PatchWaybillObj.current["positions"] = array;
-    PatchWaybillObj.current["myOrg"] = myOrg;
-    PatchWaybillObj.current["counterparty"] = counterparty;
-    PatchWaybillObj.current["counterpartyId"] =
-        counterparty.CounterpartyId || counterparty.id;
+import axios from "axios";
+import { getData } from "../../../../utils/getData.js";
+// import { setRegTrueAction } from "../../../../redux/auth-reducer.js";
+import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
+import { setAuthAction } from "../../../../redux/auth-reducer.js";
 
-    console.log(PatchWaybillObj.current);
-    // отправка запроса
-    let response = await fetch(`${url}?table=${idName}&id=${WaybillId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(PatchWaybillObj.current),
-    });
-    // получение ответа
-    let result = await response.json();
-
-    if (result.updated) {
-        // запрос на накладные
-        await getDataByForeignKey(
-            `${url}?OrgId=${JSON.parse(localStorage.getItem("myOrg")).id}`,
-            idName
-        );
-        setNav();
-    }
+export function update(event, path, UpdateWaybill, setNav, id, positions) {
+    return async function (dispatch) {
+        const type = path === "/sales" ? "SALES" : "PURCHASES";
+        event.preventDefault();
+        UpdateWaybill.current["positions"] = positions;
+        const table = path.slice(1);
+        try {
+            await axios.patch(
+                `http://localhost:5600${path}/`,
+                UpdateWaybill.current,
+                {
+                    params: {
+                        table: table,
+                        id,
+                    },
+                }
+            );
+            const OrgId = localStorage.getItem("OrgsId");
+            const WAYBILLS = await getData(
+                `http://localhost:5600${path}/?OrgId=${OrgId}`,
+                () => dispatch(setAuthAction(true)),
+                { OrgId: OrgId }
+            );
+            setNav();
+            dispatch({ type, payload: WAYBILLS });
+        } catch (error) {
+            console.log(error);
+            dispatch(setErrorTrueAction(true, error.message));
+        }
+    };
 }

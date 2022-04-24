@@ -4,7 +4,8 @@ import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { OrgFields } from "../../../utils/Org.js";
 import { IpFields } from "../../../utils/Org.js";
 import { Organizaton } from "../../../utils/Org.js";
-import PatchFields from "./service/components/Patch-fields.jsx";
+import PatchFields from "../../../components/organizations-service/update-org/service/components/Patch-fields.jsx";
+// import PatchFields from "./service/components/Patch-fields.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
@@ -15,10 +16,13 @@ import { update } from "./service/handlers/update.js";
 import { filterRequisites } from "../handlers/filter-requisites.js";
 import { isOrganization } from "../../../utils/isOrg";
 import PropTypes from "prop-types";
+import { v4 as uuid } from "uuid";
 
 export default function PatchCounterparty({ setModal }) {
     const [loader, setLoader] = useState(false);
-    const COUNTERPARTY = useSelector((state) => state.setMyOrgReducer.myOrg);
+    const COUNTERPARTY = useSelector(
+        (state) => state.setCounterpartyReducer.counterparty
+    );
     const isORG = useRef();
     isORG.current = isOrganization(COUNTERPARTY);
     const dispatch = useDispatch();
@@ -45,11 +49,9 @@ export default function PatchCounterparty({ setModal }) {
                         filteredFields.map((requisite, number) => {
                             return (
                                 <PatchFields
-                                    key={requisite.field}
+                                    key={uuid()}
                                     number={number}
                                     requisite={requisite}
-                                    length={requisite.lngth}
-                                    isNumber={requisite.num}
                                     getValue={(event, field, length) =>
                                         getValue(event, field, length, Updated)
                                     }
@@ -63,35 +65,16 @@ export default function PatchCounterparty({ setModal }) {
 
                     <div className={classes.buttons}>
                         <MyButton
-                            onClick={async (event) => {
-                                const [COUNTERPARTIES, UpCounterparty] =
-                                    await update(
+                            onClick={(event) => {
+                                dispatch(
+                                    update(
                                         event,
                                         Updated.current,
                                         () => setLoader(!loader),
-                                        setModal,
-                                        COUNTERPARTY,
-                                        () =>
-                                            dispatch({
-                                                type: "REG_FALSE",
-                                                payload: false,
-                                            }),
-                                        () =>
-                                            dispatch({
-                                                type: "isERROR_TRUE",
-                                                payload: true,
-                                                message:
-                                                    "No connection to server",
-                                            })
-                                    );
-                                dispatch({
-                                    type: "COUNTERPARTIES",
-                                    payload: COUNTERPARTIES,
-                                });
-                                dispatch({
-                                    type: "COUNTERPARTY",
-                                    payload: UpCounterparty,
-                                });
+                                        COUNTERPARTY
+                                    )
+                                );
+                                hideAnimatedModal(setModal);
                             }}
                         >
                             Обновить

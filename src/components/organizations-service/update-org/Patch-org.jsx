@@ -49,8 +49,6 @@ export default function PatchOrg({ setModal }) {
                                     key={requisite.field}
                                     number={number}
                                     requisite={requisite}
-                                    length={requisite.lngth}
-                                    isNumber={requisite.num}
                                     getValue={(event, field, length) =>
                                         getValue(event, field, length, Updated)
                                     }
@@ -64,33 +62,16 @@ export default function PatchOrg({ setModal }) {
 
                     <div className={classes.buttons}>
                         <MyButton
-                            onClick={async (event) => {
-                                const [ORGS, UpOrg] = await update(
-                                    event,
-                                    Updated.current,
-                                    () => setLoader(!loader),
-                                    setModal,
-                                    MYORG,
-                                    () =>
-                                        dispatch({
-                                            type: "REG_FALSE",
-                                            payload: false,
-                                        }),
-                                    () =>
-                                        dispatch({
-                                            type: "isERROR_TRUE",
-                                            payload: true,
-                                            message: "No connection to server",
-                                        })
+                            onClick={(event) => {
+                                dispatch(
+                                    update(
+                                        event,
+                                        Updated.current,
+                                        () => setLoader(!loader),
+                                        MYORG
+                                    )
                                 );
-                                dispatch({
-                                    type: "ORGS",
-                                    payload: ORGS,
-                                });
-                                dispatch({
-                                    type: "MYORG",
-                                    payload: UpOrg,
-                                });
+                                hideAnimatedModal(setModal);
                             }}
                         >
                             Обновить

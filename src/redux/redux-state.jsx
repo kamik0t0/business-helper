@@ -10,10 +10,12 @@ import { setPurchases } from "./purchases-reducer.js";
 import { setCounterpartyReducer } from "./counterparty-reducer.js";
 import { setSale } from "./sale-reducer.js";
 import { setPurchase } from "./purchase-reducer.js";
+import { authErrorReducer } from "./authError-reducer.js";
 
 const rootReducer = combineReducers({
     authReducer: authReducer,
     errorReducer: errorReducer,
+    authErrorReducer: authErrorReducer,
     setMyOrgReducer: setMyOrgReducer,
     setOrgsReducer: setOrgsReducer,
     setCounterparties: setCounterparties,

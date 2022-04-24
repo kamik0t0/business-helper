@@ -10,22 +10,22 @@ import PropTypes from "prop-types";
 export default function DeleteWaybill({
     setModal,
     WAYBILLTYPE,
-    setWAYBILLs,
-    url,
-    noselected,
     path,
+    setWaybills,
 }) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
     const WAYBILL = useSelector(
         (state) => state[`${WAYBILLTYPE[0]}`][`${WAYBILLTYPE[2]}`]
     );
-    console.log(WAYBILL);
+
     return (
         <>
             {WAYBILL === undefined || WAYBILL === null ? (
                 <div className={classes.noorg}>
-                    <div className={classes.noorg__text}>{noselected}</div>
+                    <div className={classes.noorg__text}>
+                        Накладная не выбрана
+                    </div>
                     <MyButton onClick={() => hideAnimatedModal(setModal)}>
                         Закрыть
                     </MyButton>
@@ -45,15 +45,15 @@ export default function DeleteWaybill({
                         <div className={classes.buttons}>
                             <MyButton
                                 onClick={(event) =>
-                                    deleteWaybill(
-                                        event,
-                                        setModal,
-                                        WAYBILL,
-                                        setWAYBILLs,
-                                        path,
-                                        url,
-                                        setLoader,
-                                        dispatch
+                                    dispatch(
+                                        deleteWaybill(
+                                            event,
+                                            setModal,
+                                            WAYBILL.id,
+                                            path,
+                                            () => setLoader(!loader),
+                                            setWaybills
+                                        )
                                     )
                                 }
                             >
@@ -75,8 +75,5 @@ export default function DeleteWaybill({
 DeleteWaybill.propTypes = {
     setModal: PropTypes.func.isRequired,
     WAYBILL: PropTypes.object,
-    setWaybills: PropTypes.func.isRequired,
-    url: PropTypes.string.isRequired,
-    noselected: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
 };

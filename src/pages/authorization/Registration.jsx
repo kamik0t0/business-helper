@@ -1,107 +1,22 @@
 import React, { useState, useRef } from "react";
 import classes from "./styles/auth.module.css";
 import { Navigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AuthError from "./service/error/Auth-error.jsx";
 import Loader from "../../UI/Loader/Loader.jsx";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
-import { validatePass } from "../../utils/validatePass.js";
+import { addUser } from "./service/registration.js";
 
 export default function Registration() {
     const [isVisible, setIsVisible] = useState(false);
     const [isReg, setIsReg] = useState(false);
-    const [isInvalid, setIsInvalid] = useState({
-        isInvalid: false,
-        result: "",
-    });
+    const AUTHERROR = useSelector((state) => state.authErrorReducer);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
 
     let email = useRef();
     let pass = useRef();
-
-    // регистрация
-    async function addUser(event) {
-        setIsInvalid((prev) => {
-            return { ...prev, isInvalid: false };
-        });
-
-        event.preventDefault();
-
-        const user = new FormData();
-
-        user.set("email", "");
-        user.set("pass", "");
-
-        if (email.current && pass.current !== undefined) {
-            user.set("email", email.current.trim());
-            user.set("pass", pass.current.trim());
-
-            if (!validatePass(pass.current.trim())) {
-                setIsInvalid({
-                    isInvalid: true,
-                    result: "Пароль должен содержать буквы и цифры. Не должен начинаться с цифры. Не должен содержать  -, (, ),  , /",
-                });
-                return;
-            }
-        }
-
-        // проверка на ввод
-        for (const [name, value] of user) {
-            if (value.trim().length === 0) {
-                setIsInvalid({
-                    isInvalid: true,
-                    result: "Введите что-нибудь...",
-                });
-                return;
-            }
-        }
-
-        try {
-            setLoader(true);
-            let response = await fetch(
-                "http://localhost:5600/login/registration",
-                // "https://deploy-test-business-assist.herokuapp.com/login/registration",
-                {
-                    method: "POST",
-                    body: user,
-                }
-            );
-
-            let result = await response.json();
-            if (result.registered) {
-                // ... статус в локальном стейте меняется на зарегистрированный и перенаправляется на страницу авторизации
-                setIsReg(true);
-                console.log(result.message);
-            } else {
-                setLoader(false);
-                if (result.error) {
-                    dispatch({
-                        type: "isERROR_TRUE",
-                        payload: true,
-                        message: result.error,
-                    });
-                } else {
-                    setIsInvalid({
-                        isInvalid: true,
-                        result: result.message,
-                    });
-                }
-
-                console.log(result);
-            }
-        } catch (error) {
-            // если запрос не проходит
-            console.log("Reg Error", error);
-            setLoader(false);
-            dispatch({
-                type: "isERROR_TRUE",
-                payload: true,
-                message: "No connection to server",
-            });
-        }
-    }
 
     return (
         <>
@@ -111,7 +26,17 @@ export default function Registration() {
                 <>
                     <div className={classes.login}>
                         <form
-                            onSubmit={addUser}
+                            onSubmit={(event) =>
+                                dispatch(
+                                    addUser(
+                                        event,
+                                        email.current,
+                                        pass.current,
+                                        () => setIsReg(!isReg),
+                                        setLoader
+                                    )
+                                )
+                            }
                             name="auth"
                             id="auth"
                             className={classes.login_frame}
@@ -145,7 +70,7 @@ export default function Registration() {
                                             name="email"
                                             type="email"
                                             className={
-                                                isInvalid.isInvalid
+                                                AUTHERROR.isInvalid
                                                     ? classes.login_auth_user_input +
                                                       " " +
                                                       classes.wrong
@@ -170,7 +95,7 @@ export default function Registration() {
                                             name="pass"
                                             type="password"
                                             className={
-                                                isInvalid.isInvalid
+                                                AUTHERROR.isInvalid
                                                     ? classes.login_auth_pass_input +
                                                       " " +
                                                       classes.wrong
@@ -200,7 +125,7 @@ export default function Registration() {
                                             }
                                         ></div>
                                     </div>
-                                    <AuthError isInvalid={isInvalid} />
+                                    <AuthError />
                                     <MyInput
                                         type="submit"
                                         value="Зарегистрироваться"

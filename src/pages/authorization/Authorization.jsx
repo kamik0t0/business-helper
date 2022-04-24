@@ -6,24 +6,17 @@ import AuthError from "./service/error/Auth-error.jsx";
 import Loader from "../../UI/Loader/Loader.jsx";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
-import { getData } from "../../utils/getData.js";
-import { setRegTrueAction } from "../../redux/auth-reducer.js";
-import { setRegFalseAction } from "../../redux/auth-reducer.js";
-import { setErrorTrueAction } from "../../redux/error-reducer.js";
-import { setOrgsAction } from "../../redux/orgs-reducer.js";
+import { auth } from "./service/auth.js";
 
-function Login() {
+export default function Login() {
     const [isVisible, setIsVisible] = useState(false);
     const isAuth = useSelector((state) => state.authReducer.isAuth);
-    const [isInvalid, setIsInvalid] = useState({
-        isInvalid: false,
-        result: "",
-    });
+    const AUTHERROR = useSelector((state) => state.authErrorReducer);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
 
-    let email = useRef();
-    let pass = useRef();
+    let email = useRef("Cap_NEMOx86@inbox.ru");
+    let pass = useRef("kdkfjdilkmf2312387");
 
     // Показать пароль
     function showPass() {
@@ -36,66 +29,6 @@ function Login() {
         setIsVisible(!isVisible);
     }
 
-    // обработка запроса авторизации
-    async function auth(event) {
-        setIsInvalid((prev) => {
-            return { ...prev, isInvalid: false };
-        });
-
-        event.preventDefault();
-
-        const user = new FormData();
-        user.set("email", "");
-        user.set("pass", "");
-
-        if (email.current && pass.current !== undefined) {
-            user.set("email", email.current.trim());
-            user.set("pass", pass.current.trim());
-        }
-
-        // проверка на ввод
-        for (const [name, value] of user) {
-            if (value.trim().length === 0) {
-                setIsInvalid({
-                    isInvalid: true,
-                    result: "Введите что-нибудь...",
-                });
-                return;
-            }
-        }
-
-        try {
-            setLoader(true);
-            let response = await fetch(
-                "http://localhost:5600/login",
-                // "https://deploy-test-business-assist.herokuapp.com/login",
-                {
-                    method: "POST",
-                    body: user,
-                }
-            );
-
-            let result = await response.json();
-            console.log(result);
-            if (result.auth) {
-                dispatch(setRegTrueAction(true));
-                return result;
-            } else {
-                setLoader(false);
-                if (typeof result.message !== "object") {
-                    setIsInvalid({
-                        isInvalid: true,
-                        result: "Неправильный пароль или email.",
-                    });
-                }
-                return false;
-            }
-        } catch (error) {
-            setLoader(false);
-            dispatch(setErrorTrueAction(true, error.message));
-        }
-    }
-
     return (
         <>
             {" "}
@@ -104,21 +37,16 @@ function Login() {
             ) : (
                 <div id="form" className={classes.login}>
                     <form
-                        onSubmit={async (event) => {
-                            const user = await auth(event);
-                            // устанавливаем токен
-                            localStorage.setItem("token", user.token);
-                            // email
-                            localStorage.setItem("email", email.current);
-                            localStorage.setItem("UserId", user.id);
-                            const ORGS = await getData(
-                                `/private/?UserId=${localStorage.getItem(
-                                    "UserId"
-                                )}`,
-                                () => dispatch(setRegFalseAction(false))
-                            );
-                            dispatch(setOrgsAction(ORGS));
-                        }}
+                        onSubmit={(event) =>
+                            dispatch(
+                                auth(
+                                    event,
+                                    email.current,
+                                    pass.current,
+                                    () => setLoader
+                                )
+                            )
+                        }
                         name="auth"
                         className={classes.login_frame}
                     >
@@ -147,7 +75,7 @@ function Login() {
                                         name="email"
                                         type="email"
                                         className={
-                                            isInvalid.isInvalid
+                                            AUTHERROR.isInvalid
                                                 ? classes.login_auth_user_input +
                                                   " " +
                                                   classes.wrong
@@ -169,7 +97,7 @@ function Login() {
                                         name="pass"
                                         type="password"
                                         className={
-                                            isInvalid.isInvalid
+                                            AUTHERROR.isInvalid
                                                 ? classes.login_auth_pass_input +
                                                   " " +
                                                   classes.wrong
@@ -187,7 +115,7 @@ function Login() {
                                         }
                                     ></div>
                                 </div>
-                                <AuthError isInvalid={isInvalid} />
+                                <AuthError />
                                 <MyInput
                                     type="submit"
                                     value="Войти"
@@ -231,5 +159,3 @@ function Login() {
 // `https://deploy-test-business-assist.herokuapp.com/private/?UserId=${localStorage.getItem(
 //     "UserId"
 // )}`
-
-export default Login;

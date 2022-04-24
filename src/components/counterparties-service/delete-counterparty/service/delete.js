@@ -1,42 +1,37 @@
 import axios from "axios";
-import { hideAnimatedModal } from "../../../../UI/modal/service/handlers/modal-control.js";
 import { getData } from "../../../../utils/getData.js";
+import { setCounterpartiesAction } from "../../../../redux/counterparties-reducer.js";
+import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
+// import { setRegFalseAction } from "../../../../redux/auth-reducer.js";
+import { setCounterpartyAction } from "../../../../redux/counterparty-reducer.js";
+import { setAuthAction } from "../../../../redux/auth-reducer.js";
 
-export async function deleteCounterparty(
-    setModal,
-    setLoader,
-    authCheck,
-    errorCheck,
-    delMyOrg
-) {
-    setLoader();
-    try {
-        const counterpartyId = localStorage.getItem("counterpartyId");
-        const result = await axios.delete(
-            `http://localhost:5600/counterparty/`,
-            {
+export function deleteCounterparty(setLoader) {
+    return async function deleteWithThunk(dispatch) {
+        setLoader();
+        try {
+            const counterpartyId = localStorage.getItem("counterpartyId");
+            await axios.delete(`http://localhost:5600/counterparty/`, {
                 params: {
                     counterpartyId: counterpartyId,
                 },
-            }
-        );
-        if (result.data.deleted) {
+            });
+
             const OrgId = localStorage.getItem("OrgsId");
             const COUNTERPARTIES = await getData(
                 `/counterparty/?OrgId=${OrgId}`,
-                authCheck
+                () => dispatch(setAuthAction(false))
             );
-            delMyOrg();
-            hideAnimatedModal(setModal);
+
+            dispatch(setCounterpartyAction({}));
+            dispatch(setCounterpartiesAction(COUNTERPARTIES));
             setLoader();
-            return COUNTERPARTIES;
+        } catch (error) {
+            console.log(error);
+            dispatch(setErrorTrueAction(true, error.message));
+            setLoader();
         }
-    } catch (error) {
-        setLoader();
-        errorCheck();
-        hideAnimatedModal(setModal);
-        console.log(error.message);
-    }
+    };
 }
 
 // url="https://deploy-test-business-assist.herokuapp.com/private"

@@ -6,15 +6,14 @@ import AuthError from "./service/error/Auth-error.jsx";
 import Loader from "../../UI/Loader/Loader.jsx";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
-import { validatePass } from "../../utils/validatePass.js";
+import { useSelector } from "react-redux";
+import { forgot } from "./service/forgot.js";
 
 export default function Forgot() {
     const [isVisible, setIsVisible] = useState(false);
     const [isRecover, setIsRecover] = useState(false);
-    const [isInvalid, setIsInvalid] = useState({
-        isInvalid: false,
-        result: "",
-    });
+    const AUTHERROR = useSelector((state) => state.authErrorReducer);
+
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
 
@@ -43,109 +42,25 @@ export default function Forgot() {
         setIsVisible(false);
     }
 
-    // запрос обновления пароля
-    async function forgot(event) {
-        setIsInvalid((prev) => {
-            return { ...prev, isInvalid: false };
-        });
-
-        event.preventDefault();
-
-        const user = new FormData();
-
-        user.set("email", "");
-        user.set("pass", "");
-
-        if (
-            email.current &&
-            repeatPass.current &&
-            newPass.current !== undefined
-        ) {
-            user.set("email", email.current.trim());
-            user.set("pass", repeatPass.current.trim());
-            user.set("pass", newPass.current.trim());
-            // проверка идентичности введенных паролей
-            if (newPass.current.localeCompare(repeatPass.current) !== 0) {
-                setLoader(false);
-                setIsInvalid({
-                    isInvalid: true,
-                    result: "Пароли не совпадают!",
-                });
-
-                return;
-            }
-
-            if (!validatePass(newPass.current.trim())) {
-                setIsInvalid({
-                    isInvalid: true,
-                    result: "Пароль должен содержать буквы и цифры. Не должен начинаться с цифры. Не должен содержать  -, (, ),  , /",
-                });
-                return;
-            }
-        }
-
-        for (const [name, value] of user) {
-            if (value.trim().length === 0) {
-                setLoader(false);
-                setIsInvalid({
-                    isInvalid: true,
-                    result: "Введите что-нибудь...",
-                });
-                return;
-            }
-        }
-        try {
-            let response = await fetch(
-                "http://localhost:5600/login/forgot",
-                // "https://deploy-test-business-assist.herokuapp.com/login/forgot",
-                {
-                    method: "PATCH",
-                    body: user,
-                }
-            );
-
-            let result = await response.json();
-            console.log(result);
-            if (result.updated) {
-                // ... статус в локальном стейте меняется на зарегистрированный и перенаправляется на страницу авторизации
-                setIsRecover(true);
-                console.log(result.message);
-            } else {
-                setLoader(false);
-                if (typeof result.message === "object") {
-                    dispatch({
-                        type: "isERROR_TRUE",
-                        payload: true,
-                        message: result.message.code,
-                    });
-                } else {
-                    setIsInvalid({
-                        isInvalid: true,
-                        result: result.message,
-                    });
-                }
-                console.log(result.message);
-            }
-        } catch (error) {
-            // если запрос не проходит
-            console.log("Recover Error", error);
-            setLoader(false);
-            dispatch({
-                type: "isERROR_TRUE",
-                payload: true,
-                message: "No connection to server",
-            });
-        }
-    }
     return (
         <>
-            {" "}
             {isRecover ? (
                 <Navigate to="/login" />
             ) : (
                 <div className={classes.login}>
                     <form
-                        onSubmit={forgot}
+                        onSubmit={(event) =>
+                            dispatch(
+                                forgot(
+                                    event,
+                                    email.current,
+                                    repeatPass.current,
+                                    newPass.current,
+                                    () => setLoader(!loader),
+                                    () => setIsRecover(!isRecover)
+                                )
+                            )
+                        }
                         name="auth"
                         className={classes.login_frame}
                     >
@@ -175,7 +90,7 @@ export default function Forgot() {
                                         name="email"
                                         type="email"
                                         className={
-                                            isInvalid.isInvalid
+                                            AUTHERROR.isInvalid
                                                 ? classes.login_auth_user_input +
                                                   " " +
                                                   classes.wrong
@@ -197,7 +112,7 @@ export default function Forgot() {
                                         name="new_password"
                                         type="password"
                                         className={
-                                            isInvalid.isInvalid
+                                            AUTHERROR.isInvalid
                                                 ? classes.login_auth_pass_input +
                                                   " " +
                                                   classes.wrong
@@ -228,7 +143,7 @@ export default function Forgot() {
                                         name="repeat_password"
                                         type="password"
                                         className={
-                                            isInvalid.isInvalid
+                                            AUTHERROR.isInvalid
                                                 ? classes.login_auth_pass_input +
                                                   " " +
                                                   classes.wrong
@@ -246,7 +161,7 @@ export default function Forgot() {
                                         }
                                     ></div>
                                 </div>
-                                <AuthError isInvalid={isInvalid} />
+                                <AuthError />
                                 <MyInput
                                     type="submit"
                                     value="Новый пароль"

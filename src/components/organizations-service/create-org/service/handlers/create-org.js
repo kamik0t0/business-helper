@@ -1,13 +1,13 @@
 import { checkInnKpp } from "./check-inn-kpp.js";
-import { hideAnimatedModal } from "../../../../../UI/modal/service/handlers/modal-control.js";
 import { Organizaton } from "../../../../../utils/Org.js";
 import { getData } from "../../../../../utils/getData.js";
 import axios from "axios";
 import { setOrgsAction } from "../../../../../redux/orgs-reducer.js";
 import { setErrorTrueAction } from "../../../../../redux/error-reducer.js";
-import { setRegFalseAction } from "../../../../../redux/auth-reducer.js";
+// import { setRegFalseAction } from "../../../../../redux/auth-reducer.js";
+import { setAuthAction } from "../../../../../redux/auth-reducer.js";
 
-export function create(event, organization, loader, setModal) {
+export function create(event, organization, loader) {
     return async function createWithThunk(dispatch) {
         event.preventDefault();
 
@@ -26,18 +26,16 @@ export function create(event, organization, loader, setModal) {
 
             const ORGS = await getData(
                 `/private/?UserId=${organization["UserId"]}`,
-                () => dispatch(setRegFalseAction(false))
+                () => dispatch(setAuthAction(false))
             );
 
             loader();
             organization = new Organizaton();
             dispatch(setOrgsAction(ORGS));
-            hideAnimatedModal(setModal);
         } catch (error) {
             console.log(error);
             dispatch(setErrorTrueAction(true, error.message));
             organization = new Organizaton();
-            hideAnimatedModal(setModal);
             loader();
         }
     };

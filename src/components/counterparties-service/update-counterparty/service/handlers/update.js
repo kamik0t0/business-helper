@@ -1,55 +1,44 @@
-import { hideAnimatedModal } from "../../../../../UI/modal/service/handlers/modal-control.js";
 import { checkInputs } from "./check-inputs.js";
 import { showUpdateChanges } from "../../../../../utils/showUpdateChanges.js";
 import { getData } from "../../../../../utils/getData.js";
 import axios from "axios";
+// import { setRegFalseAction } from "../../../../../redux/auth-reducer.js";
+import { setCounterpartiesAction } from "../../../../../redux/counterparties-reducer.js";
+import { setCounterpartyAction } from "../../../../../redux/counterparty-reducer.js";
+import { setErrorTrueAction } from "../../../../../redux/error-reducer.js";
+import { setAuthAction } from "../../../../../redux/auth-reducer.js";
 
-export async function update(
-    event,
-    Updated,
-    setLoader,
-    setModal,
-    COUNTERPARTY,
-    authCheck,
-    errorCheck
-) {
-    event.preventDefault();
-    Updated["id"] = localStorage.getItem("counterpartyId");
-    console.log(Updated);
-    // проверка ввода
-    if (!checkInputs(Updated, COUNTERPARTY)) return;
-    setLoader();
-    try {
-        console.log(Updated);
-        const result = await axios.patch(
-            "http://localhost:5600/counterparty/",
-            Updated,
-            {
+export function update(event, Updated, setLoader, COUNTERPARTY) {
+    return async function updateWithThunk(dispatch) {
+        event.preventDefault();
+        Updated["id"] = COUNTERPARTY.id;
+        // проверка ввода
+        if (!checkInputs(Updated, COUNTERPARTY)) return;
+        setLoader();
+        try {
+            await axios.patch("http://localhost:5600/counterparty/", Updated, {
                 params: {
                     table: "counterparties",
                 },
-            }
-        );
-        if (result.data.updated) {
+            });
+
             const OrgId = localStorage.getItem("OrgsId");
             const COUNTERPARTIES = await getData(
                 `/counterparty/?OrgId=${OrgId}`,
-                authCheck
+                () => dispatch(setAuthAction(false))
             );
 
-            const UpCounterparty = showUpdateChanges(
+            const UpdatedCounterparty = showUpdateChanges(
                 COUNTERPARTIES,
                 COUNTERPARTY
             );
             setLoader();
-            hideAnimatedModal(setModal);
-            return [COUNTERPARTIES, UpCounterparty];
+            dispatch(setCounterpartiesAction(COUNTERPARTIES));
+            dispatch(setCounterpartyAction(UpdatedCounterparty));
+        } catch (error) {
+            console.log(error);
+            dispatch(setErrorTrueAction(true, error.message));
+            setLoader();
         }
-    } catch (error) {
-        console.log(error);
-        setLoader(false);
-        errorCheck();
-        authCheck();
-        hideAnimatedModal(setModal);
-    }
+    };
 }

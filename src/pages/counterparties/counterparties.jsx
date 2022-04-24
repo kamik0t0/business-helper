@@ -7,6 +7,8 @@ import CounterpartiesList from "./service/counterparties-list/counterparties-lis
 import Buttons from "./service/buttons/buttons.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
 import { highlight } from "../../utils/highlight.js";
+import { setCounterpartiesAction } from "../../redux/counterparties-reducer";
+import { setCounterpartyAction } from "../../redux/counterparty-reducer";
 
 export const getCounterparty = React.createContext();
 
@@ -24,6 +26,17 @@ export default function Counterparties() {
     const [modalDelete, setModalDelete] = useState({ show: false, add: false });
     let row = useRef(null);
 
+    const grabCounterparty = (event, number) => {
+        dispatch(setCounterpartyAction(COUNTERPARTIES[number]));
+        localStorage.setItem("counterpartyId", COUNTERPARTIES[number].id);
+        highlight(
+            number,
+            COUNTERPARTIES,
+            () => dispatch(setCounterpartiesAction([...COUNTERPARTIES])),
+            row
+        );
+    };
+
     return (
         <>
             {isAuth ? (
@@ -35,30 +48,11 @@ export default function Counterparties() {
                     </div>
                     {myOrg ? (
                         <getCounterparty.Provider
-                            value={(event, number) => {
-                                dispatch({
-                                    type: "COUNTERPARTY",
-                                    payload: COUNTERPARTIES[number],
-                                });
-                                localStorage.setItem(
-                                    "counterpartyId",
-                                    COUNTERPARTIES[number].id
-                                );
-                                highlight(
-                                    number,
-                                    COUNTERPARTIES,
-                                    () =>
-                                        dispatch({
-                                            type: "COUNTERPARTIES",
-                                            payload: [...COUNTERPARTIES],
-                                        }),
-                                    row
-                                );
-                            }}
+                            value={(event, number) =>
+                                grabCounterparty(event, number)
+                            }
                         >
-                            <CounterpartiesList
-                                counterparties={COUNTERPARTIES}
-                            />
+                            <CounterpartiesList />
                             <Buttons
                                 setModalAdd={setModalAdd}
                                 setModalRead={setModalRead}

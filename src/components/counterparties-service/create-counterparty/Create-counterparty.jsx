@@ -13,6 +13,7 @@ import { create } from "./service/handlers/create-counterparty";
 import { switchOPF } from "./service/handlers/switchOPF.js";
 import { getRequisites } from "./service/handlers/getRequisites.js";
 import PropTypes from "prop-types";
+import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
 
 export default function CreateCounterparty({ setModal }) {
     const [isORG, setIsOrg] = useState(true);
@@ -56,25 +57,13 @@ export default function CreateCounterparty({ setModal }) {
                 )}
 
                 <Buttons
-                    create={async (event) => {
-                        const COUNTERPARTIES = await create(
-                            event,
-                            COUNTERPARTY.current,
-                            () => setLoader(!loader),
-                            () =>
-                                dispatch({ type: "REG_FALSE", payload: false }),
-                            setModal,
-                            () =>
-                                dispatch({
-                                    type: "isERROR_TRUE",
-                                    payload: true,
-                                    message: "No connection to server",
-                                })
+                    create={(event) => {
+                        dispatch(
+                            create(event, COUNTERPARTY.current, () =>
+                                setLoader(!loader)
+                            )
                         );
-                        dispatch({
-                            type: "COUNTERPARTIES",
-                            payload: COUNTERPARTIES,
-                        });
+                        hideAnimatedModal(setModal);
                     }}
                     clear={clear}
                     setModal={setModal}

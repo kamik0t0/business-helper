@@ -35,34 +35,13 @@ export default function DeleteCounterparty({ setModal }) {
                     ) : (
                         <div className={classes.buttons}>
                             <MyButton
-                                onClick={async () => {
-                                    const COUNTERPARTIES =
-                                        await deleteCounterparty(
-                                            setModal,
-                                            () => setLoader(!loader),
-                                            () =>
-                                                dispatch({
-                                                    type: "REG_FALSE",
-                                                    payload: false,
-                                                }),
-                                            () =>
-                                                dispatch({
-                                                    type: "isERROR_TRUE",
-                                                    payload: true,
-                                                    message:
-                                                        "No connection to server",
-                                                }),
-                                            () =>
-                                                dispatch({
-                                                    type: "COUNTERPARTY",
-                                                    payload: {},
-                                                })
-                                        );
-
-                                    dispatch({
-                                        type: "COUNTERPARTIES",
-                                        payload: COUNTERPARTIES,
-                                    });
+                                onClick={() => {
+                                    dispatch(
+                                        deleteCounterparty(() =>
+                                            setLoader(!loader)
+                                        )
+                                    );
+                                    hideAnimatedModal(setModal);
                                 }}
                             >
                                 Yes

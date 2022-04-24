@@ -1,21 +1,12 @@
-const REGSTATE = {
+const AUTHSTATE = {
     isAuth: false,
 };
 
-const REG_TRUE = "REG_TRUE";
-const REG_FALSE = "REG_FALSE";
+const AUTH = "AUTH";
 
-export function authReducer(state = REGSTATE, action) {
+export function authReducer(state = AUTHSTATE, action) {
     switch (action.type) {
-        case REG_TRUE:
-            return { isAuth: action.payload };
-
-        case REG_FALSE:
-            const keys = Object.keys(localStorage);
-            for (const key of keys) {
-                localStorage.removeItem(key);
-            }
-
+        case AUTH:
             return { isAuth: action.payload };
 
         default:
@@ -23,11 +14,7 @@ export function authReducer(state = REGSTATE, action) {
     }
 }
 
-export const setRegTrueAction = (payload) => ({
-    type: REG_TRUE,
-    payload,
-});
-export const setRegFalseAction = (payload) => ({
-    type: REG_FALSE,
+export const setAuthAction = (payload) => ({
+    type: AUTH,
     payload,
 });

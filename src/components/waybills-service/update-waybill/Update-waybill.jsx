@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import classes from "../styles/update-waybill.module.css";
 import Position from "../create-waybill/position/Position.jsx";
@@ -18,28 +18,31 @@ import {
     total,
     makeDate,
 } from "../create-waybill/service/handlers.js";
-import {
-    getCounterpartyRequisitesFromWaybill,
-    getPositions,
-} from "./service/handlers";
 import PropTypes from "prop-types";
+import { getData } from "../../../utils/getData.js";
+import { setAuthAction } from "../../../redux/auth-reducer.js";
 
 export default function UpdateWaybill({ CounterpartyInfo, path }) {
-    const myOrg = useSelector((state) => state.setMyOrgReducer.myOrg);
-    console.log(path);
-    const WaybillData =
+    const dispatch = useDispatch();
+    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
+    const type =
         path === "/sales"
-            ? ["setSale", "SALE", "sale"]
-            : ["setPurchase", "PURCHASE", "purchase"];
-    const WAYBILL = useSelector(
-        (state) => state[`${WaybillData[0]}`][`${WaybillData[2]}`]
-    );
-    const CUOUNTERPARTY = useSelector(
+            ? ["setSale", "SALE", "sale", "SaleId"]
+            : ["setPurchase", "PURCHASE", "purchase", "PurchaseId"];
+    const WAYBILL = useSelector((state) => state[`${type[0]}`][`${type[2]}`]);
+    const COUNTERPARTY = useSelector(
         (state) => state.setCounterpartyReducer.counterparty
     );
-    console.log(WAYBILL);
-    const DATE = WAYBILL?.waybill_date?.slice(0, -14);
-    const id = WAYBILL?.id;
+    // объект накладная для отправки на сервер
+    const UpdateWaybill = useRef({
+        waybill_date: WAYBILL.waybill_date,
+        counterparty: COUNTERPARTY,
+        counterpartyId: COUNTERPARTY.CounterpartyId || COUNTERPARTY.id,
+        MYORG,
+    });
+
+    const DATE = WAYBILL.waybill_date.slice(0, -14);
+    const id = WAYBILL.id;
     // индикатор загрузки
     const [loader, setLoader] = useState(true);
     // рендер позиций
@@ -50,13 +53,6 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
     const [navToList, setNavToList] = useState(false);
     // активная позиция
     const row = useRef(null);
-    // объект накладная для отправки на сервер
-    const PatchWaybillObj = useRef({});
-    // контрагент из localStorage
-    // const counterparty = getCounterpartyRequisitesFromWaybill(WAYBILL);
-    // // id накладной
-    // const WaybillId = WAYBILL.id;
-    // // дата накладной
 
     const addRow = (event) => {
         event.preventDefault();
@@ -80,7 +76,12 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
             // заполнение стартового массива позиций и новый рендер
             if (positions.length === 0) {
                 try {
-                    const PositionsFromDB = await getPositions(path, id);
+                    const PositionsFromDB = await getData(
+                        `http://localhost:5600${path.slice(0, -1)}/?${
+                            type[3]
+                        }=${id}`,
+                        () => dispatch(setAuthAction(true))
+                    );
                     let startArr = [];
                     for (const position of PositionsFromDB) {
                         startArr.push(
@@ -118,17 +119,15 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
                         <div className={classes.waybill_form_header_save}>
                             <MyButton
                                 onClick={(event) =>
-                                    update(
-                                        event,
-                                        `http://localhost:5600${path}/`,
-                                        path.slice(1),
-                                        PatchWaybillObj,
-                                        positions,
-                                        () => setNavToList(true),
-                                        WAYBILL.waybill_date,
-                                        CUOUNTERPARTY,
-                                        WAYBILL.id,
-                                        myOrg
+                                    dispatch(
+                                        update(
+                                            event,
+                                            path,
+                                            UpdateWaybill,
+                                            () => setNavToList(true),
+                                            WAYBILL.id,
+                                            positions
+                                        )
                                     )
                                 }
                             >
@@ -152,11 +151,14 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
                                 name="Дата:"
                                 type="date"
                                 defaultValue={DATE}
-                                getValue={(event) =>
-                                    (PatchWaybillObj.current["date"] = `${
-                                        event.target.value
-                                    }${makeDate()}`)
-                                }
+                                getValue={(event) => {
+                                    UpdateWaybill.current["waybill_date"] =
+                                        `${event.target.value}${makeDate()}` ||
+                                        DATE;
+                                    console.log(
+                                        UpdateWaybill.current["waybill_date"]
+                                    );
+                                }}
                             />
                             {path === "/purchases" && (
                                 <MyInput
@@ -164,7 +166,7 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
                                     type="text"
                                     defaultValue={WAYBILL.cl_waybill_number}
                                     getValue={(event) => {
-                                        PatchWaybillObj.current[
+                                        UpdateWaybill.current[
                                             "cl_waybill_number"
                                         ] = event.target.value;
                                     }}
@@ -175,10 +177,12 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
                                 style={{ width: "350px" }}
                                 name={CounterpartyInfo[1] + ":"}
                                 type="text"
-                                defaultValue={WAYBILL.cl_orgname}
+                                defaultValue={
+                                    COUNTERPARTY.orgname || WAYBILL.cl_orgname
+                                }
                                 getValue={(event) =>
-                                    (PatchWaybillObj.current.counterparty =
-                                        event.target.value)
+                                    (UpdateWaybill.current["counterparty"] =
+                                        COUNTERPARTY)
                                 }
                             />
                             <Link
@@ -243,7 +247,7 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
                             field="summ"
                             name="Сумма:"
                             total={(array, field) =>
-                                total(array, field, PatchWaybillObj)
+                                total(array, field, UpdateWaybill)
                             }
                         />
                         <Total
@@ -251,7 +255,7 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
                             field="NDS"
                             name="НДС:"
                             total={(array, field) =>
-                                total(array, field, PatchWaybillObj)
+                                total(array, field, UpdateWaybill)
                             }
                         />
                         <Total
@@ -259,7 +263,7 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
                             field="total"
                             name="Итого:"
                             total={(array, field) =>
-                                total(array, field, PatchWaybillObj)
+                                total(array, field, UpdateWaybill)
                             }
                         />
                     </TotalWrapper>

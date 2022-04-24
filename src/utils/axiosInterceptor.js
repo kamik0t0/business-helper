@@ -1,4 +1,4 @@
-export default async function authTokenInterseptor(dispatchFalse, axios) {
+export default async function authTokenInterseptor(axios, dispatchFalse) {
     axios.interceptors.request.use(
         function (config) {
             config.headers.Authorization = `Bearer ${localStorage.getItem(

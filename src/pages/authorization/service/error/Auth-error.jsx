@@ -1,25 +1,23 @@
 import React from "react";
 import classes from "./styles/auth-error.module.css";
-import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
-export default function AuthError({ isInvalid }) {
+export default function AuthError() {
+    const AUTHERROR = useSelector((state) => state.authErrorReducer);
+    console.log(AUTHERROR);
     return (
         <>
-            {typeof isInvalid.result === "string" && (
+            {typeof AUTHERROR.message === "string" && (
                 <div
                     className={
-                        isInvalid.isInvalid
+                        AUTHERROR.isInvalid
                             ? classes.login_incorrect
                             : classes.login_incorrect_none
                     }
                 >
-                    {isInvalid.result}
+                    {AUTHERROR.message}
                 </div>
             )}
         </>
     );
 }
-
-AuthError.propTypes = {
-    isInvalid: PropTypes.object.isRequired,
-};

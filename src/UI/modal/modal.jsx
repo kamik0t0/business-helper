@@ -3,7 +3,7 @@ import classes from "./styles/modal.module.css";
 import { hideAnimatedModal } from "./service/handlers/modal-control.js";
 import PropTypes from "prop-types";
 
-export default function Modal({ active, setActive, children, size }) {
+export default function Modal({ size, active, setModal, children }) {
     return (
         <>
             <div
@@ -12,7 +12,7 @@ export default function Modal({ active, setActive, children, size }) {
                         ? classes.modal + " " + classes.active
                         : classes.modal
                 }
-                onClick={() => hideAnimatedModal(setActive)}
+                onClick={() => hideAnimatedModal(setModal)}
             >
                 <div
                     style={size}
@@ -32,7 +32,7 @@ export default function Modal({ active, setActive, children, size }) {
 
 Modal.propTypes = {
     active: PropTypes.bool.isRequired,
-    setActive: PropTypes.func.isRequired,
-    children: PropTypes.element.isRequired,
+    setModal: PropTypes.func.isRequired,
     size: PropTypes.object,
+    children: PropTypes.element.isRequired,
 };

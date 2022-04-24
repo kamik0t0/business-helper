@@ -1,51 +1,45 @@
 import { checkInnKpp } from "./check-inn-kpp.js";
-import { hideAnimatedModal } from "../../../../../UI/modal/service/handlers/modal-control.js";
 import { Organizaton } from "../../../../../utils/Org.js";
 import { getData } from "../../../../../utils/getData.js";
 import axios from "axios";
+import { setCounterpartiesAction } from "../../../../../redux/counterparties-reducer.js";
+import { setErrorTrueAction } from "../../../../../redux/error-reducer.js";
+// import { setRegFalseAction } from "../../../../../redux/auth-reducer.js";
+import { setAuthAction } from "../../../../../redux/auth-reducer.js";
 
-export async function create(
-    event,
-    counterparty,
-    loader,
-    dispatch,
-    setModal,
-    dispatchError
-) {
-    event.preventDefault();
-    // проверка ввода
-    if (checkInnKpp(counterparty) === false) return;
-    try {
-        counterparty["OrgId"] = localStorage.getItem("OrgsId");
-        loader();
-        const result = await axios.post(
-            "http://localhost:5600/counterparty/",
-            counterparty,
-            {
-                params: {
-                    foreignKey: "OrgsId",
-                },
-            }
-        );
-        if (result.data.created) {
-            const ORGS = await getData(
-                `/counterparty/?OrgId=${counterparty["OrgId"]}`,
-                dispatch
-            );
+export function create(event, counterparty, loader) {
+    return async function createWithThunk(dispatch) {
+        event.preventDefault();
+        // проверка ввода
+        if (checkInnKpp(counterparty) === false) return;
+        try {
+            counterparty["OrgId"] = localStorage.getItem("OrgsId");
             loader();
-            hideAnimatedModal(setModal);
+            await axios.post(
+                "http://localhost:5600/counterparty/",
+                counterparty,
+                {
+                    params: {
+                        foreignKey: "OrgsId",
+                    },
+                }
+            );
+
+            const COUNTERPARTIES = await getData(
+                `/counterparty/?OrgId=${counterparty["OrgId"]}`,
+                () => dispatch(setAuthAction(false))
+            );
+
             counterparty = new Organizaton();
-            return ORGS;
+            dispatch(setCounterpartiesAction(COUNTERPARTIES));
+            loader();
+        } catch (error) {
+            console.log(error);
+            dispatch(setErrorTrueAction(true, error.message));
+            counterparty = new Organizaton();
+            loader();
         }
-    } catch (error) {
-        console.log(error);
-        loader();
-        dispatchError();
-        dispatch();
-        hideAnimatedModal(setModal);
-        // обновляем поля
-        counterparty = new Organizaton();
-    }
+    };
 }
 
 // url="https://deploy-test-business-assist.herokuapp.com/private"

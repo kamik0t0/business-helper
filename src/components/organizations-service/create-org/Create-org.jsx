@@ -13,6 +13,7 @@ import { create } from "./service/handlers/create-org.js";
 import { switchOPF } from "./service/handlers/switchOPF.js";
 import { getRequisites } from "./service/handlers/getRequisites.js";
 import PropTypes from "prop-types";
+import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control";
 
 export default function CreateOrg({ setModal }) {
     const [isORG, setIsOrg] = useState(true);
@@ -53,16 +54,12 @@ export default function CreateOrg({ setModal }) {
                     />
                 )}
                 <Buttons
-                    create={(event) =>
+                    create={(event) => {
                         dispatch(
-                            create(
-                                event,
-                                ORG.current,
-                                () => setLoader(!loader),
-                                setModal
-                            )
-                        )
-                    }
+                            create(event, ORG.current, () => setLoader(!loader))
+                        );
+                        hideAnimatedModal(setModal);
+                    }}
                     clear={clear}
                     setModal={setModal}
                 />

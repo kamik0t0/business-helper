@@ -1,9 +1,10 @@
 import React from "react";
 import classes from "./styles/org-info.module.css";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
-export default function OrgInfo({ MYORG, isORG }) {
-    console.log(isORG);
+export default function OrgInfo({ isORG }) {
+    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     return (
         <>
             <div className={classes.info}>
@@ -45,6 +46,5 @@ export default function OrgInfo({ MYORG, isORG }) {
 }
 
 OrgInfo.propTypes = {
-    MYORG: PropTypes.object.isRequired,
     isORG: PropTypes.bool.isRequired,
 };
