@@ -8,8 +8,6 @@ import WayBillsList from "../../components/waybills-service/waybills/Waybill-lis
 export default function Sales() {
     const MUORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     const SALES = useSelector((state) => state.setSales.sales);
-    console.log(SALES);
-
     return (
         <>
             {MUORG ? (

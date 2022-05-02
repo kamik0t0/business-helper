@@ -29,7 +29,4 @@ export default function Counterparty({ number, counterparty }) {
 
 Counterparty.propTypes = {
     number: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    inn: PropTypes.string.isRequired,
-    highlight: PropTypes.bool,
 };

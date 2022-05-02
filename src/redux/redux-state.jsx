@@ -11,6 +11,8 @@ import { setCounterpartyReducer } from "./counterparty-reducer.js";
 import { setSale } from "./sale-reducer.js";
 import { setPurchase } from "./purchase-reducer.js";
 import { authErrorReducer } from "./authError-reducer.js";
+import { setWaybills } from "./waybills-reducer.js";
+import { setWaybill } from "./waybill-reducer.js";
 
 const rootReducer = combineReducers({
     authReducer: authReducer,
@@ -24,6 +26,8 @@ const rootReducer = combineReducers({
     setCounterpartyReducer: setCounterpartyReducer,
     setPurchase: setPurchase,
     setSale: setSale,
+    setWaybills: setWaybills,
+    setWaybill: setWaybill,
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));

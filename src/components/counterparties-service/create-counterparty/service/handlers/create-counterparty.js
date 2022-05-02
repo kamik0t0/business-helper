@@ -8,7 +8,7 @@ import { setErrorTrueAction } from "../../../../../redux/error-reducer.js";
 import { setAuthAction } from "../../../../../redux/auth-reducer.js";
 
 export function create(event, counterparty, loader) {
-    return async function createWithThunk(dispatch) {
+    return async function (dispatch) {
         event.preventDefault();
         // проверка ввода
         if (checkInnKpp(counterparty) === false) return;

@@ -20,25 +20,17 @@ export default function Forgot() {
     let email = useRef();
     let newPass = useRef();
     let repeatPass = useRef();
+    const form = useRef();
 
     function showPass() {
-        document.forms.auth.elements.new_password.setAttribute("type", "text");
-        document.forms.auth.elements.repeat_password.setAttribute(
-            "type",
-            "text"
-        );
+        form.current.new_password.setAttribute("type", "text");
+        form.current.repeat_password.setAttribute("type", "text");
         setIsVisible(true);
     }
 
     function hidePass() {
-        document.forms.auth.elements.new_password.setAttribute(
-            "type",
-            "password"
-        );
-        document.forms.auth.elements.repeat_password.setAttribute(
-            "type",
-            "password"
-        );
+        form.current.new_password.setAttribute("type", "password");
+        form.current.repeat_password.setAttribute("type", "password");
         setIsVisible(false);
     }
 
@@ -49,6 +41,7 @@ export default function Forgot() {
             ) : (
                 <div className={classes.login}>
                     <form
+                        ref={form}
                         onSubmit={(event) =>
                             dispatch(
                                 forgot(

@@ -17,15 +17,16 @@ export default function Login() {
 
     let email = useRef("Cap_NEMOx86@inbox.ru");
     let pass = useRef("kdkfjdilkmf2312387");
+    const form = useRef();
 
     // Показать пароль
     function showPass() {
-        document.forms.auth.elements.pass.setAttribute("type", "text");
+        form.current.pass.setAttribute("type", "text");
         setIsVisible(!isVisible);
     }
     // Спрятать пароль
     function hidePass() {
-        document.forms.auth.elements.pass.setAttribute("type", "password");
+        form.current.pass.setAttribute("type", "password");
         setIsVisible(!isVisible);
     }
 
@@ -37,6 +38,7 @@ export default function Login() {
             ) : (
                 <div id="form" className={classes.login}>
                     <form
+                        ref={form}
                         onSubmit={(event) =>
                             dispatch(
                                 auth(

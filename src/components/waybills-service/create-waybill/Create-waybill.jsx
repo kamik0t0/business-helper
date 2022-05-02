@@ -28,6 +28,7 @@ export default function CreateWaybill({ CounterpartyInfo, path }) {
         (state) => state.setCounterpartyReducer.counterparty
     );
     const type = path === "/sales" ? "SALES" : "PURCHASES";
+    console.log(type);
     // объект накладная для отправки на сервер
     const WAYBILL = useRef({ date: makeDefaultDate() });
     WAYBILL.current["myOrg"] = MYORG;

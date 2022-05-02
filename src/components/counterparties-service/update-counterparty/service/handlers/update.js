@@ -9,7 +9,7 @@ import { setErrorTrueAction } from "../../../../../redux/error-reducer.js";
 import { setAuthAction } from "../../../../../redux/auth-reducer.js";
 
 export function update(event, Updated, setLoader, COUNTERPARTY) {
-    return async function updateWithThunk(dispatch) {
+    return async function (dispatch) {
         event.preventDefault();
         Updated["id"] = COUNTERPARTY.id;
         // проверка ввода

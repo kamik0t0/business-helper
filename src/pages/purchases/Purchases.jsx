@@ -1,4 +1,3 @@
-// компонент показывающий список существующих накладных
 import React from "react";
 import MyLink from "../../UI/link/MyLink.jsx";
 import classes from "./styles/purhcases.module.css";

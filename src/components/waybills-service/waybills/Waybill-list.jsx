@@ -22,45 +22,30 @@ import {
     sortById,
 } from "./service/sorts.js";
 import { throttle } from "./service/throttle.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setWaybillAction } from "../../../redux/waybill-reducer.js";
 
 export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
     const dispatch = useDispatch();
-    // Поскольку два HOC компонента (Purchases и Sales) используют данный компонент с разными параметрами, то в зависимости от них используются разные редюсеры; ниже происходит создание массива с соответствующими адресами в зависимости от входного параметра path
-    const WaybillsReducerTypePayload =
-        path.slice(0, -14) === "/sales"
-            ? ["setSales", "SALES", "sales"]
-            : ["setPurchases", "PURCHASES", "purchases"];
-    const WaybillReducerTypePayload =
-        path.slice(0, -14) === "/sales"
-            ? ["setSale", "SALE", "sale"]
-            : ["setPurchase", "PURCHASE", "purchase"];
-
-    let bills = WAYBILLS;
-    // перерендер списка накладных; Данные из redux store передаются в локальный стейт для удобства и реализации фильтрации
-    const [waybills, setWaybills] = useState([...bills]);
+    const type = path.slice(0, -14) === "/sales" ? "SALES" : "PURCHASES";
+    const WAYBILL = useSelector((state) => state.setWaybill.waybill);
+    // работа с локальным стейтом для реализации сортировки и фильтрации, т.е. отображение результатов фильтрации не должно влиять на глобальное хринилище данных в redux
+    const [waybills, setWaybills] = useState([...WAYBILLS]);
     // Порядок фильтрации
     const [sortOrder, setSortOrder] = useState(false);
-    // модальное окно для удаления накладной
+    // модальное окно для удаления накладной и информации если накладная не выбрана
     const [modalDelete, setModalDelete] = useState({ show: false, add: false });
     const [modalUpdate, setModalUpdate] = useState({ show: false, add: false });
     // Поле поиска
     const [search, setSearch] = useState("cl_orgname");
-    // Выбрана ли накладная
-    const [waybillChosen, setWaybillChosen] = useState(false);
 
     let isCooldown = useRef(false),
         savedArgs = useRef(),
         savedThis = useRef(),
         // выделенная позиция
         row = useRef(null);
-    // фильтр с декоратором
-    const filter = throttle(filterList, isCooldown, savedArgs, savedThis);
-    // удаление накладной
-    function deleteWaybill(event) {
-        showAnimatedModal(setModalDelete);
-    }
 
+    // различные варианты сортировки
     const sortByDateVoid = () => {
         const sorted = sortByDate(WAYBILLS, sortOrder);
         setSortOrder(!sortOrder);
@@ -83,46 +68,47 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
     };
     const getWaybill = (event, number) => {
         console.log(WAYBILLS[number]);
-        dispatch({
-            type: WaybillReducerTypePayload[1],
-            payload: WAYBILLS[number],
-        });
+        dispatch(setWaybillAction(WAYBILLS[number]));
     };
 
-    const highlightWaybill = (index) =>
+    // фильтрация
+    function filterList(event) {
+        let regexp = new RegExp(`${event.target.value.toLowerCase()}`, "g");
+        console.log(regexp);
+        const filtered = WAYBILLS.filter(
+            (item) =>
+                item[search].toString().toLowerCase().search(regexp) !== -1
+        );
+
+        setWaybills([...filtered]);
+    }
+    // фильтр с декоратором
+    const filter = throttle(filterList, isCooldown, savedArgs, savedThis);
+
+    const highlightOFF = (WAYBILLS) => {
+        return async function () {
+            const waybills = WAYBILLS;
+            waybills.forEach((pos) => {
+                if (pos.highlight === true) pos.highlight = false;
+            });
+            dispatch({
+                type,
+                payload: [...waybills],
+            });
+        };
+    };
+
+    const highlightON = (index) =>
         highlight(
             index,
             WAYBILLS,
             () =>
                 dispatch({
-                    type: WaybillsReducerTypePayload[1],
+                    type,
                     payload: [...WAYBILLS],
                 }),
             row
         );
-
-    function filterList(event) {
-        let regexp = new RegExp(`${event.target.value.toLowerCase()}`, "g");
-        console.log(regexp);
-        setWaybills([
-            ...waybills.filter((item) => {
-                return (
-                    item[search].toString().toLowerCase().search(regexp) !== -1
-                );
-            }),
-        ]);
-    }
-
-    const highlightOff = () => {
-        dispatch({
-            type: WaybillsReducerTypePayload,
-            payload: [
-                WAYBILLS.forEach((pos) => {
-                    if (pos.highlight) pos.highlight = false;
-                }),
-            ],
-        });
-    };
 
     return (
         <>
@@ -131,21 +117,33 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                     <div className={classes.content}>
                         <div className={classes.waybills_header}>
                             <Link to={path}>
-                                <div className={classes.waybills_header_add}>
+                                <div
+                                    onClick={() =>
+                                        dispatch(highlightOFF(WAYBILLS))
+                                    }
+                                    className={classes.waybills_header_add}
+                                >
                                     <span></span>
                                 </div>
                             </Link>
                             <div
-                                onClick={(event) => deleteWaybill(event, row)}
+                                onClick={() =>
+                                    showAnimatedModal(setModalDelete)
+                                }
                                 className={classes.waybills_header_delete}
                             >
                                 <span></span>
                             </div>
-                            <Link to={waybillChosen && "updatewaybill"}>
+                            <Link
+                                to={
+                                    Object.keys(WAYBILL).length > 0 &&
+                                    "updatewaybill"
+                                }
+                            >
                                 <div
                                     onClick={() => {
-                                        highlightOff();
-                                        waybillChosen === false &&
+                                        dispatch(highlightOFF(WAYBILLS));
+                                        Object.keys(WAYBILL).length === 0 &&
                                             showAnimatedModal(setModalUpdate);
                                     }}
                                     className={classes.waybills_header_redact}
@@ -183,14 +181,7 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                                     id="filter_input"
                                     placeholder="Поиск..."
                                     type="text"
-                                    getValue={(event) =>
-                                        filter(
-                                            event,
-                                            bills,
-                                            setWaybills,
-                                            search
-                                        )
-                                    }
+                                    getValue={(event) => filter(event)}
                                 />
                             </div>
                             {/* наименование раздела */}
@@ -238,9 +229,8 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                                         index={index}
                                         waybill={waybill}
                                         getWaybill={getWaybill}
-                                        setWaybillChosen={setWaybillChosen}
-                                        highlightWaybill={(index) =>
-                                            highlightWaybill(index)
+                                        highlightON={(index) =>
+                                            highlightON(index)
                                         }
                                     />
                                 );
@@ -254,7 +244,6 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                         >
                             <DeleteWaybill
                                 setModal={setModalDelete}
-                                WAYBILLTYPE={WaybillReducerTypePayload}
                                 path={path}
                                 setWaybills={setWaybills}
                             />

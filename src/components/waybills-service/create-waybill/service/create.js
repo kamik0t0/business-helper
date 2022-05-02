@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getData } from "../../../../utils/getData.js";
-// import { setRegTrueAction } from "../../../../redux/auth-reducer.js";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
 import { setAuthAction } from "../../../../redux/auth-reducer.js";
 

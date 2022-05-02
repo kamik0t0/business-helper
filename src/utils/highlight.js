@@ -1,6 +1,8 @@
 // выделение позиции
 export function highlight(number, array, setArray, row) {
+    console.log(array);
     number++;
+    console.log("Number highlight=" + number);
     // если позиция не была задана
     if (!row.current) {
         // получение номера

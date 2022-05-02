@@ -17,6 +17,7 @@ export default function Registration() {
 
     let email = useRef();
     let pass = useRef();
+    const form = useRef();
 
     return (
         <>
@@ -26,6 +27,7 @@ export default function Registration() {
                 <>
                     <div className={classes.login}>
                         <form
+                            ref={form}
                             onSubmit={(event) =>
                                 dispatch(
                                     addUser(
@@ -105,14 +107,14 @@ export default function Registration() {
                                         />
                                         <div
                                             onMouseDown={() => {
-                                                document.forms.auth.elements.pass.setAttribute(
+                                                form.current.pass.setAttribute(
                                                     "type",
                                                     "text"
                                                 );
                                                 setIsVisible(!isVisible);
                                             }}
                                             onMouseUp={() => {
-                                                document.forms.auth.elements.pass.setAttribute(
+                                                form.current.pass.setAttribute(
                                                     "type",
                                                     "password"
                                                 );

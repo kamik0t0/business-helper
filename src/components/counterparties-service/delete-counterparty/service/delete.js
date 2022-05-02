@@ -7,7 +7,7 @@ import { setCounterpartyAction } from "../../../../redux/counterparty-reducer.js
 import { setAuthAction } from "../../../../redux/auth-reducer.js";
 
 export function deleteCounterparty(setLoader) {
-    return async function deleteWithThunk(dispatch) {
+    return async function (dispatch) {
         setLoader();
         try {
             const counterpartyId = localStorage.getItem("counterpartyId");

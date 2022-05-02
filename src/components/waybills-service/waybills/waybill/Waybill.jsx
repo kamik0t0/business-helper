@@ -3,13 +3,7 @@ import React from "react";
 import classes from "./styles/waybill-list.module.css";
 import PropTypes from "prop-types";
 
-export default function Waybill({
-    index,
-    waybill,
-    getWaybill,
-    setWaybillChosen,
-    highlightWaybill,
-}) {
+export default function Waybill({ index, waybill, getWaybill, highlightON }) {
     const parseDate = new Date(
         Date.parse(waybill.waybill_date)
     ).toLocaleDateString();
@@ -24,8 +18,7 @@ export default function Waybill({
                 }
                 onClick={(event) => {
                     getWaybill(event, index);
-                    highlightWaybill(index);
-                    setWaybillChosen(true);
+                    highlightON(index);
                 }}
             >
                 {/* дата */}
@@ -53,6 +46,5 @@ Waybill.propTypes = {
     index: PropTypes.number.isRequired,
     waybill: PropTypes.object.isRequired,
     getWaybil: PropTypes.func,
-    setWaybillChosen: PropTypes.func.isRequired,
-    highlightWaybill: PropTypes.func.isRequired,
+    highlightON: PropTypes.func.isRequired,
 };

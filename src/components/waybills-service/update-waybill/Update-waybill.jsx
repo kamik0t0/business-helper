@@ -21,15 +21,13 @@ import {
 import PropTypes from "prop-types";
 import { getData } from "../../../utils/getData.js";
 import { setAuthAction } from "../../../redux/auth-reducer.js";
+import { setWaybillAction } from "../../../redux/waybill-reducer.js";
 
 export default function UpdateWaybill({ CounterpartyInfo, path }) {
     const dispatch = useDispatch();
     const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
-    const type =
-        path === "/sales"
-            ? ["setSale", "SALE", "sale", "SaleId"]
-            : ["setPurchase", "PURCHASE", "purchase", "PurchaseId"];
-    const WAYBILL = useSelector((state) => state[`${type[0]}`][`${type[2]}`]);
+    const type = path === "/sales" ? "SaleId" : "PurchaseId";
+    const WAYBILL = useSelector((state) => state.setWaybill.waybill);
     const COUNTERPARTY = useSelector(
         (state) => state.setCounterpartyReducer.counterparty
     );
@@ -77,9 +75,10 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
             if (positions.length === 0) {
                 try {
                     const PositionsFromDB = await getData(
-                        `http://localhost:5600${path.slice(0, -1)}/?${
-                            type[3]
-                        }=${id}`,
+                        `http://localhost:5600${path.slice(
+                            0,
+                            -1
+                        )}/?${type}=${id}`,
                         () => dispatch(setAuthAction(true))
                     );
                     let startArr = [];
@@ -142,7 +141,13 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
                                 {CounterpartyInfo[0]}
                             </div>
                             <Link to={path}>
-                                <MyButton>Закрыть</MyButton>
+                                <MyButton
+                                    onClick={() =>
+                                        dispatch(setWaybillAction({}))
+                                    }
+                                >
+                                    Закрыть
+                                </MyButton>
                             </Link>
                         </div>
                         <div className={classes.waybill_form_header_date}>

@@ -7,21 +7,17 @@ import { deleteWaybill } from "./service/delete.js";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
-export default function DeleteWaybill({
-    setModal,
-    WAYBILLTYPE,
-    path,
-    setWaybills,
-}) {
+export default function DeleteWaybill({ setModal, path, setWaybills }) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
-    const WAYBILL = useSelector(
-        (state) => state[`${WAYBILLTYPE[0]}`][`${WAYBILLTYPE[2]}`]
-    );
+    const WAYBILL = useSelector((state) => state.setWaybill.waybill);
+    console.log(WAYBILL);
 
     return (
         <>
-            {WAYBILL === undefined || WAYBILL === null ? (
+            {WAYBILL === undefined ||
+            WAYBILL === null ||
+            Object.keys(WAYBILL).length === 0 ? (
                 <div className={classes.noorg}>
                     <div className={classes.noorg__text}>
                         Накладная не выбрана
@@ -60,7 +56,9 @@ export default function DeleteWaybill({
                                 Да
                             </MyButton>
                             <MyButton
-                                onClick={() => hideAnimatedModal(setModal)}
+                                onClick={() => {
+                                    hideAnimatedModal(setModal);
+                                }}
                             >
                                 Нет
                             </MyButton>
@@ -74,6 +72,5 @@ export default function DeleteWaybill({
 
 DeleteWaybill.propTypes = {
     setModal: PropTypes.func.isRequired,
-    WAYBILL: PropTypes.object,
     path: PropTypes.string.isRequired,
 };
