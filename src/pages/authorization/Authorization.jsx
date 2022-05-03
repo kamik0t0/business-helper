@@ -6,7 +6,8 @@ import AuthError from "./service/error/Auth-error.jsx";
 import Loader from "../../UI/Loader/Loader.jsx";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
-import { auth } from "./service/auth.js";
+// import { auth } from "./service/auth.js";
+import { auth } from "../../redux/saga/auth-saga.js";
 
 export default function Login() {
     const [isVisible, setIsVisible] = useState(false);
