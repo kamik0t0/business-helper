@@ -14,12 +14,12 @@ export default function CalcForm() {
         localStorateClearing();
     }, []);
     // УСН доходы ИП
-    const [taxIncomeIE, setTaxIncIE] = useState(0);
-    const [burdenIncomeIE, setBurIncIE] = useState(0);
+    const [taxIncomeIE, setTaxIncomeIE] = useState(0);
+    const [burdenIncomeIE, setBurdenIncomeIE] = useState(0);
 
     // УСН доходы ООО
-    const [taxIncomeLLC, setTaxIncLLC] = useState(0);
-    const [burdenIncomeLLC, setBurIncLLC] = useState(0);
+    const [taxIncomeLLC, setTaxIncomeLLC] = useState(0);
+    const [burdenIncomeLLC, setBurdenIncomeLLC] = useState(0);
 
     // получение дохода для всех СНО
     function getIncome(event) {
@@ -44,11 +44,10 @@ export default function CalcForm() {
     }
 
     function stateControl() {
-        // console.log("stateControl");
-        setTaxIncIE(incomesOnlyIE.totalTax);
-        setBurIncIE(incomesOnlyIE.burden);
-        setTaxIncLLC(incomesOnlyLLC.totalTax);
-        setBurIncLLC(incomesOnlyLLC.burden);
+        setTaxIncomeIE(incomesOnlyIE.totalTax);
+        setBurdenIncomeIE(incomesOnlyIE.burden);
+        setTaxIncomeLLC(incomesOnlyLLC.totalTax);
+        setBurdenIncomeLLC(incomesOnlyLLC.burden);
     }
 
     return (
