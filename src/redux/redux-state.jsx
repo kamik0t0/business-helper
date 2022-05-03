@@ -1,5 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
+import createSagaMiddleware from "redux-saga";
 import { authReducer } from "./auth-reducer.js";
 import { errorReducer } from "./error-reducer.js";
 import { setMyOrgReducer } from "./setMyOrg-reducer.js";
@@ -13,6 +14,9 @@ import { setPurchase } from "./purchase-reducer.js";
 import { authErrorReducer } from "./authError-reducer.js";
 import { setWaybills } from "./waybills-reducer.js";
 import { setWaybill } from "./waybill-reducer.js";
+import { rootWatcher } from "./saga/saga-index.js";
+
+const sagaMiddleware = createSagaMiddleware();
 
 const rootReducer = combineReducers({
     authReducer: authReducer,
@@ -30,4 +34,9 @@ const rootReducer = combineReducers({
     setWaybill: setWaybill,
 });
 
-export const store = createStore(rootReducer, applyMiddleware(thunk));
+export const store = createStore(
+    rootReducer,
+    applyMiddleware(thunk, sagaMiddleware)
+);
+
+sagaMiddleware.run(rootWatcher);

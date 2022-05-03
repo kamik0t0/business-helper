@@ -7,7 +7,7 @@ const COUNTERPARTIES = "COUNTERPARTIES";
 export function setCounterparties(state = DEFAULTSTATE, action) {
     switch (action.type) {
         case COUNTERPARTIES:
-            return { counterparties: [...action.payload] };
+            return { counterparties: action.payload };
 
         default:
             return state;

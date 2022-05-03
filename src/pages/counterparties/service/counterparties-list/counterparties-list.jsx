@@ -9,6 +9,7 @@ export default function CounterpartiesList() {
     const COUNTERPARTIES = useSelector(
         (state) => state.setCounterparties.counterparties
     );
+    console.log(COUNTERPARTIES);
     return (
         <>
             <div className={classes.header}>Контрагенты</div>

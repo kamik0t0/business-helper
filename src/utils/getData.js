@@ -6,7 +6,6 @@ const instance = axios.create({
 });
 
 export async function getData(url, callDispatch, params) {
-    console.log(params);
     try {
         await authTokenInterceptor(instance, callDispatch);
         const Data = await instance.get(url);

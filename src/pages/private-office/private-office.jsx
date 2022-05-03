@@ -8,7 +8,9 @@ import MySelect from "../../UI/input/MySelect/MySelect.jsx";
 import OrgInfo from "./service/org-info.jsx";
 import Buttons from "./service/buttons/buttons.jsx";
 import { isOrganization } from "../../utils/isOrg.js";
+// функция аналогичная getPrivateData но работает с redux-thunk.
 import { getOrgDataVoid } from "./service/getOrgDataVoid.js";
+import { getPrivateData } from "../../redux/saga/private-saga.js";
 
 export default function Office() {
     const ORGS = useSelector((state) => state.setOrgsReducer.orgs);
@@ -48,7 +50,7 @@ export default function Office() {
                         defaultValue={["Выбрать организацию"][0]}
                         func={(event) =>
                             dispatch(
-                                getOrgDataVoid(
+                                getPrivateData(
                                     event,
                                     () => setLoader(!loader),
                                     ORGS
