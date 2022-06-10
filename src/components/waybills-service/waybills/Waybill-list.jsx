@@ -1,5 +1,5 @@
 // компонент показывающий список существующих накладных
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { v4 as uuid } from "uuid";
 import { Link } from "react-router-dom";
 import classes from "./styles/waybill-list.module.css";
@@ -12,10 +12,6 @@ import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import PropTypes from "prop-types";
 import DeleteWaybill from "../delete-waybill/Delete-waybill.jsx";
 import {
-    showAnimatedModal,
-    hideAnimatedModal,
-} from "../../../UI/modal/service/handlers/modal-control.js";
-import {
     sortByDate,
     sortByCounterparty,
     sortBySumm,
@@ -24,6 +20,8 @@ import {
 import { throttle } from "./service/throttle.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setWaybillAction } from "../../../redux/waybill-reducer.js";
+import { ModalContext } from "../../../blocks/content/Main.jsx";
+import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
 
 export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
     const dispatch = useDispatch();
@@ -33,11 +31,13 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
     const [waybills, setWaybills] = useState([...WAYBILLS]);
     // Порядок фильтрации
     const [sortOrder, setSortOrder] = useState(false);
-    // модальное окно для удаления накладной и информации если накладная не выбрана
-    const [modalDelete, setModalDelete] = useState({ show: false, add: false });
-    const [modalUpdate, setModalUpdate] = useState({ show: false, add: false });
     // Поле поиска
     const [search, setSearch] = useState("cl_orgname");
+    const { modalDelete, modalUpdate, setModalDelete, setModalUpdate } =
+        useContext(ModalContext);
+
+    const [showUpdateModal, hideUpdateModal] = modalManager(setModalUpdate),
+        [showDeleteModal] = modalManager(setModalDelete);
 
     let isCooldown = useRef(false),
         savedArgs = useRef(),
@@ -127,9 +127,7 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                                 </div>
                             </Link>
                             <div
-                                onClick={() =>
-                                    showAnimatedModal(setModalDelete)
-                                }
+                                onClick={showDeleteModal}
                                 className={classes.waybills_header_delete}
                             >
                                 <span></span>
@@ -144,7 +142,7 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                                     onClick={() => {
                                         dispatch(highlightOFF(WAYBILLS));
                                         Object.keys(WAYBILL).length === 0 &&
-                                            showAnimatedModal(setModalUpdate);
+                                            showUpdateModal();
                                     }}
                                     className={classes.waybills_header_redact}
                                 >
@@ -253,17 +251,13 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                         <Modal
                             size={{ height: "25vh", width: "40vw" }}
                             active={modalUpdate.add}
-                            setModal={setModalUpdate}
+                            setActive={setModalUpdate}
                         >
                             <div className={classes.noorg}>
                                 <div className={classes.noorg__text}>
                                     Накладная не выбрана
                                 </div>
-                                <MyButton
-                                    onClick={() =>
-                                        hideAnimatedModal(setModalUpdate)
-                                    }
-                                >
+                                <MyButton onClick={hideUpdateModal}>
                                     Закрыть
                                 </MyButton>
                             </div>

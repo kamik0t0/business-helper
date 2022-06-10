@@ -1,8 +1,8 @@
-import { hideAnimatedModal } from "../../../../UI/modal/service/handlers/modal-control.js";
 import axios from "axios";
 import { getData } from "../../../../utils/getData.js";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
 import { setAuthAction } from "../../../../redux/auth-reducer.js";
+import { modalManager } from "../../../../UI/modal/service/handlers/modal-control.js";
 
 export function deleteWaybill(
     event,
@@ -14,6 +14,7 @@ export function deleteWaybill(
 ) {
     return async function (dispatch) {
         event.preventDefault();
+        const [, hideModal] = modalManager(setModal);
         const [type, idType] =
             path.slice(0, -14) === "/sales"
                 ? ["SALES", "SaleId"]
@@ -35,12 +36,12 @@ export function deleteWaybill(
             dispatch({ type, payload: WAYBILLS });
             // дополнительно обновляется локальный стейт в Waybill-list
             setWaybills([...WAYBILLS]);
-            hideAnimatedModal(setModal);
+            hideModal();
             setLoader();
         } catch (error) {
             console.log(error);
             dispatch(setErrorTrueAction(true, error.message));
-            hideAnimatedModal(setModal);
+            hideModal();
             setLoader();
         }
     };

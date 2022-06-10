@@ -1,21 +1,23 @@
-export function showAnimatedModal(setState) {
-    setState((prev) => {
-        return { ...prev, show: true };
-    });
-    setTimeout(() => {
-        setState((prev) => {
-            return { ...prev, add: true };
+export function modalManager(setModal) {
+    function showModal() {
+        setModal((prev) => {
+            return { ...prev, show: true };
         });
-    }, 0);
-}
-
-export function hideAnimatedModal(setState) {
-    setState((prev) => {
-        return { ...prev, add: false };
-    });
-    setTimeout(() => {
-        setState((prev) => {
-            return { ...prev, show: false };
+        setTimeout(() => {
+            setModal((prev) => {
+                return { ...prev, add: true };
+            });
+        }, 0);
+    }
+    function hideModal() {
+        setModal((prev) => {
+            return { ...prev, add: false };
         });
-    }, 500);
+        setTimeout(() => {
+            setModal((prev) => {
+                return { ...prev, show: false };
+            });
+        }, 500);
+    }
+    return [showModal, hideModal];
 }

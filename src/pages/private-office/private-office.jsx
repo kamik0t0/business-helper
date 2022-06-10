@@ -17,10 +17,6 @@ export default function Office() {
     const isAuth = useSelector((state) => state.authReducer.isAuth);
     const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     const dispatch = useDispatch();
-    const [modalAdd, setModalAdd] = useState({ show: false, add: false });
-    const [modalRead, setModalRead] = useState({ show: false, add: false });
-    const [modalUpdate, setModalUpdate] = useState({ show: false, add: false });
-    const [modalDelete, setModalDelete] = useState({ show: false, add: false });
     const [loader, setLoader] = useState(false);
     let isORG = useRef();
     // ООО или ИП
@@ -66,26 +62,12 @@ export default function Office() {
                     ) : (
                         <OrgInfo isORG={isORG.current} />
                     )}
-                    <Buttons
-                        setModalAdd={setModalAdd}
-                        setModalRead={setModalRead}
-                        setModalUpdate={setModalUpdate}
-                        setModalDelete={setModalDelete}
-                    />
+                    <Buttons />
                 </div>
             ) : (
                 <Navigate to="/" />
             )}
-            <PrivateOfficeModals
-                setModalAdd={setModalAdd}
-                setModalRead={setModalRead}
-                setModalUpdate={setModalUpdate}
-                setModalDelete={setModalDelete}
-                modalAdd={modalAdd}
-                modalRead={modalRead}
-                modalUpdate={modalUpdate}
-                modalDelete={modalDelete}
-            />
+            <PrivateOfficeModals />
         </>
     );
 }

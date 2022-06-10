@@ -5,8 +5,10 @@ import classes from "./styles/Tax-calc-form.module.css";
 import { localStorateClearing } from "../../utils/localStorageClearing.js";
 
 // объект калькулятор инкапсулирует все расчеты
-import { incomesOnlyIE } from "./calc-obj.js";
 import { incomesOnlyLLC } from "./calc-obj.js";
+import { TaxCalculator, TaxCalculatorIE } from "./service/tax-calc-class.js";
+
+const businessData = new TaxCalculatorIE();
 
 // state в этом компоненте потому что данные нужны и CalcData и CalcResult
 export default function CalcForm() {
@@ -26,7 +28,7 @@ export default function CalcForm() {
         // console.log("income");
         let value = +event.target.value;
         // УСН доходы ИП
-        incomesOnlyIE.income = value;
+        businessData.income = value;
         // УСН доходы ООО
         incomesOnlyLLC.income = value;
         stateControl();
@@ -34,18 +36,17 @@ export default function CalcForm() {
 
     // получение зарплаты для всех СНО
     function getSalary(event) {
-        // console.log("salary");
         let value = +event.target.value;
         // УСН доходы ИП
-        incomesOnlyIE.salary = value;
+        businessData.salary = value;
         // УСН доходы ООО
         incomesOnlyLLC.salary = value;
         stateControl();
     }
 
     function stateControl() {
-        setTaxIncomeIE(incomesOnlyIE.totalTax);
-        setBurdenIncomeIE(incomesOnlyIE.burden);
+        setTaxIncomeIE(TaxCalculatorIE.totalTax(businessData));
+        setBurdenIncomeIE(TaxCalculatorIE.burden(businessData));
         setTaxIncomeLLC(incomesOnlyLLC.totalTax);
         setBurdenIncomeLLC(incomesOnlyLLC.burden);
     }

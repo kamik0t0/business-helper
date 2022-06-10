@@ -1,26 +1,27 @@
 import React from "react";
 import classes from "./styles/modal.module.css";
-import { hideAnimatedModal } from "./service/handlers/modal-control.js";
+import classNames from "classnames/bind";
 import PropTypes from "prop-types";
+import { modalManager } from "./service/handlers/modal-control.js";
 
-export default function Modal({ size, active, setModal, children }) {
+export default function Modal({ size, active, setActive, children }) {
+    const [, hideModal] = modalManager(setActive);
+
+    const cx = classNames.bind(classes);
+    const modalClassName = cx({
+        [classes.modal]: true,
+        [classes.active]: active,
+    });
+    const modalContentClassName = cx({
+        [classes.modal__content]: true,
+        [classes.active]: active,
+    });
     return (
         <>
-            <div
-                className={
-                    active
-                        ? classes.modal + " " + classes.active
-                        : classes.modal
-                }
-                onClick={() => hideAnimatedModal(setModal)}
-            >
+            <div className={modalClassName} onClick={hideModal}>
                 <div
                     style={size}
-                    className={
-                        active
-                            ? classes.modal__content + " " + classes.active
-                            : classes.modal__content
-                    }
+                    className={modalContentClassName}
                     onClick={(event) => event.stopPropagation()}
                 >
                     {children}
@@ -31,8 +32,8 @@ export default function Modal({ size, active, setModal, children }) {
 }
 
 Modal.propTypes = {
-    active: PropTypes.bool.isRequired,
-    setModal: PropTypes.func.isRequired,
     size: PropTypes.object,
+    active: PropTypes.bool.isRequired,
+    setActive: PropTypes.func.isRequired,
     children: PropTypes.element.isRequired,
 };

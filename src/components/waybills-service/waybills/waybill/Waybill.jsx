@@ -1,9 +1,15 @@
 // представление накладной в виде таблицы с 4 колонками и 1 строки в списке накладных: покупок или продаж
 import React from "react";
 import classes from "./styles/waybill-list.module.css";
+import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 
 export default function Waybill({ index, waybill, getWaybill, highlightON }) {
+    const cx = classNames.bind(classes);
+    const highlight = cx({
+        [classes.waybills_list_wb]: true,
+        [classes.highlight]: waybill.highlight,
+    });
     const parseDate = new Date(
         Date.parse(waybill.waybill_date)
     ).toLocaleDateString();
@@ -11,11 +17,7 @@ export default function Waybill({ index, waybill, getWaybill, highlightON }) {
         <div className={classes.waybills_list}>
             {/* накладная */}
             <div
-                className={
-                    waybill.highlight
-                        ? classes.waybills_list_wb + " " + classes.highlight
-                        : classes.waybills_list_wb
-                }
+                className={highlight}
                 onClick={(event) => {
                     getWaybill(event, index);
                     highlightON(index);

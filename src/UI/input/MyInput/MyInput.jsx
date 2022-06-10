@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import classes from "./styles/my-input.module.css";
 import { check } from "./service/preventStrInput";
-import PropTypes, { func } from "prop-types";
+import PropTypes from "prop-types";
+import classNames from "classnames/bind";
 
 const MyInput = React.forwardRef(
     (
@@ -19,6 +20,13 @@ const MyInput = React.forwardRef(
         ref
     ) => {
         const [error, setError] = useState(false);
+        const cx = classNames.bind(classes);
+        const inputClassName = cx({
+            [classes.fields__item_input]: true,
+            [classes.sumbit]: type === "submit",
+            [classes.error]: error && isNumber,
+        });
+
         return (
             <>
                 <div className={classes.fields__item}>
@@ -33,17 +41,7 @@ const MyInput = React.forwardRef(
                         minLength={length}
                         style={style}
                         ref={ref}
-                        className={
-                            type === "submit"
-                                ? classes.fields__item_input +
-                                  " " +
-                                  classes.sumbit
-                                : error && isNumber
-                                ? classes.fields__item_input +
-                                  " " +
-                                  classes.error
-                                : classes.fields__item_input
-                        }
+                        className={inputClassName}
                         type={`${type}`}
                         onInput={() =>
                             check(isNumber, field, prevValue, setError, length)

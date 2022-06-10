@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import classes from "./styles/create-org.module.css";
 import Inputs from "./service/components/create-inputs.jsx";
 import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
@@ -12,13 +12,15 @@ import { useDispatch } from "react-redux";
 import { create } from "./service/handlers/create-org.js";
 import { switchOPF } from "./service/handlers/switchOPF.js";
 import { getRequisites } from "./service/handlers/getRequisites.js";
-import PropTypes from "prop-types";
-import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control";
+import { ModalContext } from "../../../blocks/content/Main.jsx";
+import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
 
-export default function CreateOrg({ setModal }) {
+export default function CreateOrg() {
     const [isORG, setIsOrg] = useState(true);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
+    const { setModalAdd } = useContext(ModalContext);
+    const [, hideModal] = modalManager(setModalAdd);
 
     const ORG = useRef(new Organizaton());
     return (
@@ -58,16 +60,11 @@ export default function CreateOrg({ setModal }) {
                         dispatch(
                             create(event, ORG.current, () => setLoader(!loader))
                         );
-                        hideAnimatedModal(setModal);
+                        hideModal();
                     }}
                     clear={clear}
-                    setModal={setModal}
                 />
             </div>
         </>
     );
 }
-
-CreateOrg.propTypes = {
-    setModal: PropTypes.func.isRequired,
-};

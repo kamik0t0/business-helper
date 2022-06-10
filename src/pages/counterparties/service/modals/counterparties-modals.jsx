@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import Modal from "../../../../UI/modal/modal.jsx";
 import CreateCounterparty from "../../../../components/counterparties-service/create-counterparty/Create-counterparty.jsx";
 import ReadCounterparty from "../../../../components/counterparties-service/read-counterparty/Read-counterparty.jsx";
 import PatchCounterparty from "../../../../components/counterparties-service/update-counterparty/Patch-counterparty.jsx";
 import DeleteCounterparty from "../../../../components/counterparties-service/delete-counterparty/Delete-counterparty.jsx";
-import PropTypes from "prop-types";
+import { ModalContext } from "../../../../blocks/content/Main.jsx";
 
-export default function CounterpartiesModals({
-    setModalAdd,
-    setModalRead,
-    setModalUpdate,
-    setModalDelete,
-    modalAdd,
-    modalRead,
-    modalUpdate,
-    modalDelete,
-}) {
+export default function CounterpartiesModals() {
+    const {
+        modalAdd,
+        modalRead,
+        modalUpdate,
+        modalDelete,
+        setModalAdd,
+        setModalRead,
+        setModalUpdate,
+        setModalDelete,
+    } = useContext(ModalContext);
     return (
         <>
             {modalAdd.show && (
@@ -24,17 +25,17 @@ export default function CounterpartiesModals({
                     active={modalAdd.add}
                     setActive={setModalAdd}
                 >
-                    <CreateCounterparty setModal={setModalAdd} />
+                    <CreateCounterparty />
                 </Modal>
             )}
             {modalRead.show && (
                 <Modal active={modalRead.add} setActive={setModalRead}>
-                    <ReadCounterparty setModal={setModalRead} />
+                    <ReadCounterparty />
                 </Modal>
             )}
             {modalUpdate.show && (
                 <Modal active={modalUpdate.add} setActive={setModalUpdate}>
-                    <PatchCounterparty setModal={setModalUpdate} />
+                    <PatchCounterparty />
                 </Modal>
             )}
             {modalDelete.show && (
@@ -43,20 +44,9 @@ export default function CounterpartiesModals({
                     active={modalDelete.add}
                     setActive={setModalDelete}
                 >
-                    <DeleteCounterparty setModal={setModalDelete} />
+                    <DeleteCounterparty />
                 </Modal>
             )}
         </>
     );
 }
-
-CounterpartiesModals.propTypes = {
-    setModalAdd: PropTypes.func.isRequired,
-    setModalRead: PropTypes.func.isRequired,
-    setModalUpdate: PropTypes.func.isRequired,
-    setModalDelete: PropTypes.func.isRequired,
-    modalAdd: PropTypes.object.isRequired,
-    modalRead: PropTypes.object.isRequired,
-    modalUpdate: PropTypes.object.isRequired,
-    modalDelete: PropTypes.object.isRequired,
-};

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import classes from "./styles/patch-org.module.css";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { OrgFields } from "../../../utils/Org.js";
@@ -7,19 +7,21 @@ import { Organizaton } from "../../../utils/Org.js";
 import PatchFields from "./service/components/Patch-fields.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
 import { addRequisitesValues } from "../handlers/addRequisitesValues.js";
 import { setValue } from "./service/handlers/set-value";
 import { getValue } from "./service/handlers/get-value";
 import { update } from "./service/handlers/update.js";
 import { filterRequisites } from "../handlers/filter-requisites.js";
 import { isOrganization } from "../../../utils/isOrg";
-import PropTypes from "prop-types";
+import { ModalContext } from "../../../blocks/content/Main.jsx";
+import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
 
-export default function PatchOrg({ setModal }) {
+export default function PatchOrg() {
     const [loader, setLoader] = useState(false);
     const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     const isORG = useRef();
+    const { setModalUpdate } = useContext(ModalContext);
+    const [, hideModal] = modalManager(setModalUpdate);
     isORG.current = isOrganization(MYORG);
     const dispatch = useDispatch();
     // объект с обновленными значениями
@@ -71,21 +73,15 @@ export default function PatchOrg({ setModal }) {
                                         MYORG
                                     )
                                 );
-                                hideAnimatedModal(setModal);
+                                hideModal();
                             }}
                         >
                             Обновить
                         </MyButton>
-                        <MyButton onClick={() => hideAnimatedModal(setModal)}>
-                            Закрыть
-                        </MyButton>
+                        <MyButton onClick={hideModal}>Закрыть</MyButton>
                     </div>
                 </div>
             )}
         </>
     );
 }
-
-PatchOrg.propTypes = {
-    setModal: PropTypes.func.isRequired,
-};

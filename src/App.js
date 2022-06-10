@@ -8,9 +8,6 @@ import Error from "./UI/Error/Error.jsx";
 
 export default function App() {
     const ERROR = useSelector((state) => state.errorReducer);
-
-    // useEffect(() => dispatch(isAuth("http://localhost:5600")));
-
     return (
         <>
             <div className={classes.app}>

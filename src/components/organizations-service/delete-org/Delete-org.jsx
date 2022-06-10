@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import classes from "./styles/delete-org.module.css";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
-import { hideAnimatedModal } from "../../../UI/modal/service/handlers/modal-control.js";
 import { deleteOrg } from "./service/delete.js";
-import PropTypes from "prop-types";
+import { ModalContext } from "../../../blocks/content/Main.jsx";
+import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
 
-export default function DeleteOrg({ setModal }) {
+export default function DeleteOrg() {
     // анимация
     const [loader, setLoader] = useState(false);
     const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     const dispatch = useDispatch();
+    const { setModalDelete } = useContext(ModalContext);
+    const [, hideModal] = modalManager(setModalDelete);
     return (
         <>
             {Object.keys(MYORG).length === 0 ? (
@@ -19,9 +21,7 @@ export default function DeleteOrg({ setModal }) {
                     <div className={classes.noorg__text}>
                         Организация не выбрана
                     </div>
-                    <MyButton onClick={() => hideAnimatedModal(setModal)}>
-                        Закрыть
-                    </MyButton>
+                    <MyButton onClick={hideModal}>Закрыть</MyButton>
                 </div>
             ) : (
                 <div className={classes.delete}>
@@ -37,16 +37,12 @@ export default function DeleteOrg({ setModal }) {
                                     dispatch(
                                         deleteOrg(() => setLoader(!loader))
                                     );
-                                    hideAnimatedModal(setModal);
+                                    hideModal();
                                 }}
                             >
                                 Yes
                             </MyButton>
-                            <MyButton
-                                onClick={() => hideAnimatedModal(setModal)}
-                            >
-                                No
-                            </MyButton>
+                            <MyButton onClick={hideModal}>No</MyButton>
                         </div>
                     )}
                 </div>
@@ -54,7 +50,3 @@ export default function DeleteOrg({ setModal }) {
         </>
     );
 }
-
-DeleteOrg.propTypes = {
-    setModal: PropTypes.func.isRequired,
-};

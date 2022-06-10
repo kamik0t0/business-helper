@@ -1,6 +1,7 @@
 // строка в создаваемой накладной (позиция)
 import React from "react";
 import classes from "./styles/position.module.css";
+import classNames from "classnames/bind";
 import MyInput from "../../../../UI/input/MyInput/MyInput.jsx";
 import PropTypes from "prop-types";
 
@@ -13,15 +14,16 @@ export default function Position({
     getQuantity,
     getPrice,
 }) {
+    const cx = classNames.bind(classes);
+    const isHighlight = cx({
+        [classes.position]: true,
+        [classes.highlight]: highlight,
+    });
     return (
         <>
             <div
                 onClick={(event) => getRow(event, number)}
-                className={
-                    highlight === false
-                        ? classes.position
-                        : classes.position + " " + classes.highlight
-                }
+                className={isHighlight}
             >
                 <div className={classes.position_number}>{number + 1}</div>
                 <div className={classes.position_nomenclature}>

@@ -1,12 +1,12 @@
 import React, { useState, useRef } from "react";
 import classes from "./styles/auth.module.css";
+import classNames from "classnames/bind";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AuthError from "./service/error/Auth-error.jsx";
 import Loader from "../../UI/Loader/Loader.jsx";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
-// import { auth } from "./service/auth.js";
 import { auth } from "../../redux/saga/auth-saga.js";
 
 export default function Login() {
@@ -15,6 +15,20 @@ export default function Login() {
     const AUTHERROR = useSelector((state) => state.authErrorReducer);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
+
+    const cx = classNames.bind(classes);
+    const authErrUser = cx({
+        [classes.login_auth_user_input]: true,
+        [classes.wrong]: AUTHERROR.isInvalid,
+    });
+    const authErrPass = cx({
+        [classes.login_auth_pass_input]: true,
+        [classes.wrong]: AUTHERROR.isInvalid,
+    });
+    const passVisibility = cx({
+        [classes.login_auth_pass_eye]: isVisible,
+        [classes.login_auth_pass_eye_close]: !isVisible,
+    });
 
     let email = useRef("Cap_NEMOx86@inbox.ru");
     let pass = useRef("kdkfjdilkmf2312387");
@@ -77,13 +91,7 @@ export default function Login() {
                                         }}
                                         name="email"
                                         type="email"
-                                        className={
-                                            AUTHERROR.isInvalid
-                                                ? classes.login_auth_user_input +
-                                                  " " +
-                                                  classes.wrong
-                                                : classes.login_auth_user_input
-                                        }
+                                        className={authErrUser}
                                         placeholder="E-mail"
                                     />
                                 </div>
@@ -99,23 +107,13 @@ export default function Login() {
                                         }}
                                         name="pass"
                                         type="password"
-                                        className={
-                                            AUTHERROR.isInvalid
-                                                ? classes.login_auth_pass_input +
-                                                  " " +
-                                                  classes.wrong
-                                                : classes.login_auth_pass_input
-                                        }
+                                        className={authErrPass}
                                         placeholder="Password"
                                     />
                                     <div
                                         onMouseDown={showPass}
                                         onMouseUp={hidePass}
-                                        className={
-                                            isVisible
-                                                ? classes.login_auth_pass_eye
-                                                : classes.login_auth_pass_eye_close
-                                        }
+                                        className={passVisibility}
                                     ></div>
                                 </div>
                                 <AuthError />

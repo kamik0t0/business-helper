@@ -1,7 +1,7 @@
 // компонент создания накладной
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import classes from "../styles/update-waybill.module.css";
 import Position from "./position/Position.jsx";
 import PositionHeaders from "../common/Position-headers.jsx";
@@ -22,6 +22,10 @@ import {
 import PropTypes from "prop-types";
 
 export default function CreateWaybill({ CounterpartyInfo, path }) {
+    const { pathname } = window.location;
+    const resolvedPath = pathname.endsWith("/")
+        ? pathname.slice(0, -1)
+        : pathname;
     const dispatch = useDispatch();
     const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     const COUNTERPARTY = useSelector(
@@ -140,11 +144,7 @@ export default function CreateWaybill({ CounterpartyInfo, path }) {
                                         event.target.value)
                                 }
                             />
-                            <Link
-                                to={`/counterparties:${path.slice(
-                                    1
-                                )}:createwaybill`}
-                            >
+                            <Link to={`${resolvedPath}/counterparties`}>
                                 <MyButton>Выбрать...</MyButton>
                             </Link>
                         </div>

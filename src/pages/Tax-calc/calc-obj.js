@@ -40,18 +40,19 @@ class TaxCalculator {
     get salaryTaxRate() {
         return this._salaryTaxRate;
     }
-
+    // Фикс. ОМС
     _medicalFixInsurance = 8766;
 
     get medicalFixInsurance() {
         return this._medicalFixInsurance;
     }
+    // Фикс. ОПС
     _retirementFixInsurance = 34445;
 
     get retirementFixInsurance() {
         return this._retirementFixInsurance;
     }
-
+    // Страховые взносы 1% с доходов > 300 тыс. руб.
     static floatInsurance({ income }) {
         if (income > 300000) {
             return Math.round(((income - 300000) * 1) / 100);
@@ -59,7 +60,7 @@ class TaxCalculator {
             return 0;
         }
     }
-
+    // Страховые взносы ИП
     static totalInsurance({
         income,
         retirementFixInsurance,
@@ -70,11 +71,11 @@ class TaxCalculator {
             retirementFixInsurance + medicalFixInsurance + floatInsurance
         );
     }
-
+    // Налоги с зарплаты
     static salaryTax({ salary, salaryTaxRate }) {
         return Math.round((salary * salaryTaxRate) / 100);
     }
-
+    // Расходы
     static totalCost({
         income,
         retirementFixInsurance,
@@ -94,7 +95,7 @@ class TaxCalculator {
     static usnAccrued({ income }) {
         return Math.round((income * 6) / 100);
     }
-
+    // УСН
     static USN({
         income,
         retirementFixInsurance,

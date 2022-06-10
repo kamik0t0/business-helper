@@ -14,9 +14,6 @@ import Counterparties from "../pages/counterparties/counterparties.jsx";
 import UpdateSale from "../pages/sales/Update-sale.jsx";
 import UpdatePurchase from "../pages/purchases/Update-purchase.jsx";
 
-export const SalesContext = React.createContext();
-export const PurchasesContext = React.createContext();
-
 export default function AppRouter() {
     return (
         <Routes>
@@ -57,7 +54,27 @@ export default function AppRouter() {
             <Route exact path="/private" element={<Private />}></Route>
             <Route
                 exact
-                path="/counterparties:params"
+                path="/purchases/createwaybill/counterparties"
+                element={<Counterparties />}
+            ></Route>
+            <Route
+                exact
+                path="/purchases/updatewaybill/counterparties"
+                element={<Counterparties />}
+            ></Route>
+            <Route
+                exact
+                path="/sales/createwaybill/counterparties"
+                element={<Counterparties />}
+            ></Route>
+            <Route
+                exact
+                path="/sales/updatewaybill/counterparties"
+                element={<Counterparties />}
+            ></Route>
+            <Route
+                exact
+                path="/counterparties"
                 element={<Counterparties />}
             ></Route>
         </Routes>

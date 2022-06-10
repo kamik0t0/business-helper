@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import classes from "./styles/auth.module.css";
+import classNames from "classnames/bind";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AuthError from "./service/error/Auth-error.jsx";
@@ -14,6 +15,20 @@ export default function Registration() {
     const AUTHERROR = useSelector((state) => state.authErrorReducer);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
+
+    const cx = classNames.bind(classes);
+    const authErrUser = cx({
+        [classes.login_auth_user_input]: true,
+        [classes.wrong]: AUTHERROR.isInvalid,
+    });
+    const authErrPass = cx({
+        [classes.login_auth_pass_input]: true,
+        [classes.wrong]: AUTHERROR.isInvalid,
+    });
+    const passVisibility = cx({
+        [classes.login_auth_pass_eye]: isVisible,
+        [classes.login_auth_pass_eye_close]: !isVisible,
+    });
 
     let email = useRef();
     let pass = useRef();
@@ -71,13 +86,7 @@ export default function Registration() {
                                             }}
                                             name="email"
                                             type="email"
-                                            className={
-                                                AUTHERROR.isInvalid
-                                                    ? classes.login_auth_user_input +
-                                                      " " +
-                                                      classes.wrong
-                                                    : classes.login_auth_user_input
-                                            }
+                                            className={authErrUser}
                                             placeholder="E-mail"
                                         />
                                     </div>
@@ -96,13 +105,7 @@ export default function Registration() {
                                             }}
                                             name="pass"
                                             type="password"
-                                            className={
-                                                AUTHERROR.isInvalid
-                                                    ? classes.login_auth_pass_input +
-                                                      " " +
-                                                      classes.wrong
-                                                    : classes.login_auth_pass_input
-                                            }
+                                            className={authErrPass}
                                             placeholder="Password"
                                         />
                                         <div
@@ -120,11 +123,7 @@ export default function Registration() {
                                                 );
                                                 setIsVisible(!isVisible);
                                             }}
-                                            className={
-                                                isVisible
-                                                    ? classes.login_auth_pass_eye
-                                                    : classes.login_auth_pass_eye_close
-                                            }
+                                            className={passVisibility}
                                         ></div>
                                     </div>
                                     <AuthError />
