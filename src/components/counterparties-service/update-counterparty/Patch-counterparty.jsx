@@ -4,7 +4,7 @@ import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { OrgFields } from "../../../utils/Org.js";
 import { IpFields } from "../../../utils/Org.js";
 import { Organizaton } from "../../../utils/Org.js";
-import PatchFields from "../../../components/organizations-service/update-org/service/components/Patch-fields.jsx";
+import PatchField from "../../../components/organizations-service/update-org/service/components/Patch-field.jsx";
 // import PatchFields from "./service/components/Patch-fields.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,7 +51,7 @@ export default function PatchCounterparty() {
                     ) : (
                         filteredFields.map((requisite, number) => {
                             return (
-                                <PatchFields
+                                <PatchField
                                     key={uuid()}
                                     number={number}
                                     requisite={requisite}

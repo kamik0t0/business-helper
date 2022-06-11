@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import classes from "./styles/my-input.module.css";
-import { check } from "./service/preventStrInput";
+import { check } from "./service/check";
 import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 

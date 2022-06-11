@@ -9,15 +9,15 @@ import Requisite from "./service/components/ReqField.jsx";
 import { isOrganization } from "../../../utils/isOrg";
 import { ModalContext } from "../../../blocks/content/Main.jsx";
 import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
+import { MyOrg } from "../../../redux/setMyOrg-reducer.js";
 
 export default function ReadOrg() {
-    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
-    const isORG = useRef();
+    const MYORG = useSelector(MyOrg);
+    const isORG = useRef(isOrganization(MYORG));
     const { setModalRead } = useContext(ModalContext);
     const [, hideModal] = modalManager(setModalRead);
-    isORG.current = isOrganization(MYORG);
     // если выбрана организация, то добавляются значения реквизитов
-    let Requisites = addRequisitesValues(
+    const Requisites = addRequisitesValues(
         OrgFields,
         IpFields,
         MYORG,
@@ -33,8 +33,8 @@ export default function ReadOrg() {
             ) : (
                 <div className={classes.read}>
                     <div className={classes.header}>Реквизиты</div>
-                    {Requisites.map((requisite) => {
-                        return <Requisite requisite={requisite} />;
+                    {Requisites.map((requisite, index) => {
+                        return <Requisite key={index} requisite={requisite} />;
                     })}
                     <div className={classes.buttons}>
                         <MyButton onClick={hideModal}>EXCEL</MyButton>

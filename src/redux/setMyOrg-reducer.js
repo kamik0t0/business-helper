@@ -18,3 +18,5 @@ export const setMyOrgAction = (payload) => ({
     type: MYORG,
     payload,
 });
+
+export const MyOrg = (state) => state.setMyOrgReducer.myOrg;

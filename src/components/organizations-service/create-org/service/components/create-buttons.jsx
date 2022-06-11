@@ -3,11 +3,13 @@ import classes from "./styles/org-buttons.module.css";
 import MyButton from "../../../../../UI/input/MyButton/MyButton.jsx";
 import { ModalContext } from "../../../../../blocks/content/Main.jsx";
 import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control.js";
+import { clear } from "../../../../../utils/clear.js";
 import PropTypes from "prop-types";
 
-export default function Buttons({ create, clear }) {
+export default function Buttons({ create }) {
     const { setModalAdd } = useContext(ModalContext);
     const [, hideModal] = modalManager(setModalAdd);
+
     return (
         <>
             <div className={classes.controls}>
@@ -21,5 +23,4 @@ export default function Buttons({ create, clear }) {
 
 Buttons.propTypes = {
     create: PropTypes.func.isRequired,
-    clear: PropTypes.func.isRequired,
 };

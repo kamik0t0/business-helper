@@ -5,7 +5,7 @@ import MyInput from "../../../../../UI/input/MyInput/MyInput.jsx";
 import { setFocus } from "../handlers/set-focus.js";
 import PropTypes from "prop-types";
 
-export default function PatchFields({ requisite, number, getValue, setValue }) {
+export default function PatchField({ requisite, number, getValue, setValue }) {
     const [refresh, setRefresh] = useState(false);
     // ref для чтения значения текущего значения и подстановки в input
     let prevValue = useRef();
@@ -83,7 +83,7 @@ export default function PatchFields({ requisite, number, getValue, setValue }) {
     );
 }
 
-PatchFields.propTypes = {
+PatchField.propTypes = {
     requisite: PropTypes.object.isRequired,
     number: PropTypes.number.isRequired,
     getValue: PropTypes.func.isRequired,

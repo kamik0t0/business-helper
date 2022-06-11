@@ -45,6 +45,13 @@ export default function Login() {
         setIsVisible(!isVisible);
     }
 
+    const getEmail = (event) => {
+        email.current = event.target.value;
+    };
+    const getPass = (event) => {
+        email.current = event.target.value;
+    };
+
     return (
         <>
             {" "}
@@ -86,9 +93,7 @@ export default function Login() {
                                     <input
                                         id="auth-input"
                                         defaultValue={email.current}
-                                        onChange={(event) => {
-                                            email.current = event.target.value;
-                                        }}
+                                        onChange={getEmail}
                                         name="email"
                                         type="email"
                                         className={authErrUser}
@@ -102,9 +107,7 @@ export default function Login() {
                                     <input
                                         id="pass-input"
                                         defaultValue={pass.current}
-                                        onChange={(event) => {
-                                            pass.current = event.target.value;
-                                        }}
+                                        onChange={getPass}
                                         name="pass"
                                         type="password"
                                         className={authErrPass}

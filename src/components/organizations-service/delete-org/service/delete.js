@@ -2,7 +2,6 @@ import axios from "axios";
 import { getData } from "../../../../utils/getData.js";
 import { setOrgsAction } from "../../../../redux/orgs-reducer.js";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
-// import { setRegFalseAction } from "../../../../redux/auth-reducer.js";
 import { setMyOrgAction } from "../../../../redux/setMyOrg-reducer.js";
 import { setAuthAction } from "../../../../redux/auth-reducer.js";
 

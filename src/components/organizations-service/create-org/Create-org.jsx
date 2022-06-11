@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useRef } from "react";
 import classes from "./styles/create-org.module.css";
 import Inputs from "./service/components/create-inputs.jsx";
 import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
@@ -6,23 +6,25 @@ import Buttons from "./service/components/create-buttons.jsx";
 import { Organizaton } from "../../../utils/Org.js";
 import { OrgFields } from "../../../utils/Org.js";
 import { IpFields } from "../../../utils/Org.js";
-import { clear } from "../../../utils/clear.js";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import { useDispatch } from "react-redux";
-import { create } from "./service/handlers/create-org.js";
-import { switchOPF } from "./service/handlers/switchOPF.js";
+import { useCreateOrg } from "./service/hooks/useCreateOrg.js";
+import { useSwitchOPF } from "./service/hooks/useSwitchOPF.js";
 import { getRequisites } from "./service/handlers/getRequisites.js";
-import { ModalContext } from "../../../blocks/content/Main.jsx";
-import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
+import { OPFoptions } from "./service/utils/options.js";
 
 export default function CreateOrg() {
-    const [isORG, setIsOrg] = useState(true);
-    const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
-    const { setModalAdd } = useContext(ModalContext);
-    const [, hideModal] = modalManager(setModalAdd);
 
     const ORG = useRef(new Organizaton());
+
+    const [isORG, getOPF] = useSwitchOPF(ORG.current);
+    const [loader, create] = useCreateOrg(ORG.current);
+
+    const getInputsValues = (event, field, length) =>
+        getRequisites(event, field, length, ORG.current, isORG);
+    const createOrg = (event) => dispatch(create(event));
+
     return (
         <>
             <div className={classes.create}>
@@ -31,12 +33,8 @@ export default function CreateOrg() {
                     name="Выберите ОПФ"
                     style={{ color: "#F0EBDD" }}
                     defaultValue={["Выберите организационно-правовую форму"][0]}
-                    options={[
-                        "Выберите организационно-правовую форму",
-                        "Общество с ограниченной ответственностью",
-                        "Индивидуальный предприниматель",
-                    ]}
-                    func={(event) => switchOPF(event, setIsOrg, ORG.current)}
+                    options={OPFoptions}
+                    func={getOPF}
                 />
                 {loader ? (
                     <Loader />
@@ -44,26 +42,10 @@ export default function CreateOrg() {
                     <Inputs
                         isORG={isORG}
                         fields={isORG ? OrgFields : IpFields}
-                        getValue={(event, field, length) =>
-                            getRequisites(
-                                event,
-                                field,
-                                length,
-                                ORG.current,
-                                isORG
-                            )
-                        }
+                        getValue={getInputsValues}
                     />
                 )}
-                <Buttons
-                    create={(event) => {
-                        dispatch(
-                            create(event, ORG.current, () => setLoader(!loader))
-                        );
-                        hideModal();
-                    }}
-                    clear={clear}
-                />
+                <Buttons create={createOrg} />
             </div>
         </>
     );
