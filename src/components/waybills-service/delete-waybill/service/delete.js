@@ -15,22 +15,24 @@ export function deleteWaybill(
     return async function (dispatch) {
         event.preventDefault();
         const [, hideModal] = modalManager(setModal);
+        const slicedPath = path.slice(0, -14);
         const [type, idType] =
-            path.slice(0, -14) === "/sales"
+            slicedPath === "/sales"
                 ? ["SALES", "SaleId"]
                 : ["PURCHASES", "PurchaseId"];
         setLoader();
 
         const OrgId = localStorage.getItem("OrgsId");
         try {
-            await axios.delete(`http://localhost:5600${path.slice(0, -14)}/`, {
+            await axios.delete(process.env.REACT_APP_URL_BASE + slicedPath, {
                 params: {
                     [idType]: id,
                 },
             });
 
             const WAYBILLS = await getData(
-                `http://localhost:5600${path.slice(0, -14)}/?OrgId=${OrgId}`,
+                process.env.REACT_APP_URL_BASE + slicedPath,
+                { OrgId },
                 () => dispatch(setAuthAction(true))
             );
             dispatch({ type, payload: WAYBILLS });

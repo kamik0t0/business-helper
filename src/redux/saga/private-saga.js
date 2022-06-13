@@ -29,10 +29,11 @@ function* getOrgDataVoidWorker({ payload }) {
     const OrgId = localStorage.getItem("OrgsId");
 
     const URLS = [
-        `/counterparty/?OrgId=${OrgId}`,
-        `/sales/?OrgId=${OrgId}`,
-        `/purchases/?OrgId=${OrgId}`,
+        process.env.REACT_APP_URL_COUNTERPARTY,
+        process.env.REACT_APP_URL_SALES,
+        process.env.REACT_APP_URL_PURCHASES,
     ];
+
     const ACTIONS = [
         setCounterpartiesAction,
         setSalesAction,
@@ -43,7 +44,9 @@ function* getOrgDataVoidWorker({ payload }) {
 
     let requests = yield call(() =>
         URLS.map((url) =>
-            getData(url, () => authErrorCallback.put(setAuthAction(false)))
+            getData(url, { OrgId }, () =>
+                authErrorCallback.put(setAuthAction(false))
+            )
         )
     );
 

@@ -24,6 +24,10 @@ import { setAuthAction } from "../../../redux/auth-reducer.js";
 import { setWaybillAction } from "../../../redux/waybill-reducer.js";
 
 export default function UpdateWaybill({ CounterpartyInfo, path }) {
+    const { pathname } = window.location;
+    const resolvedPath = pathname.endsWith("/")
+        ? pathname.slice(0, -1)
+        : pathname;
     const dispatch = useDispatch();
     const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     const type = path === "/sales" ? "SaleId" : "PurchaseId";
@@ -71,14 +75,15 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
 
     useEffect(() => {
         async function fillStartPositions() {
+            const slicedPath = path.slice(0, -1);
             // заполнение стартового массива позиций и новый рендер
             if (positions.length === 0) {
                 try {
                     const PositionsFromDB = await getData(
-                        `http://localhost:5600${path.slice(
-                            0,
-                            -1
-                        )}/?${type}=${id}`,
+                        process.env.REACT_APP_URL_BASE + slicedPath,
+                        {
+                            [type]: id,
+                        },
                         () => dispatch(setAuthAction(true))
                     );
                     let startArr = [];
@@ -190,11 +195,7 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
                                         COUNTERPARTY)
                                 }
                             />
-                            <Link
-                                to={`/counterparties:${path.slice(
-                                    1
-                                )}:updatewaybill`}
-                            >
+                            <Link to={`${resolvedPath}/counterparties`}>
                                 <MyButton>Выбрать...</MyButton>
                             </Link>
                         </div>

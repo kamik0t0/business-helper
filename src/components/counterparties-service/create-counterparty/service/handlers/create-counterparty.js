@@ -4,7 +4,6 @@ import { getData } from "../../../../../utils/getData.js";
 import axios from "axios";
 import { setCounterpartiesAction } from "../../../../../redux/counterparties-reducer.js";
 import { setErrorTrueAction } from "../../../../../redux/error-reducer.js";
-// import { setRegFalseAction } from "../../../../../redux/auth-reducer.js";
 import { setAuthAction } from "../../../../../redux/auth-reducer.js";
 
 export function create(event, counterparty, loader) {
@@ -16,7 +15,7 @@ export function create(event, counterparty, loader) {
             counterparty["OrgId"] = localStorage.getItem("OrgsId");
             loader();
             await axios.post(
-                "http://localhost:5600/counterparty/",
+                process.env.REACT_APP_URL_COUNTERPARTY,
                 counterparty,
                 {
                     params: {
@@ -26,7 +25,8 @@ export function create(event, counterparty, loader) {
             );
 
             const COUNTERPARTIES = await getData(
-                `/counterparty/?OrgId=${counterparty["OrgId"]}`,
+                process.env.REACT_APP_URL_COUNTERPARTY,
+                { OrgId: counterparty.OrgId },
                 () => dispatch(setAuthAction(false))
             );
 

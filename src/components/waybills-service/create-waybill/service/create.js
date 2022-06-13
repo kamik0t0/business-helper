@@ -11,16 +11,22 @@ export function create(event, path, WAYBILL, positions, setNavToList, type) {
         const OrgId = localStorage.getItem("OrgsId");
         WAYBILL.current["OrgId"] = OrgId;
         try {
-            await axios.post(`http://localhost:5600${path}/`, WAYBILL.current, {
-                params: {
-                    table: path.slice(1),
-                    OrgId: OrgId,
-                    CounterpartyId: localStorage.getItem("counterpartyId"),
-                },
-            });
+            await axios.post(
+                process.env.REACT_APP_URL_BASE + path,
+                WAYBILL.current,
+                {
+                    params: {
+                        table: path.slice(1),
+                        OrgId: OrgId,
+                        CounterpartyId: localStorage.getItem("counterpartyId"),
+                    },
+                }
+            );
 
-            const WAYBILLS = await getData(`${path}/?OrgId=${OrgId}`, () =>
-                dispatch(setAuthAction(true))
+            const WAYBILLS = await getData(
+                process.env.REACT_APP_URL_BASE + path,
+                { OrgId },
+                () => dispatch(setAuthAction(true))
             );
             dispatch({ type, payload: WAYBILLS });
             setNavToList();

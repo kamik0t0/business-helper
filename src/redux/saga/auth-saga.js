@@ -42,7 +42,7 @@ export function* authWorker({ payload }) {
 
     try {
         const AuthData = yield call(() =>
-            Promise.resolve(axios.post("http://localhost:5600/login", user))
+            Promise.resolve(axios.post(process.env.REACT_APP_URL_AUTH, user))
         );
         setLoader();
         if (AuthData.data.auth) {
@@ -55,8 +55,10 @@ export function* authWorker({ payload }) {
             const UserId = localStorage.getItem("UserId");
             const authErrorCallback = channel();
             const ORGS = yield call(() =>
-                getData(`/private/?UserId=${UserId}`, () =>
-                    authErrorCallback.put(setAuthAction(false))
+                getData(
+                    process.env.REACT_APP_URL_PRIVATE_OFFICE,
+                    { UserId },
+                    () => authErrorCallback.put(setAuthAction(false))
                 )
             );
             yield put(setOrgsAction(ORGS));

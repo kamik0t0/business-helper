@@ -20,7 +20,7 @@ export default function PatchOrg() {
     const MYORG = useSelector(MyOrg);
 
     const isORG = useRef(isOrganization(MYORG));
-    const [loader, Updated, update] = usePatchOrg(MYORG);
+    const [loader, UpdateData, update] = usePatchOrg(MYORG);
 
     const { setModalUpdate } = useContext(ModalContext);
     const [, hideModal] = modalManager(setModalUpdate);
@@ -34,9 +34,9 @@ export default function PatchOrg() {
         dispatch(update(event));
     };
     const getInputValue = (event, field, length) =>
-        getValue(event, field, length, Updated);
+        getValue(event, field, length, UpdateData);
     const setInputValue = (event, field, length) =>
-        setValue(event, field, length, Updated);
+        setValue(event, field, length, UpdateData);
 
     return (
         <>

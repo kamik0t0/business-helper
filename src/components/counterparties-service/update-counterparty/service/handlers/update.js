@@ -16,7 +16,7 @@ export function update(event, Updated, setLoader, COUNTERPARTY) {
         if (!checkInputs(Updated, COUNTERPARTY)) return;
         setLoader();
         try {
-            await axios.patch("http://localhost:5600/counterparty/", Updated, {
+            await axios.patch(process.env.REACT_APP_URL_COUNTERPARTY, Updated, {
                 params: {
                     table: "counterparties",
                 },
@@ -24,7 +24,8 @@ export function update(event, Updated, setLoader, COUNTERPARTY) {
 
             const OrgId = localStorage.getItem("OrgsId");
             const COUNTERPARTIES = await getData(
-                `/counterparty/?OrgId=${OrgId}`,
+                process.env.REACT_APP_URL_COUNTERPARTY,
+                { OrgId },
                 () => dispatch(setAuthAction(false))
             );
 

@@ -19,15 +19,17 @@ export function useDeleteOrg(OrgId, UserId) {
             event.preventDefault();
             setLoader(!loader);
             try {
-                await axios.delete(`http://localhost:5600/private`, {
+                await axios.delete(process.env.REACT_APP_URL_PRIVATE_OFFICE, {
                     params: {
                         orgId: OrgId,
                         table: "Orgs",
                     },
                 });
 
-                const ORGS = await getData(`/private/?UserId=${UserId}`, () =>
-                    dispatch(setAuthAction(false))
+                const ORGS = await getData(
+                    process.env.REACT_APP_URL_PRIVATE_OFFICE,
+                    { UserId: UserId },
+                    () => dispatch(setAuthAction(false))
                 );
                 dispatch(setMyOrgAction({}));
                 setLoader(!loader);

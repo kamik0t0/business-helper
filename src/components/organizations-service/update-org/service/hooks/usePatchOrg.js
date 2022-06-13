@@ -14,23 +14,23 @@ import { Organizaton } from "../../../../../utils/Org.js";
 export function usePatchOrg(Org) {
     const [loader, setLoader] = useState(false);
     const { setModalUpdate } = useContext(ModalContext);
-    const Updated = useRef(new Organizaton());
+    const UpdateData = useRef(new Organizaton());
     const [, hideModal] = modalManager(setModalUpdate);
 
     function update(event) {
         return async (dispatch) => {
             event.preventDefault();
 
-            Updated.current["id"] = Org.id;
+            UpdateData.current["id"] = Org.id;
 
-            if (!checkInputs(Updated, Org)) return;
+            if (!checkInputs(UpdateData, Org)) return;
 
             setLoader(!loader);
 
             try {
                 await axios.patch(
-                    "http://localhost:5600/private/",
-                    Updated.current,
+                    process.env.REACT_APP_URL_PRIVATE_OFFICE,
+                    UpdateData.current,
                     {
                         params: {
                             table: "Orgs",
@@ -40,12 +40,15 @@ export function usePatchOrg(Org) {
 
                 const UserId = localStorage.getItem("UserId");
                 const ORGS = await getData(
-                    `/private/?table=Orgs&UserId=${UserId}`,
-                    "orgs",
+                    process.env.REACT_APP_URL_PRIVATE_OFFICE,
+                    { table: "Orgs", UserId },
                     () => dispatch(setAuthAction(false))
                 );
 
-                const UpdatedOrg = showUpdateChanges(ORGS, Updated.current.id);
+                const UpdatedOrg = showUpdateChanges(
+                    ORGS,
+                    UpdateData.current.id
+                );
 
                 dispatch(setMyOrgAction(UpdatedOrg));
                 dispatch(setOrgsAction(ORGS));
@@ -61,7 +64,7 @@ export function usePatchOrg(Org) {
             }
         };
     }
-    return [loader, Updated, update];
+    return [loader, UpdateData, update];
 }
 
 // url="https://deploy-test-business-assist.herokuapp.com/private"

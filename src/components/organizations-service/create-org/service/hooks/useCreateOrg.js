@@ -26,7 +26,7 @@ export function useCreateOrg(organization) {
                 setLoader(!loader);
 
                 await axios.post(
-                    "http://localhost:5600/private/",
+                    process.env.REACT_APP_URL_PRIVATE_OFFICE,
                     organization,
                     {
                         params: {
@@ -37,7 +37,8 @@ export function useCreateOrg(organization) {
                 );
 
                 const ORGS = await getData(
-                    `/private/?UserId=${organization["UserId"]}`,
+                    process.env.REACT_APP_URL_PRIVATE_OFFICE,
+                    { UserId: organization.UserId },
                     () => dispatch(setAuthAction(false))
                 );
 

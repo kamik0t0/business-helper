@@ -12,7 +12,7 @@ export function update(event, path, UpdateWaybill, setNav, id, positions) {
         const table = path.slice(1);
         try {
             await axios.patch(
-                `http://localhost:5600${path}/`,
+                process.env.REACT_APP_URL_BASE + path,
                 UpdateWaybill.current,
                 {
                     params: {
@@ -23,7 +23,8 @@ export function update(event, path, UpdateWaybill, setNav, id, positions) {
             );
             const OrgId = localStorage.getItem("OrgsId");
             const WAYBILLS = await getData(
-                `http://localhost:5600${path}/?OrgId=${OrgId}`,
+                process.env.REACT_APP_URL_BASE + path,
+                { OrgId },
                 () => dispatch(setAuthAction(true)),
                 { OrgId: OrgId }
             );
