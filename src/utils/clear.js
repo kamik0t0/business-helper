@@ -3,3 +3,5 @@ export function clear() {
         input.value = "";
     }
 }
+
+console.log("lalalal");
