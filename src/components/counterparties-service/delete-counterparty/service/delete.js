@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getData } from "../../../../utils/getData.js";
+import { getData } from "../../../../utils/getData.ts";
 import { setCounterpartiesAction } from "../../../../redux/counterparties-reducer.js";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
 import { setCounterpartyAction } from "../../../../redux/counterparty-reducer.js";

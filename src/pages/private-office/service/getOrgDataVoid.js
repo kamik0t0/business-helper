@@ -1,4 +1,4 @@
-import { getData } from "../../../utils/getData.js";
+import { getData } from "../../../utils/getData.ts";
 import { setMyOrgAction } from "../../../redux/setMyOrg-reducer.js";
 import { setCounterpartiesAction } from "../../../redux/counterparties-reducer.js";
 import { setSalesAction } from "../../../redux/sales-reducer.js";

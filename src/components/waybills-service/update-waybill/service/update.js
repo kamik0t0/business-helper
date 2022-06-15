@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getData } from "../../../../utils/getData.js";
+import { getData } from "../../../../utils/getData.ts";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
 import { setAuthAction } from "../../../../redux/auth-reducer.js";
 import { setWaybillAction } from "../../../../redux/waybill-reducer.js";

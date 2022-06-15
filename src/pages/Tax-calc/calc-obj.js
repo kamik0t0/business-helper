@@ -1,3 +1,4 @@
+// старый код - не используется; Переписано на классы
 class TaxCalculator {
     constructor(income = 0, salary = 0, salaryTaxRate = 30.2) {
         this.income = income;

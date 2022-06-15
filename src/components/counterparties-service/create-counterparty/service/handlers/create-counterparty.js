@@ -1,6 +1,6 @@
 import { checkInnKpp } from "./check-inn-kpp.js";
 import { Organizaton } from "../../../../../utils/Org.js";
-import { getData } from "../../../../../utils/getData.js";
+import { getData } from "../../../../../utils/getData.ts";
 import axios from "axios";
 import { setCounterpartiesAction } from "../../../../../redux/counterparties-reducer.js";
 import { setErrorTrueAction } from "../../../../../redux/error-reducer.js";

@@ -19,7 +19,7 @@ import {
     makeDate,
 } from "../create-waybill/service/handlers.js";
 import PropTypes from "prop-types";
-import { getData } from "../../../utils/getData.js";
+import { getData } from "../../../utils/getData.ts";
 import { setAuthAction } from "../../../redux/auth-reducer.js";
 import { setWaybillAction } from "../../../redux/waybill-reducer.js";
 

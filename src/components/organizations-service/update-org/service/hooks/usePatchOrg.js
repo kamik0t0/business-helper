@@ -1,6 +1,6 @@
 import { checkInputs } from "../handlers/check-inputs.js";
 import { showUpdateChanges } from "../../../../../utils/showUpdateChanges.js";
-import { getData } from "../../../../../utils/getData.js";
+import { getData } from "../../../../../utils/getData.ts";
 import axios from "axios";
 import { setOrgsAction } from "../../../../../redux/orgs-reducer.js";
 import { setErrorTrueAction } from "../../../../../redux/error-reducer.js";

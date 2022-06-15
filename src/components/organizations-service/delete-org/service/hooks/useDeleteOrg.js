@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getData } from "../../../../../utils/getData.js";
+import { getData } from "../../../../../utils/getData.ts";
 import { setOrgsAction } from "../../../../../redux/orgs-reducer.js";
 import { setErrorTrueAction } from "../../../../../redux/error-reducer.js";
 import { setMyOrgAction } from "../../../../../redux/setMyOrg-reducer.js";

@@ -1,6 +1,6 @@
 import { checkInputs } from "./check-inputs.js";
 import { showUpdateChanges } from "../../../../../utils/showUpdateChanges.js";
-import { getData } from "../../../../../utils/getData.js";
+import { getData } from "../../../../../utils/getData.ts";
 import axios from "axios";
 // import { setRegFalseAction } from "../../../../../redux/auth-reducer.js";
 import { setCounterpartiesAction } from "../../../../../redux/counterparties-reducer.js";
