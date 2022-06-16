@@ -1,4 +1,3 @@
-import React from "react";
 import classes from "./styles/modal.module.css";
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";

@@ -22,7 +22,7 @@ export function getPrice(event, number, positions, setPositions) {
 }
 // получение позиции
 export function getRow(event, number, positions, setPositions, row) {
-    highlight(number, positions, () => setPositions([...positions]), row);
+    setPositions(highlight(number, [...positions], row));
 }
 
 // Подсчёт сумм по накладной и сохранение значения для отправки

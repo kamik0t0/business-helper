@@ -3,7 +3,6 @@ import classes from "./styles/error.module.css";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Error({ message }) {
-    console.log("error");
     const isError = useSelector((state) => state.errorReducer.isError);
     const dispatch = useDispatch();
 

@@ -15,3 +15,5 @@ export function setOrgsReducer(state = STATE, action) {
 }
 
 export const setOrgsAction = (payload) => ({ type: ORGS, payload });
+
+export const orgsSelector = (state) => state.setOrgsReducer.orgs;

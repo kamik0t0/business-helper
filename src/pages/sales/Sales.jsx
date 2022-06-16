@@ -6,11 +6,11 @@ import { useSelector } from "react-redux";
 import WayBillsList from "../../components/waybills-service/waybills/Waybill-list.jsx";
 
 export default function Sales() {
-    const MUORG = useSelector((state) => state.setMyOrgReducer.myOrg);
+    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     const SALES = useSelector((state) => state.setSales.sales);
     return (
         <>
-            {MUORG ? (
+            {MYORG ? (
                 <WayBillsList
                     CounterpartyInfo={["Покупатель", "Покупателю", "Продажи"]}
                     path="/sales/createwaybill"

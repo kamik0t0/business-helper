@@ -1,4 +1,3 @@
-import React from "react";
 import CalcData from "./Calc-data";
 import CalcResult from "./Calc-result";
 import classes from "./styles/Tax-calc-form.module.css";

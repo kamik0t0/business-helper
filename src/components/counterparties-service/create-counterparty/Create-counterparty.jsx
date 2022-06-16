@@ -6,7 +6,7 @@ import Buttons from "./service/components/create-buttons.jsx";
 import { Organizaton } from "../../../utils/Org.js";
 import { OrgFields } from "../../../utils/Org.js";
 import { IpFields } from "../../../utils/Org.js";
-import { clear } from "../../../utils/clear.js";
+import { clear } from "../../../utils/clear.ts";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import { useDispatch } from "react-redux";
 import { create } from "./service/handlers/create-counterparty";

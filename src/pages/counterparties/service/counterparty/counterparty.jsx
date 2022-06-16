@@ -30,4 +30,5 @@ export default function Counterparty({ number, counterparty }) {
 
 Counterparty.propTypes = {
     number: PropTypes.number.isRequired,
+    counterparty: PropTypes.object.isRequired,
 };

@@ -1,7 +1,6 @@
 import React from "react";
 import classes from "./style/counterparties-list.module.css";
 import Counterparty from "../counterparty/counterparty.jsx";
-import PropTypes from "prop-types";
 import { v4 as uuid } from "uuid";
 import { useSelector } from "react-redux";
 
@@ -40,7 +39,3 @@ export default function CounterpartiesList() {
         </>
     );
 }
-
-CounterpartiesList.propTypes = {
-    counterparties: PropTypes.array,
-};

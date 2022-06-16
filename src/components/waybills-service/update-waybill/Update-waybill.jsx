@@ -215,11 +215,12 @@ export default function UpdateWaybill({ CounterpartyInfo, path }) {
                                     item={item}
                                     highlight={item.highlight}
                                     getRow={(event, number) =>
-                                        highlight(
-                                            number,
-                                            positions,
-                                            () => setPositions([...positions]),
-                                            row
+                                        setPositions(
+                                            highlight(
+                                                number,
+                                                [...positions],
+                                                row
+                                            )
                                         )
                                     }
                                     number={index}

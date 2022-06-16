@@ -1,4 +1,4 @@
-import { clear } from "../../../../../utils/clear.js";
+import { clear } from "../../../../../utils/clear.ts";
 // выбор организационно-правовой формы - добавляем/удаляем поля для ввода реквизитов
 export function switchOPF(event, setIsOrg, ORG) {
     console.log(ORG);

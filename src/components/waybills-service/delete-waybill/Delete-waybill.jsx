@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import { ModalContext } from "../../../blocks/content/Main.jsx";
 import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
 
-export default function DeleteWaybill({ path, setWaybills }) {
+export default function DeleteWaybill({ path }) {
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
     const WAYBILL = useSelector((state) => state.setWaybill.waybill);
@@ -47,8 +47,7 @@ export default function DeleteWaybill({ path, setWaybills }) {
                                             setModalDelete,
                                             WAYBILL.id,
                                             path,
-                                            () => setLoader(!loader),
-                                            setWaybills
+                                            () => setLoader(!loader)
                                         )
                                     )
                                 }

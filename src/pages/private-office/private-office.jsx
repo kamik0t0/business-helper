@@ -11,9 +11,10 @@ import { isOrganization } from "../../utils/isOrg.js";
 // функция аналогичная getPrivateData но работает с redux-thunk.
 import { getOrgDataVoid } from "./service/getOrgDataVoid.js";
 import { getPrivateData } from "../../redux/saga/private-saga.js";
+import { orgsSelector } from "../../redux/orgs-reducer";
 
 export default function Office() {
-    const ORGS = useSelector((state) => state.setOrgsReducer.orgs);
+    const ORGS = useSelector(orgsSelector);
     const isAuth = useSelector((state) => state.authReducer.isAuth);
     const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     const dispatch = useDispatch();
@@ -21,6 +22,12 @@ export default function Office() {
     let isORG = useRef();
     // ООО или ИП
     isORG.current = isOrganization(MYORG);
+    // работа с состоянием через Redux Saga
+    function getMyOrgData(event) {
+        return dispatch(
+            getPrivateData(event, () => setLoader((loader) => !loader), ORGS)
+        );
+    }
 
     // инлайн стили для select в личном кабинете (выбор организации)
     const customInlineStyles = {
@@ -44,15 +51,7 @@ export default function Office() {
                         id="ORG"
                         multiple={false}
                         defaultValue={["Выбрать организацию"][0]}
-                        func={(event) =>
-                            dispatch(
-                                getPrivateData(
-                                    event,
-                                    () => setLoader(!loader),
-                                    ORGS
-                                )
-                            )
-                        }
+                        func={getMyOrgData}
                         options={makeOrgsArr(ORGS)}
                     />
                     {Object.keys(MYORG).length === 0 ? (

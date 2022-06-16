@@ -4,14 +4,7 @@ import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
 import { setAuthAction } from "../../../../redux/auth-reducer.js";
 import { modalManager } from "../../../../UI/modal/service/handlers/modal-control.js";
 
-export function deleteWaybill(
-    event,
-    setModal,
-    id,
-    path,
-    setLoader,
-    setWaybills
-) {
+export function deleteWaybill(event, setModal, id, path, setLoader) {
     return async function (dispatch) {
         event.preventDefault();
         const [, hideModal] = modalManager(setModal);
@@ -37,7 +30,6 @@ export function deleteWaybill(
             );
             dispatch({ type, payload: WAYBILLS });
             // дополнительно обновляется локальный стейт в Waybill-list
-            setWaybills([...WAYBILLS]);
             hideModal();
             setLoader();
         } catch (error) {

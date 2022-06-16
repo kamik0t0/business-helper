@@ -14,11 +14,8 @@ export const useCounterparty = () => {
     const grabCounterparty = (number) => {
         dispatch(setCounterpartyAction(COUNTERPARTIES[number]));
         localStorage.setItem("counterpartyId", COUNTERPARTIES[number].id);
-        highlight(
-            number,
-            COUNTERPARTIES,
-            () => dispatch(setCounterpartiesAction([...COUNTERPARTIES])),
-            row
+        dispatch(
+            setCounterpartiesAction(highlight(number, [...COUNTERPARTIES], row))
         );
     };
 

@@ -1,17 +1,13 @@
 // выделение позиции
-export function highlight(number, array, setArray, row) {
-    console.log(array);
+export function highlight(number, array, row) {
     number++;
-    console.log("Number highlight=" + number);
     // если позиция не была задана
     if (!row.current) {
         // получение номера
         row.current = number;
         // подсветка
         array[row.current - 1].highlight = true;
-        // рендер
-        setArray();
-        return;
+        return array;
     }
     // клик по выделенной позиции
     if (row.current === number) return;
@@ -27,8 +23,6 @@ export function highlight(number, array, setArray, row) {
         } else {
             row.current = number;
         }
-        // рендер
-        setArray();
-        return;
+        return array;
     }
 }
