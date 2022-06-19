@@ -1,4 +1,4 @@
-export class Positions {
+export class PositionClass {
     constructor(number, nomenclature, quantity, price, summ, NDS, total, id) {
         this.number = +number;
         this.nomenclature = nomenclature || "";

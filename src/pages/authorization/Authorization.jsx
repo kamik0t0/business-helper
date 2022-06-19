@@ -8,6 +8,7 @@ import Loader from "../../UI/Loader/Loader.jsx";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
 import { auth } from "../../redux/saga/auth-saga.js";
+import { loaderStyle, submitStyle } from "./service/inlineStyles";
 
 export default function Login() {
     const [isVisible, setIsVisible] = useState(false);
@@ -34,56 +35,38 @@ export default function Login() {
     let pass = useRef("kdkfjdilkmf2312387");
     const form = useRef();
 
-    // Показать пароль
     function showPass() {
         form.current.pass.setAttribute("type", "text");
         setIsVisible(!isVisible);
     }
-    // Спрятать пароль
     function hidePass() {
         form.current.pass.setAttribute("type", "password");
         setIsVisible(!isVisible);
     }
-
     const getEmail = (event) => {
         email.current = event.target.value;
     };
     const getPass = (event) => {
         email.current = event.target.value;
     };
+    const dispatchAuth = (event) =>
+        dispatch(auth(event, email.current, pass.current, () => setLoader));
 
     return (
         <>
-            {" "}
             {isAuth ? (
                 <Navigate to="/" />
             ) : (
                 <div id="form" className={classes.login}>
                     <form
                         ref={form}
-                        onSubmit={(event) =>
-                            dispatch(
-                                auth(
-                                    event,
-                                    email.current,
-                                    pass.current,
-                                    () => setLoader
-                                )
-                            )
-                        }
+                        onSubmit={dispatchAuth}
                         name="auth"
                         className={classes.login_frame}
                     >
                         <div className={classes.login_header}>Авторизация</div>
                         {loader ? (
-                            <Loader
-                                style={{
-                                    color: "#495A6F",
-                                    borderColor: "#495A6F",
-                                    height: "200px",
-                                    width: "200px",
-                                }}
-                            />
+                            <Loader style={loaderStyle} />
                         ) : (
                             <div className={classes.login_auth}>
                                 <div className={classes.login_auth_user}>
@@ -123,14 +106,7 @@ export default function Login() {
                                 <MyInput
                                     type="submit"
                                     value="Войти"
-                                    style={{
-                                        width: "85%",
-                                        height: "35px",
-                                        color: "#f0ebde",
-                                        margin: "0 auto 0 auto",
-                                        fontSize: "1.2em",
-                                        textTransform: "uppercase",
-                                    }}
+                                    style={submitStyle}
                                 />
                             </div>
                         )}

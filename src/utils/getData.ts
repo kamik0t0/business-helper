@@ -21,7 +21,7 @@ export let getData: getDataFunc;
 
 getData = async function (
     url: string,
-    params: { a: string },
+    params: { a: string | number },
     callDispatch: object
 ) {
     try {

@@ -6,21 +6,22 @@ import classes from "../styles/waybill-list.module.css";
 import { useSelector } from "react-redux";
 import { ModalContext } from "../../../../blocks/content/Main";
 import { modalManager } from "../../../../UI/modal/service/handlers/modal-control";
+import PropTypes from "prop-types";
 
 const InteractionHeader = ({
     highlightOffArgs,
     filterColumn,
     filter,
     info,
-    path,
 }) => {
     const { setModalDelete } = useContext(ModalContext);
     const [showDeleteModal] = modalManager(setModalDelete);
     const WAYBILL = useSelector((state) => state.setWaybill.waybill);
+    const { pathname } = window.location;
 
     return (
         <div className={classes.waybills_header}>
-            <Link to={path}>
+            <Link to={pathname + "/createwaybill"}>
                 <div
                     onClick={highlightOffArgs}
                     className={classes.waybills_header_add}
@@ -72,3 +73,10 @@ const InteractionHeader = ({
 };
 
 export default InteractionHeader;
+
+InteractionHeader.propTypes = {
+    highlightOffArgs: PropTypes.func.isRequired,
+    filterColumn: PropTypes.func.isRequired,
+    filter: PropTypes.func.isRequired,
+    info: PropTypes.array.isRequired,
+};

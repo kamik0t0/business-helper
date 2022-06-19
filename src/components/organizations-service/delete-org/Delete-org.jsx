@@ -10,7 +10,6 @@ import { useDeleteOrg } from "./service/hooks/useDeleteOrg.js";
 import { MyOrg } from "../../../redux/setMyOrg-reducer.js";
 
 export default function DeleteOrg() {
-    console.log(process.env.REACT_APP_URL_BASE);
     const dispatch = useDispatch();
     const MYORG = useSelector(MyOrg);
 

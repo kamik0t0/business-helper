@@ -8,57 +8,55 @@ import PropTypes from "prop-types";
 export default function Position({
     item,
     highlight,
-    getRow,
+    highlightPosition,
     number,
-    getNomenclature,
-    getQuantity,
-    getPrice,
+    getPositionValues,
 }) {
     const cx = classNames.bind(classes);
     const isHighlight = cx({
         [classes.position]: true,
         [classes.highlight]: highlight,
     });
+
+    const inputStyle = {
+        display: "flex",
+        flex: "1 1 100%",
+        width: "100%",
+    };
+
+    const getNomenclature = (event) =>
+        getPositionValues(event, number, "nomenclature");
+    const getQuantity = (event) => getPositionValues(event, number, "quantity");
+    const getPrice = (event) => getPositionValues(event, number, "price");
+
     return (
         <>
             <div
-                onClick={(event) => getRow(event, number)}
+                onClick={(event) => highlightPosition(event, number)}
                 className={isHighlight}
             >
                 <div className={classes.position_number}>{number + 1}</div>
                 <div className={classes.position_nomenclature}>
                     <MyInput
-                        style={{
-                            display: "flex",
-                            flex: "1 1 100%",
-                            width: "100%",
-                        }}
+                        style={inputStyle}
                         defaultValue={"" || item.nomenclature}
-                        getValue={(event) => getNomenclature(event, number)}
+                        getValue={getNomenclature}
                         type="text"
                     />
                 </div>
                 <div className={classes.position_quantity}>
                     <MyInput
-                        style={{
-                            display: "flex",
-                            flex: "1 1 100%",
-                            width: "100%",
-                        }}
+                        style={inputStyle}
                         defaultValue={+item.quantity || ""}
-                        getValue={(event) => getQuantity(event, number)}
+                        getValue={getQuantity}
                         type="number"
                     />
                 </div>
                 <div className={classes.position_price}>
                     <MyInput
-                        style={{
-                            display: "flex",
-                            flex: "1 1 100%",
-                            width: "100%",
-                        }}
+                        style={inputStyle}
                         defaultValue={+item.price || ""}
-                        getValue={(event) => getPrice(event, number)}
+                        getValue={getPrice}
                         type="number"
                     />
                 </div>
@@ -80,9 +78,7 @@ export default function Position({
 Position.propTypes = {
     item: PropTypes.object.isRequired,
     highlight: PropTypes.bool.isRequired,
-    getRow: PropTypes.func.isRequired,
+    highlightPosition: PropTypes.func.isRequired,
     number: PropTypes.number.isRequired,
-    getNomenclature: PropTypes.func.isRequired,
-    getQuantity: PropTypes.func.isRequired,
-    getPrice: PropTypes.func.isRequired,
+    getPositionValues: PropTypes.func.isRequired,
 };

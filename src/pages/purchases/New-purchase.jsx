@@ -6,7 +6,6 @@ export default function NewPurchase() {
     return (
         <CreateWaybill
             CounterpartyInfo={["Покупка товаров: создание", "Поставщик:", "№"]}
-            path="/purchases"
         />
     );
 }

@@ -10,7 +10,6 @@ export default function UpdatePurchase() {
                 "Purchase",
                 "№",
             ]}
-            path="/purchases"
         />
     );
 }

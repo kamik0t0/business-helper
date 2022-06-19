@@ -13,7 +13,7 @@ export function Total({ array, field, name, total }) {
     );
 }
 
-export function TotalWrapper({ children, arr }) {
+export function TotalWrapper({ children }) {
     return <div className={classes.totalWrapper}>{children}</div>;
 }
 

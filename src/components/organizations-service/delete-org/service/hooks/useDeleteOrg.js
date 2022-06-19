@@ -11,7 +11,6 @@ import { modalManager } from "../../../../../UI/modal/service/handlers/modal-con
 export function useDeleteOrg(OrgId, UserId) {
     const [loader, setLoader] = useState(false);
     const { setModalDelete } = useContext(ModalContext);
-
     const [, hideModal] = modalManager(setModalDelete);
 
     function deleteOrg(event) {

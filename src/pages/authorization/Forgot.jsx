@@ -9,6 +9,7 @@ import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
 import { useSelector } from "react-redux";
 import { forgot } from "./service/forgot.js";
+import { loaderStyle, submitStyle } from "./service/inlineStyles";
 
 export default function Forgot() {
     const [isVisible, setIsVisible] = useState(false);
@@ -49,6 +50,27 @@ export default function Forgot() {
         setIsVisible(false);
     }
 
+    const dispatchRecover = (event) =>
+        dispatch(
+            forgot(
+                event,
+                email.current,
+                repeatPass.current,
+                newPass.current,
+                () => setLoader(!loader),
+                () => setIsRecover(!isRecover)
+            )
+        );
+    const getEmail = (event) => {
+        email.current = event.target.value;
+    };
+    const getNewPass = (event) => {
+        newPass.current = event.target.value;
+    };
+    const getRepeatedPass = (event) => {
+        repeatPass.current = event.target.value;
+    };
+
     return (
         <>
             {isRecover ? (
@@ -57,18 +79,7 @@ export default function Forgot() {
                 <div className={classes.login}>
                     <form
                         ref={form}
-                        onSubmit={(event) =>
-                            dispatch(
-                                forgot(
-                                    event,
-                                    email.current,
-                                    repeatPass.current,
-                                    newPass.current,
-                                    () => setLoader(!loader),
-                                    () => setIsRecover(!isRecover)
-                                )
-                            )
-                        }
+                        onSubmit={dispatchRecover}
                         name="auth"
                         className={classes.login_frame}
                     >
@@ -76,14 +87,7 @@ export default function Forgot() {
                             Восстановление пароля
                         </div>
                         {loader ? (
-                            <Loader
-                                style={{
-                                    color: "#495A6F",
-                                    borderColor: "#495A6F",
-                                    height: "200px",
-                                    width: "200px",
-                                }}
-                            />
+                            <Loader style={loaderStyle} />
                         ) : (
                             <div className={classes.login_auth}>
                                 <div className={classes.login_auth_user}>
@@ -92,9 +96,7 @@ export default function Forgot() {
                                     ></div>
                                     <input
                                         defaultValue={email.current}
-                                        onChange={(event) => {
-                                            email.current = event.target.value;
-                                        }}
+                                        onChange={getEmail}
                                         name="email"
                                         type="email"
                                         className={authErrUser}
@@ -107,10 +109,7 @@ export default function Forgot() {
                                     ></div>
                                     <input
                                         defaultValue={newPass.current}
-                                        onChange={(event) => {
-                                            newPass.current =
-                                                event.target.value;
-                                        }}
+                                        onChange={getNewPass}
                                         name="new_password"
                                         type="password"
                                         className={authErrPass}
@@ -128,43 +127,23 @@ export default function Forgot() {
                                     ></div>
                                     <input
                                         defaultValue={repeatPass.current}
-                                        onChange={(event) => {
-                                            repeatPass.current =
-                                                event.target.value;
-                                        }}
+                                        onChange={getRepeatedPass}
                                         name="repeat_password"
                                         type="password"
-                                        className={
-                                            AUTHERROR.isInvalid
-                                                ? classes.login_auth_pass_input +
-                                                  " " +
-                                                  classes.wrong
-                                                : classes.login_auth_pass_input
-                                        }
+                                        className={authErrPass}
                                         placeholder="Repeat Password"
                                     />
                                     <div
                                         onMouseDown={showPass}
                                         onMouseUp={hidePass}
-                                        className={
-                                            isVisible
-                                                ? classes.login_auth_pass_eye
-                                                : classes.login_auth_pass_eye_close
-                                        }
+                                        className={passVisibility}
                                     ></div>
                                 </div>
                                 <AuthError />
                                 <MyInput
                                     type="submit"
                                     value="Новый пароль"
-                                    style={{
-                                        width: "85%",
-                                        height: "35px",
-                                        color: "#f0ebde",
-                                        margin: "0 auto 0 auto",
-                                        fontSize: "1.2em",
-                                        textTransform: "uppercase",
-                                    }}
+                                    style={submitStyle}
                                 />
                             </div>
                         )}

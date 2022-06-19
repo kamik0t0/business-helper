@@ -54,7 +54,7 @@ export default function AppRouter() {
             <Route exact path="/private" element={<Private />}></Route>
             <Route
                 exact
-                path="/purchases/createwaybill/counterparties"
+                path="/counterparties"
                 element={<Counterparties />}
             ></Route>
             <Route
@@ -64,7 +64,7 @@ export default function AppRouter() {
             ></Route>
             <Route
                 exact
-                path="/sales/createwaybill/counterparties"
+                path="/counterparties"
                 element={<Counterparties />}
             ></Route>
             <Route

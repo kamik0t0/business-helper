@@ -8,8 +8,6 @@ import MySelect from "../../UI/input/MySelect/MySelect.jsx";
 import OrgInfo from "./service/org-info.jsx";
 import Buttons from "./service/buttons/buttons.jsx";
 import { isOrganization } from "../../utils/isOrg.js";
-// функция аналогичная getPrivateData но работает с redux-thunk.
-import { getOrgDataVoid } from "./service/getOrgDataVoid.js";
 import { getPrivateData } from "../../redux/saga/private-saga.js";
 import { orgsSelector } from "../../redux/orgs-reducer";
 
@@ -28,7 +26,6 @@ export default function Office() {
             getPrivateData(event, () => setLoader((loader) => !loader), ORGS)
         );
     }
-
     // инлайн стили для select в личном кабинете (выбор организации)
     const customInlineStyles = {
         height: "30px",

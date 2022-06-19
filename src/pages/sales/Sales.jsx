@@ -13,7 +13,6 @@ export default function Sales() {
             {MYORG ? (
                 <WayBillsList
                     CounterpartyInfo={["Покупатель", "Покупателю", "Продажи"]}
-                    path="/sales/createwaybill"
                     WAYBILLS={SALES}
                 />
             ) : (

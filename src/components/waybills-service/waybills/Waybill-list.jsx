@@ -1,5 +1,5 @@
 // компонент показывающий список существующих накладных
-import { useRef, useContext, useEffect } from "react";
+import { useRef, useContext, useEffect, useMemo } from "react";
 import { v4 as uuid } from "uuid";
 import classes from "./styles/waybill-list.module.css";
 import Waybill from "./waybill/Waybill.jsx";
@@ -19,10 +19,11 @@ import { useFilter } from "./service/hooks/useFilter";
 import { highlightOff } from "./service/scripts/highlightOff.js";
 import InteractionHeader from "./header/Interaction-header.jsx";
 
-export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
+export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
+    const { pathname } = window.location;
     const dispatch = useDispatch();
     let row = useRef(null);
-    const type = path.slice(0, -14) === "/sales" ? "SALES" : "PURCHASES";
+    const type = pathname === "/sales" ? "SALES" : "PURCHASES";
 
     const WAYBILL = useSelector((state) => state.setWaybill.waybill);
 
@@ -39,15 +40,14 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
         setWaybills(WAYBILLS);
     }, [WAYBILLS]);
 
-    const getWaybill = (event, number) => {
+    const getWaybill = (event, number) =>
         dispatch(setWaybillAction(waybills[number]));
-    };
 
-    const highlightOffArgs = () =>
+    const setHighlightOff = () =>
         setWaybills(highlightOff([...waybills], WAYBILL, showUpdateModal));
 
     const highlightON = (index) =>
-        setWaybills(highlight(index, [...waybills], row));
+        setWaybills(() => highlight(index, waybills, row));
 
     return (
         <>
@@ -55,11 +55,10 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                 <>
                     <div className={classes.content}>
                         <InteractionHeader
-                            highlightOffArgs={highlightOffArgs}
+                            highlightOffArgs={setHighlightOff}
                             filterColumn={filterColumn}
                             filter={filter}
-                            info={[CounterpartyInfo[1], CounterpartyInfo[1]]}
-                            path={path}
+                            info={[CounterpartyInfo[1], CounterpartyInfo[2]]}
                         />
 
                         <WaybillHeader sort={sort} info={CounterpartyInfo[0]} />
@@ -83,7 +82,7 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
                             active={modalDelete.add}
                             setModal={setModalDelete}
                         >
-                            <DeleteWaybill path={path} />
+                            <DeleteWaybill />
                         </Modal>
                     )}
                     {modalUpdate.show && (
@@ -110,6 +109,5 @@ export default function WayBillsList({ CounterpartyInfo, path, WAYBILLS }) {
 
 WayBillsList.propTypes = {
     CounterpartyInfo: PropTypes.array.isRequired,
-    path: PropTypes.string.isRequired,
     WAYBILLS: PropTypes.array.isRequired,
 };

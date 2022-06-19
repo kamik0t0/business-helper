@@ -5,7 +5,6 @@ export default function UpdateSale() {
     return (
         <UpdateWaybill
             CounterpartyInfo={["Реализация: изменение", "Покупатель", "Sale"]}
-            path="/sales"
         />
     );
 }

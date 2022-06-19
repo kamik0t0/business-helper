@@ -8,6 +8,7 @@ import Loader from "../../UI/Loader/Loader.jsx";
 import MyInput from "../../UI/input/MyInput/MyInput.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
 import { addUser } from "./service/registration.js";
+import { loaderStyle, submitStyle } from "./service/inlineStyles";
 
 export default function Registration() {
     const [isVisible, setIsVisible] = useState(false);
@@ -34,6 +35,31 @@ export default function Registration() {
     let pass = useRef();
     const form = useRef();
 
+    const dispathcAddUser = (event) =>
+        dispatch(
+            addUser(
+                event,
+                email.current,
+                pass.current,
+                () => setIsReg(!isReg),
+                setLoader
+            )
+        );
+    const getEmail = (event) => {
+        email.current = event.target.value;
+    };
+    const getPass = (event) => {
+        email.current = event.target.value;
+    };
+    const showPass = () => {
+        form.current.pass.setAttribute("type", "text");
+        setIsVisible(!isVisible);
+    };
+    const hidePass = () => {
+        form.current.pass.setAttribute("type", "password");
+        setIsVisible(!isVisible);
+    };
+
     return (
         <>
             {isReg ? (
@@ -43,17 +69,7 @@ export default function Registration() {
                     <div className={classes.login}>
                         <form
                             ref={form}
-                            onSubmit={(event) =>
-                                dispatch(
-                                    addUser(
-                                        event,
-                                        email.current,
-                                        pass.current,
-                                        () => setIsReg(!isReg),
-                                        setLoader
-                                    )
-                                )
-                            }
+                            onSubmit={dispathcAddUser}
                             name="auth"
                             id="auth"
                             className={classes.login_frame}
@@ -62,14 +78,7 @@ export default function Registration() {
                                 Регистрация
                             </div>
                             {loader ? (
-                                <Loader
-                                    style={{
-                                        color: "#495A6F",
-                                        borderColor: "#495A6F",
-                                        height: "200px",
-                                        width: "200px",
-                                    }}
-                                />
+                                <Loader style={loaderStyle} />
                             ) : (
                                 <div className={classes.login_auth}>
                                     <div className={classes.login_auth_user}>
@@ -80,10 +89,7 @@ export default function Registration() {
                                         ></div>
                                         <input
                                             defaultValue={email.current}
-                                            onChange={(event) => {
-                                                email.current =
-                                                    event.target.value;
-                                            }}
+                                            onChange={getEmail}
                                             name="email"
                                             type="email"
                                             className={authErrUser}
@@ -99,30 +105,15 @@ export default function Registration() {
                                         <input
                                             defaultValue={pass.current}
                                             minLength={10}
-                                            onChange={(event) => {
-                                                pass.current =
-                                                    event.target.value;
-                                            }}
+                                            onChange={getPass}
                                             name="pass"
                                             type="password"
                                             className={authErrPass}
                                             placeholder="Password"
                                         />
                                         <div
-                                            onMouseDown={() => {
-                                                form.current.pass.setAttribute(
-                                                    "type",
-                                                    "text"
-                                                );
-                                                setIsVisible(!isVisible);
-                                            }}
-                                            onMouseUp={() => {
-                                                form.current.pass.setAttribute(
-                                                    "type",
-                                                    "password"
-                                                );
-                                                setIsVisible(!isVisible);
-                                            }}
+                                            onMouseDown={showPass}
+                                            onMouseUp={hidePass}
                                             className={passVisibility}
                                         ></div>
                                     </div>
@@ -130,14 +121,7 @@ export default function Registration() {
                                     <MyInput
                                         type="submit"
                                         value="Зарегистрироваться"
-                                        style={{
-                                            width: "85%",
-                                            height: "35px",
-                                            color: "#f0ebde",
-                                            margin: "0 auto 0 auto",
-                                            fontSize: "1.2em",
-                                            textTransform: "uppercase",
-                                        }}
+                                        style={submitStyle}
                                     />
                                 </div>
                             )}

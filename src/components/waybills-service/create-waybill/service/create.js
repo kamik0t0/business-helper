@@ -4,19 +4,20 @@ import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
 import { setAuthAction } from "../../../../redux/auth-reducer.js";
 
 // создание накладной
-export function create(event, path, WAYBILL, positions, setNavToList, type) {
+export function create(event, WAYBILL, positions, setNavToList, type) {
     return async function (dispatch) {
         event.preventDefault();
+        const { pathname } = window.location;
         WAYBILL.current["positions"] = positions;
         const OrgId = localStorage.getItem("OrgsId");
         WAYBILL.current["OrgId"] = OrgId;
         try {
             await axios.post(
-                process.env.REACT_APP_URL_BASE + path,
+                process.env.REACT_APP_URL_BASE + pathname,
                 WAYBILL.current,
                 {
                     params: {
-                        table: path.slice(1),
+                        table: pathname.slice(1),
                         OrgId: OrgId,
                         CounterpartyId: localStorage.getItem("counterpartyId"),
                     },
@@ -24,7 +25,7 @@ export function create(event, path, WAYBILL, positions, setNavToList, type) {
             );
 
             const WAYBILLS = await getData(
-                process.env.REACT_APP_URL_BASE + path,
+                process.env.REACT_APP_URL_BASE + pathname,
                 { OrgId },
                 () => dispatch(setAuthAction(true))
             );

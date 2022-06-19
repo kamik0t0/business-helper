@@ -1,6 +1,8 @@
 // выделение позиции
 export function highlight(number, array, row) {
     number++;
+    // клик по выделенной позиции
+    if (row.current === number) return array;
     // если позиция не была задана
     if (!row.current) {
         // получение номера
@@ -9,8 +11,6 @@ export function highlight(number, array, row) {
         array[row.current - 1].highlight = true;
         return array;
     }
-    // клик по выделенной позиции
-    if (row.current === number) return;
     // клик по другой позиции
     if (row.current !== number && row.current) {
         if (array[row.current - 1]) {

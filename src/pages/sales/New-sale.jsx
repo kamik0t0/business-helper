@@ -6,7 +6,6 @@ export default function NewSale() {
         <>
             <CreateWaybill
                 CounterpartyInfo={["Продажа товаров: создание", "Покупатель:"]}
-                path="/sales"
             />
         </>
     );
