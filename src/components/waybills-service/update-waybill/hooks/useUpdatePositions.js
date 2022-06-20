@@ -3,7 +3,7 @@ import { PositionClass } from "../../../../utils/wbpositionClass";
 import { highlight } from "../../../../utils/highlight";
 import { getValue } from "../../common/scripts";
 import { getData } from "../../../../utils/getData";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAuthAction } from "../../../../redux/auth-reducer";
 
@@ -11,10 +11,14 @@ export function useUpdatePositions() {
     const dispatch = useDispatch();
     const [positions, setPositions] = useState([]);
     const [counter, setCounter] = useState(0);
+    const { id } = useParams();
+
     // useRef - запоминаем значение при ререндеринге
     let row = useRef(null);
     const { pathname } = useLocation();
-    const type = pathname === "/sales/updatewaybill" ? "SaleId" : "PurchaseId";
+
+    const type = pathname === `/sales/${id}` ? "SaleId" : "PurchaseId";
+
     const [loader, setLoader] = useState(true);
 
     const addPosition = (event) => {
@@ -48,7 +52,7 @@ export function useUpdatePositions() {
     async function getPositions(waybillId) {
         try {
             const PositionsFromDB = await getData(
-                process.env.REACT_APP_URL_BASE + pathname.slice(0, -15) + "/",
+                process.env.REACT_APP_URL_BASE + pathname,
                 {
                     [type]: waybillId,
                 },

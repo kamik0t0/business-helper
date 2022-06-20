@@ -3,7 +3,7 @@ import { PositionClass } from "../../../../utils/wbpositionClass";
 import { highlight } from "../../../../utils/highlight";
 import { getValue } from "../../common/scripts";
 
-export function usePositions() {
+export function useCreatePositions() {
     const [positions, setPositions] = useState([]);
     const [counter, setCounter] = useState(0);
     // useRef - запоминаем значение при ререндеринге

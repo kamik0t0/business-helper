@@ -4,6 +4,7 @@ export default async function authTokenInterseptor(axios, dispatchFalse) {
             config.headers.Authorization = `Bearer ${localStorage.getItem(
                 "token"
             )}`;
+
             return config;
         },
         function (error) {

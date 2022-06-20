@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -19,10 +19,12 @@ export function useCreateWaybill(positions) {
     const WAYBILL = useRef({ date: makeDefaultDate() });
     WAYBILL.current["myOrg"] = MYORG;
     WAYBILL.current["counterparty"] = COUNTERPARTY;
+    const [loader, setLoader] = useState(false);
 
     function create(event) {
         return async function (dispatch) {
             event.preventDefault();
+            setLoader((loader) => !loader);
             const { pathname } = window.location;
             WAYBILL.current["positions"] = positions;
             const OrgId = localStorage.getItem("OrgsId");
@@ -48,6 +50,7 @@ export function useCreateWaybill(positions) {
                     () => dispatch(setAuthAction(true))
                 );
                 dispatch({ type: type, payload: WAYBILLS });
+                setLoader((loader) => !loader);
                 navigate(-1);
             } catch (error) {
                 console.log(error);
@@ -67,5 +70,13 @@ export function useCreateWaybill(positions) {
 
     const defaultDate = WAYBILL.current.date.slice(0, -14);
 
-    return [WAYBILL, defaultDate, create, setTotal, getDate, getCounterparty];
+    return [
+        loader,
+        WAYBILL,
+        defaultDate,
+        create,
+        setTotal,
+        getDate,
+        getCounterparty,
+    ];
 }

@@ -5,12 +5,13 @@ import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
 import { setAuthAction } from "../../../../redux/auth-reducer.js";
 import { modalManager } from "../../../../UI/modal/service/handlers/modal-control.js";
 import { ModalContext } from "../../../../blocks/content/Main";
+import { useLocation } from "react-router";
 
 export function useDeleteWaybill(id) {
     const [loader, setLoader] = useState(false);
     const { setModalDelete } = useContext(ModalContext);
     const [, hideDeleteModal] = modalManager(setModalDelete);
-    const { pathname } = window.location;
+    const { pathname } = useLocation();
 
     function deleteWaybill(event) {
         return async function (dispatch) {

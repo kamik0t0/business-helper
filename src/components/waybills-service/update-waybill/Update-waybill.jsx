@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import classes from "../styles/update-waybill.module.css";
-import Position from "../create-waybill/position/Position.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import PositionHeaders from "../common/Position-headers.jsx";
 import { Total, TotalWrapper } from "../create-waybill/total/Total.jsx";
@@ -12,6 +11,7 @@ import PropTypes from "prop-types";
 import { setWaybillAction } from "../../../redux/waybill-reducer.js";
 import { useUpdatePositions } from "./hooks/useUpdatePositions";
 import { useUpdateWaybill } from "./hooks/useUpdateWaybill";
+import Positons from "../common/Positons-HOC.jsx";
 
 export default function UpdateWaybill({ CounterpartyInfo }) {
     const dispatch = useDispatch();
@@ -101,18 +101,11 @@ export default function UpdateWaybill({ CounterpartyInfo }) {
                 {loader ? (
                     <Loader />
                 ) : (
-                    positions.map((item, index) => {
-                        return (
-                            <Position
-                                key={item.number}
-                                item={item}
-                                highlight={item.highlight}
-                                highlightPosition={highlightPosition}
-                                number={index}
-                                getPositionValues={getPositionValues}
-                            />
-                        );
-                    })
+                    <Positons
+                        positions={positions}
+                        highlightPosition={highlightPosition}
+                        getPositionValues={getPositionValues}
+                    />
                 )}
                 <TotalWrapper arr={positions}>
                     <Total

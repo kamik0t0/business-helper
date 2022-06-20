@@ -1,5 +1,5 @@
 import React from "react";
-import Position from "../position/Position.jsx";
+import Position from "./position/Position.jsx";
 import PropTypes from "prop-types";
 
 const Positons = ({ positions, highlightPosition, getPositionValues }) => {

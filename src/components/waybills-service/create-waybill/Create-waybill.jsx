@@ -9,8 +9,9 @@ import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import PropTypes from "prop-types";
 import { useCreateWaybill } from "./hooks/useCreateWaybill";
-import { usePositions } from "./hooks/usePositions";
-import Positons from "./positions/Positons-HOC.jsx";
+import { useCreatePositions } from "./hooks/usePositions";
+import Positons from "../common/Positons-HOC.jsx";
+import Loader from "../../../UI/Loader/Loader.jsx";
 
 export default function CreateWaybill({ CounterpartyInfo }) {
     const dispatch = useDispatch();
@@ -27,10 +28,17 @@ export default function CreateWaybill({ CounterpartyInfo }) {
         deletePosition,
         highlightPosition,
         getPositionValues,
-    ] = usePositions();
+    ] = useCreatePositions();
 
-    const [WAYBILL, defaultDate, create, setTotal, getDate, getCounterparty] =
-        useCreateWaybill(positions);
+    const [
+        loader,
+        WAYBILL,
+        defaultDate,
+        create,
+        setTotal,
+        getDate,
+        getCounterparty,
+    ] = useCreateWaybill(positions);
 
     const dispatchCreateWaybill = (event) => dispatch(create(event));
 
@@ -76,11 +84,15 @@ export default function CreateWaybill({ CounterpartyInfo }) {
                 </div>
 
                 <PositionHeaders />
-                <Positons
-                    positions={positions}
-                    highlightPosition={highlightPosition}
-                    getPositionValues={getPositionValues}
-                />
+                {loader ? (
+                    <Loader />
+                ) : (
+                    <Positons
+                        positions={positions}
+                        highlightPosition={highlightPosition}
+                        getPositionValues={getPositionValues}
+                    />
+                )}
                 <TotalWrapper arr={positions}>
                     <Total
                         array={positions}

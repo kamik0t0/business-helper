@@ -19,8 +19,14 @@ export default function AppRouter() {
         <Routes>
             <Route exact path="/" element={<Tabs />}></Route>
             <Route exact path="/calculator" element={<CalcForm />}></Route>
-
             <Route exact path="/sales" element={<Sales />}></Route>
+            <Route exact path="/sales/:id" element={<UpdateSale />}></Route>
+            <Route exact path="/purchases" element={<Purchases />}></Route>
+            <Route
+                exact
+                path="/purchases/:id"
+                element={<UpdatePurchase />}
+            ></Route>
             <Route
                 exact
                 path="/sales/createwaybill"
@@ -28,22 +34,9 @@ export default function AppRouter() {
             ></Route>
             <Route
                 exact
-                path="/sales/updatewaybill"
-                element={<UpdateSale />}
-            ></Route>
-
-            <Route exact path="/purchases" element={<Purchases />}></Route>
-            <Route
-                exact
                 path="/purchases/createwaybill"
                 element={<NewPurchase />}
             ></Route>
-            <Route
-                exact
-                path="/purchases/updatewaybill"
-                element={<UpdatePurchase />}
-            ></Route>
-
             <Route exact path="/login" element={<Login />}></Route>
             <Route exact path="/login/forgot" element={<Forgot />}></Route>
             <Route

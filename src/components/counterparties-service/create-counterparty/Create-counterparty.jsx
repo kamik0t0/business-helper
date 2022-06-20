@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useRef } from "react";
 import classes from "./styles/create-org.module.css";
 import Inputs from "./service/components/create-inputs.jsx";
 import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
@@ -9,20 +9,23 @@ import { IpFields } from "../../../utils/Org.js";
 import { clear } from "../../../utils/clear.ts";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import { useDispatch } from "react-redux";
-import { create } from "./service/handlers/create-counterparty";
-import { switchOPF } from "./service/handlers/switchOPF.js";
 import { getRequisites } from "./service/handlers/getRequisites.js";
-import { ModalContext } from "../../../blocks/content/Main.jsx";
-import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
+import { useSwitchOPF } from "../../common/hooks/useSwitchOPF";
+import { useCreateCounterparty } from "./service/hooks/useCreateCounterparty";
 
 export default function CreateCounterparty() {
-    const [isORG, setIsOrg] = useState(true);
-    const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
-    const { setModalAdd } = useContext(ModalContext);
-    const [, hideModal] = modalManager(setModalAdd);
-
     const COUNTERPARTY = useRef(new Organizaton());
+
+    const [loader, create] = useCreateCounterparty(COUNTERPARTY.current);
+    const [isORG, getOPF] = useSwitchOPF(COUNTERPARTY.current);
+
+    const getInputsValues = (event, field, length) =>
+        getRequisites(event, field, length, COUNTERPARTY.current, isORG);
+
+    const dispatchCreateCounterparty = (event) => {
+        dispatch(create(event));
+    };
     return (
         <>
             <div className={classes.create}>
@@ -36,9 +39,7 @@ export default function CreateCounterparty() {
                         "Общество с ограниченной ответственностью",
                         "Индивидуальный предприниматель",
                     ]}
-                    func={(event) =>
-                        switchOPF(event, setIsOrg, COUNTERPARTY.current)
-                    }
+                    func={getOPF}
                 />
                 {loader ? (
                     <Loader />
@@ -46,29 +47,11 @@ export default function CreateCounterparty() {
                     <Inputs
                         isORG={isORG}
                         fields={isORG ? OrgFields : IpFields}
-                        getValue={(event, field, length) =>
-                            getRequisites(
-                                event,
-                                field,
-                                length,
-                                COUNTERPARTY.current,
-                                isORG
-                            )
-                        }
+                        getValue={getInputsValues}
                     />
                 )}
 
-                <Buttons
-                    create={(event) => {
-                        dispatch(
-                            create(event, COUNTERPARTY.current, () =>
-                                setLoader(!loader)
-                            )
-                        );
-                        hideModal();
-                    }}
-                    clear={clear}
-                />
+                <Buttons create={dispatchCreateCounterparty} clear={clear} />
             </div>
         </>
     );

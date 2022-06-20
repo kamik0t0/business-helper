@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import MySelect from "../../../../UI/input/MySelect/MySelect.jsx";
 import MyInput from "../../../../UI/input/MyInput/MyInput.jsx";
 import classes from "../styles/waybill-list.module.css";
@@ -17,7 +17,7 @@ const InteractionHeader = ({
     const { setModalDelete } = useContext(ModalContext);
     const [showDeleteModal] = modalManager(setModalDelete);
     const WAYBILL = useSelector((state) => state.setWaybill.waybill);
-    const { pathname } = window.location;
+    const { pathname } = useLocation();
 
     return (
         <div className={classes.waybills_header}>
@@ -35,7 +35,7 @@ const InteractionHeader = ({
             >
                 <span></span>
             </div>
-            <Link to={Object.keys(WAYBILL).length > 0 && "updatewaybill"}>
+            <Link to={Object.keys(WAYBILL).length > 0 && `${WAYBILL.id}`}>
                 <div
                     onClick={highlightOffArgs}
                     className={classes.waybills_header_redact}
@@ -62,7 +62,7 @@ const InteractionHeader = ({
                 <MyInput
                     id="filter_input"
                     placeholder="Поиск..."
-                    type="text"
+                    type="search"
                     getValue={filter}
                 />
             </div>
