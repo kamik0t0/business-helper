@@ -10,11 +10,18 @@ import { useState, useContext, useRef } from "react";
 import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control.js";
 import { ModalContext } from "../../../../../blocks/content/Main.jsx";
 import { Organizaton } from "../../../../../utils/Org.js";
+import { useDispatch } from "react-redux";
+import { getValue } from "../handlers/get-value.js";
+import { setValue } from "../handlers/set-value.js";
 
 export function usePatchOrg(Org) {
+    const dispatch = useDispatch();
+
     const [loader, setLoader] = useState(false);
-    const { setModalUpdate } = useContext(ModalContext);
+
     const UpdateData = useRef(new Organizaton());
+
+    const { setModalUpdate } = useContext(ModalContext);
     const [, hideModal] = modalManager(setModalUpdate);
 
     function update(event) {
@@ -22,9 +29,7 @@ export function usePatchOrg(Org) {
             event.preventDefault();
 
             UpdateData.current["id"] = Org.id;
-
             if (!checkInputs(UpdateData, Org)) return;
-
             setLoader(!loader);
 
             try {
@@ -39,6 +44,7 @@ export function usePatchOrg(Org) {
                 );
 
                 const UserId = localStorage.getItem("UserId");
+
                 const ORGS = await getData(
                     process.env.REACT_APP_URL_PRIVATE_OFFICE,
                     { table: "Orgs", UserId },
@@ -64,7 +70,18 @@ export function usePatchOrg(Org) {
             }
         };
     }
-    return [loader, UpdateData, update];
+
+    const getInputValue = (event, field, length) =>
+        getValue(event, field, length, UpdateData);
+
+    const setInputValue = (event, field, length) =>
+        setValue(event, field, length, UpdateData);
+
+    const dispatchUpdate = (event) => {
+        dispatch(update(event));
+    };
+
+    return [loader, hideModal, getInputValue, setInputValue, dispatchUpdate];
 }
 
 // url="https://deploy-test-business-assist.herokuapp.com/private"

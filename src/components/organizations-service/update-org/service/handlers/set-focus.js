@@ -1,10 +1,5 @@
-export function setFocus(number, refresh, setRefresh) {
-    let target = document.getElementById(number);
-    // обработчик для переключения на input
-    target.addEventListener("click", () => {
-        setRefresh(!refresh);
-    });
-    // фокусировка на появляющемся input
+export function setInputFocus(input) {
+    // фокусировка на смонтированный input
     let observer = new MutationObserver((mutations) => {
         try {
             mutations[2].addedNodes[0].lastChild.focus();
@@ -12,7 +7,7 @@ export function setFocus(number, refresh, setRefresh) {
             console.log("no focus");
         }
     });
-    observer.observe(target, {
+    observer.observe(input, {
         childList: true,
         subtree: true,
     });

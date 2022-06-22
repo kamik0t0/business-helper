@@ -1,8 +1,7 @@
 // компонент показывающий список существующих накладных
-import { useRef, useContext, useEffect, useMemo } from "react";
-import { v4 as uuid } from "uuid";
+import { useRef, useContext, useEffect } from "react";
+import { useLocation } from "react-router";
 import classes from "./styles/waybill-list.module.css";
-import Waybill from "./waybill/Waybill.jsx";
 import { highlight } from "../../../utils/highlight.js";
 import Modal from "../../../UI/modal/modal.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
@@ -18,9 +17,10 @@ import { useFilterColumn } from "./service/hooks/useFilterColumn";
 import { useFilter } from "./service/hooks/useFilter";
 import { highlightOff } from "./service/scripts/highlightOff.js";
 import InteractionHeader from "./header/Interaction-header.jsx";
+import WaybillsWrapper from "./waybills-wrapper.jsx";
 
 export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
-    const { pathname } = window.location;
+    const { pathname } = useLocation();
     const dispatch = useDispatch();
     let row = useRef(null);
     const type = pathname === "/sales" ? "SALES" : "PURCHASES";
@@ -62,19 +62,11 @@ export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
                         />
 
                         <WaybillHeader sort={sort} info={CounterpartyInfo[0]} />
-
-                        {waybills.length > 0 &&
-                            waybills.map((waybill, index) => {
-                                return (
-                                    <Waybill
-                                        key={uuid()}
-                                        index={index}
-                                        waybill={waybill}
-                                        getWaybill={getWaybill}
-                                        highlightON={highlightON}
-                                    />
-                                );
-                            })}
+                        <WaybillsWrapper
+                            waybills={waybills}
+                            getWaybill={getWaybill}
+                            highlightON={highlightON}
+                        />
                     </div>
                     {modalDelete.show && (
                         <Modal

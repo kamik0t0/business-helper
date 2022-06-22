@@ -1,6 +1,5 @@
 // компонент создания накладной
 import React from "react";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import classes from "../styles/update-waybill.module.css";
 import PositionHeaders from "../common/Position-headers.jsx";
@@ -10,11 +9,10 @@ import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import PropTypes from "prop-types";
 import { useCreateWaybill } from "./hooks/useCreateWaybill";
 import { useCreatePositions } from "./hooks/usePositions";
-import Positons from "../common/Positons-HOC.jsx";
+import Positons from "../common/Positons.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 
 export default function CreateWaybill({ CounterpartyInfo }) {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const goBack = (event) => {
@@ -40,16 +38,12 @@ export default function CreateWaybill({ CounterpartyInfo }) {
         getCounterparty,
     ] = useCreateWaybill(positions);
 
-    const dispatchCreateWaybill = (event) => dispatch(create(event));
-
     return (
         <>
             <form className={classes.content}>
                 <div className={classes.waybill_form_header}>
                     <div className={classes.waybill_form_header_save}>
-                        <MyButton onClick={dispatchCreateWaybill}>
-                            Сохранить
-                        </MyButton>
+                        <MyButton onClick={create}>Сохранить</MyButton>
                         <MyButton>Excel</MyButton>
                         <div className={classes.waybill_form_header_save_name}>
                             {CounterpartyInfo[0]}

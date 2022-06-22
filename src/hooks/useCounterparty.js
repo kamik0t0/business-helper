@@ -19,5 +19,5 @@ export const useCounterparty = () => {
         );
     };
 
-    return grabCounterparty;
+    return (number) => grabCounterparty(number);
 };

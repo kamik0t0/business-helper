@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import { setWaybillAction } from "../../../redux/waybill-reducer.js";
 import { useUpdatePositions } from "./hooks/useUpdatePositions";
 import { useUpdateWaybill } from "./hooks/useUpdateWaybill";
-import Positons from "../common/Positons-HOC.jsx";
+import Positons from "../common/Positons.jsx";
 
 export default function UpdateWaybill({ CounterpartyInfo }) {
     const dispatch = useDispatch();

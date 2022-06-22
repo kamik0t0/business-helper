@@ -48,6 +48,7 @@ const MyInput = React.forwardRef(
                         }
                         onChange={(event) => getValue(event, field, length)}
                         {...props}
+                        tabIndex={1}
                     />
                 </div>
             </>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import { useLocation } from "react-router";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { getData } from "../../../../utils/getData.ts";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
@@ -20,6 +20,7 @@ export function useCreateWaybill(positions) {
     WAYBILL.current["myOrg"] = MYORG;
     WAYBILL.current["counterparty"] = COUNTERPARTY;
     const [loader, setLoader] = useState(false);
+    const dispatch = useDispatch();
 
     function create(event) {
         return async function (dispatch) {
@@ -69,12 +70,13 @@ export function useCreateWaybill(positions) {
         (WAYBILL.current.counterparty = event.target.value);
 
     const defaultDate = WAYBILL.current.date.slice(0, -14);
+    const dispatchCreateWaybill = (event) => dispatch(create(event));
 
     return [
         loader,
         WAYBILL,
         defaultDate,
-        create,
+        dispatchCreateWaybill,
         setTotal,
         getDate,
         getCounterparty,

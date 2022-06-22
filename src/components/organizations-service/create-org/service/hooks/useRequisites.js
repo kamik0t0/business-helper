@@ -1,7 +1,9 @@
 import { useState } from "react";
 
+import { getRequisites } from "../handlers/getRequisites";
+
 // выбор организационно-правовой формы - добавляем/удаляем поля для ввода реквизитов
-export function useSwitchOPF(ORG) {
+export function useRequisites(ORG) {
     const [isORG, setIsOrg] = useState(true);
 
     function getOPF(event) {
@@ -22,5 +24,9 @@ export function useSwitchOPF(ORG) {
             }
         }
     }
-    return [isORG, getOPF];
+
+    const getInputsValues = (event, field, length) =>
+        getRequisites(event, field, length, ORG, isORG);
+
+    return [isORG, getOPF, getInputsValues];
 }

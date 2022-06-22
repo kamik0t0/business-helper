@@ -14,7 +14,6 @@ export default function Counterparties() {
     const isAuth = useSelector((state) => state.authReducer.isAuth);
     const myOrg = useSelector((state) => state.setMyOrgReducer.myOrg);
     const grabCounterparty = useCounterparty();
-    const getCounterpartyNum = (number) => grabCounterparty(number);
 
     return (
         <>
@@ -26,7 +25,7 @@ export default function Counterparties() {
                         </div>
                     </div>
                     {myOrg ? (
-                        <getCounterparty.Provider value={getCounterpartyNum}>
+                        <getCounterparty.Provider value={grabCounterparty}>
                             <CounterpartiesList />
                             <Buttons />
                         </getCounterparty.Provider>

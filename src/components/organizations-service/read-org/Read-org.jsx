@@ -16,7 +16,6 @@ export default function ReadOrg() {
     const isORG = useRef(isOrganization(MYORG));
     const { setModalRead } = useContext(ModalContext);
     const [, hideModal] = modalManager(setModalRead);
-    console.log(process.env);
     // если выбрана организация, то добавляются значения реквизитов
     const Requisites = addRequisitesValues(
         OrgFields,

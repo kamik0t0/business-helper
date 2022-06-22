@@ -17,59 +17,35 @@ import UpdatePurchase from "../pages/purchases/Update-purchase.jsx";
 export default function AppRouter() {
     return (
         <Routes>
-            <Route exact path="/" element={<Tabs />}></Route>
-            <Route exact path="/calculator" element={<CalcForm />}></Route>
-            <Route exact path="/sales" element={<Sales />}></Route>
-            <Route exact path="/sales/:id" element={<UpdateSale />}></Route>
-            <Route exact path="/purchases" element={<Purchases />}></Route>
+            <Route path="/" element={<Tabs />}></Route>
+            <Route path="/calculator" element={<CalcForm />}></Route>
+            <Route path="/sales" element={<Sales />}></Route>
+            <Route path="/sales/:id" element={<UpdateSale />}></Route>
+            <Route path="/purchases" element={<Purchases />}></Route>
+            <Route path="/purchases/:id" element={<UpdatePurchase />}></Route>
+            <Route path="/sales/createwaybill" element={<NewSale />}></Route>
             <Route
-                exact
-                path="/purchases/:id"
-                element={<UpdatePurchase />}
-            ></Route>
-            <Route
-                exact
-                path="/sales/createwaybill"
-                element={<NewSale />}
-            ></Route>
-            <Route
-                exact
                 path="/purchases/createwaybill"
                 element={<NewPurchase />}
             ></Route>
-            <Route exact path="/login" element={<Login />}></Route>
-            <Route exact path="/login/forgot" element={<Forgot />}></Route>
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/login/forgot" element={<Forgot />}></Route>
             <Route
-                exact
                 path="/login/registration"
                 element={<Registration />}
             ></Route>
-            <Route exact path="/private" element={<Private />}></Route>
+            <Route path="/private" element={<Private />}></Route>
+            <Route path="/counterparties" element={<Counterparties />}></Route>
             <Route
-                exact
-                path="/counterparties"
-                element={<Counterparties />}
-            ></Route>
-            <Route
-                exact
                 path="/purchases/updatewaybill/counterparties"
                 element={<Counterparties />}
             ></Route>
+            <Route path="/counterparties" element={<Counterparties />}></Route>
             <Route
-                exact
-                path="/counterparties"
-                element={<Counterparties />}
-            ></Route>
-            <Route
-                exact
                 path="/sales/updatewaybill/counterparties"
                 element={<Counterparties />}
             ></Route>
-            <Route
-                exact
-                path="/counterparties"
-                element={<Counterparties />}
-            ></Route>
+            <Route path="/counterparties" element={<Counterparties />}></Route>
         </Routes>
     );
 }

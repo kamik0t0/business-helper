@@ -8,8 +8,10 @@ import { setAuthAction } from "../../../../../redux/auth-reducer.js";
 import { useState, useContext } from "react";
 import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control.js";
 import { ModalContext } from "../../../../../blocks/content/Main.jsx";
+import { useDispatch } from "react-redux";
 
 export function useCreateOrg(organization) {
+    const dispatch = useDispatch();
     const [loader, setLoader] = useState(false);
     const { setModalAdd } = useContext(ModalContext);
 
@@ -55,7 +57,10 @@ export function useCreateOrg(organization) {
             }
         };
     }
-    return [loader, create];
+
+    const createOrg = (event) => dispatch(create(event));
+
+    return [loader, createOrg];
 }
 
 // url="https://deploy-test-business-assist.herokuapp.com/private"

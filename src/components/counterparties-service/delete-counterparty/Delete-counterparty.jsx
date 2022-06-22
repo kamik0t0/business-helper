@@ -1,21 +1,21 @@
-import React, { useState, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import classes from "./styles/delete-org.module.css";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
-import { deleteCounterparty } from "./service/delete.js";
-import { ModalContext } from "../../../blocks/content/Main.jsx";
-import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
+import { useDeleteCounterparty } from "./hooks/useDeleteCounterparty";
 
 export default function DeleteCounterparty() {
-    // анимация
-    const [loader, setLoader] = useState(false);
+    const dispatch = useDispatch();
     const COUNTERPARTY = useSelector(
         (state) => state.setCounterpartyReducer.counterparty
     );
-    const dispatch = useDispatch();
-    const { setModalDelete } = useContext(ModalContext);
-    const [, hideModal] = modalManager(setModalDelete);
+
+    const [loader, hideModal, deleteCounterparty] = useDeleteCounterparty();
+
+    const dispatchDeleteCounterparty = (event) => {
+        dispatch(deleteCounterparty(event));
+    };
+
     return (
         <>
             {Object.keys(COUNTERPARTY).length === 0 ? (
@@ -34,16 +34,7 @@ export default function DeleteCounterparty() {
                         <Loader />
                     ) : (
                         <div className={classes.buttons}>
-                            <MyButton
-                                onClick={() => {
-                                    dispatch(
-                                        deleteCounterparty(() =>
-                                            setLoader(!loader)
-                                        )
-                                    );
-                                    hideModal();
-                                }}
-                            >
+                            <MyButton onClick={dispatchDeleteCounterparty}>
                                 Yes
                             </MyButton>
                             <MyButton onClick={hideModal}>No</MyButton>
