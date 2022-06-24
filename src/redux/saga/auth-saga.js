@@ -6,6 +6,11 @@ import { setAuthAction } from "../../redux/auth-reducer.js";
 import { setAuthErrorAction } from "../../redux/authError-reducer.js";
 import { call, takeEvery, put } from "redux-saga/effects";
 import { channel } from "redux-saga";
+import { setCounterpartiesAction } from "../counterparties-reducer";
+import { setSalesAction } from "../sales-reducer";
+import { setPurchasesAction } from "../purchases-reducer";
+import { setMyOrgAction } from "../setMyOrg-reducer";
+import { setWaybillAction } from "../waybill-reducer";
 
 const AUTHORIZATION = "AUTHORIZATION";
 
@@ -18,7 +23,17 @@ export const auth = (...payload) => {
 };
 
 export function* authWorker({ payload }) {
-    const [event, email, pass, setLoader] = payload;
+    const [
+        event,
+        email,
+        pass,
+        setLoader,
+        navigate,
+        fromPage,
+        type,
+        orgId,
+        waybill,
+    ] = payload;
     yield put(setAuthErrorAction(false, ""));
     setLoader();
     event.preventDefault();
@@ -61,7 +76,57 @@ export function* authWorker({ payload }) {
                     () => authErrorCallback.put(setAuthAction(false))
                 )
             );
+
             yield put(setOrgsAction(ORGS));
+
+            // TODO: Refactoring
+
+            if (orgId) {
+                const MyOrg = ORGS.find((org) => +org.id === +orgId);
+                if (Object.keys(MyOrg).length === 0) {
+                    navigate("/private");
+                }
+                localStorage.setItem("OrgsId", orgId);
+                yield put(setMyOrgAction(MyOrg));
+
+                const URLS = [
+                    process.env.REACT_APP_URL_COUNTERPARTY,
+                    process.env.REACT_APP_URL_SALES,
+                    process.env.REACT_APP_URL_PURCHASES,
+                ];
+
+                const ACTIONS = [
+                    setCounterpartiesAction,
+                    setSalesAction,
+                    setPurchasesAction,
+                ];
+
+                const authErrorCallback = channel();
+
+                let requests = yield call(() =>
+                    URLS.map((url) =>
+                        getData(url, { OrgId: orgId }, () =>
+                            authErrorCallback.put(setAuthAction(false))
+                        )
+                    )
+                );
+
+                const data = yield call(() =>
+                    Promise.resolve(Promise.all(requests))
+                );
+
+                for (let i = 0; i < ACTIONS.length; i++) {
+                    yield put(ACTIONS[i](data[i]));
+                }
+                if (waybill) {
+                    const waybills = type === "sales" ? data[1] : data[2];
+                    const wbindex = waybills.findIndex(
+                        (wb) => wb.id == waybill
+                    );
+                    yield put(setWaybillAction(waybills[wbindex]));
+                }
+            }
+            navigate(`${fromPage}`);
         } else {
             yield put(setAuthErrorAction(true, AuthData.data.message));
             return false;

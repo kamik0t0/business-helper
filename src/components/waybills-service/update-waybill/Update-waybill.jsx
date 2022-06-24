@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import classes from "../styles/update-waybill.module.css";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import PositionHeaders from "../common/Position-headers.jsx";
@@ -16,6 +16,7 @@ import Positons from "../common/Positons.jsx";
 export default function UpdateWaybill({ CounterpartyInfo }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { orgId } = useParams();
 
     const goBack = (event) => {
         event.preventDefault();
@@ -88,7 +89,7 @@ export default function UpdateWaybill({ CounterpartyInfo }) {
                             }
                             getValue={getCounterparty}
                         />
-                        <Link to={`/counterparties`}>
+                        <Link to={`/counterparties/${orgId}`}>
                             <MyButton>Выбрать...</MyButton>
                         </Link>
                     </div>

@@ -11,13 +11,15 @@ export function useUpdatePositions() {
     const dispatch = useDispatch();
     const [positions, setPositions] = useState([]);
     const [counter, setCounter] = useState(0);
-    const { id } = useParams();
+    const { orgId, id } = useParams();
 
     // useRef - запоминаем значение при ререндеринге
     let row = useRef(null);
     const { pathname } = useLocation();
 
-    const type = pathname === `/sales/${id}` ? "SaleId" : "PurchaseId";
+    console.log(pathname);
+
+    const type = pathname === `/sales/${orgId}/${id}` ? "SaleId" : "PurchaseId";
 
     const [loader, setLoader] = useState(true);
 

@@ -18,10 +18,13 @@ import { useFilter } from "./service/hooks/useFilter";
 import { highlightOff } from "./service/scripts/highlightOff.js";
 import InteractionHeader from "./header/Interaction-header.jsx";
 import WaybillsWrapper from "./waybills-wrapper.jsx";
+import { useParams } from "react-router-dom";
 
 export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
     const { pathname } = useLocation();
     const dispatch = useDispatch();
+    const { orgId } = useParams();
+    console.log(orgId);
     let row = useRef(null);
     const type = pathname === "/sales" ? "SALES" : "PURCHASES";
 

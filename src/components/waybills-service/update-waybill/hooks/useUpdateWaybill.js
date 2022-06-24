@@ -10,8 +10,8 @@ import { makeDate, total } from "../../common/scripts";
 export function useUpdateWaybill(positions, WAYBILL) {
     const navigate = useNavigate();
     const { pathname } = useLocation();
-    const { id } = useParams();
-    const type = pathname === `/sales/${id}` ? "SALES" : "PURCHASES";
+    const { orgId, id } = useParams();
+    const type = pathname === `/sales/${orgId}/${id}` ? "SALES" : "PURCHASES";
 
     const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     const COUNTERPARTY = useSelector(

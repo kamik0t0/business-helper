@@ -35,7 +35,12 @@ const InteractionHeader = ({
             >
                 <span></span>
             </div>
-            <Link to={Object.keys(WAYBILL).length > 0 && `${WAYBILL.id}`}>
+            <Link
+                to={
+                    Object.keys(WAYBILL).length > 0 &&
+                    `${pathname}/${WAYBILL.id}`
+                }
+            >
                 <div
                     onClick={highlightOffArgs}
                     className={classes.waybills_header_redact}

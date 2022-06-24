@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import classes from "./styles/auth.module.css";
 import classNames from "classnames/bind";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AuthError from "./service/error/Auth-error.jsx";
 import Loader from "../../UI/Loader/Loader.jsx";
@@ -16,6 +16,10 @@ export default function Login() {
     const AUTHERROR = useSelector((state) => state.authErrorReducer);
     const [loader, setLoader] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const fromPage = location.state?.from?.pathname || "/";
+    const [, type, orgId, id] = fromPage.split("/");
 
     const cx = classNames.bind(classes);
     const authErrUser = cx({
@@ -50,7 +54,19 @@ export default function Login() {
         email.current = event.target.value;
     };
     const dispatchAuth = (event) =>
-        dispatch(auth(event, email.current, pass.current, () => setLoader));
+        dispatch(
+            auth(
+                event,
+                email.current,
+                pass.current,
+                () => setLoader,
+                navigate,
+                fromPage,
+                type,
+                orgId,
+                id
+            )
+        );
 
     return (
         <>
