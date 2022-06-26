@@ -18,21 +18,24 @@ import { useFilter } from "./service/hooks/useFilter";
 import { highlightOff } from "./service/scripts/highlightOff.js";
 import InteractionHeader from "./header/Interaction-header.jsx";
 import WaybillsWrapper from "./waybills-wrapper.jsx";
-import { useParams } from "react-router-dom";
 
 export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
     const { pathname } = useLocation();
     const dispatch = useDispatch();
-    const { orgId } = useParams();
-    console.log(orgId);
+
     let row = useRef(null);
     const type = pathname === "/sales" ? "SALES" : "PURCHASES";
 
     const WAYBILL = useSelector((state) => state.setWaybill.waybill);
 
     const [column, filterColumn] = useFilterColumn("cl_orgname");
-    const [waybills, setWaybills, filter] = useFilter(column, WAYBILLS);
+    const [waybills, setWaybills, filter, searchParams] = useFilter(
+        column,
+        WAYBILLS
+    );
     const sort = useSort(type, [...waybills]);
+
+    const startSearch = searchParams.get("search") || "";
 
     const { modalDelete, modalUpdate, setModalDelete, setModalUpdate } =
         useContext(ModalContext);
@@ -42,6 +45,19 @@ export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
     useEffect(() => {
         setWaybills(WAYBILLS);
     }, [WAYBILLS]);
+
+    useEffect(() => {
+        // обработка параметров строки запроса - загрузка страницы с выполненной фильтрацией
+        if (startSearch) {
+            let regexp = new RegExp(startSearch, "g");
+            const filtered = [...WAYBILLS].filter(
+                (waybill) =>
+                    waybill[column].toString().toLowerCase().search(regexp) !==
+                    -1
+            );
+            setWaybills(filtered);
+        }
+    }, [startSearch]);
 
     const getWaybill = (event, number) =>
         dispatch(setWaybillAction(waybills[number]));
@@ -62,6 +78,7 @@ export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
                             filterColumn={filterColumn}
                             filter={filter}
                             info={[CounterpartyInfo[1], CounterpartyInfo[2]]}
+                            params={startSearch}
                         />
 
                         <WaybillHeader sort={sort} info={CounterpartyInfo[0]} />

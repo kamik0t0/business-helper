@@ -1,6 +1,6 @@
 import { useState, useContext, useRef } from "react";
 import { checkInputs } from "../service/handlers/check-inputs.js";
-import { showUpdateChanges } from "../../../../utils/showUpdateChanges.js";
+import { getUpdatedOrg } from "../../../../utils/getUpdatedOrg.js";
 import { getData } from "../../../../utils/getData.ts";
 import axios from "axios";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
@@ -16,19 +16,18 @@ import { setValue } from "../service/handlers/set-value.js";
 
 export function usePatchCounterparty(COUNTERPARTY) {
     const dispatch = useDispatch();
-
     const [loader, setLoader] = useState(false);
-
-    const UpdateData = useRef(new Organizaton());
-
     const { setModalUpdate } = useContext(ModalContext);
     const [, hideModal] = modalManager(setModalUpdate);
+
+    const UpdateData = useRef(new Organizaton());
+    UpdateData.current["id"] = COUNTERPARTY.id;
+    const OrgId = localStorage.getItem("OrgsId");
 
     function update(event) {
         return async (dispatch) => {
             event.preventDefault();
 
-            UpdateData.current["id"] = COUNTERPARTY.id;
             if (!checkInputs(UpdateData, COUNTERPARTY)) return;
             setLoader(!loader);
 
@@ -43,28 +42,25 @@ export function usePatchCounterparty(COUNTERPARTY) {
                     }
                 );
 
-                const OrgId = localStorage.getItem("OrgsId");
-
                 const COUNTERPARTIES = await getData(
                     process.env.REACT_APP_URL_COUNTERPARTY,
                     { OrgId },
                     () => dispatch(setAuthAction(false))
                 );
 
-                const UpdatedCounterparty = showUpdateChanges(
+                const UpdatedCounterparty = getUpdatedOrg(
                     COUNTERPARTIES,
                     UpdateData.current.id
                 );
+
                 dispatch(setCounterpartyAction(UpdatedCounterparty));
                 dispatch(setCounterpartiesAction(COUNTERPARTIES));
                 setLoader((loader) => !loader);
                 hideModal();
             } catch (error) {
                 console.log(error);
-
                 dispatch(setErrorTrueAction(true, error.message));
                 setLoader((loader) => !loader);
-
                 hideModal();
             }
         };

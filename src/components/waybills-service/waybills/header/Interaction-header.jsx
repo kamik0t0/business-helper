@@ -13,6 +13,7 @@ const InteractionHeader = ({
     filterColumn,
     filter,
     info,
+    params,
 }) => {
     const { setModalDelete } = useContext(ModalContext);
     const [showDeleteModal] = modalManager(setModalDelete);
@@ -69,6 +70,7 @@ const InteractionHeader = ({
                     placeholder="Поиск..."
                     type="search"
                     getValue={filter}
+                    defaultValue={`${params}`}
                 />
             </div>
             {/* наименование раздела */}

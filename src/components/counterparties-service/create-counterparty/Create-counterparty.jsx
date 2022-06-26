@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import classes from "./styles/create-org.module.css";
 import Inputs from "./service/components/create-inputs.jsx";
 import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
@@ -15,7 +15,9 @@ import { useCreateCounterparty } from "./service/hooks/useCreateCounterparty";
 
 export default function CreateCounterparty() {
     const dispatch = useDispatch();
-    const COUNTERPARTY = useRef(new Organizaton());
+    const COUNTERPARTY = useRef(
+        new Organizaton(localStorage.getItem("OrgsId"))
+    );
 
     const [loader, create] = useCreateCounterparty(COUNTERPARTY.current);
     const [isORG, getOPF] = useSwitchOPF(COUNTERPARTY.current);

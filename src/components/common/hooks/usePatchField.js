@@ -1,38 +1,21 @@
-import { useState, useEffect, useRef } from "react";
-import { setInputFocus } from "../../organizations-service/update-org/service/handlers/set-focus";
+import { useRef } from "react";
 
-export function usePatchField(requisite, number, setInputValue) {
-    const [focus, setFocus] = useState(false);
+export function usePatchField(requisite, setInputValue, setFocus) {
     // ref для чтения значения текущего значения и подстановки в input
     let prevValue = useRef();
     // ref для чтения нового значения из input
     let currentValue = useRef();
     let oldValue = prevValue.current && prevValue.current.innerHTML;
 
-    useEffect(() => {
-        // фокусировка на input
-        const input = document.getElementById(number);
-        const focusHandler = () => {
-            setFocus(true);
-        };
-        input.addEventListener("click", focusHandler);
-
-        setInputFocus(input);
-        // очистка ресурсов
-        return () => {
-            input.removeEventListener("click", focusHandler);
-        };
-    }, []);
-
     const Ok = (event) => {
         setInputValue(event, requisite.field, currentValue.current.value) &&
-            setFocus((focus) => !focus);
+            setFocus();
     };
 
     const Cancel = () => {
         currentValue.current.value = oldValue;
-        setFocus((focus) => !focus);
+        setFocus();
     };
 
-    return [focus, prevValue, currentValue, Ok, Cancel];
+    return [prevValue, currentValue, Ok, Cancel];
 }

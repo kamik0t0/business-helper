@@ -14,8 +14,8 @@ export function useDeleteOrg(OrgId, UserId) {
     const [, hideModal] = modalManager(setModalDelete);
 
     function deleteOrg(event) {
+        event.preventDefault();
         return async (dispatch) => {
-            event.preventDefault();
             setLoader(!loader);
             try {
                 await axios.delete(process.env.REACT_APP_URL_PRIVATE_OFFICE, {

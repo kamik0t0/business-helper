@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 
 export default function Side({ showCurtain }) {
     const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
-    console.log(MYORG);
 
     const { curtain } = useContext(CurtainContext);
 

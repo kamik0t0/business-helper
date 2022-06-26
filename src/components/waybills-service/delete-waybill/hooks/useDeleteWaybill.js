@@ -13,22 +13,18 @@ export function useDeleteWaybill(id) {
     const [, hideDeleteModal] = modalManager(setModalDelete);
     const { pathname } = useLocation();
     const { orgId } = useParams();
+    const OrgId = localStorage.getItem("OrgsId");
+
+    const [table, idType, URL] =
+        pathname === `/sales/${orgId}`
+            ? ["SALES", "SaleId", process.env.REACT_APP_URL_SALES]
+            : ["PURCHASES", "PurchaseId", process.env.REACT_APP_URL_PURCHASES];
 
     function deleteWaybill(event) {
+        setLoader((prev) => !prev);
+        event.preventDefault();
+
         return async function (dispatch) {
-            event.preventDefault();
-
-            const [type, idType, URL] =
-                pathname === `/sales/${orgId}`
-                    ? ["SALES", "SaleId", process.env.REACT_APP_URL_SALES]
-                    : [
-                          "PURCHASES",
-                          "PurchaseId",
-                          process.env.REACT_APP_URL_PURCHASES,
-                      ];
-            setLoader((prev) => !prev);
-
-            const OrgId = localStorage.getItem("OrgsId");
             try {
                 await axios.delete(URL, {
                     params: {
@@ -39,8 +35,8 @@ export function useDeleteWaybill(id) {
                 const WAYBILLS = await getData(URL, { OrgId }, () =>
                     dispatch(setAuthAction(true))
                 );
-                dispatch({ type, payload: WAYBILLS });
-                // дополнительно обновляется локальный стейт в Waybill-list
+
+                dispatch({ type: table, payload: WAYBILLS });
                 hideDeleteModal();
                 setLoader((prev) => !prev);
             } catch (error) {

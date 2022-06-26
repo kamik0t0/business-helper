@@ -1,9 +1,8 @@
 // компонент создания накладной
-import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import classes from "../styles/update-waybill.module.css";
 import PositionHeaders from "../common/Position-headers.jsx";
-import { Total, TotalWrapper } from "./total/Total.jsx";
+import { TotalWrapper } from "./total/Total.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import PropTypes from "prop-types";
@@ -11,9 +10,11 @@ import { useCreateWaybill } from "./hooks/useCreateWaybill";
 import { useCreatePositions } from "./hooks/usePositions";
 import Positons from "../common/Positons.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
+import { useParams } from "react-router-dom";
 
 export default function CreateWaybill({ CounterpartyInfo }) {
     const navigate = useNavigate();
+    const { orgId } = useParams();
 
     const goBack = (event) => {
         event.preventDefault();
@@ -67,7 +68,7 @@ export default function CreateWaybill({ CounterpartyInfo }) {
                             defaultValue={WAYBILL.current.counterparty.orgname}
                             getValue={getCounterparty}
                         />
-                        <Link to={"/counterparties"}>
+                        <Link to={`/counterparties/${orgId}`}>
                             <MyButton>Выбрать...</MyButton>
                         </Link>
                     </div>
@@ -87,26 +88,7 @@ export default function CreateWaybill({ CounterpartyInfo }) {
                         getPositionValues={getPositionValues}
                     />
                 )}
-                <TotalWrapper arr={positions}>
-                    <Total
-                        array={positions}
-                        field="summ"
-                        name="Сумма:"
-                        total={setTotal}
-                    />
-                    <Total
-                        array={positions}
-                        field="NDS"
-                        name="НДС:"
-                        total={setTotal}
-                    />
-                    <Total
-                        array={positions}
-                        field="total"
-                        name="Итого:"
-                        total={setTotal}
-                    />
-                </TotalWrapper>
+                <TotalWrapper positions={positions} setTotal={setTotal} />
             </form>
         </>
     );

@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import classes from "../styles/update-waybill.module.css";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import PositionHeaders from "../common/Position-headers.jsx";
-import { Total, TotalWrapper } from "../create-waybill/total/Total.jsx";
+import { TotalWrapper } from "../create-waybill/total/Total.jsx";
 import MyInput from "../../../UI/input/MyInput/MyInput.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import PropTypes from "prop-types";
@@ -34,7 +34,7 @@ export default function UpdateWaybill({ CounterpartyInfo }) {
         highlightPosition,
         getPositionValues,
         fillStartPositions,
-        getPositions,
+        getPositionsRequest,
     ] = useUpdatePositions();
 
     const [
@@ -46,11 +46,9 @@ export default function UpdateWaybill({ CounterpartyInfo }) {
         getCounterparty,
     ] = useUpdateWaybill(positions, WAYBILL);
 
-    const dispatchUpdateWaybill = (event) => dispatch(update(event));
-
     useEffect(() => {
         async function fill() {
-            const Positions = await getPositions(WAYBILL.id);
+            const Positions = await getPositionsRequest(WAYBILL.id);
             fillStartPositions(Positions);
         }
         fill();
@@ -61,9 +59,7 @@ export default function UpdateWaybill({ CounterpartyInfo }) {
             <form className={classes.content}>
                 <div className={classes.waybill_form_header}>
                     <div className={classes.waybill_form_header_save}>
-                        <MyButton onClick={dispatchUpdateWaybill}>
-                            Сохранить
-                        </MyButton>
+                        <MyButton onClick={update}>Сохранить</MyButton>
                         <MyButton>Excel</MyButton>
                         <div className={classes.waybill_form_header_save_name}>
                             {CounterpartyInfo[0]}
@@ -108,26 +104,7 @@ export default function UpdateWaybill({ CounterpartyInfo }) {
                         getPositionValues={getPositionValues}
                     />
                 )}
-                <TotalWrapper arr={positions}>
-                    <Total
-                        array={positions}
-                        field="summ"
-                        name="Сумма:"
-                        total={setTotal}
-                    />
-                    <Total
-                        array={positions}
-                        field="NDS"
-                        name="НДС:"
-                        total={setTotal}
-                    />
-                    <Total
-                        array={positions}
-                        field="total"
-                        name="Итого:"
-                        total={setTotal}
-                    />
-                </TotalWrapper>
+                <TotalWrapper positions={positions} setTotal={setTotal} />
             </form>
         </>
     );

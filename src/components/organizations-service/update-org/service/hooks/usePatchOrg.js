@@ -1,5 +1,5 @@
 import { checkInputs } from "../handlers/check-inputs.js";
-import { showUpdateChanges } from "../../../../../utils/showUpdateChanges.js";
+import { getUpdatedOrg } from "../../../../../utils/getUpdatedOrg.js";
 import { getData } from "../../../../../utils/getData.ts";
 import axios from "axios";
 import { setOrgsAction } from "../../../../../redux/orgs-reducer.js";
@@ -20,6 +20,8 @@ export function usePatchOrg(Org) {
     const [loader, setLoader] = useState(false);
 
     const UpdateData = useRef(new Organizaton());
+    UpdateData.current["id"] = Org.id;
+    const UserId = localStorage.getItem("UserId");
 
     const { setModalUpdate } = useContext(ModalContext);
     const [, hideModal] = modalManager(setModalUpdate);
@@ -27,8 +29,6 @@ export function usePatchOrg(Org) {
     function update(event) {
         return async (dispatch) => {
             event.preventDefault();
-
-            UpdateData.current["id"] = Org.id;
             if (!checkInputs(UpdateData, Org)) return;
             setLoader(!loader);
 
@@ -43,18 +43,13 @@ export function usePatchOrg(Org) {
                     }
                 );
 
-                const UserId = localStorage.getItem("UserId");
-
                 const ORGS = await getData(
                     process.env.REACT_APP_URL_PRIVATE_OFFICE,
                     { table: "Orgs", UserId },
                     () => dispatch(setAuthAction(false))
                 );
 
-                const UpdatedOrg = showUpdateChanges(
-                    ORGS,
-                    UpdateData.current.id
-                );
+                const UpdatedOrg = getUpdatedOrg(ORGS, UpdateData.current.id);
 
                 dispatch(setMyOrgAction(UpdatedOrg));
                 dispatch(setOrgsAction(ORGS));

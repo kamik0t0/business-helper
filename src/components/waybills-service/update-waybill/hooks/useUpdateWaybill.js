@@ -1,17 +1,22 @@
 import axios from "axios";
 import { useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getData } from "../../../../utils/getData.ts";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
 import { setAuthAction } from "../../../../redux/auth-reducer.js";
 import { makeDate, total } from "../../common/scripts";
 
 export function useUpdateWaybill(positions, WAYBILL) {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const { orgId, id } = useParams();
-    const type = pathname === `/sales/${orgId}/${id}` ? "SALES" : "PURCHASES";
+
+    const [table, getWaybillURL] =
+        pathname === `/sales/${orgId}/${id}`
+            ? ["SALES", process.env.REACT_APP_URL_SALES]
+            : ["PURCHASES", process.env.REACT_APP_URL_PURCHASES];
 
     const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
     const COUNTERPARTY = useSelector(
@@ -28,31 +33,28 @@ export function useUpdateWaybill(positions, WAYBILL) {
         OrgId,
     });
 
+    UpdateWaybill.current["positions"] = positions;
+
     function update(event) {
+        event.preventDefault();
         return async function (dispatch) {
-            event.preventDefault();
-            UpdateWaybill.current["positions"] = positions;
             try {
                 await axios.patch(
                     process.env.REACT_APP_URL_BASE + pathname,
                     UpdateWaybill.current,
                     {
                         params: {
-                            table: type.toLocaleLowerCase(),
+                            table: table.toLocaleLowerCase(),
                             id: WAYBILL.id,
                         },
                     }
                 );
-                const getWaybillURL =
-                    type === "SALES"
-                        ? process.env.REACT_APP_URL_SALES
-                        : process.env.REACT_APP_URL_PURCHASES;
 
                 const WAYBILLS = await getData(getWaybillURL, { OrgId }, () =>
                     dispatch(setAuthAction(true))
                 );
 
-                dispatch({ type: type, payload: WAYBILLS });
+                dispatch({ type: table, payload: WAYBILLS });
                 navigate(-1);
             } catch (error) {
                 console.log(error);
@@ -73,11 +75,12 @@ export function useUpdateWaybill(positions, WAYBILL) {
         (UpdateWaybill.current.counterparty = event.target.value);
 
     const defaultDate = UpdateWaybill.current.waybill_date.slice(0, -14);
+    const dispatchUpdateWaybill = (event) => dispatch(update(event));
 
     return [
         UpdateWaybill,
         defaultDate,
-        update,
+        dispatchUpdateWaybill,
         setTotal,
         getDate,
         getCounterparty,

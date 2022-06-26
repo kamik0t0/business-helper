@@ -1,4 +1,3 @@
-import React from "react";
 import classes from "./styles/detel-waybill.module.css";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";

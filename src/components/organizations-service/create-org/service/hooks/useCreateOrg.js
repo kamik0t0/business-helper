@@ -1,5 +1,4 @@
 import { checkInnKpp } from "../handlers/check-inn-kpp.js";
-import { Organizaton } from "../../../../../utils/Org.js";
 import { getData } from "../../../../../utils/getData.ts";
 import axios from "axios";
 import { setOrgsAction } from "../../../../../redux/orgs-reducer.js";
@@ -14,17 +13,14 @@ export function useCreateOrg(organization) {
     const dispatch = useDispatch();
     const [loader, setLoader] = useState(false);
     const { setModalAdd } = useContext(ModalContext);
-
     const [, hideModal] = modalManager(setModalAdd);
 
     function create(event) {
+        event.preventDefault();
         return async (dispatch) => {
-            event.preventDefault();
-
             if (checkInnKpp(organization) === false) return;
 
             try {
-                organization["UserId"] = localStorage.getItem("UserId");
                 setLoader(!loader);
 
                 await axios.post(
@@ -45,13 +41,11 @@ export function useCreateOrg(organization) {
                 );
 
                 setLoader(!loader);
-                organization = new Organizaton();
                 dispatch(setOrgsAction(ORGS));
                 hideModal();
             } catch (error) {
                 console.log(error);
                 dispatch(setErrorTrueAction(true, error.message));
-                organization = new Organizaton();
                 setLoader(!loader);
                 hideModal();
             }

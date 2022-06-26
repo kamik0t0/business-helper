@@ -1,8 +1,23 @@
-import React from "react";
 import classes from "./styles/total.module.css";
 import PropTypes from "prop-types";
+import { v4 as uuid } from "uuid";
 
-export function Total({ array, field, name, total }) {
+const totalInfos = [
+    {
+        field: "summ",
+        name: "Сумма:",
+    },
+    {
+        field: "NDS",
+        name: "НДС:",
+    },
+    {
+        field: "total",
+        name: "Итого:",
+    },
+];
+
+function Total({ array, field, name, total }) {
     return (
         <div className={classes.total}>
             <div className={classes.total_name}>{name}</div>
@@ -13,8 +28,22 @@ export function Total({ array, field, name, total }) {
     );
 }
 
-export function TotalWrapper({ children }) {
-    return <div className={classes.totalWrapper}>{children}</div>;
+export function TotalWrapper({ positions, setTotal }) {
+    return (
+        <div className={classes.totalWrapper}>
+            {totalInfos.map((totalInfo) => {
+                return (
+                    <Total
+                        key={uuid()}
+                        array={positions}
+                        field={totalInfo.field}
+                        name={totalInfo.name}
+                        total={setTotal}
+                    />
+                );
+            })}
+        </div>
+    );
 }
 
 Total.propTypes = {
@@ -22,4 +51,9 @@ Total.propTypes = {
     field: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     total: PropTypes.func.isRequired,
+};
+
+TotalWrapper.propTypes = {
+    positions: PropTypes.array.isRequired,
+    setTotal: PropTypes.func.isRequired,
 };

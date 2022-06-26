@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import classes from "./styles/create-org.module.css";
 import Inputs from "./service/components/create-inputs.jsx";
 import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
@@ -13,6 +13,7 @@ import { OPFoptions } from "./service/utils/options.js";
 
 export default function CreateOrg() {
     const ORG = useRef(new Organizaton());
+    ORG.current["UserId"] = localStorage.getItem("UserId");
 
     const [isORG, getOPF, getInputsValues] = useRequisites(ORG.current);
     const [loader, createOrg] = useCreateOrg(ORG.current);

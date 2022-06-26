@@ -10,10 +10,8 @@ export function validatePass(pass) {
         containsLetters.test(pass) &&
         containsDigits.test(pass)
     ) {
-        console.log("pass");
         return true;
     } else {
-        console.log("no pass");
         return false;
     }
 }

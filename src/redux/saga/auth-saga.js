@@ -30,6 +30,7 @@ export function* authWorker({ payload }) {
         setLoader,
         navigate,
         fromPage,
+        search,
         type,
         orgId,
         waybill,
@@ -118,6 +119,7 @@ export function* authWorker({ payload }) {
                 for (let i = 0; i < ACTIONS.length; i++) {
                     yield put(ACTIONS[i](data[i]));
                 }
+
                 if (waybill) {
                     const waybills = type === "sales" ? data[1] : data[2];
                     const wbindex = waybills.findIndex(
@@ -126,7 +128,7 @@ export function* authWorker({ payload }) {
                     yield put(setWaybillAction(waybills[wbindex]));
                 }
             }
-            navigate(`${fromPage}`);
+            navigate(`${fromPage}${search}`);
         } else {
             yield put(setAuthErrorAction(true, AuthData.data.message));
             return false;

@@ -19,6 +19,7 @@ export default function Login() {
     const navigate = useNavigate();
     const location = useLocation();
     const fromPage = location.state?.from?.pathname || "/";
+    const search = location.state?.from?.search;
     const [, type, orgId, id] = fromPage.split("/");
 
     const cx = classNames.bind(classes);
@@ -62,6 +63,7 @@ export default function Login() {
                 () => setLoader,
                 navigate,
                 fromPage,
+                search,
                 type,
                 orgId,
                 id

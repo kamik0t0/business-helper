@@ -3,6 +3,7 @@ import MyButton from "../../../UI/input/MyButton/MyButton";
 import MyInput from "../../../UI/input/MyInput/MyInput";
 import PropTypes from "prop-types";
 import { usePatchField } from "../hooks/usePatchField";
+import { useInput } from "../hooks/useFocus";
 
 export default function PatchField({
     requisite,
@@ -10,16 +11,19 @@ export default function PatchField({
     getInputValue,
     setInputValue,
 }) {
-    const [focus, prevValue, currentValue, Ok, Cancel] = usePatchField(
+    const [requisiteInput, setRequisiteInput] = useInput(number);
+
+    const [prevValue, currentValue, Ok, Cancel] = usePatchField(
         requisite,
-        number,
-        setInputValue
+        setInputValue,
+        () => setRequisiteInput((focus) => !focus)
     );
+
     const defInputValue = prevValue.current && prevValue.current.innerHTML;
 
     return (
         <div id={number} className={classes.content}>
-            {focus ? (
+            {requisiteInput ? (
                 <div className={classes.redactable}>
                     <MyInput
                         ref={currentValue}

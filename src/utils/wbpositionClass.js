@@ -11,7 +11,6 @@ export class PositionClass {
         this.total = total || 0;
         this.id = id || null;
     }
-    // синтаксис свойств-аксессоров используется поскольку не поулчилось передать через fetch
     getSumm() {
         this.summ = this.quantity * this.price;
         return this.summ;

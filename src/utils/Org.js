@@ -1,5 +1,6 @@
 export class Organizaton {
     constructor(
+        OrgId,
         opf,
         orgname,
         inn,
@@ -17,6 +18,7 @@ export class Organizaton {
         // okved,
         // okpo
     ) {
+        this.OrgId = OrgId;
         this.opf = opf;
         this.orgname = orgname;
         this.inn = inn;

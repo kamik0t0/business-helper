@@ -12,12 +12,9 @@ export function useUpdatePositions() {
     const [positions, setPositions] = useState([]);
     const [counter, setCounter] = useState(0);
     const { orgId, id } = useParams();
-
     // useRef - запоминаем значение при ререндеринге
     let row = useRef(null);
     const { pathname } = useLocation();
-
-    console.log(pathname);
 
     const type = pathname === `/sales/${orgId}/${id}` ? "SaleId" : "PurchaseId";
 
@@ -51,7 +48,7 @@ export function useUpdatePositions() {
         setPositions([...arr]);
     };
 
-    async function getPositions(waybillId) {
+    async function getPositionsRequest(waybillId) {
         try {
             const PositionsFromDB = await getData(
                 process.env.REACT_APP_URL_BASE + pathname,
@@ -94,6 +91,6 @@ export function useUpdatePositions() {
         highlightPosition,
         getPositionValues,
         fillStartPositions,
-        getPositions,
+        getPositionsRequest,
     ];
 }
