@@ -3,8 +3,11 @@ import axios from "axios";
 
 const instance = axios.create();
 
-interface getDataFunc {
-    (url: string, params: { a: string }, callDispatch: object): Promise<object>;
+interface IParams {
+    UserId?: string | number;
+    OrgId?: string | number;
+    SaleId?: string | number;
+    PurchaseId?: string | number;
 }
 
 /**
@@ -14,25 +17,25 @@ interface getDataFunc {
  * @param {string} url server endpoint
  * @param {object} params url params
  * @param {func} callDispatch state change callback
- * @return {Promise<array>} requested data
+ * @return {Promise<array>} requested data array
  */
 
-export let getData: getDataFunc;
-
-getData = async function (
+export const getData = async function (
     url: string,
-    params: { a: string | number },
+    params: IParams,
     callDispatch: object
-) {
+): Promise<any> {
     try {
         await authTokenInterceptor(instance, callDispatch);
         const Data = await instance.get(url, { params });
         return Data.data;
     } catch (error) {
         if (error instanceof Error) {
-            console.log(error.message);
-        } else {
             console.log(error);
+
+            throw new Error(error.message);
+        } else {
+            throw new Error("Get Data error");
         }
     }
 };

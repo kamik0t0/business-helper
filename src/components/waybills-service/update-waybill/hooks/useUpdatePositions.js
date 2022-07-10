@@ -1,14 +1,14 @@
 import { useState, useRef } from "react";
 import { PositionClass } from "../../../../utils/wbpositionClass";
-import { highlight } from "../../../../utils/highlight";
+// import { highlight } from "../../../../utils/highlight";
 import { getValue } from "../../common/scripts";
 import { getData } from "../../../../utils/getData";
 import { useLocation, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setAuthAction } from "../../../../redux/auth-reducer";
+import { useTypedDispatch } from "../../../../redux/hooks/hooks";
+import { setAuth } from "../../../../redux/reducers/authSlice";
 
 export function useUpdatePositions() {
-    const dispatch = useDispatch();
+    const dispatch = useTypedDispatch();
     const [positions, setPositions] = useState([]);
     const [counter, setCounter] = useState(0);
     const { orgId, id } = useParams();
@@ -38,10 +38,10 @@ export function useUpdatePositions() {
         }
     };
 
-    const highlightPosition = (event, number) => {
-        const arr = highlight(number, [...positions], row);
-        setPositions([...arr]);
-    };
+    // const highlightPosition = (event, number) => {
+    //     const arr = highlight(number, [...positions], row);
+    //     setPositions([...arr]);
+    // };
 
     const getPositionValues = (event, number, prop) => {
         const arr = getValue(event, number, [...positions], prop);
@@ -55,7 +55,7 @@ export function useUpdatePositions() {
                 {
                     [type]: waybillId,
                 },
-                () => dispatch(setAuthAction(true))
+                () => dispatch(setAuth(true))
             );
             return PositionsFromDB;
         } catch (error) {
@@ -88,7 +88,7 @@ export function useUpdatePositions() {
         positions,
         addPosition,
         deletePosition,
-        highlightPosition,
+        // highlightPosition,
         getPositionValues,
         fillStartPositions,
         getPositionsRequest,

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getData } from "../../../../utils/getData.ts";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
-import { setAuthAction } from "../../../../redux/auth-reducer.js";
+import { setAuth } from "../../../../redux/reducers/authSlice";
 
 // создание накладной
 export function create(event, WAYBILL, positions, setNavToList, type) {
@@ -27,7 +27,7 @@ export function create(event, WAYBILL, positions, setNavToList, type) {
             const WAYBILLS = await getData(
                 process.env.REACT_APP_URL_BASE + pathname,
                 { OrgId },
-                () => dispatch(setAuthAction(true))
+                () => dispatch(setAuth(true))
             );
             dispatch({ type, payload: WAYBILLS });
             setNavToList();

@@ -2,8 +2,7 @@ import axios from "axios";
 import { getData } from "../../utils/getData.ts";
 import { setErrorTrueAction } from "../../redux/error-reducer.js";
 import { setOrgsAction } from "../../redux/orgs-reducer.js";
-import { setAuthAction } from "../../redux/auth-reducer.js";
-import { setAuthErrorAction } from "../../redux/authError-reducer.js";
+import { setAuth } from "../reducers/authSlice";
 import { call, takeEvery, put } from "redux-saga/effects";
 import { channel } from "redux-saga";
 import { setCounterpartiesAction } from "../counterparties-reducer";
@@ -34,8 +33,9 @@ export function* authWorker({ payload }) {
         type,
         orgId,
         waybill,
+        setIsValid,
     ] = payload;
-    yield put(setAuthErrorAction(false, ""));
+    setIsValid("");
     setLoader();
     event.preventDefault();
 
@@ -51,7 +51,7 @@ export function* authWorker({ payload }) {
     // проверка на ввод
     for (const [name, value] of user) {
         if (value.trim().length === 0) {
-            yield put(setAuthErrorAction(true, "Введите пароль и логин"));
+            setIsValid("Введите пароль и логин");
             return;
         }
     }
@@ -62,7 +62,7 @@ export function* authWorker({ payload }) {
         );
         setLoader();
         if (AuthData.data.auth) {
-            yield put(setAuthAction(true));
+            yield put(setAuth(true));
 
             localStorage.setItem("token", AuthData.data.token);
             localStorage.setItem("email", email);
@@ -74,7 +74,7 @@ export function* authWorker({ payload }) {
                 getData(
                     process.env.REACT_APP_URL_PRIVATE_OFFICE,
                     { UserId },
-                    () => authErrorCallback.put(setAuthAction(false))
+                    () => authErrorCallback.put(setAuth(false))
                 )
             );
 
@@ -107,7 +107,7 @@ export function* authWorker({ payload }) {
                 let requests = yield call(() =>
                     URLS.map((url) =>
                         getData(url, { OrgId: orgId }, () =>
-                            authErrorCallback.put(setAuthAction(false))
+                            authErrorCallback.put(setAuth(false))
                         )
                     )
                 );
@@ -130,7 +130,7 @@ export function* authWorker({ payload }) {
             }
             navigate(`${fromPage}${search}`);
         } else {
-            yield put(setAuthErrorAction(true, AuthData.data.message));
+            setIsValid(AuthData.data.message);
             return false;
         }
     } catch (error) {

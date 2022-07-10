@@ -1,23 +1,30 @@
-import { useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setCounterpartiesAction } from "../redux/counterparties-reducer.js";
-import { setCounterpartyAction } from "../redux/counterparty-reducer.js";
-import { highlight } from "../utils/highlight.js";
+import { useTypedDispatch, useTypedSelector } from "../redux/hooks/hooks";
+import { setCounterparty } from "../redux/reducers/counterpartiesSlice";
+import { setCounterparties } from "../redux/reducers/counterpartiesSlice";
+import { highlightPosition } from "../utils/highlight.ts";
 
-export const useCounterparty = () => {
-    const dispatch = useDispatch();
-    const COUNTERPARTIES = useSelector(
-        (state) => state.setCounterparties.counterparties
+export const useCounterparty = (counterpartyIndex, counterparty) => {
+    const dispatch = useTypedDispatch();
+    const COUNTERPARTIES = useTypedSelector(
+        (state) => state.counterpartyReducer.counterparties
     );
-    let row = useRef(null);
 
-    const grabCounterparty = (number) => {
-        dispatch(setCounterpartyAction(COUNTERPARTIES[number]));
-        localStorage.setItem("counterpartyId", COUNTERPARTIES[number].id);
-        dispatch(
-            setCounterpartiesAction(highlight(number, [...COUNTERPARTIES], row))
+    const selectCounterparty = () => {
+        const { payload: highlightedCounterparty } = dispatch(
+            setCounterparty(
+                Object.assign({}, counterparty, {
+                    highlight: true,
+                })
+            )
         );
+        const counterparties = highlightPosition(
+            counterpartyIndex,
+            highlightedCounterparty,
+            [...COUNTERPARTIES]
+        );
+
+        dispatch(setCounterparties(counterparties));
     };
 
-    return (number) => grabCounterparty(number);
+    return selectCounterparty;
 };

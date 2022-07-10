@@ -1,14 +1,18 @@
 import axios from "axios";
 import { useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import {
+    useTypedSelector,
+    useTypedDispatch,
+} from "../../../../redux/hooks/hooks";
 import { getData } from "../../../../utils/getData.ts";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
-import { setAuthAction } from "../../../../redux/auth-reducer.js";
+
+import { setAuth } from "../../../../redux/reducers/authSlice";
 import { makeDate, total } from "../../common/scripts";
 
 export function useUpdateWaybill(positions, WAYBILL) {
-    const dispatch = useDispatch();
+    const dispatch = useTypedDispatch();
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const { orgId, id } = useParams();
@@ -18,8 +22,8 @@ export function useUpdateWaybill(positions, WAYBILL) {
             ? ["SALES", process.env.REACT_APP_URL_SALES]
             : ["PURCHASES", process.env.REACT_APP_URL_PURCHASES];
 
-    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
-    const COUNTERPARTY = useSelector(
+    const MYORG = useTypedSelector((state) => state.setMyOrgReducer.myOrg);
+    const COUNTERPARTY = useTypedSelector(
         (state) => state.setCounterpartyReducer.counterparty
     );
 
@@ -51,7 +55,7 @@ export function useUpdateWaybill(positions, WAYBILL) {
                 );
 
                 const WAYBILLS = await getData(getWaybillURL, { OrgId }, () =>
-                    dispatch(setAuthAction(true))
+                    dispatch(setAuth(true))
                 );
 
                 dispatch({ type: table, payload: WAYBILLS });

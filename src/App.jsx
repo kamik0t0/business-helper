@@ -1,12 +1,12 @@
 import classes from "./styles/app.module.css";
-import Content from "../src/UI/Curtain/Content/Content.jsx";
-import Header from "../src/blocks/header/Header.jsx";
+import Content from "./UI/Curtain/Content/Content.jsx";
+import Header from "./blocks/header/Header.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Error from "./UI/Error/Error.jsx";
 
 export default function App() {
-    const ERROR = useSelector((state) => state.errorReducer);
+    // const ERROR = useSelector((state) => state.errorReducer);
 
     return (
         <>
@@ -16,7 +16,7 @@ export default function App() {
                         <Header />
                         <Content />
                     </BrowserRouter>
-                    {ERROR.isError && <Error message={ERROR.message} />}
+                    {/* {ERROR.isError && <Error message={ERROR.message} />} */}
                 </div>
             </div>
         </>

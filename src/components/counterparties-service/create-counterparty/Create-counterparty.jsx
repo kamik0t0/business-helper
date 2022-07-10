@@ -25,9 +25,7 @@ export default function CreateCounterparty() {
     const getInputsValues = (event, field, length) =>
         getRequisites(event, field, length, COUNTERPARTY.current, isORG);
 
-    const dispatchCreateCounterparty = (event) => {
-        dispatch(create(event));
-    };
+    const dispatchCreateCounterparty = (event) => dispatch(create(event));
     return (
         <>
             <div className={classes.create}>

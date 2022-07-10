@@ -3,11 +3,10 @@ import { CurtainContext } from "../../UI/Curtain/Content/Content.jsx";
 import classes from "./styles/side-menu.module.css";
 import MyLink from "../../UI/link/MyLink.jsx";
 import classNames from "classnames/bind";
-import { useSelector } from "react-redux";
+import { useTypedSelector } from "../../redux/hooks/hooks.ts";
 
 export default function Side({ showCurtain }) {
-    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
-
+    const USERORG = useTypedSelector((state) => state.orgsReducer.org);
     const { curtain } = useContext(CurtainContext);
 
     const cx = classNames.bind(classes);
@@ -15,6 +14,7 @@ export default function Side({ showCurtain }) {
         [classes.side]: true,
         [classes.active]: !curtain,
     });
+
     return (
         <div onClick={showCurtain} className={curtainClassName}>
             <div className={classes.menu}>
@@ -26,7 +26,7 @@ export default function Side({ showCurtain }) {
             <div className={classes.menu}>
                 <MyLink
                     style={{ textDecoration: "none" }}
-                    path={`/counterparties/${MYORG.id}`}
+                    path={`/counterparties/${USERORG?.id}`}
                 >
                     Контрагенты
                 </MyLink>
@@ -34,7 +34,7 @@ export default function Side({ showCurtain }) {
             <div className={classes.menu}>
                 <MyLink
                     style={{ textDecoration: "none" }}
-                    path={`/sales/${MYORG?.id}`}
+                    path={`/sales/${USERORG?.id}`}
                 >
                     Продажи
                 </MyLink>
@@ -42,7 +42,7 @@ export default function Side({ showCurtain }) {
             <div className={classes.menu}>
                 <MyLink
                     style={{ textDecoration: "none" }}
-                    path={`/purchases/${MYORG.id}`}
+                    path={`/purchases/${USERORG?.id}`}
                 >
                     Покупки
                 </MyLink>

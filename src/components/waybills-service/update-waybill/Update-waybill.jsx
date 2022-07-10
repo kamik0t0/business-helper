@@ -31,7 +31,7 @@ export default function UpdateWaybill({ CounterpartyInfo }) {
         positions,
         addPosition,
         deletePosition,
-        highlightPosition,
+        // highlightPosition,
         getPositionValues,
         fillStartPositions,
         getPositionsRequest,
@@ -100,7 +100,7 @@ export default function UpdateWaybill({ CounterpartyInfo }) {
                 ) : (
                     <Positons
                         positions={positions}
-                        highlightPosition={highlightPosition}
+                        // highlightPosition={highlightPosition}
                         getPositionValues={getPositionValues}
                     />
                 )}

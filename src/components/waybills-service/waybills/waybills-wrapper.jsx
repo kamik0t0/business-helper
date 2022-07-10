@@ -1,20 +1,20 @@
 import React from "react";
-import Waybill from "./waybill/Waybill.jsx";
+import Invoice from "./waybill/Waybill.jsx";
 import { v4 as uuid } from "uuid";
 import PropTypes from "prop-types";
 
-const WaybillsWrapper = ({ waybills, getWaybill, highlightON }) => {
+const InvoicesWrapper = ({ invoices, action }) => {
     return (
         <>
-            {waybills.length > 0 &&
-                waybills.map((waybill, index) => {
+            {invoices.length > 0 &&
+                invoices.map((invoice, index) => {
                     return (
-                        <Waybill
+                        <Invoice
                             key={uuid()}
                             index={index}
-                            waybill={waybill}
-                            getWaybill={getWaybill}
-                            highlightON={highlightON}
+                            invoice={invoice}
+                            invoices={invoices}
+                            action={action}
                         />
                     );
                 })}
@@ -22,10 +22,9 @@ const WaybillsWrapper = ({ waybills, getWaybill, highlightON }) => {
     );
 };
 
-WaybillsWrapper.propTypes = {
-    waybills: PropTypes.array,
-    getWaybill: PropTypes.func.isRequired,
-    highlightON: PropTypes.func.isRequired,
+InvoicesWrapper.propTypes = {
+    invoices: PropTypes.array,
+    action: PropTypes.func.isRequired,
 };
 
-export default WaybillsWrapper;
+export default InvoicesWrapper;

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getData } from "../../../../utils/getData.ts";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
-import { setAuthAction } from "../../../../redux/auth-reducer.js";
+import { setAuth } from "../../../../redux/reducers/authSlice";
 import { setWaybillAction } from "../../../../redux/waybill-reducer.js";
 
 export function update(event, path, UpdateWaybill, setNav, id, positions) {
@@ -25,7 +25,7 @@ export function update(event, path, UpdateWaybill, setNav, id, positions) {
             const WAYBILLS = await getData(
                 process.env.REACT_APP_URL_BASE + path,
                 { OrgId },
-                () => dispatch(setAuthAction(true)),
+                () => dispatch(setAuth(true)),
                 { OrgId: OrgId }
             );
             setNav();

@@ -1,4 +1,4 @@
-import { highlight } from "../../../utils/highlight.js";
+// import { highlight } from "../../../utils/highlight.js";
 
 export function getValue(event, number, positions, prop) {
     if (prop === "nomenclature") {
@@ -30,10 +30,10 @@ export function getPrice(event, number, positions) {
     positions[number].price = price;
     return positions;
 }
-// получение позиции
-export function getRow(event, number, positions, row) {
-    highlight(number, [...positions], row);
-}
+// // получение позиции
+// export function getRow(event, number, positions, row) {
+//     highlight(number, [...positions], row);
+// }
 
 // Подсчёт сумм по накладной и сохранение значения для отправки
 export function total(array, field, WAYBILL) {

@@ -3,50 +3,43 @@ import React from "react";
 import classes from "./styles/waybill-list.module.css";
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
+import { useInvoice } from "./hooks/useInvoice";
 
-export default function Waybill({ index, waybill, getWaybill, highlightON }) {
+export default function Invoice({ index, invoice, invoices, action }) {
     const cx = classNames.bind(classes);
     const highlight = cx({
         [classes.waybills_list_wb]: true,
-        [classes.highlight]: waybill.highlight,
+        [classes.highlight]: invoice.highlight,
     });
+
+    const selectInvoice = useInvoice(index, action, invoice, invoices);
+
     const parseDate = new Date(
-        Date.parse(waybill.waybill_date)
+        Date.parse(invoice.waybill_date)
     ).toLocaleDateString();
+
     return (
         <div className={classes.waybills_list}>
-            {/* накладная */}
-            <div
-                className={highlight}
-                onClick={(event) => {
-                    getWaybill(event, index);
-                    highlightON(index);
-                }}
-            >
-                {/* дата */}
+            <div className={highlight} onClick={selectInvoice}>
                 <div className={classes.waybills_list_wb_date}>{parseDate}</div>
-                {/* номер */}
                 <div className={classes.waybills_list_wb_num}>
-                    {waybill.id.length > 14
-                        ? waybill.id.slice(0, 15) + "..."
-                        : waybill.id}
+                    {invoice.id.length > 14
+                        ? invoice.id.slice(0, 15) + "..."
+                        : invoice.id}
                 </div>
-                {/* контрагент */}
                 <div className={classes.waybills_list_wb_ctrpty}>
-                    {waybill.cl_orgname}
+                    {invoice.cl_orgname}
                 </div>
-                {/* сумма */}
                 <div className={classes.waybills_list_wb_summ}>
-                    {waybill.total}
+                    {invoice.total}
                 </div>
             </div>
         </div>
     );
 }
 
-Waybill.propTypes = {
-    index: PropTypes.number.isRequired,
-    waybill: PropTypes.object.isRequired,
-    getWaybil: PropTypes.func,
-    highlightON: PropTypes.func.isRequired,
+Invoice.propTypes = {
+    invoice: PropTypes.object.isRequired,
+    invoices: PropTypes.array,
+    action: PropTypes.func.isRequired,
 };

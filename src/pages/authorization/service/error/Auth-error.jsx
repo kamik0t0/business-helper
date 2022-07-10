@@ -1,9 +1,9 @@
 import React from "react";
 import classes from "./styles/auth-error.module.css";
-import { useSelector } from "react-redux";
+import { useTypedSelector } from "../../../../redux/hooks/hooks";
 
 export default function AuthError() {
-    const AUTHERROR = useSelector((state) => state.authErrorReducer);
+    const AUTHERROR = useTypedSelector((state) => state.authErrorReducer);
     console.log(AUTHERROR);
     return (
         <>

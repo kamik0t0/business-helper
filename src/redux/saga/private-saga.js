@@ -4,7 +4,7 @@ import { setCounterpartiesAction } from "../counterparties-reducer.js";
 import { setSalesAction } from "../sales-reducer.js";
 import { setPurchasesAction } from "../purchases-reducer.js";
 import { getData } from "../../utils/getData.ts";
-import { setAuthAction } from "../auth-reducer.js";
+import { setAuth } from "../reducers/authSlice";
 import { chooseMyOrg } from "../../utils/getOrgs.js";
 import { setMyOrgAction } from "../setMyOrg-reducer.js";
 
@@ -44,9 +44,7 @@ function* getOrgDataVoidWorker({ payload }) {
 
     let requests = yield call(() =>
         URLS.map((url) =>
-            getData(url, { OrgId }, () =>
-                authErrorCallback.put(setAuthAction(false))
-            )
+            getData(url, { OrgId }, () => authErrorCallback.put(setAuth(false)))
         )
     );
 

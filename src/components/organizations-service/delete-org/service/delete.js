@@ -3,10 +3,10 @@ import { getData } from "../../../../utils/getData.js";
 import { setOrgsAction } from "../../../../redux/orgs-reducer.js";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
 import { setMyOrgAction } from "../../../../redux/setMyOrg-reducer.js";
-import { setAuthAction } from "../../../../redux/auth-reducer.js";
+import { setAuth } from "../../../../redux/reducers/authSlice.js";
 
 export function deleteOrg(setLoader) {
-    return async function deleteWithThunk(dispatch) {
+    return async function (dispatch) {
         setLoader();
         try {
             const UserId = localStorage.getItem("UserId");
@@ -20,7 +20,7 @@ export function deleteOrg(setLoader) {
             });
 
             const ORGS = await getData(`/private/?UserId=${UserId}`, () =>
-                dispatch(setAuthAction(false))
+                dispatch(setAuth(false))
             );
             dispatch(setMyOrgAction({}));
             setLoader();

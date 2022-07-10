@@ -38,7 +38,7 @@ export class Organizaton {
     }
 }
 
-export let OrgFields = [
+export const OrgFields = [
     {
         field: "orgname",
         name: "Наименование:",
@@ -152,7 +152,7 @@ export class Individual {
         // this.okved = okved;
     }
 }
-export let IpFields = [
+export const IpFields = [
     {
         field: "orgname",
         name: "Наименование:",

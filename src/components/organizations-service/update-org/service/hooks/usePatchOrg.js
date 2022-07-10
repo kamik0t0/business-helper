@@ -1,69 +1,56 @@
 import { checkInputs } from "../handlers/check-inputs.js";
-import { getUpdatedOrg } from "../../../../../utils/getUpdatedOrg.js";
-import { getData } from "../../../../../utils/getData.ts";
-import axios from "axios";
-import { setOrgsAction } from "../../../../../redux/orgs-reducer.js";
-import { setErrorTrueAction } from "../../../../../redux/error-reducer.js";
-import { setMyOrgAction } from "../../../../../redux/setMyOrg-reducer.js";
-import { setAuthAction } from "../../../../../redux/auth-reducer.js";
 import { useState, useContext, useRef } from "react";
+import { useTypedSelector } from "../../../../../redux/hooks/hooks";
 import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control.js";
 import { ModalContext } from "../../../../../blocks/content/Main.jsx";
 import { Organizaton } from "../../../../../utils/Org.js";
-import { useDispatch } from "react-redux";
+import { useTypedDispatch } from "../../../../../redux/hooks/hooks";
 import { getValue } from "../handlers/get-value.js";
 import { setValue } from "../handlers/set-value.js";
+import { isOrganization } from "../../../../../utils/isOrg.js";
+import { addRequisitesValues } from "../../../handlers/addRequisitesValues.js";
 
-export function usePatchOrg(Org) {
-    const dispatch = useDispatch();
+export function usePatchOrg() {
+    const dispatch = useTypedDispatch();
+    const USERORG = useTypedSelector((state) => state.orgsReducer.org);
+
+    const isORG = useRef(isOrganization(USERORG));
+    const UpdateData = useRef(new Organizaton());
 
     const [loader, setLoader] = useState(false);
-
-    const UpdateData = useRef(new Organizaton());
-    UpdateData.current["id"] = Org.id;
-    const UserId = localStorage.getItem("UserId");
 
     const { setModalUpdate } = useContext(ModalContext);
     const [, hideModal] = modalManager(setModalUpdate);
 
-    function update(event) {
-        return async (dispatch) => {
-            event.preventDefault();
-            if (!checkInputs(UpdateData, Org)) return;
-            setLoader(!loader);
+    UpdateData.current["id"] = USERORG.id;
 
-            try {
-                await axios.patch(
-                    process.env.REACT_APP_URL_PRIVATE_OFFICE,
-                    UpdateData.current,
-                    {
-                        params: {
-                            table: "Orgs",
-                        },
-                    }
-                );
+    async function update(event) {
+        event.preventDefault();
+        if (!checkInputs(UpdateData, USERORG)) return;
+        setLoader(!loader);
 
-                const ORGS = await getData(
-                    process.env.REACT_APP_URL_PRIVATE_OFFICE,
-                    { table: "Orgs", UserId },
-                    () => dispatch(setAuthAction(false))
-                );
+        // await axios.patch(
+        //     process.env.REACT_APP_URL_PRIVATE_OFFICE,
+        //     UpdateData.current,
+        //     {
+        //         params: {
+        //             table: "Orgs",
+        //         },
+        //     }
+        // );
 
-                const UpdatedOrg = getUpdatedOrg(ORGS, UpdateData.current.id);
+        // const ORGS = await getData(
+        //     process.env.REACT_APP_URL_PRIVATE_OFFICE,
+        //     { table: "Orgs", UserId },
+        //     () => dispatch(setAuth(false))
+        // );
 
-                dispatch(setMyOrgAction(UpdatedOrg));
-                dispatch(setOrgsAction(ORGS));
+        // const UpdatedOrg = getUpdatedOrg(ORGS, UpdateData.current.id);
 
-                hideModal();
-            } catch (error) {
-                console.log(error);
+        // dispatch(setMyOrgAction(UpdatedOrg));
+        // dispatch(setOrgsAction(ORGS));
 
-                dispatch(setErrorTrueAction(true, error.message));
-                setLoader(!loader);
-
-                hideModal();
-            }
-        };
+        hideModal();
     }
 
     const getInputValue = (event, field, length) =>
@@ -72,11 +59,16 @@ export function usePatchOrg(Org) {
     const setInputValue = (event, field, length) =>
         setValue(event, field, length, UpdateData);
 
-    const dispatchUpdate = (event) => {
-        dispatch(update(event));
+    const Requisites =
+        USERORG !== null && addRequisitesValues(USERORG, isORG.current);
+
+    return {
+        update,
+        USERORG,
+        hideModal,
+        getInputValue,
+        setInputValue,
+        Requisites,
+        loader,
     };
-
-    return [loader, hideModal, getInputValue, setInputValue, dispatchUpdate];
 }
-
-// url="https://deploy-test-business-assist.herokuapp.com/private"

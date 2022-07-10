@@ -1,6 +1,6 @@
 // Проверка авторизации
 import axios from "axios";
-import { setAuthAction } from "../redux/auth-reducer.js";
+import { setAuth } from "../redux/reducers/authSlice.js";
 
 export function isAuth(pathname) {
     return async function (dispatch) {
@@ -9,10 +9,10 @@ export function isAuth(pathname) {
             if (token) {
                 await axios.get(process.env.REACT_APP_URL_BASE + pathname);
 
-                dispatch(setAuthAction(true));
+                dispatch(setAuth(true));
             }
         } catch (error) {
-            dispatch(setAuthAction(false));
+            dispatch(setAuth(false));
         }
     };
 }

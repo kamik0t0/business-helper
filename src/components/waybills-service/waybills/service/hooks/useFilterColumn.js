@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 export function useFilterColumn(initialColumn = "cl_orgname") {
-    const [column, setColumn] = useState(initialColumn);
-    const filterColumn = (event) => setColumn(event.target.value);
+    const [column, setState] = useState(initialColumn);
+    const setColumn = (event) => setState(event.target.value);
 
-    return [column, filterColumn];
+    return [column, setColumn];
 }

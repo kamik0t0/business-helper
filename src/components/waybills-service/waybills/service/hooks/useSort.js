@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useTypedDispatch } from "../../../../../redux/hooks/hooks";
 import {
     sortByDate,
     sortByCounterparty,
@@ -7,8 +7,8 @@ import {
     sortById,
 } from "../scripts/sorts";
 
-export function useSort(type, waybills) {
-    const dispatch = useDispatch();
+export function useSort(action, waybills) {
+    const dispatch = useTypedDispatch();
     const [sortOrder, setSortOrder] = useState(false);
 
     const sort = (event) => {
@@ -31,12 +31,8 @@ export function useSort(type, waybills) {
                 sortedItems = sortBySumm(waybills, sortOrder);
                 break;
         }
-
         setSortOrder(!sortOrder);
-        dispatch({
-            type,
-            payload: sortedItems,
-        });
+        dispatch(action(sortedItems));
     };
 
     return sort;

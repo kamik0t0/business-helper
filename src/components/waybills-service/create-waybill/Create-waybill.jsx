@@ -1,4 +1,3 @@
-// компонент создания накладной
 import { Link, useNavigate } from "react-router-dom";
 import classes from "../styles/update-waybill.module.css";
 import PositionHeaders from "../common/Position-headers.jsx";
@@ -25,7 +24,7 @@ export default function CreateWaybill({ CounterpartyInfo }) {
         positions,
         addPosition,
         deletePosition,
-        highlightPosition,
+        // highlightPosition,
         getPositionValues,
     ] = useCreatePositions();
 
@@ -65,7 +64,7 @@ export default function CreateWaybill({ CounterpartyInfo }) {
                             style={{ width: "350px" }}
                             name={CounterpartyInfo[1]}
                             type="text"
-                            defaultValue={WAYBILL.current.counterparty.orgname}
+                            defaultValue={WAYBILL.current.counterparty?.orgname}
                             getValue={getCounterparty}
                         />
                         <Link to={`/counterparties/${orgId}`}>
@@ -84,7 +83,7 @@ export default function CreateWaybill({ CounterpartyInfo }) {
                 ) : (
                     <Positons
                         positions={positions}
-                        highlightPosition={highlightPosition}
+                        // highlightPosition={highlightPosition}
                         getPositionValues={getPositionValues}
                     />
                 )}

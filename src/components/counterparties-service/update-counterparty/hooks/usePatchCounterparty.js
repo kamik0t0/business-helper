@@ -6,16 +6,16 @@ import axios from "axios";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
 import { setCounterpartyAction } from "../../../../redux/counterparty-reducer.js";
 import { setCounterpartiesAction } from "../../../../redux/counterparties-reducer.js";
-import { setAuthAction } from "../../../../redux/auth-reducer.js";
+import { setAuth } from "../../../../redux/reducers/authSlice";
 import { modalManager } from "../../../../UI/modal/service/handlers/modal-control.js";
 import { ModalContext } from "../../../../blocks/content/Main.jsx";
 import { Organizaton } from "../../../../utils/Org.js";
-import { useDispatch } from "react-redux";
+import { useTypedDispatch } from "../../../../redux/hooks/hooks";
 import { getValue } from "../service/handlers/get-value.js";
 import { setValue } from "../service/handlers/set-value.js";
 
 export function usePatchCounterparty(COUNTERPARTY) {
-    const dispatch = useDispatch();
+    const dispatch = useTypedDispatch();
     const [loader, setLoader] = useState(false);
     const { setModalUpdate } = useContext(ModalContext);
     const [, hideModal] = modalManager(setModalUpdate);
@@ -45,7 +45,7 @@ export function usePatchCounterparty(COUNTERPARTY) {
                 const COUNTERPARTIES = await getData(
                     process.env.REACT_APP_URL_COUNTERPARTY,
                     { OrgId },
-                    () => dispatch(setAuthAction(false))
+                    () => dispatch(setAuth(false))
                 );
 
                 const UpdatedCounterparty = getUpdatedOrg(

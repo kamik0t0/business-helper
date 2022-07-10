@@ -2,11 +2,11 @@ import React from "react";
 import classes from "./style/counterparties-list.module.css";
 import Counterparty from "../counterparty/counterparty.jsx";
 import { v4 as uuid } from "uuid";
-import { useSelector } from "react-redux";
+import { useTypedSelector } from "../../../../redux/hooks/hooks";
 
 export default function CounterpartiesList() {
-    const COUNTERPARTIES = useSelector(
-        (state) => state.setCounterparties.counterparties
+    const COUNTERPARTIES = useTypedSelector(
+        (state) => state.counterpartyReducer.counterparties
     );
     return (
         <>

@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
-import { authReducer } from "./auth-reducer.js";
+import { authReducer } from "./legacy/auth-reducer.js";
 import { errorReducer } from "./error-reducer.js";
 import { setMyOrgReducer } from "./setMyOrg-reducer.js";
 import { setOrgsReducer } from "./orgs-reducer.js";
@@ -34,7 +34,7 @@ const rootReducer = combineReducers({
     setWaybill: setWaybill,
 });
 
-export const store = createStore(
+export const legacyStore = createStore(
     rootReducer,
     applyMiddleware(thunk, sagaMiddleware)
 );

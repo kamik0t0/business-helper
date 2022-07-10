@@ -1,12 +1,12 @@
 import React, { useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useTypedDispatch, useTypedSelector } from "../../../redux/hooks/hooks";
 import classes from "./styles/avatar.module.css";
 import MyLink from "../../../UI/link/MyLink.jsx";
-import { setAuthAction } from "../../../redux/auth-reducer.js";
+import { setAuth } from "../../../redux/reducers/authSlice";
 
 export default function Avatar() {
-    const isAuth = useSelector((state) => state.authReducer.isAuth);
-    const dispatch = useDispatch();
+    const isAuth = useTypedSelector((state) => state.authReducer.isAuth);
+    const dispatch = useTypedDispatch();
 
     const auth = useRef();
     const enter = useRef();
@@ -15,7 +15,7 @@ export default function Avatar() {
     // меняет состояние в redux
     function auth_Handler(event) {
         event.preventDefault();
-        dispatch(setAuthAction(!isAuth));
+        dispatch(setAuth(!isAuth));
         dispatch({ type: "isMYORGSELECTED_FALSE", payload: false });
         hideIconMenu();
     }

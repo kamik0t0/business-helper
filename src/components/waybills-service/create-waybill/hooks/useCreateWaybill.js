@@ -1,17 +1,20 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import { useLocation } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
+import {
+    useTypedSelector,
+    useTypedDispatch,
+} from "../../../../redux/hooks/hooks";
 import { useNavigate } from "react-router";
 import { getData } from "../../../../utils/getData.ts";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
-import { setAuthAction } from "../../../../redux/auth-reducer.js";
+import { setAuth } from "../../../../redux/reducers/authSlice";
 import { makeDefaultDate, total, makeDate } from "../../common/scripts";
 import { useParams } from "react-router-dom";
 
 export function useCreateWaybill(positions) {
     const [loader, setLoader] = useState(false);
-    const dispatch = useDispatch();
+    const dispatch = useTypedDispatch();
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const { orgId } = useParams();
@@ -22,13 +25,13 @@ export function useCreateWaybill(positions) {
             ? ["SALES", process.env.REACT_APP_URL_SALES]
             : ["PURCHASES", process.env.REACT_APP_URL_PURCHASES];
 
-    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
-    const COUNTERPARTY = useSelector(
-        (state) => state.setCounterpartyReducer.counterparty
+    const USERORG = useTypedSelector((state) => state.orgsReducer.org);
+    const COUNTERPARTY = useTypedSelector(
+        (state) => state.counterpartyReducer.counterparty
     );
     const WAYBILL = useRef({
         date: makeDefaultDate(),
-        myOrg: MYORG,
+        myOrg: USERORG,
         counterparty: COUNTERPARTY,
         OrgId,
     });
@@ -49,7 +52,7 @@ export function useCreateWaybill(positions) {
                 });
 
                 const WAYBILLS = await getData(URL, { OrgId }, () =>
-                    dispatch(setAuthAction(true))
+                    dispatch(setAuth(true))
                 );
                 dispatch({ type: table, payload: WAYBILLS });
                 setLoader((loader) => !loader);

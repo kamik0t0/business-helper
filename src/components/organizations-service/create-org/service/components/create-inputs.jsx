@@ -1,4 +1,3 @@
-import React from "react";
 import MyInput from "../../../../../UI/input/MyInput/MyInput.jsx";
 import PropTypes from "prop-types";
 

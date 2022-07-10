@@ -18,3 +18,4 @@ export const setAuthAction = (payload) => ({
     type: AUTH,
     payload,
 });
+// переписан на RTK

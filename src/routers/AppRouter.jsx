@@ -13,10 +13,10 @@ import Private from "../pages/private-office/private-office.jsx";
 import Counterparties from "../pages/counterparties/counterparties.jsx";
 import UpdateSale from "../pages/sales/Update-sale.jsx";
 import UpdatePurchase from "../pages/purchases/Update-purchase.jsx";
-import { useSelector } from "react-redux";
+import { useTypedSelector } from "../redux/hooks/hooks";
 
 export default function AppRouter() {
-    const isAuth = useSelector((state) => state.authReducer.isAuth);
+    const isAuth = useTypedSelector((state) => state.authReducer.isAuth);
     const location = useLocation();
     return (
         <>

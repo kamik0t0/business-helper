@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { getData } from "../../../../utils/getData.ts";
 import { setErrorTrueAction } from "../../../../redux/error-reducer.js";
-import { setAuthAction } from "../../../../redux/auth-reducer.js";
+import { setAuth } from "../../../../redux/reducers/authSlice";
 import { modalManager } from "../../../../UI/modal/service/handlers/modal-control.js";
 import { ModalContext } from "../../../../blocks/content/Main";
 import { useLocation, useParams } from "react-router-dom";
@@ -33,7 +33,7 @@ export function useDeleteWaybill(id) {
                 });
 
                 const WAYBILLS = await getData(URL, { OrgId }, () =>
-                    dispatch(setAuthAction(true))
+                    dispatch(setAuth(true))
                 );
 
                 dispatch({ type: table, payload: WAYBILLS });

@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { PositionClass } from "../../../../utils/wbpositionClass";
-import { highlight } from "../../../../utils/highlight";
+// import { highlight } from "../../../../utils/highlight";
 import { getValue } from "../../common/scripts";
 
 export function useCreatePositions() {
@@ -27,10 +27,10 @@ export function useCreatePositions() {
         }
     };
 
-    const highlightPosition = (event, number) => {
-        const arr = highlight(number, [...positions], row);
-        setPositions([...arr]);
-    };
+    // const highlightPosition = (event, number) => {
+    //     // const arr = highlight(number, [...positions], row);
+    //     // setPositions([...arr]);
+    // };
 
     const getPositionValues = (event, number, prop) => {
         const arr = getValue(event, number, [...positions], prop);
@@ -41,7 +41,7 @@ export function useCreatePositions() {
         positions,
         addPosition,
         deletePosition,
-        highlightPosition,
+        // highlightPosition,
         getPositionValues,
     ];
 }

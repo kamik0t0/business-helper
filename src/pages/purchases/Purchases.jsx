@@ -1,24 +1,28 @@
-import React from "react";
 import MyLink from "../../UI/link/MyLink.jsx";
 import classes from "./styles/purhcases.module.css";
-import { useSelector } from "react-redux";
-import WayBillsList from "../../components/waybills-service/waybills/Waybill-list.jsx";
+import { useTypedSelector } from "../../redux/hooks/hooks";
+import InvoicesList from "../../components/waybills-service/waybills/Waybill-list.jsx";
+import { setPurchases } from "../../redux/reducers/InvoiceSlice";
 
 export default function Purchases() {
-    const MYORG = useSelector((state) => state.setMyOrgReducer.myOrg);
-    const PURCHASES = useSelector((state) => state.setPurchases.purchases);
+    const USERORG = useTypedSelector((state) => state.orgsReducer.org);
+    const PURCHASES = useTypedSelector(
+        (state) => state.invoicesReducer.purchases
+    );
+
     return (
         <>
-            {MYORG ? (
-                <WayBillsList
+            {USERORG ? (
+                <InvoicesList
                     CounterpartyInfo={["Продавец", "Продавцу", "Покупки", "№"]}
-                    WAYBILLS={PURCHASES}
+                    INVOICES={PURCHASES}
+                    action={setPurchases}
                 />
             ) : (
                 <div className={classes.content}>
                     <div className={classes.nocounterparties}>
                         Выберите организацию в
-                        <MyLink path="/private"> личном кабинете</MyLink> или{" "}
+                        <MyLink path="/private"> личном кабинете</MyLink> или
                         <MyLink path="/login"> авторизуйтесь</MyLink>
                     </div>
                 </div>

@@ -1,72 +1,42 @@
-// компонент показывающий список существующих накладных
-import { useRef, useContext, useEffect } from "react";
-import { useLocation } from "react-router";
+import { useContext, useEffect } from "react";
 import classes from "./styles/waybill-list.module.css";
-import { highlight } from "../../../utils/highlight.js";
 import Modal from "../../../UI/modal/modal.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import PropTypes from "prop-types";
-import DeleteWaybill from "../delete-waybill/Delete-waybill.jsx";
-import { useDispatch, useSelector } from "react-redux";
-import { setWaybillAction } from "../../../redux/waybill-reducer.js";
+import DeleteInvoice from "../delete-waybill/Delete-waybill.jsx";
 import { ModalContext } from "../../../blocks/content/Main.jsx";
 import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
-import WaybillHeader from "./header/Waybill-header.jsx";
-import { useSort } from "./service/hooks/useSort";
-import { useFilterColumn } from "./service/hooks/useFilterColumn";
-import { useFilter } from "./service/hooks/useFilter";
-import { highlightOff } from "./service/scripts/highlightOff.js";
+import InvoiceHeader from "./header/Waybill-header.jsx";
 import InteractionHeader from "./header/Interaction-header.jsx";
-import WaybillsWrapper from "./waybills-wrapper.jsx";
+import InvoicesWrapper from "./waybills-wrapper.jsx";
+import { useFilter } from "./service/hooks/useFilter";
+import { useSort } from "./service/hooks/useSort";
 
-export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
-    const { pathname } = useLocation();
-    const dispatch = useDispatch();
-
-    let row = useRef(null);
-    const type = pathname === "/sales" ? "SALES" : "PURCHASES";
-
-    const WAYBILL = useSelector((state) => state.setWaybill.waybill);
-
-    const [column, filterColumn] = useFilterColumn("cl_orgname");
-    const [waybills, setWaybills, filter, searchParams] = useFilter(
-        column,
-        WAYBILLS
-    );
-    const sort = useSort(type, [...waybills]);
-
-    const startSearch = searchParams.get("search") || "";
-
+export default function InvoicesList({ CounterpartyInfo, INVOICES, action }) {
+    const [column, setColumn, invoices, setInvoices, filter, startSearch] =
+        useFilter(INVOICES);
+    const sort = useSort(action, [...invoices]);
     const { modalDelete, modalUpdate, setModalDelete, setModalUpdate } =
         useContext(ModalContext);
 
     const [showUpdateModal, hideUpdateModal] = modalManager(setModalUpdate);
 
     useEffect(() => {
-        setWaybills(WAYBILLS);
-    }, [WAYBILLS]);
+        setInvoices(INVOICES);
+    }, [INVOICES]);
 
     useEffect(() => {
         // обработка параметров строки запроса - загрузка страницы с выполненной фильтрацией
         if (startSearch) {
             let regexp = new RegExp(startSearch, "g");
-            const filtered = [...WAYBILLS].filter(
-                (waybill) =>
-                    waybill[column].toString().toLowerCase().search(regexp) !==
+            const filtered = [...invoices].filter(
+                (invoice) =>
+                    invoice[column].toString().toLowerCase().search(regexp) !==
                     -1
             );
-            setWaybills(filtered);
+            setInvoices(filtered);
         }
     }, [startSearch]);
-
-    const getWaybill = (event, number) =>
-        dispatch(setWaybillAction(waybills[number]));
-
-    const setHighlightOff = () =>
-        setWaybills(highlightOff([...waybills], WAYBILL, showUpdateModal));
-
-    const highlightON = (index) =>
-        setWaybills(() => highlight(index, waybills, row));
 
     return (
         <>
@@ -74,19 +44,13 @@ export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
                 <>
                     <div className={classes.content}>
                         <InteractionHeader
-                            highlightOffArgs={setHighlightOff}
-                            filterColumn={filterColumn}
+                            setColumn={setColumn}
                             filter={filter}
                             info={[CounterpartyInfo[1], CounterpartyInfo[2]]}
                             params={startSearch}
                         />
-
-                        <WaybillHeader sort={sort} info={CounterpartyInfo[0]} />
-                        <WaybillsWrapper
-                            waybills={waybills}
-                            getWaybill={getWaybill}
-                            highlightON={highlightON}
-                        />
+                        <InvoiceHeader sort={sort} info={CounterpartyInfo[0]} />
+                        <InvoicesWrapper invoices={invoices} action={action} />
                     </div>
                     {modalDelete.show && (
                         <Modal
@@ -94,7 +58,7 @@ export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
                             active={modalDelete.add}
                             setModal={setModalDelete}
                         >
-                            <DeleteWaybill />
+                            <DeleteInvoice />
                         </Modal>
                     )}
                     {modalUpdate.show && (
@@ -119,7 +83,8 @@ export default function WayBillsList({ CounterpartyInfo, WAYBILLS }) {
     );
 }
 
-WayBillsList.propTypes = {
+InvoicesList.propTypes = {
     CounterpartyInfo: PropTypes.array.isRequired,
-    WAYBILLS: PropTypes.array.isRequired,
+    INVOICES: PropTypes.array.isRequired,
+    action: PropTypes.func.isRequired,
 };

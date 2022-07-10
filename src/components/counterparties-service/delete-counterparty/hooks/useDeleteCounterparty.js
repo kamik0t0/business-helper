@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { ModalContext } from "../../../../blocks/content/Main";
 import { modalManager } from "../../../../UI/modal/service/handlers/modal-control";
-import { setAuthAction } from "../../../../redux/auth-reducer";
+import { setAuth } from "../../../../redux/reducers/authSlice";
 import { setCounterpartyAction } from "../../../../redux/counterparty-reducer";
 import { setCounterpartiesAction } from "../../../../redux/counterparties-reducer";
 import { setErrorTrueAction } from "../../../../redux/error-reducer";
@@ -28,7 +28,7 @@ export function useDeleteCounterparty() {
                 const COUNTERPARTIES = await getData(
                     process.env.REACT_APP_URL_COUNTERPARTY,
                     { OrgId },
-                    () => dispatch(setAuthAction(false))
+                    () => dispatch(setAuth(false))
                 );
 
                 dispatch(setCounterpartyAction({}));

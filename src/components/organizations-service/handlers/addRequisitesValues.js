@@ -1,19 +1,16 @@
-export function addRequisitesValues(
-    orgRequisites,
-    IpRequisites,
-    requisitesValues = false,
-    isORG
-) {
-    if (requisitesValues === false) return null;
+import { OrgFields, IpFields } from "../../../utils/Org";
+
+export function addRequisitesValues(USERORG = null, isORG) {
+    if (USERORG === null) return null;
     if (isORG) {
-        for (const requisiteName of orgRequisites) {
-            requisiteName.value = requisitesValues[requisiteName.field];
+        for (const requisiteName of OrgFields) {
+            requisiteName.value = USERORG[requisiteName.field];
         }
-        return orgRequisites;
+        return OrgFields;
     } else {
-        for (const requisiteName of IpRequisites) {
-            requisiteName.value = requisitesValues[requisiteName.field];
+        for (const requisiteName of IpFields) {
+            requisiteName.value = USERORG[requisiteName.field];
         }
-        return IpRequisites;
+        return IpFields;
     }
 }
