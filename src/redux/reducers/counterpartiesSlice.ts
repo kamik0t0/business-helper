@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction, current } from "@reduxjs/toolkit";
 import { CounterpartiesState } from "../../models/counterparty";
-import { getCounterpatiesByOrgId } from "../actions/CounterpartiesAction";
+import {
+    getCounterpatiesByOrgId,
+    postCounterparty,
+    deleteCounterparty,
+    patchCounterparty,
+} from "../actions/CounterpartiesAction";
 import { ICounterparty } from "../../models/counterparty";
 import { errorHanlder } from "../scripts/errorHandler";
 
@@ -27,6 +32,15 @@ const counterpartiesSlice = createSlice({
             state.counterparties = action.payload;
         });
         builder.addCase(getCounterpatiesByOrgId.rejected, (state, action) => {
+            errorHanlder(state, action);
+        });
+        builder.addCase(postCounterparty.rejected, (state, action) => {
+            errorHanlder(state, action);
+        });
+        builder.addCase(deleteCounterparty.rejected, (state, action) => {
+            errorHanlder(state, action);
+        });
+        builder.addCase(patchCounterparty.rejected, (state, action) => {
             errorHanlder(state, action);
         });
     },

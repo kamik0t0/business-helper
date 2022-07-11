@@ -1,5 +1,5 @@
 import classes from "./styles/private-office.module.css";
-import PrivateOfficeModals from "./service/modals/Private-office-modals.jsx";
+import CRUDModals from "../../components/organization/common/components/CRUD-Modals";
 import { useTypedSelector } from "../../redux/hooks/hooks";
 import { makeOrgsArr } from "../../utils/orgsList.js";
 import MySelect from "../../UI/input/MySelect/MySelect.jsx";
@@ -42,7 +42,7 @@ export default function Office() {
                     <Buttons />
                 </div>
             )}
-            <PrivateOfficeModals />
+            <CRUDModals />
         </>
     );
 }

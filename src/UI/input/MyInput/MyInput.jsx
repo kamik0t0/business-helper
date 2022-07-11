@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import classes from "./styles/my-input.module.css";
-import { check } from "./service/check";
+import { digitInputHandler } from "./service/digitInputHandler";
 import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 
@@ -19,12 +19,12 @@ const MyInput = React.forwardRef(
         },
         ref
     ) => {
-        const [error, setError] = useState(false);
+        const [inputError, setInputError] = useState(false);
         const cx = classNames.bind(classes);
         const inputClassName = cx({
             [classes.fields__item_input]: true,
             [classes.sumbit]: type === "submit",
-            [classes.error]: error && isNumber,
+            [classes.error]: inputError && isNumber,
         });
 
         return (
@@ -44,7 +44,13 @@ const MyInput = React.forwardRef(
                         className={inputClassName}
                         type={`${type}`}
                         onInput={() =>
-                            check(isNumber, field, prevValue, setError, length)
+                            digitInputHandler(
+                                isNumber,
+                                field,
+                                prevValue,
+                                setInputError,
+                                length
+                            )
                         }
                         onChange={(event) => getValue(event, field, length)}
                         {...props}

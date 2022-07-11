@@ -3,7 +3,7 @@ export interface ICounterparty {
     createdAt: string;
     UserId: number;
     OrgId: number;
-    counterpartyName: string;
+    orgname: string;
     inn: string;
     kpp: string;
     ogrn: string;

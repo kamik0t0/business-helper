@@ -1,5 +1,6 @@
 export class Organizaton {
     constructor(
+        UserId,
         OrgId,
         opf,
         orgname,
@@ -18,6 +19,7 @@ export class Organizaton {
         // okved,
         // okpo
     ) {
+        this.UserId = UserId;
         this.OrgId = OrgId;
         this.opf = opf;
         this.orgname = orgname;
@@ -49,14 +51,14 @@ export const OrgFields = [
         field: "inn",
         name: "ИНН:",
         type: "text",
-        lngth: 10,
+        inputValueLength: 10,
         num: true,
     },
     {
         field: "kpp",
         name: "КПП:",
         type: "text",
-        lngth: 9,
+        inputValueLength: 9,
         num: true,
     },
     // {
@@ -163,7 +165,7 @@ export const IpFields = [
         field: "inn",
         name: "ИНН:",
         type: "text",
-        lngth: 12,
+        inputValueLength: 12,
         num: true,
     },
 

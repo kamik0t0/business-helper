@@ -1,6 +1,6 @@
 import classes from "./styles/counterparties.module.css";
 import { useTypedSelector } from "../../redux/hooks/hooks";
-import CounterpartiesModals from "./service/modals/counterparties-modals.jsx";
+import CRUDModals from "../../components/organization/common/components/CRUD-Modals";
 import CounterpartiesList from "./service/counterparties-list/counterparties-list";
 import Buttons from "./service/buttons/buttons.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
@@ -29,7 +29,7 @@ export default function Counterparties() {
                 )}
             </div>
 
-            <CounterpartiesModals />
+            <CRUDModals />
         </>
     );
 }
