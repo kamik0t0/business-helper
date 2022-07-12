@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 
 export default function ReadOrg({ ORG }) {
     const [hideModal, OrgData] = useReadOrg(ORG);
-
     return (
         <>
             {OrgData === null ? (

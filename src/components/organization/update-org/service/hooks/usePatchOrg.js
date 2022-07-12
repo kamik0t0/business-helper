@@ -2,12 +2,12 @@ import { isAnyOrgValueUpdated } from "../handlers/isInputesFilled";
 import { useState, useContext, useRef } from "react";
 import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control";
 import { ModalContext } from "../../../../../blocks/content/Main.jsx";
-import { Organizaton } from "../../../../../utils/Org.js";
+import { Organizaton } from "../../../../../utils/Org";
 import { useTypedDispatch } from "../../../../../redux/hooks/hooks";
-import { setInputLengthLimit } from "../handlers/setInputLengthLimit.js";
-import { setUpdateOrgValue } from "../handlers/setUpdateOrgValue.js";
-import { isOrganization } from "../../../../../utils/isOrg.js";
-import { assignRequisitesValues } from "../../../common/scripts/addRequisitesValues.js";
+import { setInputLengthLimit } from "../handlers/setInputLengthLimit";
+import { setUpdateOrgValue } from "../handlers/setUpdateOrgValue";
+import { isOrganization } from "../../../../../utils/isOrg";
+import { assignRequisitesValues } from "../../../common/scripts/addRequisitesValues";
 
 export function usePatchOrg(ORG, action) {
     const dispatch = useTypedDispatch();
