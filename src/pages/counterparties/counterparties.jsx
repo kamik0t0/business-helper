@@ -4,19 +4,18 @@ import CRUDModals from "../../components/organization/common/components/CRUD-Mod
 import CounterpartiesList from "./service/counterparties-list/counterparties-list";
 import Buttons from "./service/buttons/buttons.jsx";
 import MyLink from "../../UI/link/MyLink.jsx";
+import CounterpartyHeader from "./service/counterparties-list/counterparty-header";
 
 export default function Counterparties() {
-    const USERORG = useTypedSelector((state) => state.orgsReducer.org);
+    const { org } = useTypedSelector((state) => state.orgsReducer);
+    const { email } = useTypedSelector((state) => state.userReducer.data);
 
     return (
         <>
             <div className={classes.content}>
-                <div className={classes.header}>
-                    <div className={classes.header_items}>
-                        {localStorage.getItem("email")}
-                    </div>
-                </div>
-                {USERORG ? (
+                <CounterpartyHeader />
+                <div className={classes.header_items}>{email}</div>
+                {org ? (
                     <>
                         <CounterpartiesList />
                         <Buttons />

@@ -6,22 +6,25 @@ import MyLink from "../../UI/link/MyLink.jsx";
 import { useForm } from "./service/hooks/useForm";
 import { useUser } from "./service/hooks/useUser";
 import { loaderStyle, submitStyle } from "./service/inlineStyles";
+import { useTypedSelector } from "../../redux/hooks/hooks";
 
 export default function Forgot() {
-    const USER = useUser();
+    const { recover, inputError } = useUser();
     const FORM = useForm();
 
+    const { isLoading } = useTypedSelector((state) => state.userReducer);
+
     const passRecover = (event) =>
-        USER.recover(event, FORM.email, FORM.pass, FORM.repeatPass);
+        recover(event, FORM.email, FORM.pass, FORM.repeatPass);
 
     const cx = classNames.bind(classes);
     const authErrUser = cx({
         [classes.login_auth_user_input]: true,
-        [classes.wrong]: USER.inputError,
+        [classes.wrong]: inputError,
     });
     const authErrPass = cx({
         [classes.login_auth_pass_input]: true,
-        [classes.wrong]: USER.inputError,
+        [classes.wrong]: inputError,
     });
     const passVisibility = cx({
         [classes.login_auth_pass_eye]: FORM.isVisible,
@@ -40,7 +43,7 @@ export default function Forgot() {
                     <div className={classes.login_header}>
                         Восстановление пароля
                     </div>
-                    {USER.loader ? (
+                    {isLoading ? (
                         <Loader style={loaderStyle} />
                     ) : (
                         <div className={classes.login_auth}>

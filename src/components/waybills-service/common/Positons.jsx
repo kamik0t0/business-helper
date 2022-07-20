@@ -1,19 +1,17 @@
-import React from "react";
 import Position from "./position/Position.jsx";
 import PropTypes from "prop-types";
 
-const Positons = ({ positions, highlightPosition, getPositionValues }) => {
+const Positons = ({ positions, setPositions }) => {
     return (
         <>
-            {positions.map((item, index) => {
+            {positions.map((position, index) => {
                 return (
                     <Position
-                        key={item.number}
-                        item={item}
-                        highlight={item.highlight}
-                        highlightPosition={highlightPosition}
-                        number={index}
-                        getPositionValues={getPositionValues}
+                        key={position.item_number}
+                        position={position}
+                        positionIndex={index}
+                        positions={positions}
+                        setPositions={setPositions}
                     />
                 );
             })}

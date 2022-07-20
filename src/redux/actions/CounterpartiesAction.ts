@@ -33,7 +33,9 @@ interface postInfo {
 
 interface IThunkConfig {
     rejectValue: string;
-    state: { orgsReducer: { org: { id: number } } };
+    state: {
+        orgsReducer: { org: { id: number } };
+    };
 }
 
 export const postCounterparty = createAsyncThunk<

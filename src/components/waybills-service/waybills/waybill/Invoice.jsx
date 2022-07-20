@@ -1,11 +1,10 @@
-// представление накладной в виде таблицы с 4 колонками и 1 строки в списке накладных: покупок или продаж
-import React from "react";
 import classes from "./styles/waybill-list.module.css";
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { useInvoice } from "./hooks/useInvoice";
+import { toRU } from "../../../../utils/currencyFormat";
 
-export default function Invoice({ index, invoice, invoices, action }) {
+const Invoice = ({ index, invoice, invoices, action }) => {
     const cx = classNames.bind(classes);
     const highlight = cx({
         [classes.waybills_list_wb]: true,
@@ -17,6 +16,8 @@ export default function Invoice({ index, invoice, invoices, action }) {
     const parseDate = new Date(
         Date.parse(invoice.waybill_date)
     ).toLocaleDateString();
+
+    const Total = toRU.format(invoice.total);
 
     return (
         <div className={classes.waybills_list}>
@@ -30,16 +31,16 @@ export default function Invoice({ index, invoice, invoices, action }) {
                 <div className={classes.waybills_list_wb_ctrpty}>
                     {invoice.cl_orgname}
                 </div>
-                <div className={classes.waybills_list_wb_summ}>
-                    {invoice.total}
-                </div>
+                <div className={classes.waybills_list_wb_summ}>{Total}</div>
             </div>
         </div>
     );
-}
+};
 
 Invoice.propTypes = {
     invoice: PropTypes.object.isRequired,
     invoices: PropTypes.array,
     action: PropTypes.func.isRequired,
 };
+
+export default Invoice;

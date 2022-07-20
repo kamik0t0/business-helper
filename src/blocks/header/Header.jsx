@@ -6,7 +6,7 @@ import Menu from "./menu/Header-menu.jsx";
 
 export const ContextBurger = React.createContext();
 
-export default function Header() {
+const Header = () => {
     const [burger, setBurger] = useState(true);
 
     function showBurger() {
@@ -23,4 +23,6 @@ export default function Header() {
             </ContextBurger.Provider>
         </div>
     );
-}
+};
+
+export default Header;

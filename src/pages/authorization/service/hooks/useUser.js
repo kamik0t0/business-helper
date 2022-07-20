@@ -14,14 +14,13 @@ import { setInvoice } from "../../../../redux/reducers/InvoiceSlice";
 export function useUser() {
     const dispatch = useTypedDispatch();
     const [inputError, setInputError] = useState("");
-    const [loader, setLoader] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const fromPage = location.state?.from?.pathname || "/";
     const search = location.state?.from?.search;
-    const [, type, orgId, invoiceId] = fromPage.split("/");
-    console.log(invoiceId);
+    const [, , orgId, invoiceId] = fromPage.split("/");
     // регистрация
+    // -------------------------------------------------------------------------
     async function reg(event, email, pass) {
         event.preventDefault();
         const user = new FormData();
@@ -43,14 +42,14 @@ export function useUser() {
             return;
         }
 
-        setLoader(true);
         const { payload: USER } = await dispatch(UserAPI.postUser(user));
 
-        typeof USER === "string" && setLoader(false) && setInputError(USER);
-        USER.regerror && setLoader(false) && setInputError(USER.regerror);
+        typeof USER === "string" && setInputError(USER);
+        USER.regerror && setInputError(USER.regerror);
         USER.registered && navigate("/login");
     }
     // восстановление
+    // -------------------------------------------------------------------------
     async function recover(event, email, pass, repeatPass) {
         event.preventDefault();
 
@@ -76,12 +75,12 @@ export function useUser() {
                 "Пароль должен содержать буквы и цифры. Не должен начинаться с цифры. Не должен содержать: пробел  - ( )  /"
             );
 
-        setLoader(true);
         const { payload: USER } = await dispatch(UserAPI.updateUser(user));
-        typeof USER === "string" && setLoader(false) && setInputError(USER);
+        typeof USER === "string" && setInputError(USER);
         USER.updated && navigate("/login");
     }
     // авторизация
+    // -------------------------------------------------------------------------
     async function auth(event, email, pass) {
         event.preventDefault();
 
@@ -97,15 +96,12 @@ export function useUser() {
             return;
         }
 
-        setLoader(true);
         // авторизация с редиректом на главную страницу
         const { payload: USER } = await dispatch(UserAPI.getUser(user));
-        if (typeof USER === "string")
-            return setLoader(false) && setInputError(USER);
+        if (typeof USER === "string") return setInputError(USER);
 
         const { payload: ORGS } = await dispatch(getOrgsByUserId(USER.id));
-        if (typeof ORGS === "string")
-            return setLoader(false) && setInputError(USER);
+        if (typeof ORGS === "string") return setInputError(USER);
         // авторизация с возвратом на страницу
         if (orgId) {
             const { payload: ORGID } = dispatch(setUserOrg(+orgId));
@@ -116,12 +112,13 @@ export function useUser() {
             const { payload: Purchases } = await dispatch(
                 getPurchasesByOrgId(+orgId)
             );
+
             // редирект к накладной
             if (invoiceId) {
-                const [invoice] = [...Sales, ...Purchases].find(
-                    (invoice) => invoice.id === invoiceId
+                const invoice = [...Sales, ...Purchases].find(
+                    (invoice) => invoice.id === +invoiceId
                 );
-                console.log(invoice);
+
                 dispatch(setInvoice(invoice));
             }
             return navigate(`${fromPage}${search}`);
@@ -129,9 +126,7 @@ export function useUser() {
         navigate("/");
     }
 
-    const USER = { recover, reg, auth, inputError, loader };
+    const USER = { recover, reg, auth, inputError };
 
     return USER;
 }
-
-// "https://deploy-test-business-assist.herokuapp.com/login/registration",

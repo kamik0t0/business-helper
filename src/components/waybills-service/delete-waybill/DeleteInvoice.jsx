@@ -1,25 +1,23 @@
 import classes from "./styles/detel-waybill.module.css";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
-import { useDispatch, useSelector } from "react-redux";
+import { useTypedSelector } from "../../../redux/hooks/hooks";
 import { useDeleteWaybill } from "./hooks/useDeleteWaybill.js";
 
-export default function DeleteWaybill() {
-    const dispatch = useDispatch();
-    const WAYBILL = useSelector((state) => state.setWaybill.waybill);
+export default function DeleteInvoice({ deleteAction }) {
+    const INVOICE = useTypedSelector((state) => state.invoicesReducer.Invoice);
+    const { isLoading } = useTypedSelector((state) => state.invoicesReducer);
 
-    const [loader, hideDeleteModal, deleteWaybill] = useDeleteWaybill(
-        WAYBILL.id
+    const [hideDeleteModal, deleteInvoice] = useDeleteWaybill(
+        INVOICE.id,
+        deleteAction
     );
 
-    const dispatchDeleteWaybill = (event) => dispatch(deleteWaybill(event));
-    const slicedDate = WAYBILL.waybill_date.slice(0, -14);
+    const slicedDate = INVOICE.waybill_date.slice(0, -14);
 
     return (
         <>
-            {WAYBILL === undefined ||
-            WAYBILL === null ||
-            Object.keys(WAYBILL).length === 0 ? (
+            {INVOICE == null || Object.keys(INVOICE).length === 0 ? (
                 <div className={classes.noorg}>
                     <div className={classes.noorg__text}>
                         Накладная не выбрана
@@ -30,14 +28,12 @@ export default function DeleteWaybill() {
                 <div className={classes.delete}>
                     <div
                         className={classes.text}
-                    >{`Вы действительно хотите удалить накладную № ${WAYBILL.id} от ${slicedDate} на ${WAYBILL.total} рублей?`}</div>
-                    {loader ? (
+                    >{`Вы действительно хотите удалить накладную № ${INVOICE.id} от ${slicedDate} на ${INVOICE.total} рублей?`}</div>
+                    {isLoading ? (
                         <Loader />
                     ) : (
                         <div className={classes.buttons}>
-                            <MyButton onClick={dispatchDeleteWaybill}>
-                                Да
-                            </MyButton>
+                            <MyButton onClick={deleteInvoice}>Да</MyButton>
                             <MyButton onClick={hideDeleteModal}>Нет</MyButton>
                         </div>
                     )}

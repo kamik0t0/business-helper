@@ -1,8 +1,5 @@
 import { setUserOrg } from "../../../../redux/reducers/orgsSlice";
-import {
-    useTypedSelector,
-    useTypedDispatch,
-} from "../../../../redux/hooks/hooks";
+import { useTypedDispatch } from "../../../../redux/hooks/hooks";
 import { useState } from "react";
 import { getCounterpatiesByOrgId } from "../../../../redux/actions/CounterpartiesAction";
 import { getOrgIdByOrgName } from "../scripts/getOrgIdByOrgName.js";

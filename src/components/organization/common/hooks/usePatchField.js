@@ -33,7 +33,7 @@ export function usePatchField(requisite, fieldNumber) {
         return () => {
             input.removeEventListener("click", focusHandler);
         };
-    }, []);
+    }, [fieldNumber]);
 
     return [focus, prevValue, newValue, Ok, Cancel];
 }

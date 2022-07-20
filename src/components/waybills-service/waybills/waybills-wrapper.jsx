@@ -1,5 +1,4 @@
-import React from "react";
-import Invoice from "./waybill/Waybill.jsx";
+import Invoice from "./waybill/Invoice.jsx";
 import { v4 as uuid } from "uuid";
 import PropTypes from "prop-types";
 

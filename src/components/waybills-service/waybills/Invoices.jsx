@@ -3,40 +3,42 @@ import classes from "./styles/waybill-list.module.css";
 import Modal from "../../../UI/modal/modal.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import PropTypes from "prop-types";
-import DeleteInvoice from "../delete-waybill/Delete-waybill.jsx";
+import DeleteInvoice from "../delete-waybill/DeleteInvoice.jsx";
 import { ModalContext } from "../../../blocks/content/Main.jsx";
 import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
-import InvoiceHeader from "./header/Waybill-header.jsx";
+import InvoiceHeader from "./header/Invoice-header.jsx";
 import InteractionHeader from "./header/Interaction-header.jsx";
 import InvoicesWrapper from "./waybills-wrapper.jsx";
-import { useFilter } from "./service/hooks/useFilter";
 import { useSort } from "./service/hooks/useSort";
+import { useTypedSelector } from "../../../redux/hooks/hooks";
 
-export default function InvoicesList({ CounterpartyInfo, INVOICES, action }) {
-    const [column, setColumn, invoices, setInvoices, filter, startSearch] =
-        useFilter(INVOICES);
-    const sort = useSort(action, [...invoices]);
+const Invoices = ({
+    Info,
+    invoices,
+    setInvoices,
+    startSearch,
+    column,
+    setColumn,
+    filter,
+    deleteAction,
+}) => {
+    const { Invoice } = useTypedSelector((state) => state.invoicesReducer);
+    const sort = useSort(setInvoices, [...invoices]);
+
     const { modalDelete, modalUpdate, setModalDelete, setModalUpdate } =
         useContext(ModalContext);
 
-    const [showUpdateModal, hideUpdateModal] = modalManager(setModalUpdate);
-
-    useEffect(() => {
-        setInvoices(INVOICES);
-    }, [INVOICES]);
+    const [, hideUpdateModal] = modalManager(setModalUpdate);
 
     useEffect(() => {
         // обработка параметров строки запроса - загрузка страницы с выполненной фильтрацией
-        if (startSearch) {
-            let regexp = new RegExp(startSearch, "g");
-            const filtered = [...invoices].filter(
-                (invoice) =>
-                    invoice[column].toString().toLowerCase().search(regexp) !==
-                    -1
-            );
-            setInvoices(filtered);
-        }
-    }, [startSearch]);
+        let regexp = new RegExp(startSearch, "g");
+        const filtered = invoices.filter(
+            (invoice) =>
+                invoice[column].toString().toLowerCase().search(regexp) !== -1
+        );
+        setInvoices(filtered);
+    }, []);
 
     return (
         <>
@@ -46,11 +48,16 @@ export default function InvoicesList({ CounterpartyInfo, INVOICES, action }) {
                         <InteractionHeader
                             setColumn={setColumn}
                             filter={filter}
-                            info={[CounterpartyInfo[1], CounterpartyInfo[2]]}
+                            info={[Info[1], Info[2]]}
                             params={startSearch}
+                            INVOICE={Invoice}
+                            column={column}
                         />
-                        <InvoiceHeader sort={sort} info={CounterpartyInfo[0]} />
-                        <InvoicesWrapper invoices={invoices} action={action} />
+                        <InvoiceHeader sort={sort} info={Info[0]} />
+                        <InvoicesWrapper
+                            invoices={invoices}
+                            action={setInvoices}
+                        />
                     </div>
                     {modalDelete.show && (
                         <Modal
@@ -58,7 +65,7 @@ export default function InvoicesList({ CounterpartyInfo, INVOICES, action }) {
                             active={modalDelete.add}
                             setModal={setModalDelete}
                         >
-                            <DeleteInvoice />
+                            <DeleteInvoice deleteAction={deleteAction} />
                         </Modal>
                     )}
                     {modalUpdate.show && (
@@ -81,10 +88,16 @@ export default function InvoicesList({ CounterpartyInfo, INVOICES, action }) {
             }
         </>
     );
-}
-
-InvoicesList.propTypes = {
-    CounterpartyInfo: PropTypes.array.isRequired,
-    INVOICES: PropTypes.array.isRequired,
-    action: PropTypes.func.isRequired,
 };
+Invoices.propTypes = {
+    Info: PropTypes.array.isRequired,
+    invoices: PropTypes.array.isRequired,
+    setInvoices: PropTypes.func.isRequired,
+    startSearch: PropTypes.string,
+    column: PropTypes.string,
+    setColumn: PropTypes.func.isRequired,
+    filter: PropTypes.func.isRequired,
+    deleteAction: PropTypes.func.isRequired,
+};
+
+export default Invoices;

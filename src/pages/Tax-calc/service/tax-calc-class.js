@@ -201,18 +201,15 @@ export class TaxCalculatorLLC extends TaxCalculator {
     // УСН к уплате 2
     static USN({ salary, income, salaryTaxRate }) {
         const salaryTax = this.salaryTax({ salary, salaryTaxRate });
-        let recoupmentValue = 0;
+
         if (salary > 0) {
             let usn = Math.round((income * 6) / 100);
             if (usn - salaryTax > (usn * 50) / 100) {
-                recoupmentValue = salaryTax;
                 return Math.round(usn - salaryTax);
             } else {
-                recoupmentValue = usn / 2;
                 return Math.round((usn * 50) / 100);
             }
         } else {
-            recoupmentValue = salaryTax;
             let check = (income * 6) / 100;
 
             return Math.round(check > 0 ? check : 0);

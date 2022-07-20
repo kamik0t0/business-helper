@@ -4,7 +4,7 @@ import { ContextBurger } from "../Header.jsx";
 import MyLink from "../../../UI/link/MyLink.jsx";
 import classNames from "classnames/bind";
 
-export default function Menu() {
+const HeaderMenu = () => {
     const { burger, showBurger } = useContext(ContextBurger);
     const cx = classNames.bind(classes);
     const burgerClassName = cx({
@@ -18,4 +18,6 @@ export default function Menu() {
             </div>
         </div>
     );
-}
+};
+
+export default HeaderMenu;

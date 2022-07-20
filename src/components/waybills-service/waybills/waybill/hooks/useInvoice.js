@@ -1,9 +1,17 @@
-import { useTypedDispatch } from "../../../../../redux/hooks/hooks";
+import {
+    useTypedDispatch,
+    useTypedSelector,
+} from "../../../../../redux/hooks/hooks";
 import { setInvoice } from "../../../../../redux/reducers/InvoiceSlice";
 import { highlightPosition } from "../../../../../utils/highlight.ts";
 
 export const useInvoice = (invoiceIdnex, action, invoice, INVOICES) => {
     const dispatch = useTypedDispatch();
+    const prevInvoice = useTypedSelector(
+        (state) => state.invoicesReducer.Invoice
+    );
+
+    if (prevInvoice && prevInvoice.id === invoice.id) return;
 
     const selectInvoice = () => {
         const { payload: highlightedInvoice } = dispatch(
@@ -13,10 +21,11 @@ export const useInvoice = (invoiceIdnex, action, invoice, INVOICES) => {
                 })
             )
         );
+
         const invoices = highlightPosition(invoiceIdnex, highlightedInvoice, [
             ...INVOICES,
         ]);
-        dispatch(action([...invoices]));
+        action(invoices);
     };
     return selectInvoice;
 };

@@ -8,6 +8,8 @@ interface IParams {
     OrgId?: string | number;
     SaleId?: string | number;
     PurchaseId?: string | number;
+    id?: string | number;
+    table?: string;
 }
 
 /**

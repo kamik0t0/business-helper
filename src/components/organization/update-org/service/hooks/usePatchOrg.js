@@ -1,4 +1,4 @@
-import { isAnyOrgValueUpdated } from "../handlers/isInputesFilled";
+import { isAnyOrgValueUpdated } from "../handlers/isAnyOrgValueUpdated";
 import { useState, useContext, useRef } from "react";
 import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control";
 import { ModalContext } from "../../../../../blocks/content/Main.jsx";

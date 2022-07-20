@@ -6,21 +6,16 @@ import { getRequisites } from "../scripts/getRequisites";
 export function useRequisites(ORG) {
     const [isORG, setIsOrg] = useState(true);
     function getOPF(event) {
-        {
-            if (
-                event.target.value ===
-                "Общество с ограниченной ответственностью"
-            ) {
-                setIsOrg(true);
-                ORG.current.opf = "Общество с ограниченной ответственностью";
-                ORG.current["kpp"] = undefined;
-                ORG.current["director"] = undefined;
-            } else {
-                setIsOrg(false);
-                ORG.current.opf = "Индивидуальный предприниматель";
-                delete ORG.current["kpp"];
-                delete ORG.current["director"];
-            }
+        if (event.target.value === "Общество с ограниченной ответственностью") {
+            setIsOrg(true);
+            ORG.current.opf = "Общество с ограниченной ответственностью";
+            ORG.current["kpp"] = undefined;
+            ORG.current["director"] = undefined;
+        } else {
+            setIsOrg(false);
+            ORG.current.opf = "Индивидуальный предприниматель";
+            delete ORG.current["kpp"];
+            delete ORG.current["director"];
         }
     }
 

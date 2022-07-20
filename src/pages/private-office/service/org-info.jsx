@@ -1,13 +1,11 @@
 import classes from "./styles/org-info.module.css";
-import { useTypedSelector } from "../../../redux/hooks/hooks";
 import { isOrganization } from "../../../utils/isOrg";
 
-export default function OrgInfo() {
-    const USERORG = useTypedSelector((state) => state.orgsReducer.org);
-    const isORG = USERORG !== null && isOrganization(USERORG);
+const OrgInfo = ({ USERORG }) => {
+    const isORG = USERORG != null && isOrganization(USERORG);
     return (
         <>
-            {USERORG !== null && (
+            {USERORG != null && (
                 <div className={classes.info}>
                     <div className={classes.info_item}>
                         <div className={classes.info_name}>
@@ -16,7 +14,7 @@ export default function OrgInfo() {
 
                         <div className={classes.info_value}>
                             {`${USERORG.opf} `}
-                            {isORG ? `"${USERORG.orgname}"` : USERORG.orgname}
+                            {isORG ? USERORG.orgname : USERORG.orgname}
                         </div>
                     </div>
                     <div className={classes.info_item}>
@@ -27,7 +25,7 @@ export default function OrgInfo() {
                             </div>
                         ) : (
                             <div className={classes.info_value}>
-                                {`${USERORG.inn} `}
+                                {USERORG.inn}
                             </div>
                         )}
                     </div>
@@ -40,7 +38,7 @@ export default function OrgInfo() {
                     {isORG && (
                         <div className={classes.info_item}>
                             <div className={classes.info_name}>
-                                Руководитель:{" "}
+                                Руководитель:
                             </div>
                             <div className={classes.info_value}>
                                 {USERORG.director}
@@ -51,7 +49,9 @@ export default function OrgInfo() {
             )}
         </>
     );
-}
+};
+
+export default OrgInfo;
 
 // OrgInfo.propTypes = {
 //     isORG: PropTypes.bool.isRequired,

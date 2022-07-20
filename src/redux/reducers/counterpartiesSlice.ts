@@ -1,11 +1,6 @@
-import { createSlice, PayloadAction, current } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CounterpartiesState } from "../../models/counterparty";
-import {
-    getCounterpatiesByOrgId,
-    postCounterparty,
-    deleteCounterparty,
-    patchCounterparty,
-} from "../actions/CounterpartiesAction";
+import * as CounterpartyAPI from "../actions/CounterpartiesAction";
 import { ICounterparty } from "../../models/counterparty";
 import { errorHanlder } from "../scripts/errorHandler";
 
@@ -28,21 +23,36 @@ const counterpartiesSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(getCounterpatiesByOrgId.fulfilled, (state, action) => {
-            state.counterparties = action.payload;
-        });
-        builder.addCase(getCounterpatiesByOrgId.rejected, (state, action) => {
-            errorHanlder(state, action);
-        });
-        builder.addCase(postCounterparty.rejected, (state, action) => {
-            errorHanlder(state, action);
-        });
-        builder.addCase(deleteCounterparty.rejected, (state, action) => {
-            errorHanlder(state, action);
-        });
-        builder.addCase(patchCounterparty.rejected, (state, action) => {
-            errorHanlder(state, action);
-        });
+        builder.addCase(
+            CounterpartyAPI.getCounterpatiesByOrgId.fulfilled,
+            (state, action) => {
+                state.counterparties = action.payload;
+            }
+        );
+        builder.addCase(
+            CounterpartyAPI.getCounterpatiesByOrgId.rejected,
+            (state, action) => {
+                errorHanlder(state, action);
+            }
+        );
+        builder.addCase(
+            CounterpartyAPI.postCounterparty.rejected,
+            (state, action) => {
+                errorHanlder(state, action);
+            }
+        );
+        builder.addCase(
+            CounterpartyAPI.deleteCounterparty.rejected,
+            (state, action) => {
+                errorHanlder(state, action);
+            }
+        );
+        builder.addCase(
+            CounterpartyAPI.patchCounterparty.rejected,
+            (state, action) => {
+                errorHanlder(state, action);
+            }
+        );
     },
 });
 export const { setCounterparty, setCounterparties } =

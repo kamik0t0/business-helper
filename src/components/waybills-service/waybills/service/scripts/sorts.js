@@ -18,8 +18,16 @@ export function sortByCounterparty(waybills, sortOrder) {
 // - сумме
 export function sortBySumm(waybills, sortOrder) {
     return sortOrder
-        ? waybills.sort((a, b) => a.summ - b.summ)
-        : waybills.sort((a, b) => b.summ - a.summ);
+        ? waybills.sort((a, b) => {
+              if (+a.summ > +b.summ) return 1;
+              if (+a.summ === +b.summ) return 0;
+              if (+a.summ < +b.summ) return -1;
+          })
+        : waybills.sort((a, b) => {
+              if (+a.summ > +b.summ) return -1;
+              if (+a.summ === +b.summ) return 0;
+              if (+a.summ < +b.summ) return 1;
+          });
 }
 // - id
 export function sortById(waybills, sortOrder) {

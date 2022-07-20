@@ -1,22 +1,34 @@
 import MyLink from "../../UI/link/MyLink.jsx";
+import { useEffect, useState } from "react";
+import { useFilter } from "../../components/waybills-service/waybills/service/hooks/useFilter.js";
 import classes from "./styles/purhcases.module.css";
 import { useTypedSelector } from "../../redux/hooks/hooks";
-import InvoicesList from "../../components/waybills-service/waybills/Waybill-list.jsx";
-import { setPurchases } from "../../redux/reducers/InvoiceSlice";
+import Invoices from "../../components/waybills-service/waybills/Invoices.jsx";
+import { deletePurchaseByPurchaseId } from "../../redux/actions/PurchasesAction";
 
 export default function Purchases() {
-    const USERORG = useTypedSelector((state) => state.orgsReducer.org);
-    const PURCHASES = useTypedSelector(
-        (state) => state.invoicesReducer.purchases
+    const { org } = useTypedSelector((state) => state.orgsReducer);
+    const { purchases } = useTypedSelector((state) => state.invoicesReducer);
+    const [invoices, setInvoices] = useState([...purchases]);
+    const [column, setColumn, filter, startSearch] = useFilter(
+        purchases,
+        setInvoices
     );
+
+    useEffect(() => setInvoices(purchases), [purchases]);
 
     return (
         <>
-            {USERORG ? (
-                <InvoicesList
-                    CounterpartyInfo={["Продавец", "Продавцу", "Покупки", "№"]}
-                    INVOICES={PURCHASES}
-                    action={setPurchases}
+            {org ? (
+                <Invoices
+                    Info={["Продавец", "Продавцу", "Покупки", "№"]}
+                    invoices={invoices}
+                    setInvoices={setInvoices}
+                    startSearch={startSearch}
+                    column={column}
+                    setColumn={setColumn}
+                    filter={filter}
+                    deleteAction={deletePurchaseByPurchaseId}
                 />
             ) : (
                 <div className={classes.content}>

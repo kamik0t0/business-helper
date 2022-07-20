@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 
 // получаем некоторые значения через props из родительского компонента

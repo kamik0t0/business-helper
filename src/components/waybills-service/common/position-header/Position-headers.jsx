@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import classes from "./styles/position-headers.module.css";
 
-export default function PositionHeaders() {
+const PositionHeaders = memo(() => {
     return (
         <div className={classes.waybill_form_wb_header}>
             <div className={classes.waybill_form_wb_header_number}>№</div>
@@ -16,4 +16,6 @@ export default function PositionHeaders() {
             <div className={classes.waybill_form_wb_header_total}>Всего</div>
         </div>
     );
-}
+});
+
+export default PositionHeaders;

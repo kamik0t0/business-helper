@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTypedDispatch } from "../../../../../redux/hooks/hooks";
 import {
     sortByDate,
     sortByCounterparty,
@@ -7,8 +6,7 @@ import {
     sortById,
 } from "../scripts/sorts";
 
-export function useSort(action, waybills) {
-    const dispatch = useTypedDispatch();
+export function useSort(action, invoices) {
     const [sortOrder, setSortOrder] = useState(false);
 
     const sort = (event) => {
@@ -16,24 +14,27 @@ export function useSort(action, waybills) {
         let sortedItems;
         switch (sortField) {
             case "Дата":
-                sortedItems = sortByDate(waybills, sortOrder);
+                sortedItems = sortByDate(invoices, sortOrder);
                 break;
             case "Номер":
-                sortedItems = sortById(waybills, sortOrder);
+                sortedItems = sortById(invoices, sortOrder);
                 break;
             case "Покупатель":
-                sortedItems = sortByCounterparty(waybills, sortOrder);
+                sortedItems = sortByCounterparty(invoices, sortOrder);
                 break;
             case "Продавец":
-                sortedItems = sortByCounterparty(waybills, sortOrder);
+                sortedItems = sortByCounterparty(invoices, sortOrder);
                 break;
             case "Сумма":
-                sortedItems = sortBySumm(waybills, sortOrder);
+                sortedItems = sortBySumm(invoices, sortOrder);
                 break;
+
+            default:
+                sortedItems = sortBySumm(invoices, sortOrder);
         }
         setSortOrder(!sortOrder);
-        dispatch(action(sortedItems));
+        action(sortedItems);
     };
 
-    return sort;
+    return { sort, sortOrder };
 }

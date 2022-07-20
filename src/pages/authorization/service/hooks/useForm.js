@@ -4,7 +4,7 @@ export function useForm() {
     const form = useRef();
     const email = useRef("Cap_NEMOx86@inbox.ru");
     const pass = useRef("kdkfjdilkmf2312387");
-    const repeatPass = useRef();
+    const repeatPass = useRef("kdkfjdilkmf2312387");
 
     const [isVisible, setIsVisible] = useState(false);
 

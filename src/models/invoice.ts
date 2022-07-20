@@ -29,9 +29,9 @@ export interface IInvoice {
     highlight: boolean;
 }
 
-interface IInvoiceItems {
-    id: number;
-    createdAt: string;
+export interface IInvoiceItem {
+    id: number | null;
+    createdAt?: string | null;
     item_number: number;
     nomenclature: string;
     quantity: number;
@@ -40,19 +40,21 @@ interface IInvoiceItems {
     nds_percent: number;
     nds: number;
     total: number;
+    highlight?: boolean;
 }
 
-export interface ISaleItems extends IInvoiceItems {
-    saleId: number;
+export interface ISaleItem extends IInvoiceItem {
+    SaleId?: number | null;
 }
-export interface IPurchaseItems extends IInvoiceItems {
-    purchaseId: number;
+export interface IPurchaseItem extends IInvoiceItem {
+    PurchaseId?: number | null;
 }
 export interface IInvoiceState {
     purchases: IInvoice[];
     sales: IInvoice[];
     Invoice: IInvoice | null;
-    InvoiceItems: ISaleItems[] | IPurchaseItems[];
-    loading: boolean;
+    InvoiceItem: ISaleItem[] | IPurchaseItem[] | null;
+    InvoicePositionIndex: number | null;
+    isLoading: boolean;
     error: string | null;
 }

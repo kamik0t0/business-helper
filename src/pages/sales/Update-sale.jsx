@@ -1,10 +1,13 @@
-import React from "react";
-import UpdateWaybill from "../../components/waybills-service/update-waybill/Update-waybill.jsx";
+import UpdateInvoice from "../update-invoice/UpdateInvoice";
+import { getSaleItemsBySaleId } from "../../redux/actions/SalesAction";
+import { updateSaleBySaleId } from "../../redux/actions/SalesAction";
 
 export default function UpdateSale() {
     return (
-        <UpdateWaybill
-            CounterpartyInfo={["Реализация: изменение", "Покупатель", "Sale"]}
+        <UpdateInvoice
+            Info={["Реализация: изменение", "Покупатель", "Sale"]}
+            requestInvoiceItemsAction={getSaleItemsBySaleId}
+            updateAction={updateSaleBySaleId}
         />
     );
 }

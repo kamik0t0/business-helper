@@ -9,7 +9,7 @@ import { useOffice } from "./service/hooks/useOffice";
 import { customInlineStyles } from "./service/utils/styles";
 import Loader from "../../UI/Loader/Loader";
 
-export default function Office() {
+const Office = () => {
     const email = useTypedSelector((state) => state.userReducer.data.email);
     const USERORG = useTypedSelector((state) => state.orgsReducer.org);
     const ORGANIZATIONS = useTypedSelector((state) => state.orgsReducer.orgs);
@@ -17,9 +17,7 @@ export default function Office() {
 
     return (
         <>
-            {OFFICE.loader ? (
-                <Loader />
-            ) : (
+            {
                 <div className={classes.content}>
                     <div className={classes.header}>
                         <div className={classes.header_items}>{email}</div>
@@ -36,13 +34,17 @@ export default function Office() {
                         <div className={classes.noorg}>
                             Выберите или добавьте фирму
                         </div>
+                    ) : OFFICE.loader ? (
+                        <Loader />
                     ) : (
-                        <OrgInfo />
+                        <OrgInfo USERORG={USERORG} />
                     )}
                     <Buttons />
                 </div>
-            )}
+            }
             <CRUDModals />
         </>
     );
-}
+};
+
+export default Office;

@@ -1,11 +1,11 @@
-// компонент создания накладной
-import React from "react";
-import CreateWaybill from "../../components/waybills-service/create-waybill/Create-waybill.jsx";
+import CreateInvoice from "../create-invoice/Create-invoice";
+import { createPurchase } from "../../redux/actions/PurchasesAction";
 
 export default function NewPurchase() {
     return (
-        <CreateWaybill
-            CounterpartyInfo={["Покупка товаров: создание", "Поставщик:", "№"]}
+        <CreateInvoice
+            Info={["Покупка товаров: создание", "Поставщик:", "№"]}
+            createAction={createPurchase}
         />
     );
 }

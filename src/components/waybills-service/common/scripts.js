@@ -1,6 +1,4 @@
-// import { highlight } from "../../../utils/highlight.js";
-
-export function getValue(event, number, positions, prop) {
+export function setInvoicePositionCalculations(event, number, positions, prop) {
     if (prop === "nomenclature") {
         let value = event.target.value;
         positions[number][prop] = value;
@@ -30,19 +28,10 @@ export function getPrice(event, number, positions) {
     positions[number].price = price;
     return positions;
 }
-// // получение позиции
-// export function getRow(event, number, positions, row) {
-//     highlight(number, [...positions], row);
-// }
-
 // Подсчёт сумм по накладной и сохранение значения для отправки
-export function total(array, field, WAYBILL) {
-    WAYBILL.current[field] = +array.reduce(
-        (prev, item) => prev + item[field],
-        0
-    );
-    return WAYBILL.current[field];
-}
+export const calculateInvoiceSummary = (array, field) =>
+    +array.reduce((prev, item) => prev + +item[field], 0);
+
 // формирование текущей даты
 export function makeDefaultDate() {
     const date = new Date();
@@ -70,3 +59,7 @@ export function makeDate() {
         date.getSeconds() >= 10 ? date.getSeconds() : "0" + +date.getSeconds();
     return `T${hour}:${minute}:${seconds}.000Z`;
 }
+
+export const getDate = (event) => `${event.target.value}${makeDate()}`;
+
+export const getCounterpartyName = (event) => event.target.value;

@@ -14,5 +14,6 @@ export interface IUserInitial {
         message: string;
         token: string;
     };
+    isLoading: boolean;
     error: null | string;
 }

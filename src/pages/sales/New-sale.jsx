@@ -1,11 +1,13 @@
 // компонент создания накладной
-import CreateWaybill from "../../components/waybills-service/create-waybill/Create-waybill.jsx";
+import CreateInvoice from "../create-invoice/Create-invoice";
+import { createSale } from "../../redux/actions/SalesAction";
 
 export default function NewSale() {
     return (
         <>
-            <CreateWaybill
-                CounterpartyInfo={["Продажа товаров: создание", "Покупатель:"]}
+            <CreateInvoice
+                Info={["Продажа товаров: создание", "Покупатель:"]}
+                createAction={createSale}
             />
         </>
     );

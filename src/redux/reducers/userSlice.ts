@@ -11,6 +11,7 @@ const initialState: IUserInitial = {
         message: "",
         token: "",
     },
+    isLoading: false,
     error: null,
 };
 
@@ -25,14 +26,30 @@ const userSlice = createSlice({
             state.data.id = action.payload.id;
             state.data.message = action.payload.message;
             state.data.token = action.payload.token;
+            state.isLoading = false;
         });
-        builder.addCase(UserAPI.postUser.fulfilled, (state, action) => {
-            console.log(action.payload);
+        builder.addCase(UserAPI.getUser.pending, (state, action) => {
+            state.isLoading = true;
         });
         builder.addCase(UserAPI.getUser.rejected, (state, action) => {
             errorHanlder(state, action);
         });
+        builder.addCase(UserAPI.postUser.fulfilled, (state, action) => {
+            state.isLoading = false;
+        });
+        builder.addCase(UserAPI.postUser.pending, (state, action) => {
+            state.isLoading = true;
+        });
         builder.addCase(UserAPI.postUser.rejected, (state, action) => {
+            errorHanlder(state, action);
+        });
+        builder.addCase(UserAPI.updateUser.fulfilled, (state, action) => {
+            state.isLoading = false;
+        });
+        builder.addCase(UserAPI.updateUser.pending, (state, action) => {
+            state.isLoading = true;
+        });
+        builder.addCase(UserAPI.updateUser.rejected, (state, action) => {
             errorHanlder(state, action);
         });
     },

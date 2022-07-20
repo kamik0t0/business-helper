@@ -6,21 +6,24 @@ import MyLink from "../../UI/link/MyLink.jsx";
 import { loaderStyle, submitStyle } from "./service/inlineStyles";
 import { useUser } from "./service/hooks/useUser";
 import { useForm } from "./service/hooks/useForm";
+import { useTypedSelector } from "../../redux/hooks/hooks";
 
 export default function Registration() {
-    const USER = useUser();
+    const { reg, inputError } = useUser();
     const FORM = useForm();
 
-    const addUser = (event) => USER.reg(event, FORM.email, FORM.pass);
+    const { isLoading } = useTypedSelector((state) => state.userReducer);
+
+    const addUser = (event) => reg(event, FORM.email, FORM.pass);
 
     const cx = classNames.bind(classes);
     const authErrUser = cx({
         [classes.login_auth_user_input]: true,
-        [classes.wrong]: USER.inputError,
+        [classes.wrong]: inputError,
     });
     const authErrPass = cx({
         [classes.login_auth_pass_input]: true,
-        [classes.wrong]: USER.inputError,
+        [classes.wrong]: inputError,
     });
     const passVisibility = cx({
         [classes.login_auth_pass_eye]: FORM.isVisible,
@@ -39,7 +42,7 @@ export default function Registration() {
                         className={classes.login_frame}
                     >
                         <div className={classes.login_header}>Регистрация</div>
-                        {USER.loader ? (
+                        {isLoading ? (
                             <Loader style={loaderStyle} />
                         ) : (
                             <div className={classes.login_auth}>
