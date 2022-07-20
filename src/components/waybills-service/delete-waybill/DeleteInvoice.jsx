@@ -5,19 +5,19 @@ import { useTypedSelector } from "../../../redux/hooks/hooks";
 import { useDeleteWaybill } from "./hooks/useDeleteWaybill.js";
 
 export default function DeleteInvoice({ deleteAction }) {
-    const INVOICE = useTypedSelector((state) => state.invoicesReducer.Invoice);
+    const { Invoice } = useTypedSelector((state) => state.invoicesReducer);
     const { isLoading } = useTypedSelector((state) => state.invoicesReducer);
 
     const [hideDeleteModal, deleteInvoice] = useDeleteWaybill(
-        INVOICE.id,
+        Invoice?.id,
         deleteAction
     );
 
-    const slicedDate = INVOICE.waybill_date.slice(0, -14);
+    const slicedDate = Invoice?.waybill_date.slice(0, -14);
 
     return (
         <>
-            {INVOICE == null || Object.keys(INVOICE).length === 0 ? (
+            {Invoice === null ? (
                 <div className={classes.noorg}>
                     <div className={classes.noorg__text}>
                         Накладная не выбрана
@@ -28,7 +28,7 @@ export default function DeleteInvoice({ deleteAction }) {
                 <div className={classes.delete}>
                     <div
                         className={classes.text}
-                    >{`Вы действительно хотите удалить накладную № ${INVOICE.id} от ${slicedDate} на ${INVOICE.total} рублей?`}</div>
+                    >{`Вы действительно хотите удалить накладную № ${Invoice.id} от ${slicedDate} на ${Invoice.total} рублей?`}</div>
                     {isLoading ? (
                         <Loader />
                     ) : (

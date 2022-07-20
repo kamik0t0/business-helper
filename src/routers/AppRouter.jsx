@@ -14,6 +14,8 @@ import Counterparties from "../pages/counterparties/counterparties.jsx";
 import UpdateSale from "../pages/sales/Update-sale.jsx";
 import UpdatePurchase from "../pages/purchases/Update-purchase.jsx";
 import { useTypedSelector } from "../redux/hooks/hooks";
+import Layout from "../blocks/layout/Layout.jsx";
+import UnAuthLayout from "../blocks/layout/noAuthLayout.jsx";
 
 export default function AppRouter() {
     const isAuth = useTypedSelector((state) => state.authReducer.isAuth);
@@ -22,55 +24,59 @@ export default function AppRouter() {
         <>
             {isAuth ? (
                 <Routes>
-                    <Route path="/" element={<Tabs />}></Route>
-                    <Route path="/calculator" element={<CalcForm />}></Route>
-                    <Route path="/private" element={<Private />}></Route>
-                    <Route
-                        path="/counterparties/:orgId"
-                        element={<Counterparties />}
-                    ></Route>
-                    <Route path="/sales/:orgId" element={<Sales />}></Route>
-                    <Route
-                        path="/purchases/:orgId"
-                        element={<Purchases />}
-                    ></Route>
-                    <Route
-                        path="/sales/:orgId/createwaybill"
-                        element={<NewSale />}
-                    ></Route>
-                    <Route
-                        path="/purchases/:orgId/createwaybill"
-                        element={<NewPurchase />}
-                    ></Route>
-                    <Route
-                        path="/sales/:orgId/:id"
-                        element={<UpdateSale />}
-                    ></Route>
-                    <Route
-                        path="/purchases/:orgId/:id"
-                        element={<UpdatePurchase />}
-                    ></Route>
+                    <Route path="/" element={<Layout />}>
+                        <Route index element={<Tabs />} />
+                        <Route path="calculator" element={<CalcForm />} />
+                        <Route path="private" element={<Private />} />
+                        <Route
+                            path="counterparties/:orgId"
+                            element={<Counterparties />}
+                        />
+                        <Route path="sales/:orgId" element={<Sales />} />
+                        <Route
+                            path="purchases/:orgId"
+                            element={<Purchases />}
+                        />
+                        <Route
+                            path="sales/:orgId/createwaybill"
+                            element={<NewSale />}
+                        />
+                        <Route
+                            path="purchases/:orgId/createwaybill"
+                            element={<NewPurchase />}
+                        />
+                        <Route
+                            path="sales/:orgId/:id"
+                            element={<UpdateSale />}
+                        />
+                        <Route
+                            path="purchases/:orgId/:id"
+                            element={<UpdatePurchase />}
+                        />
+                    </Route>
                 </Routes>
             ) : (
                 <Routes>
-                    <Route path="/" element={<Tabs />}></Route>
-                    <Route path="/calculator" element={<CalcForm />}></Route>
-                    <Route path="/login" element={<Login />}></Route>
-                    <Route path="/login/forgot" element={<Forgot />}></Route>
-                    <Route
-                        path="/login/registration"
-                        element={<Registration />}
-                    ></Route>
-                    <Route
-                        path="*"
-                        element={
-                            <Navigate
-                                to="/login"
-                                // replace
-                                state={{ from: location }}
-                            />
-                        }
-                    ></Route>
+                    <Route path="/" element={<UnAuthLayout />}>
+                        <Route index element={<Tabs />} />
+                        <Route path="calculator" element={<CalcForm />} />
+                        <Route path="login" element={<Login />} />
+                        <Route path="login/forgot" element={<Forgot />} />
+                        <Route
+                            path="login/registration"
+                            element={<Registration />}
+                        />
+                        <Route
+                            path="*"
+                            element={
+                                <Navigate
+                                    to="login"
+                                    // replace
+                                    state={{ from: location }}
+                                />
+                            }
+                        />
+                    </Route>
                 </Routes>
             )}
         </>

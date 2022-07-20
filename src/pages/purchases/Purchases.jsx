@@ -31,12 +31,10 @@ export default function Purchases() {
                     deleteAction={deletePurchaseByPurchaseId}
                 />
             ) : (
-                <div className={classes.content}>
-                    <div className={classes.nocounterparties}>
-                        Выберите организацию в
-                        <MyLink path="/private"> личном кабинете</MyLink> или
-                        <MyLink path="/login"> авторизуйтесь</MyLink>
-                    </div>
+                <div className={classes.nocounterparties}>
+                    Выберите организацию в
+                    <MyLink path="/private"> личном кабинете</MyLink> или
+                    <MyLink path="/login"> авторизуйтесь</MyLink>
                 </div>
             )}
         </>

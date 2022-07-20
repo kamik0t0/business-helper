@@ -18,22 +18,33 @@ export const usePosition = (
         (state) => state.invoicesReducer.InvoicePositionIndex
     );
 
-    const getInvoicePositionCalculations = (event, number, prop) => {
-        const arr = setInvoicePositionCalculations(
-            event,
-            number,
-            [...positions],
-            prop
-        );
-        setPositions([...arr]);
-    };
-
     const getNomenclature = (event) =>
-        getInvoicePositionCalculations(event, positionIndex, "nomenclature");
+        setPositions(
+            setInvoicePositionCalculations(
+                event,
+                positionIndex,
+                [...positions],
+                "nomenclature"
+            )
+        );
     const getQuantity = (event) =>
-        getInvoicePositionCalculations(event, positionIndex, "quantity");
+        setPositions(
+            setInvoicePositionCalculations(
+                event,
+                positionIndex,
+                [...positions],
+                "quantity"
+            )
+        );
     const getPrice = (event) =>
-        getInvoicePositionCalculations(event, positionIndex, "price");
+        setPositions(
+            setInvoicePositionCalculations(
+                event,
+                positionIndex,
+                [...positions],
+                "price"
+            )
+        );
 
     const selectPosition = () => {
         if (currentIndex === positionIndex) return;

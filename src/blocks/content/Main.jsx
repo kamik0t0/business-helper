@@ -22,13 +22,13 @@ export default function Main() {
         setModalDelete,
     };
     return (
-        <div id="main" className={classes.main}>
+        <main id="main" className={classes.main}>
             {/* В этот компонент открываются страницы */}
             <ErrorBoundary>
                 <ModalContext.Provider value={context}>
-                    <AppRouter classes={classes} />
+                    <AppRouter />
                 </ModalContext.Provider>
             </ErrorBoundary>
-        </div>
+        </main>
     );
 }

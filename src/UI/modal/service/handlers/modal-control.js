@@ -1,22 +1,14 @@
 export function modalManager(setModal) {
     function showModal() {
-        setModal((prev) => {
-            return { ...prev, show: true };
-        });
+        setModal((prev) => ({ ...prev, show: true }));
         setTimeout(() => {
-            setModal((prev) => {
-                return { ...prev, add: true };
-            });
+            setModal((prev) => ({ ...prev, add: true }));
         }, 0);
     }
     function hideModal() {
-        setModal((prev) => {
-            return { ...prev, add: false };
-        });
+        setModal((prev) => ({ ...prev, add: false }));
         setTimeout(() => {
-            setModal((prev) => {
-                return { ...prev, show: false };
-            });
+            setModal((prev) => ({ ...prev, show: false }));
         }, 500);
     }
     return [showModal, hideModal];

@@ -10,7 +10,8 @@ export function useDeleteWaybill(id, deleteAction) {
 
     async function deleteInvoice(event) {
         event.preventDefault();
-        await dispatch(deleteAction(id));
+
+        id && (await dispatch(deleteAction(id)));
         hideDeleteModal();
     }
 

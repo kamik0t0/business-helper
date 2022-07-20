@@ -6,6 +6,9 @@ import ReadOrg from "../../../components/organizations-service/read-org/Read-org
 import DeleteOrg from "../../../components/organizations-service/delete-org/Delete-org.jsx";
 import PatchOrg from "../../../components/organizations-service/update-org/Patch-org.jsx";
 
+const InlineDelModalStyles = { height: "25vh", width: "40vw" };
+const InlineCreateModalStyles = { height: "75vh", width: "75vw" };
+
 export default function OfficeModals() {
     const MODALS = useContext(ModalContext);
 
@@ -13,7 +16,7 @@ export default function OfficeModals() {
         <>
             {MODALS.modalAdd.show && (
                 <Modal
-                    size={{ height: "75vh", width: "75vw" }}
+                    size={InlineCreateModalStyles}
                     active={MODALS.modalAdd.add}
                     setActive={MODALS.setModalAdd}
                 >
@@ -38,7 +41,7 @@ export default function OfficeModals() {
             )}
             {MODALS.modalDelete.show && (
                 <Modal
-                    size={{ height: "25vh", width: "40vw" }}
+                    size={InlineDelModalStyles}
                     active={MODALS.modalDelete.add}
                     setActive={MODALS.setModalDelete}
                 >

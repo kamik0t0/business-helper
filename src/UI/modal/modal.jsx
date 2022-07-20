@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { modalManager } from "./service/handlers/modal-control.js";
 
 export default function Modal({ size, active, setActive, children }) {
-    const [, hideModal] = modalManager(setActive);
+    const [_, hideModal] = modalManager(setActive);
 
     const cx = classNames.bind(classes);
     const modalClassName = cx({

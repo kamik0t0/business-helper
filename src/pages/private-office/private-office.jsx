@@ -10,38 +10,28 @@ import { customInlineStyles } from "./service/utils/styles";
 import Loader from "../../UI/Loader/Loader";
 
 const Office = () => {
-    const email = useTypedSelector((state) => state.userReducer.data.email);
-    const USERORG = useTypedSelector((state) => state.orgsReducer.org);
-    const ORGANIZATIONS = useTypedSelector((state) => state.orgsReducer.orgs);
-    const OFFICE = useOffice(ORGANIZATIONS);
+    const { org } = useTypedSelector((state) => state.orgsReducer);
+    const { orgs } = useTypedSelector((state) => state.orgsReducer);
+    const OFFICE = useOffice(orgs);
 
     return (
         <>
-            {
-                <div className={classes.content}>
-                    <div className={classes.header}>
-                        <div className={classes.header_items}>{email}</div>
-                    </div>
-                    <MySelect
-                        styleFieldName={customInlineStyles}
-                        id="ORG"
-                        multiple={false}
-                        defaultValue={["Выбрать организацию"][0]}
-                        func={OFFICE.selectUserOrg}
-                        options={makeOrgsArr(ORGANIZATIONS)}
-                    />
-                    {USERORG === null ? (
-                        <div className={classes.noorg}>
-                            Выберите или добавьте фирму
-                        </div>
-                    ) : OFFICE.loader ? (
-                        <Loader />
-                    ) : (
-                        <OrgInfo USERORG={USERORG} />
-                    )}
-                    <Buttons />
-                </div>
-            }
+            <MySelect
+                styleFieldName={customInlineStyles}
+                id="ORG"
+                multiple={false}
+                defaultValue={["Выбрать организацию"][0]}
+                func={OFFICE.selectUserOrg}
+                options={makeOrgsArr(orgs)}
+            />
+            {org === null ? (
+                <div className={classes.noorg}>Выберите или добавьте фирму</div>
+            ) : OFFICE.loader ? (
+                <Loader />
+            ) : (
+                <OrgInfo USERORG={org} />
+            )}
+            <Buttons />
             <CRUDModals />
         </>
     );

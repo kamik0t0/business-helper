@@ -6,6 +6,9 @@ import ReadCounterparty from "../../../../components/counterparties-service/read
 import PatchCounterparty from "../../../../components/counterparties-service/update-counterparty/Patch-counterparty.jsx";
 import DeleteCounterparty from "../../../../components/counterparties-service/delete-counterparty/Delete-counterparty.jsx";
 
+const InlineDelModalStyles = { height: "25vh", width: "40vw" };
+const InlineCreateModalStyles = { height: "75vh", width: "75vw" };
+
 export default function CounterpartyModals() {
     const MODALS = useContext(ModalContext);
 
@@ -13,7 +16,7 @@ export default function CounterpartyModals() {
         <>
             {MODALS.modalAdd.show && (
                 <Modal
-                    size={{ height: "75vh", width: "75vw" }}
+                    size={InlineCreateModalStyles}
                     active={MODALS.modalAdd.add}
                     setActive={MODALS.setModalAdd}
                 >
@@ -38,7 +41,7 @@ export default function CounterpartyModals() {
             )}
             {MODALS.modalDelete.show && (
                 <Modal
-                    size={{ height: "25vh", width: "40vw" }}
+                    size={InlineDelModalStyles}
                     active={MODALS.modalDelete.add}
                     setActive={MODALS.setModalDelete}
                 >

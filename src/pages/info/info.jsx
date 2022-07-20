@@ -4,7 +4,7 @@ import Tab from "../../components/Tab/Tab.jsx";
 
 export default function Tabs() {
     return (
-        <div id="flash" className={classes.inner}>
+        <>
             {" "}
             <Tab header="О проекте">
                 Приветствую всех на моем "PET"-проекте - Web-приложение
@@ -104,6 +104,6 @@ export default function Tabs() {
                 счета-фактуры при вводе документа от поставщика; <br></br>4.
                 Фикс багов и частичный рефакторинг кода.
             </Tab>
-        </div>
+        </>
     );
 }

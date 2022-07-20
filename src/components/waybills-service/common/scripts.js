@@ -1,10 +1,10 @@
-export function setInvoicePositionCalculations(event, number, positions, prop) {
+export function setInvoicePositionCalculations(event, index, positions, prop) {
     if (prop === "nomenclature") {
         let value = event.target.value;
-        positions[number][prop] = value;
+        positions[index][prop] = value;
     } else {
         let value = +event.target.value < 0 ? 0 : +event.target.value;
-        positions[number][prop] = value;
+        positions[index][prop] = value;
     }
     return positions;
 }

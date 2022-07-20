@@ -10,6 +10,8 @@ import { useLocation } from "react-router";
 import * as OrgAPI from "../../../../redux/actions/OrgsAction";
 import * as CounterpartyAPI from "../../../../redux/actions/CounterpartiesAction";
 
+const InlineModalStyles = { height: "25vh", width: "40vw" };
+
 export default function CRUDModals() {
     const { pathname } = useLocation();
     const MODALS = useContext(ModalContext);
@@ -27,7 +29,7 @@ export default function CRUDModals() {
         <>
             {MODALS.modalAdd.show && (
                 <Modal
-                    size={{ height: "75vh", width: "75vw" }}
+                    size={InlineModalStyles}
                     active={MODALS.modalAdd.add}
                     setActive={MODALS.setModalAdd}
                 >
@@ -78,7 +80,7 @@ export default function CRUDModals() {
             )}
             {MODALS.modalDelete.show && (
                 <Modal
-                    size={{ height: "25vh", width: "40vw" }}
+                    size={InlineModalStyles}
                     active={MODALS.modalDelete.add}
                     setActive={MODALS.setModalDelete}
                 >

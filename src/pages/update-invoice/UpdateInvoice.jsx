@@ -70,69 +70,59 @@ export default function UpdateInvoice({
         requestPositions(Invoice.id).then(({ payload: invoiceItems }) =>
             serializeInvoiceItems(invoiceItems)
         );
-    }, [Invoice.id]);
+    }, []);
 
     return (
         <>
-            <form className={classes.content}>
-                <div className={classes.waybill_form_header}>
-                    <div className={classes.waybill_form_header_save}>
-                        <MyButton onClick={UpdateAPI.update}>
-                            Сохранить
-                        </MyButton>
-                        <MyButton>Excel</MyButton>
-                        <div className={classes.waybill_form_header_save_name}>
-                            {Info[0]}
-                        </div>
+            <div className={classes.waybill_form_header}>
+                <div className={classes.waybill_form_header_save}>
+                    <MyButton onClick={UpdateAPI.update}>Сохранить</MyButton>
+                    <MyButton>Excel</MyButton>
+                    <div className={classes.waybill_form_header_save_name}>
+                        {Info[0]}
+                    </div>
 
-                        <MyButton onClick={goBack}>Закрыть</MyButton>
-                    </div>
-                    <div className={classes.waybill_form_header_date}>
-                        <MyInput
-                            id="waybillDate"
-                            name="Дата:"
-                            type="date"
-                            defaultValue={UpdateAPI.defaultDate}
-                            getValue={UpdateAPI.setDate}
-                        />
-                        <MyInput
-                            style={inputCounterpartyStyle}
-                            name={Info[1] + ":"}
-                            type="text"
-                            defaultValue={
-                                counterparty?.orgname ||
-                                UpdateAPI.UpdateInvoice.current.counterparty
-                                    ?.orgname
-                            }
-                            getValue={UpdateAPI.setCounterpartyName}
-                        />
-                        <MyLink
-                            path={`/counterparties/${orgId}`}
-                            style={linkStyle}
-                        >
-                            <MyButton>Выбрать...</MyButton>
-                        </MyLink>
-                    </div>
-                    <div className={classes.waybill_form_header_usage}>
-                        <MyButton onClick={addPosition}>Добавить</MyButton>
-                        <MyButton onClick={deletePosition}>Удалить</MyButton>
-                    </div>
+                    <MyButton onClick={goBack}>Закрыть</MyButton>
                 </div>
-                <PositionHeaders />
-                {isLoading ? (
-                    <Loader />
-                ) : (
-                    <Positons
-                        positions={positions}
-                        setPositions={setPositions}
+                <div className={classes.waybill_form_header_date}>
+                    <MyInput
+                        id="waybillDate"
+                        name="Дата:"
+                        type="date"
+                        defaultValue={UpdateAPI.defaultDate}
+                        getValue={UpdateAPI.setDate}
                     />
-                )}
-                <InvoiceSummary
-                    summ={UpdateAPI.summ}
-                    NDS={UpdateAPI.NDS}
-                    total={UpdateAPI.total}
-                />
-            </form>
+                    <MyInput
+                        style={inputCounterpartyStyle}
+                        name={Info[1] + ":"}
+                        type="text"
+                        defaultValue={
+                            counterparty?.orgname ||
+                            UpdateAPI.UpdateInvoice.current.counterparty
+                                ?.orgname
+                        }
+                        getValue={UpdateAPI.setCounterpartyName}
+                    />
+                    <MyLink path={`/counterparties/${orgId}`} style={linkStyle}>
+                        <MyButton>Выбрать...</MyButton>
+                    </MyLink>
+                </div>
+                <div className={classes.waybill_form_header_usage}>
+                    <MyButton onClick={addPosition}>Добавить</MyButton>
+                    <MyButton onClick={deletePosition}>Удалить</MyButton>
+                </div>
+            </div>
+            <PositionHeaders />
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <Positons positions={positions} setPositions={setPositions} />
+            )}
+            <InvoiceSummary
+                summ={UpdateAPI.summ}
+                NDS={UpdateAPI.NDS}
+                total={UpdateAPI.total}
+            />
         </>
     );
 }

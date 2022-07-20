@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import MyLink from "../../../../UI/link/MyLink.jsx";
 import MySelect from "../../../../UI/input/MySelect/MySelect.jsx";
@@ -16,9 +16,21 @@ const InteractionHeader = ({
     params,
     INVOICE,
 }) => {
-    const { setModalDelete } = useContext(ModalContext);
+    const { setModalDelete, setModalUpdate } = useContext(ModalContext);
     const [showDeleteModal] = modalManager(setModalDelete);
+    const [showUpdateModal] = modalManager(setModalUpdate);
     const { pathname } = useLocation();
+
+    const columns = useMemo(
+        () => [
+            {
+                value: "cl_orgname",
+                name: info[1],
+            },
+            { value: "total", name: "Сумме" },
+        ],
+        [info[1]]
+    );
 
     return (
         <div className={classes.waybills_header}>
@@ -35,7 +47,10 @@ const InteractionHeader = ({
             </div>
             <MyLink path={INVOICE !== null && `${pathname}/${INVOICE.id}`}>
                 <div className={classes.waybills_header_redact}>
-                    <div className={classes.waybills_header_redact_icon}></div>
+                    <div
+                        onClick={INVOICE === null && showUpdateModal}
+                        className={classes.waybills_header_redact_icon}
+                    ></div>
                 </div>
             </MyLink>
 
@@ -46,13 +61,7 @@ const InteractionHeader = ({
                         defaultValue="counterparty"
                         func={setColumn}
                         column={column}
-                        options={[
-                            {
-                                value: "cl_orgname",
-                                name: info[1],
-                            },
-                            { value: "total", name: "Сумме" },
-                        ]}
+                        options={columns}
                     />
                 </div>
                 <MyInput

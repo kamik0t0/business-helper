@@ -12,6 +12,8 @@ import InvoicesWrapper from "./waybills-wrapper.jsx";
 import { useSort } from "./service/hooks/useSort";
 import { useTypedSelector } from "../../../redux/hooks/hooks";
 
+const InlineModalStyles = { height: "25vh", width: "40vw" };
+
 const Invoices = ({
     Info,
     invoices,
@@ -23,12 +25,13 @@ const Invoices = ({
     deleteAction,
 }) => {
     const { Invoice } = useTypedSelector((state) => state.invoicesReducer);
+
     const sort = useSort(setInvoices, [...invoices]);
 
     const { modalDelete, modalUpdate, setModalDelete, setModalUpdate } =
         useContext(ModalContext);
 
-    const [, hideUpdateModal] = modalManager(setModalUpdate);
+    const [_, hideUpdateModal] = modalManager(setModalUpdate);
 
     useEffect(() => {
         // обработка параметров строки запроса - загрузка страницы с выполненной фильтрацией
@@ -42,50 +45,40 @@ const Invoices = ({
 
     return (
         <>
-            {
-                <>
-                    <div className={classes.content}>
-                        <InteractionHeader
-                            setColumn={setColumn}
-                            filter={filter}
-                            info={[Info[1], Info[2]]}
-                            params={startSearch}
-                            INVOICE={Invoice}
-                            column={column}
-                        />
-                        <InvoiceHeader sort={sort} info={Info[0]} />
-                        <InvoicesWrapper
-                            invoices={invoices}
-                            action={setInvoices}
-                        />
+            <InteractionHeader
+                setColumn={setColumn}
+                filter={filter}
+                info={[Info[1], Info[2]]}
+                params={startSearch}
+                INVOICE={Invoice}
+                column={column}
+            />
+            <InvoiceHeader sort={sort} info={Info[0]} />
+            <InvoicesWrapper invoices={invoices} action={setInvoices} />
+
+            {modalDelete.show && (
+                <Modal
+                    size={InlineModalStyles}
+                    active={modalDelete.add}
+                    setModal={setModalDelete}
+                >
+                    <DeleteInvoice deleteAction={deleteAction} />
+                </Modal>
+            )}
+            {modalUpdate.show && (
+                <Modal
+                    size={InlineModalStyles}
+                    active={modalUpdate.add}
+                    setActive={setModalUpdate}
+                >
+                    <div className={classes.noorg}>
+                        <div className={classes.noorg__text}>
+                            Накладная не выбрана
+                        </div>
+                        <MyButton onClick={hideUpdateModal}>Закрыть</MyButton>
                     </div>
-                    {modalDelete.show && (
-                        <Modal
-                            size={{ height: "25vh", width: "40vw" }}
-                            active={modalDelete.add}
-                            setModal={setModalDelete}
-                        >
-                            <DeleteInvoice deleteAction={deleteAction} />
-                        </Modal>
-                    )}
-                    {modalUpdate.show && (
-                        <Modal
-                            size={{ height: "25vh", width: "40vw" }}
-                            active={modalUpdate.add}
-                            setActive={setModalUpdate}
-                        >
-                            <div className={classes.noorg}>
-                                <div className={classes.noorg__text}>
-                                    Накладная не выбрана
-                                </div>
-                                <MyButton onClick={hideUpdateModal}>
-                                    Закрыть
-                                </MyButton>
-                            </div>
-                        </Modal>
-                    )}
-                </>
-            }
+                </Modal>
+            )}
         </>
     );
 };

@@ -52,65 +52,55 @@ export default function CreateInvoice({ Info, createAction }) {
 
     return (
         <>
-            <form className={classes.content}>
-                <div className={classes.waybill_form_header}>
-                    <div className={classes.waybill_form_header_save}>
-                        <MyButton onClick={CreateAPI.create}>
-                            Сохранить
-                        </MyButton>
-                        <MyButton>Excel</MyButton>
-                        <div className={classes.waybill_form_header_save_name}>
-                            {Info[0]}
-                        </div>
-                        <MyButton onClick={goBack}>Закрыть</MyButton>
+            <div className={classes.waybill_form_header}>
+                <div className={classes.waybill_form_header_save}>
+                    <MyButton onClick={CreateAPI.create}>Сохранить</MyButton>
+                    <MyButton>Excel</MyButton>
+                    <div className={classes.waybill_form_header_save_name}>
+                        {Info[0]}
                     </div>
-                    <div className={classes.waybill_form_header_date}>
-                        <div className={classes.waybill_form_header_date_date}>
-                            <MyInput
-                                id="waybillDate"
-                                name="Дата:"
-                                type="date"
-                                defaultValue={CreateAPI.defaultDate}
-                                getValue={CreateAPI.setDate}
-                            />
-                        </div>
-                        <MyInput
-                            style={inputCounterpartyStyle}
-                            name={Info[1]}
-                            type="text"
-                            defaultValue={
-                                CreateAPI.INVOICE.current.counterparty?.orgname
-                            }
-                            getValue={CreateAPI.setCounterparty}
-                        />
-                        <MyLink
-                            path={`/counterparties/${orgId}`}
-                            style={linkStyle}
-                        >
-                            <MyButton>Выбрать...</MyButton>
-                        </MyLink>
-                    </div>
-                    <div className={classes.waybill_form_header_usage}>
-                        <MyButton onClick={addPosition}>Добавить</MyButton>
-                        <MyButton onClick={deletePosition}>Удалить</MyButton>
-                    </div>
+                    <MyButton onClick={goBack}>Закрыть</MyButton>
                 </div>
-
-                <PositionHeaders />
-                {isLoading ? (
-                    <Loader />
-                ) : (
-                    <Positons
-                        positions={positions}
-                        setPositions={setPositions}
+                <div className={classes.waybill_form_header_date}>
+                    <div className={classes.waybill_form_header_date_date}>
+                        <MyInput
+                            id="waybillDate"
+                            name="Дата:"
+                            type="date"
+                            defaultValue={CreateAPI.defaultDate}
+                            getValue={CreateAPI.setDate}
+                        />
+                    </div>
+                    <MyInput
+                        style={inputCounterpartyStyle}
+                        name={Info[1]}
+                        type="text"
+                        defaultValue={
+                            CreateAPI.INVOICE.current.counterparty?.orgname
+                        }
+                        getValue={CreateAPI.setCounterparty}
                     />
-                )}
-                <InvoiceSummary
-                    summ={CreateAPI.summ}
-                    NDS={CreateAPI.NDS}
-                    total={CreateAPI.total}
-                />
-            </form>
+                    <MyLink path={`/counterparties/${orgId}`} style={linkStyle}>
+                        <MyButton>Выбрать...</MyButton>
+                    </MyLink>
+                </div>
+                <div className={classes.waybill_form_header_usage}>
+                    <MyButton onClick={addPosition}>Добавить</MyButton>
+                    <MyButton onClick={deletePosition}>Удалить</MyButton>
+                </div>
+            </div>
+
+            <PositionHeaders />
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <Positons positions={positions} setPositions={setPositions} />
+            )}
+            <InvoiceSummary
+                summ={CreateAPI.summ}
+                NDS={CreateAPI.NDS}
+                total={CreateAPI.total}
+            />
         </>
     );
 }
