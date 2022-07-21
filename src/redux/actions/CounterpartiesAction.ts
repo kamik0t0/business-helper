@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ICounterparty } from "../../models/counterparty";
+import { ICounterparty } from "../../interfaces/counterparty";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 import axios from "axios";

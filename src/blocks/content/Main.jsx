@@ -1,31 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import AppRouter from "../../routers/AppRouter.jsx";
 import classes from "./styles/main.module.css";
 import ErrorBoundary from "../../utils/errorBoundary.jsx";
+import { useModals } from "./hooks/useModals.js";
 
 export const ModalContext = React.createContext();
 
 export default function Main() {
-    const [modalAdd, setModalAdd] = useState({ show: false, add: false });
-    const [modalRead, setModalRead] = useState({ show: false, add: false });
-    const [modalUpdate, setModalUpdate] = useState({ show: false, add: false });
-    const [modalDelete, setModalDelete] = useState({ show: false, add: false });
+    const MODALS = useModals();
 
-    const context = {
-        modalAdd,
-        modalRead,
-        modalUpdate,
-        modalDelete,
-        setModalAdd,
-        setModalRead,
-        setModalUpdate,
-        setModalDelete,
-    };
     return (
         <main id="main" className={classes.main}>
-            {/* В этот компонент открываются страницы */}
             <ErrorBoundary>
-                <ModalContext.Provider value={context}>
+                <ModalContext.Provider value={MODALS}>
                     <AppRouter />
                 </ModalContext.Provider>
             </ErrorBoundary>

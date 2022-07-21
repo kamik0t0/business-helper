@@ -2,7 +2,7 @@ import React from "react";
 import classes from "./styles/tab.module.css";
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { useTab } from "../../hooks/useTab.js";
+import { useTab } from "./hooks/useTab.js";
 
 export default function Tab({ children, header, style }) {
     const [tab, showTab] = useTab(false);

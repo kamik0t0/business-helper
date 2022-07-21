@@ -1,30 +1,23 @@
 import { setUserOrg } from "../../../../redux/reducers/orgsSlice";
 import { useTypedDispatch } from "../../../../redux/hooks/hooks";
-import { useState } from "react";
 import { getCounterpatiesByOrgId } from "../../../../redux/actions/CounterpartiesAction";
-import { getOrgIdByOrgName } from "../scripts/getOrgIdByOrgName.js";
+import { getOrgByOrgName } from "../scripts/getOrgIdOrgName.js";
 import { getSalesByOrgId } from "../../../../redux/actions/SalesAction";
 import { getPurchasesByOrgId } from "../../../../redux/actions/PurchasesAction";
 
 export function useOffice(ORGANIZATIONS) {
     const dispatch = useTypedDispatch();
-    const [loader, setLoader] = useState(false);
 
     async function selectUserOrg(event) {
         event.preventDefault();
         const orgname = event.target.value;
-        const OrgId = getOrgIdByOrgName(ORGANIZATIONS, orgname);
+        const [Org] = getOrgByOrgName(ORGANIZATIONS, orgname);
 
-        setLoader((prev) => !prev);
-
-        dispatch(setUserOrg(orgname));
-
-        await dispatch(getCounterpatiesByOrgId(OrgId));
-        await dispatch(getSalesByOrgId(OrgId));
-        await dispatch(getPurchasesByOrgId(OrgId));
-
-        setLoader((prev) => !prev);
+        dispatch(setUserOrg(Org?.id));
+        await dispatch(getCounterpatiesByOrgId(Org?.id));
+        await dispatch(getSalesByOrgId(Org?.id));
+        await dispatch(getPurchasesByOrgId(Org?.id));
     }
 
-    return { selectUserOrg, loader, ORGANIZATIONS };
+    return { selectUserOrg };
 }

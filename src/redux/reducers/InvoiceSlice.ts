@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IInvoice, IInvoiceState } from "../../models/invoice";
+import { IInvoice, IInvoiceState } from "../../interfaces/invoice";
 import {
     getSalesByOrgId,
     getSaleItemsBySaleId,
@@ -54,6 +54,10 @@ const InvoicesSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(getSalesByOrgId.fulfilled, (state, action) => {
             state.sales = action.payload;
+            state.isLoading = false;
+        });
+        builder.addCase(getSalesByOrgId.pending, (state, action) => {
+            state.isLoading = true;
         });
         builder.addCase(getSaleItemsBySaleId.fulfilled, (state, action) => {
             state.InvoiceItem = action.payload;
@@ -62,6 +66,9 @@ const InvoicesSlice = createSlice({
         builder.addCase(getPurchasesByOrgId.fulfilled, (state, action) => {
             state.purchases = action.payload;
             state.isLoading = false;
+        });
+        builder.addCase(getPurchasesByOrgId.pending, (state, action) => {
+            state.isLoading = true;
         });
         builder.addCase(getPurchaseItemsBySaleId.fulfilled, (state, action) => {
             state.InvoiceItem = action.payload;

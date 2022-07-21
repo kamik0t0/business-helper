@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IUserInitial } from "../../models/user";
+import { IUserInitial } from "../../interfaces/user";
 import * as UserAPI from "../actions/UserActions";
 import { errorHanlder } from "../scripts/errorHandler";
 
@@ -33,6 +33,7 @@ const userSlice = createSlice({
         });
         builder.addCase(UserAPI.getUser.rejected, (state, action) => {
             errorHanlder(state, action);
+            state.isLoading = false;
         });
         builder.addCase(UserAPI.postUser.fulfilled, (state, action) => {
             state.isLoading = false;
@@ -42,6 +43,7 @@ const userSlice = createSlice({
         });
         builder.addCase(UserAPI.postUser.rejected, (state, action) => {
             errorHanlder(state, action);
+            state.isLoading = false;
         });
         builder.addCase(UserAPI.updateUser.fulfilled, (state, action) => {
             state.isLoading = false;
@@ -51,6 +53,7 @@ const userSlice = createSlice({
         });
         builder.addCase(UserAPI.updateUser.rejected, (state, action) => {
             errorHanlder(state, action);
+            state.isLoading = false;
         });
     },
 });

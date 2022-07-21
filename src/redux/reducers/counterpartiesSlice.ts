@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CounterpartiesState } from "../../models/counterparty";
+import { CounterpartiesState } from "../../interfaces/counterparty";
 import * as CounterpartyAPI from "../actions/CounterpartiesAction";
-import { ICounterparty } from "../../models/counterparty";
+import { ICounterparty } from "../../interfaces/counterparty";
 import { errorHanlder } from "../scripts/errorHandler";
 
 const initialState: CounterpartiesState = {
     counterparties: [],
     counterparty: null,
-    loading: false,
+    isLoading: false,
     error: null,
 };
 
@@ -27,30 +27,41 @@ const counterpartiesSlice = createSlice({
             CounterpartyAPI.getCounterpatiesByOrgId.fulfilled,
             (state, action) => {
                 state.counterparties = action.payload;
+                state.isLoading = false;
+            }
+        );
+        builder.addCase(
+            CounterpartyAPI.getCounterpatiesByOrgId.pending,
+            (state, action) => {
+                state.isLoading = true;
             }
         );
         builder.addCase(
             CounterpartyAPI.getCounterpatiesByOrgId.rejected,
             (state, action) => {
                 errorHanlder(state, action);
+                state.isLoading = false;
             }
         );
         builder.addCase(
             CounterpartyAPI.postCounterparty.rejected,
             (state, action) => {
                 errorHanlder(state, action);
+                state.isLoading = false;
             }
         );
         builder.addCase(
             CounterpartyAPI.deleteCounterparty.rejected,
             (state, action) => {
                 errorHanlder(state, action);
+                state.isLoading = false;
             }
         );
         builder.addCase(
             CounterpartyAPI.patchCounterparty.rejected,
             (state, action) => {
                 errorHanlder(state, action);
+                state.isLoading = false;
             }
         );
     },

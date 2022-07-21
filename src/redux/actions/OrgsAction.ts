@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IOrg } from "../../models/organization";
+import { IOrg } from "../../interfaces/organization";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 import { setUserOrg } from "../reducers/orgsSlice";

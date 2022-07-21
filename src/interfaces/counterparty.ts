@@ -25,6 +25,6 @@ export interface ICounterparty {
 export interface CounterpartiesState {
     counterparties: ICounterparty[];
     counterparty: ICounterparty | null;
-    loading: boolean;
+    isLoading: boolean;
     error: string | null;
 }

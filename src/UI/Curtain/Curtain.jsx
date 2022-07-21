@@ -1,10 +1,7 @@
-import React, { useContext } from "react";
-import { CurtainContext } from "./Content/Content.jsx";
 import classes from "./styles/curtain.module.css";
 import classNames from "classnames/bind.js";
 
-export default function Сurtain({ showCurtain }) {
-    const { curtain } = useContext(CurtainContext);
+export default function Сurtain({ showCurtain, curtain }) {
     const cx = classNames.bind(classes);
     const curtainClassName = cx({
         [classes.span]: true,

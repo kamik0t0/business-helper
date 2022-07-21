@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { OrgsState } from "../../models/organization";
+import { OrgsState } from "../../interfaces/organization";
 import {
     getOrgsByUserId,
     postOrganization,
@@ -11,7 +11,7 @@ import { orgFilter } from "../scripts/orgFilter";
 const initialState: OrgsState = {
     orgs: [],
     org: null,
-    loading: false,
+    isLoading: false,
     error: null,
 };
 
@@ -26,15 +26,34 @@ const orgsSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(getOrgsByUserId.fulfilled, (state, action) => {
             state.orgs = action.payload;
+            state.isLoading = false;
+        });
+        builder.addCase(getOrgsByUserId.pending, (state, action) => {
+            state.isLoading = true;
         });
         builder.addCase(getOrgsByUserId.rejected, (state, action) => {
             errorHanlder(state, action);
+            state.isLoading = false;
+        });
+        builder.addCase(postOrganization.fulfilled, (state, action) => {
+            state.isLoading = false;
         });
         builder.addCase(postOrganization.rejected, (state, action) => {
             errorHanlder(state, action);
+            state.isLoading = false;
+        });
+        builder.addCase(postOrganization.pending, (state, action) => {
+            state.isLoading = true;
+        });
+        builder.addCase(deleteOrganization.fulfilled, (state, action) => {
+            state.isLoading = false;
         });
         builder.addCase(deleteOrganization.rejected, (state, action) => {
             errorHanlder(state, action);
+            state.isLoading = false;
+        });
+        builder.addCase(deleteOrganization.pending, (state, action) => {
+            state.isLoading = true;
         });
     },
 });

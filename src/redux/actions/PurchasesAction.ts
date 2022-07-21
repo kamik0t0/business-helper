@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IInvoice, IPurchaseItem } from "../../models/invoice";
+import { IInvoice, IPurchaseItem } from "../../interfaces/invoice";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 

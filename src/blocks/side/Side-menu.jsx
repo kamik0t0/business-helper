@@ -1,11 +1,8 @@
-import { useContext } from "react";
-import { CurtainContext } from "../../UI/Curtain/Content/Content.jsx";
 import classes from "./styles/side-menu.module.css";
 import MyLink from "../../UI/link/MyLink.jsx";
 import classNames from "classnames/bind";
 
-const SideMenu = ({ showCurtain, id }) => {
-    const { curtain } = useContext(CurtainContext);
+const SideMenu = ({ showCurtain, curtain, id }) => {
     const cx = classNames.bind(classes);
     const curtainClassName = cx({
         [classes.side]: true,

@@ -11,6 +11,7 @@ import * as OrgAPI from "../../../../redux/actions/OrgsAction";
 import * as CounterpartyAPI from "../../../../redux/actions/CounterpartiesAction";
 
 const InlineModalStyles = { height: "25vh", width: "40vw" };
+const InlineCreateModalStyles = { height: "75vh", width: "75vw" };
 
 export default function CRUDModals() {
     const { pathname } = useLocation();
@@ -29,7 +30,7 @@ export default function CRUDModals() {
         <>
             {MODALS.modalAdd.show && (
                 <Modal
-                    size={InlineModalStyles}
+                    size={InlineCreateModalStyles}
                     active={MODALS.modalAdd.add}
                     setActive={MODALS.setModalAdd}
                 >

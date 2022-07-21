@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IUser } from "../../models/user";
+import { IUser } from "../../interfaces/user";
 import axios from "axios";
 import { setAuth } from "../reducers/authSlice";
 

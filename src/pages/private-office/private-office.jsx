@@ -1,38 +1,38 @@
-import classes from "./styles/private-office.module.css";
-import CRUDModals from "../../components/organization/common/components/CRUD-Modals";
+import { useMemo } from "react";
+import Modals from "../../components/organization/common/components/CRUD-Modals";
 import { useTypedSelector } from "../../redux/hooks/hooks";
+import OrganizationSelect from "../../UI/input/OfficeSelect/OrganizationSelect";
+import Loader from "../../UI/Loader/Loader";
 import { makeOrgsArr } from "../../utils/orgsList.js";
-import MySelect from "../../UI/input/MySelect/MySelect.jsx";
-import OrgInfo from "./service/org-info.jsx";
 import Buttons from "./service/buttons/buttons.jsx";
 import { useOffice } from "./service/hooks/useOffice";
-import { customInlineStyles } from "./service/utils/styles";
-import Loader from "../../UI/Loader/Loader";
+import OrgInfo from "./service/org-info.jsx";
+import classes from "./styles/private-office.module.css";
 
 const Office = () => {
-    const { org } = useTypedSelector((state) => state.orgsReducer);
-    const { orgs } = useTypedSelector((state) => state.orgsReducer);
-    const OFFICE = useOffice(orgs);
+    const { org, orgs } = useTypedSelector((state) => state.orgsReducer);
+    const { isLoading } = useTypedSelector((state) => state.invoicesReducer);
+
+    const { selectUserOrg } = useOffice(orgs);
+
+    const options = useMemo(() => makeOrgsArr(orgs), [orgs]);
 
     return (
         <>
-            <MySelect
-                styleFieldName={customInlineStyles}
-                id="ORG"
-                multiple={false}
-                defaultValue={["Выбрать организацию"][0]}
-                func={OFFICE.selectUserOrg}
-                options={makeOrgsArr(orgs)}
+            <OrganizationSelect
+                defaultValue={"Выбрать организацию"}
+                selectUserOrg={selectUserOrg}
+                options={options}
             />
             {org === null ? (
                 <div className={classes.noorg}>Выберите или добавьте фирму</div>
-            ) : OFFICE.loader ? (
+            ) : isLoading ? (
                 <Loader />
             ) : (
                 <OrgInfo USERORG={org} />
             )}
             <Buttons />
-            <CRUDModals />
+            <Modals />
         </>
     );
 };

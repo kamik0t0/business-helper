@@ -1,4 +1,4 @@
-import { ISaleItem, IPurchaseItem } from "../models/invoice";
+import { ISaleItem, IPurchaseItem } from "../interfaces/invoice";
 
 export class InvoiceItem implements ISaleItem, IPurchaseItem {
     id: number | null;

@@ -23,6 +23,6 @@ export interface IOrg {
 export interface OrgsState {
     orgs: IOrg[];
     org: IOrg | null;
-    loading: boolean;
+    isLoading: boolean;
     error: string | null;
 }
