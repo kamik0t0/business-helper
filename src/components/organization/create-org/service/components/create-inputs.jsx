@@ -1,19 +1,17 @@
-import MyInput from "../../../../../UI/input/MyInput/MyInput.jsx";
 import PropTypes from "prop-types";
+import { uuid } from "uuidv4";
+import CreateRequisiteField from "./CreateRequisiteField/CreateRequisiteField.jsx";
 
-export default function Inputs({ fields, getValue }) {
+export default function CreateInputs({ CreateFields, getRequisiteValue }) {
     return (
         <>
-            {fields.map((field) => {
+            {CreateFields.map((requisiteInput, index) => {
                 return (
-                    <MyInput
-                        key={field.field}
-                        name={field.name}
-                        type={field.type}
-                        field={field.field}
-                        length={field.inputValueLength}
-                        isNumber={field.num}
-                        getValue={getValue}
+                    <CreateRequisiteField
+                        key={uuid()}
+                        requisite={requisiteInput}
+                        fieldIndex={index}
+                        getRequisiteValue={getRequisiteValue}
                     />
                 );
             })}
@@ -21,7 +19,6 @@ export default function Inputs({ fields, getValue }) {
     );
 }
 
-Inputs.propTypes = {
-    fields: PropTypes.array.isRequired,
-    getValue: PropTypes.func.isRequired,
+CreateInputs.propTypes = {
+    RequisiteInputs: PropTypes.array.isRequired,
 };

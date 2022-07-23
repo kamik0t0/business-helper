@@ -1,7 +1,9 @@
 import classes from "./styles/org-info.module.css";
-import { isOrganization } from "../../../utils/isOrg";
+import { isOrganization } from "../../../utils/isOrganization";
+import { memo } from "react";
+import PropTypes from "prop-types";
 
-const OrgInfo = ({ USERORG }) => {
+const OrgInfo = memo(({ USERORG }) => {
     const isORG = USERORG != null && isOrganization(USERORG);
     return (
         <>
@@ -49,10 +51,10 @@ const OrgInfo = ({ USERORG }) => {
             )}
         </>
     );
-};
+});
 
 export default OrgInfo;
 
-// OrgInfo.propTypes = {
-//     isORG: PropTypes.bool.isRequired,
-// };
+OrgInfo.propTypes = {
+    USERORG: PropTypes.object.isRequired,
+};

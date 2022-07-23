@@ -26,3 +26,8 @@ export interface OrgsState {
     isLoading: boolean;
     error: string | null;
 }
+
+export interface IOrgWithInputValueLength extends IOrg {
+    inputValueLength?: number;
+    [prop: string]: string | number | undefined;
+}

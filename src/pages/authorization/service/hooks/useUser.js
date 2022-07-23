@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { validatePass } from "../../../../utils/validatePass.js";
+import { validatePass } from "../../../../utils/validatePass";
 import { isDataEntered } from "../scripts/isDataEntered.ts";
 import * as UserAPI from "../../../../redux/actions/UserActions";
 import { getOrgsByUserId } from "../../../../redux/actions/OrgsAction";
@@ -101,6 +101,7 @@ export function useUser() {
         if (typeof USER === "string") return setInputError(USER);
 
         const { payload: ORGS } = await dispatch(getOrgsByUserId(USER.id));
+
         if (typeof ORGS === "string") return setInputError(USER);
         // авторизация с возвратом на страницу
         if (orgId) {

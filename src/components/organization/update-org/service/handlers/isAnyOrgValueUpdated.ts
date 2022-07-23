@@ -1,30 +1,25 @@
-import { IOrg } from "../../../../../interfaces/organization";
+import { MutableRefObject } from "react";
+import { ICounterpartyWithInputValueLength } from "../../../../../interfaces/counterparty";
 
 /* Временный комментарий для себя:
 расширяем интефейс IOrg опциональным свойством inputValueLength типа number и описываем сигнатуру индекса, т.е. тип вызываемого свойства объекта и тип получаемого значения. Интерфейс содержит типы как number так и string, при этом поскольку имеется опциональное свойство которое может быть удалено то значение и тип этого свойства может быть undefined
 */
-interface IOrgWithInputValueLength extends IOrg {
-    inputValueLength?: number;
-    [prop: string]: string | number | undefined;
-}
 
 export function isAnyOrgValueUpdated(
-    Updated: IOrgWithInputValueLength,
-    USERORG: IOrgWithInputValueLength
+    Updated: MutableRefObject<ICounterpartyWithInputValueLength>,
+    USERORG: ICounterpartyWithInputValueLength
 ): boolean {
-    for (const field in Updated) {
+    for (const field in Updated.current) {
         // удаление лишнего поля
-        if (Updated[field] === undefined) delete Updated[field];
+        if (Updated.current[field] === undefined) delete Updated.current[field];
         // удаление поля контроля длины
-        if (Updated.inputValueLength) delete Updated.inputValueLength;
-
+        if (Updated.current.inputValueLength)
+            delete Updated.current.inputValueLength;
         if (
             // если значенине поля обновилось
-            Updated[field] !== USERORG[field] &&
-            // и наименование поля !== upINN
-            field !== "upINN" &&
+            Updated.current[field] !== USERORG[field] &&
             // и значение поля !== undefined
-            Updated[field] !== undefined
+            Updated.current[field] !== undefined
         )
             return true;
     }

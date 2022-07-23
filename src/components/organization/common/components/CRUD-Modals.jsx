@@ -16,13 +16,14 @@ const InlineCreateModalStyles = { height: "75vh", width: "75vw" };
 export default function CRUDModals() {
     const { pathname } = useLocation();
     const MODALS = useContext(ModalContext);
-    const UserId = useTypedSelector((state) => state.userReducer.data.id);
-    const COUNTERPARTY = useTypedSelector(
-        (state) => state.counterpartyReducer.counterparty
+    const { id: UserId } = useTypedSelector((state) => state.userReducer.data);
+    const { counterparty, isLoading: isOrgLoading } = useTypedSelector(
+        (state) => state.counterpartyReducer
     );
-    const USERORG = useTypedSelector((state) => state.orgsReducer.org);
-
-    const OrgId = USERORG ? USERORG.id : null;
+    const { org, isLoading: isCounterpartyLoading } = useTypedSelector(
+        (state) => state.orgsReducer
+    );
+    const OrgId = org?.id || null;
     // если находимся в личном кабинете - работаем с организацией пользователя, иначе - с контрагентами организации
     const isUserOrg = pathname === "/private";
 
@@ -39,12 +40,14 @@ export default function CRUDModals() {
                             UserId={UserId}
                             OrgId={null}
                             action={OrgAPI.postOrganization}
+                            isLoading={isOrgLoading}
                         />
                     ) : (
                         <Create
                             UserId={UserId}
                             OrgId={OrgId}
                             action={CounterpartyAPI.postCounterparty}
+                            isLoading={isCounterpartyLoading}
                         />
                     )}
                 </Modal>
@@ -55,9 +58,9 @@ export default function CRUDModals() {
                     setActive={MODALS.setModalRead}
                 >
                     {isUserOrg ? (
-                        <Read ORG={USERORG} />
+                        <Read org={org} />
                     ) : (
-                        <Read ORG={COUNTERPARTY} />
+                        <Read org={counterparty} />
                     )}
                 </Modal>
             )}
@@ -68,13 +71,15 @@ export default function CRUDModals() {
                 >
                     {isUserOrg ? (
                         <Update
-                            ORG={USERORG}
+                            org={org}
                             action={OrgAPI.patchOrganization}
+                            isLoading={isOrgLoading}
                         />
                     ) : (
                         <Update
-                            ORG={COUNTERPARTY}
+                            org={counterparty}
                             action={CounterpartyAPI.patchCounterparty}
+                            isLoading={isCounterpartyLoading}
                         />
                     )}
                 </Modal>
@@ -87,15 +92,17 @@ export default function CRUDModals() {
                 >
                     {isUserOrg ? (
                         <Delete
-                            id={USERORG?.id}
-                            orgname={USERORG?.orgname}
+                            id={org?.id}
+                            orgname={org?.orgname}
                             action={OrgAPI.deleteOrganization}
+                            isLoading={isOrgLoading}
                         />
                     ) : (
                         <Delete
-                            id={COUNTERPARTY?.id}
-                            orgname={COUNTERPARTY?.orgname}
+                            id={counterparty?.id}
+                            orgname={counterparty?.orgname}
                             action={CounterpartyAPI.deleteCounterparty}
+                            isLoading={isCounterpartyLoading}
                         />
                     )}
                 </Modal>

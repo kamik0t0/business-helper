@@ -5,8 +5,8 @@ import Buttons from "./service/components/delete-buttons/Delete-buttons.jsx";
 import { useDeleteOrg } from "./service/hooks/useDeleteOrg.js";
 import PropTypes from "prop-types";
 
-export default function DeleteOrg({ id, orgname, action }) {
-    const [loader, deleteOrg, hideModal] = useDeleteOrg(id, action);
+export default function DeleteOrg({ id, orgname, action, isLoading }) {
+    const [deleteOrg, hideModal] = useDeleteOrg(id, action);
 
     return (
         <>
@@ -22,7 +22,7 @@ export default function DeleteOrg({ id, orgname, action }) {
                     <div
                         className={classes.text}
                     >{`Вы действительно хотите удалить ${orgname}?`}</div>
-                    {loader ? <Loader /> : <Buttons deleteOrg={deleteOrg} />}
+                    {isLoading ? <Loader /> : <Buttons deleteOrg={deleteOrg} />}
                 </div>
             )}
         </>

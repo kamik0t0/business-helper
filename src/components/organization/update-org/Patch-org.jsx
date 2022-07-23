@@ -1,34 +1,38 @@
-import classes from "./styles/patch-org.module.css";
+import PropTypes from "prop-types";
+import React from "react";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
-import { usePatchOrg } from "./service/hooks/usePatchOrg.js";
-import PatchFields from "../common/components/PatchFieldsWrapper";
-import React from "react";
-import PropTypes from "prop-types";
+import PatchFields from "../common/components/PatchRequisiteFieldsWrapper";
+import { usePatchOrg } from "./service/hooks/usePatchOrg";
+import { usePatchRequisites } from "./service/hooks/usePatchRequisites";
+import classes from "./styles/patch-org.module.css";
 
 export const PatchContext = React.createContext();
 
-export default function PatchOrg({ ORG, action }) {
-    const PatchAPI = usePatchOrg(ORG, action);
+export default function PatchOrg({ org = null, action, isLoading }) {
+    const PatchRequisitesAPI = usePatchRequisites(org);
+    const PatchAPI = usePatchOrg(org, action, PatchRequisitesAPI.UpdateData);
     const PatchFuncs = {
-        getInputLengthLimit: PatchAPI.getInputLengthLimit,
-        getUpdateValue: PatchAPI.getUpdateValue,
+        getInputLengthLimit: PatchRequisitesAPI.getInputLengthLimit,
+        getUpdateValue: PatchRequisitesAPI.getUpdateValue,
     };
 
     return (
         <>
-            {ORG === null ? (
+            {org === null ? (
                 <div className={classes.read}>
                     <div className={classes.noorg}>Организация не выбрана</div>
                 </div>
             ) : (
                 <div className={classes.read}>
                     <div className={classes.header}>Реквизиты</div>
-                    {PatchAPI.loader ? (
+                    {isLoading ? (
                         <Loader />
                     ) : (
                         <PatchContext.Provider value={PatchFuncs}>
-                            <PatchFields OrgData={PatchAPI.OrgData} />
+                            <PatchFields
+                                PatchFields={PatchRequisitesAPI.PatchFields}
+                            />
                         </PatchContext.Provider>
                     )}
 
@@ -45,6 +49,7 @@ export default function PatchOrg({ ORG, action }) {
 }
 
 PatchOrg.propTypes = {
-    ORG: PropTypes.object,
+    org: PropTypes.object,
     action: PropTypes.func,
+    isLoading: PropTypes.bool,
 };

@@ -3,7 +3,7 @@ import Modals from "../../components/organization/common/components/CRUD-Modals"
 import { useTypedSelector } from "../../redux/hooks/hooks";
 import OrganizationSelect from "../../UI/input/OfficeSelect/OrganizationSelect";
 import Loader from "../../UI/Loader/Loader";
-import { makeOrgsArr } from "../../utils/orgsList.js";
+import { makeOrgsArr } from "../../utils/orgsList";
 import Buttons from "./service/buttons/buttons.jsx";
 import { useOffice } from "./service/hooks/useOffice";
 import OrgInfo from "./service/org-info.jsx";

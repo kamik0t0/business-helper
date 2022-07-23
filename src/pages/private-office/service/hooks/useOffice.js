@@ -14,6 +14,7 @@ export function useOffice(ORGANIZATIONS) {
         const [Org] = getOrgByOrgName(ORGANIZATIONS, orgname);
 
         dispatch(setUserOrg(Org?.id));
+        // TODO: LazyLoading
         await dispatch(getCounterpatiesByOrgId(Org?.id));
         await dispatch(getSalesByOrgId(Org?.id));
         await dispatch(getPurchasesByOrgId(Org?.id));

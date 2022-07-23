@@ -1,25 +1,26 @@
 export interface ICounterparty {
-    id: number;
-    createdAt: string;
-    UserId: number;
-    OrgId: number;
-    orgname: string;
-    inn: string;
-    kpp: string;
-    ogrn: string;
-    bank: string;
-    bik: string;
-    korr: string;
-    acc: string;
-    address: string;
-    director: string;
-    position: string;
-    okopf: string;
-    okfs: string;
-    okved: string;
-    okpo: string;
-    opf: string;
-    highlight: boolean;
+    id: number | null | undefined;
+    createdAt: string | undefined;
+    UserId: number | null;
+    OrgId: number | undefined;
+    inn: string | null;
+    kpp: string | null;
+    opf: string | null;
+    orgname: string | null;
+    address: string | null;
+    director: string | null;
+    // ogrn: string;
+    // bank: string;
+    // bik: string;
+    // korr: string;
+    // acc: string;
+    // position: string;
+    // okopf: string;
+    // okfs: string;
+    // okved: string;
+    // okpo: string;
+    // highlight: boolean;
+    [prop: string]: string | number | null | undefined;
 }
 
 export interface CounterpartiesState {
@@ -27,4 +28,9 @@ export interface CounterpartiesState {
     counterparty: ICounterparty | null;
     isLoading: boolean;
     error: string | null;
+}
+
+export interface ICounterpartyWithInputValueLength extends ICounterparty {
+    inputValueLength?: number;
+    [prop: string]: string | number | null | undefined;
 }

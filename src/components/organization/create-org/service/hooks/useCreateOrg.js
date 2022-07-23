@@ -1,13 +1,12 @@
-import { isInnKppValid } from "../scripts/isInnKppValid.js";
-import { isAllRequisitesFilled } from "../scripts/isAllRequisitesFilled.js";
-import { useState, useContext } from "react";
-import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control.js";
-import { ModalContext } from "../../../../../blocks/content/Main.jsx";
-import { useTypedDispatch } from "../../../../../redux/hooks/hooks.ts";
+import { isInnKppValid } from "../scripts/isInnKppValid.ts";
+import { isAllRequisitesFilled } from "../scripts/isAllRequisitesFilled.ts";
+import { useContext } from "react";
+import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control";
+import { ModalContext } from "../../../../../blocks/content/Main";
+import { useTypedDispatch } from "../../../../../redux/hooks/hooks";
 
-export function useCreateOrg(action) {
+export function useCreateOrg(action, ORG) {
     const dispatch = useTypedDispatch();
-    const [loader, setLoader] = useState(false);
     const { setModalAdd } = useContext(ModalContext);
     const [, hideModal] = modalManager(setModalAdd);
 
@@ -16,11 +15,9 @@ export function useCreateOrg(action) {
 
         if (isInnKppValid(organization) === false) return;
         if (isAllRequisitesFilled(organization) === false) return;
-
-        setLoader(true);
         await dispatch(action(organization));
         hideModal();
     }
 
-    return [loader, create];
+    return (event) => create(event, ORG.current);
 }

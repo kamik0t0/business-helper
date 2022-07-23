@@ -1,13 +1,12 @@
 import classes from "./styles/create-org.module.css";
-import Inputs from "./service/components/create-inputs.jsx";
+import CreateInputs from "./service/components/create-inputs.jsx";
 import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
 import Buttons from "./service/components/create-buttons.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import { useCreateOrg } from "./service/hooks/useCreateOrg.js";
-import { useRequisites } from "../common/hooks/useRequisites";
-import { Organizaton } from "../../../utils/Org";
-import { useRef } from "react";
+import { useCreateRequisites } from "./service/hooks/useCreateRequisites";
 import PropTypes from "prop-types";
+import React from "react";
 
 const OPFoptions = [
     "Выберите организационно-правовую форму",
@@ -15,16 +14,22 @@ const OPFoptions = [
     "Индивидуальный предприниматель",
 ];
 
-export default function CreateOrg({ UserId, OrgId = null, action }) {
-    const ORG = useRef(new Organizaton());
+export const CreateContext = React.createContext();
 
-    ORG.current.UserId = UserId;
-    ORG.current.OrgId = OrgId && OrgId;
+export default function CreateOrg({
+    UserId,
+    OrgId = undefined,
+    action,
+    isLoading,
+}) {
+    const RequisitesAPI = useCreateRequisites(UserId, OrgId);
+    const create = useCreateOrg(action, RequisitesAPI.ORG);
 
-    const [fields, getOPF, getInputsValues] = useRequisites(ORG);
-    const [loader, create] = useCreateOrg(action);
+    const CreateFuncs = {
+        getInputLengthLimit: RequisitesAPI.getInputLengthLimit,
+        getInputValue: RequisitesAPI.getInputValue,
+    };
 
-    const createOrg = (event) => create(event, ORG.current);
     return (
         <>
             <div className={classes.create}>
@@ -34,14 +39,19 @@ export default function CreateOrg({ UserId, OrgId = null, action }) {
                     style={{ color: "#F0EBDD" }}
                     defaultValue={["Выберите организационно-правовую форму"][0]}
                     options={OPFoptions}
-                    func={getOPF}
+                    func={RequisitesAPI.getOPF}
                 />
-                {loader ? (
+                {isLoading ? (
                     <Loader />
                 ) : (
-                    <Inputs fields={fields} getValue={getInputsValues} />
+                    <CreateContext.Provider value={CreateFuncs}>
+                        <CreateInputs
+                            CreateFields={RequisitesAPI.CreateFields}
+                            getRequisiteValue={RequisitesAPI.getRequisiteValue}
+                        />
+                    </CreateContext.Provider>
                 )}
-                <Buttons create={createOrg} />
+                <Buttons create={create} />
             </div>
         </>
     );
@@ -51,4 +61,5 @@ CreateOrg.propTypes = {
     UserId: PropTypes.number.isRequired,
     OrgId: PropTypes.number,
     action: PropTypes.func,
+    isLoading: PropTypes.func,
 };
