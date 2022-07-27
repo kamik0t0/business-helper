@@ -1,5 +1,3 @@
-import React from "react";
-import classes from "./styles/info.module.css";
 import Tab from "../../components/Tab/Tab.jsx";
 
 export default function Tabs() {

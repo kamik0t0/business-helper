@@ -1,12 +1,12 @@
-import classes from "./styles/create-org.module.css";
-import CreateInputs from "./service/components/create-inputs.jsx";
-import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
-import Buttons from "./service/components/create-buttons.jsx";
-import Loader from "../../../UI/Loader/Loader.jsx";
-import { useCreateOrg } from "./service/hooks/useCreateOrg.js";
-import { useCreateRequisites } from "./service/hooks/useCreateRequisites";
 import PropTypes from "prop-types";
 import React from "react";
+import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
+import Loader from "../../../UI/Loader/Loader.jsx";
+import Buttons from "./service/components/create-buttons.jsx";
+import CreateInputs from "./service/components/create-inputs.jsx";
+import { useCreateOrg } from "./service/hooks/useCreateOrg";
+import { useCreateRequisites } from "./service/hooks/useCreateRequisites";
+import classes from "./styles/create-org.module.css";
 
 const OPFoptions = [
     "Выберите организационно-правовую форму",

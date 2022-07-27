@@ -6,19 +6,21 @@ import {
 } from "../../../../../redux/hooks/hooks";
 import { setPosition } from "../../../../../redux/reducers/InvoiceSlice";
 import { setInvoicePositionCalculations } from "../../scripts";
+import { IEvent } from "../../../../../interfaces/event";
+import { IInvoiceItem } from "../../../../../interfaces/invoice";
 
 export const usePosition = (
-    position,
-    positionIndex,
-    setPositions,
-    positions
+    position: IInvoiceItem,
+    positionIndex: number,
+    setPositions: ([]) => any,
+    positions: IInvoiceItem[]
 ) => {
     const dispatch = useTypedDispatch();
     const currentIndex = useTypedSelector(
         (state) => state.invoicesReducer.InvoicePositionIndex
     );
 
-    const getNomenclature = (event) =>
+    const getNomenclature = (event: IEvent): void =>
         setPositions(
             setInvoicePositionCalculations(
                 event,
@@ -27,7 +29,7 @@ export const usePosition = (
                 "nomenclature"
             )
         );
-    const getQuantity = (event) =>
+    const getQuantity = (event: IEvent): void =>
         setPositions(
             setInvoicePositionCalculations(
                 event,
@@ -36,7 +38,7 @@ export const usePosition = (
                 "quantity"
             )
         );
-    const getPrice = (event) =>
+    const getPrice = (event: IEvent): void =>
         setPositions(
             setInvoicePositionCalculations(
                 event,
@@ -46,7 +48,7 @@ export const usePosition = (
             )
         );
 
-    const selectPosition = () => {
+    const selectPosition = (): void => {
         if (currentIndex === positionIndex) return;
         dispatch(setPosition(positionIndex));
 

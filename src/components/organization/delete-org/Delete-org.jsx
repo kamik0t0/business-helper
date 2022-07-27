@@ -2,7 +2,7 @@ import classes from "./styles/delete-org.module.css";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import Buttons from "./service/components/delete-buttons/Delete-buttons.jsx";
-import { useDeleteOrg } from "./service/hooks/useDeleteOrg.js";
+import { useDeleteOrg } from "./service/hooks/useDeleteOrg";
 import PropTypes from "prop-types";
 
 export default function DeleteOrg({ id, orgname, action, isLoading }) {

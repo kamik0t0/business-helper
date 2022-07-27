@@ -1,7 +1,7 @@
 import CalcData from "./Calc-data";
 import CalcResult from "./Calc-result";
-import classes from "./styles/Tax-calc-form.module.css";
 import { useTaxCalc } from "./hooks/useTaxCalc";
+import classes from "./styles/Tax-calc-form.module.css";
 
 export default function CalcForm() {
     const [tax, calcIncome, calcSalary] = useTaxCalc();

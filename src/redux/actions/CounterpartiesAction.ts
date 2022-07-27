@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import { ICounterparty } from "../../interfaces/counterparty";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
-import axios from "axios";
 
 export const getCounterpatiesByOrgId = createAsyncThunk<
     ICounterparty[],

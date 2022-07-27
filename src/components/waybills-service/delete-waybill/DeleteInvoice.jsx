@@ -2,7 +2,7 @@ import classes from "./styles/detel-waybill.module.css";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import { useTypedSelector } from "../../../redux/hooks/hooks";
-import { useDeleteWaybill } from "./hooks/useDeleteWaybill.js";
+import { useDeleteWaybill } from "./hooks/useDeleteWaybill";
 
 export default function DeleteInvoice({ deleteAction }) {
     const { Invoice } = useTypedSelector((state) => state.invoicesReducer);

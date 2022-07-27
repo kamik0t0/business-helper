@@ -1,6 +1,8 @@
+import {
+    getSaleItemsBySaleId,
+    updateSaleBySaleId,
+} from "../../redux/actions/SalesAction";
 import UpdateInvoice from "../update-invoice/UpdateInvoice";
-import { getSaleItemsBySaleId } from "../../redux/actions/SalesAction";
-import { updateSaleBySaleId } from "../../redux/actions/SalesAction";
 
 export default function UpdateSale() {
     return (

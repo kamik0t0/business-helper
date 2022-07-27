@@ -26,7 +26,8 @@ export interface IInvoice {
     cl_opf: string;
     OrgId: number;
     cl_waybill_number: string;
-    highlight: boolean;
+    highlight?: boolean;
+    [prop: string]: string | number | undefined | boolean;
 }
 
 export interface IInvoiceItem {
@@ -41,19 +42,22 @@ export interface IInvoiceItem {
     nds: number;
     total: number;
     highlight?: boolean;
+    SaleId?: number | null | undefined;
+    PurchaseId?: number | null | undefined;
+    [prop: string]: string | number | undefined | null | boolean;
 }
 
-export interface ISaleItem extends IInvoiceItem {
-    SaleId?: number | null;
-}
-export interface IPurchaseItem extends IInvoiceItem {
-    PurchaseId?: number | null;
-}
+// export interface ISaleItem extends IInvoiceItem {
+//     SaleId?: number | null | undefined;
+// }
+// export interface IPurchaseItem extends IInvoiceItem {
+//     PurchaseId?: number | null | undefined;
+// }
 export interface IInvoiceState {
     purchases: IInvoice[];
     sales: IInvoice[];
     Invoice: IInvoice | null;
-    InvoiceItem: ISaleItem[] | IPurchaseItem[] | null;
+    InvoiceItem: IInvoiceItem[] | null;
     InvoicePositionIndex: number | null;
     isLoading: boolean;
     error: string | null;

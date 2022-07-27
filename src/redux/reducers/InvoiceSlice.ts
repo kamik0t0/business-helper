@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IInvoice, IInvoiceState } from "../../interfaces/invoice";
 import {
-    getSalesByOrgId,
-    getSaleItemsBySaleId,
-    updateSaleBySaleId,
-    deleteSaleBySaleId,
-} from "../actions/SalesAction";
-import {
-    getPurchasesByOrgId,
-    getPurchaseItemsBySaleId,
-    updatePurchaseByPurchaseId,
     deletePurchaseByPurchaseId,
+    getPurchaseItemsBySaleId,
+    getPurchasesByOrgId,
+    updatePurchaseByPurchaseId,
 } from "../actions/PurchasesAction";
+import {
+    deleteSaleBySaleId,
+    getSaleItemsBySaleId,
+    getSalesByOrgId,
+    updateSaleBySaleId,
+} from "../actions/SalesAction";
 import { errorHanlder } from "../scripts/errorHandler";
 
 const initialState: IInvoiceState = {

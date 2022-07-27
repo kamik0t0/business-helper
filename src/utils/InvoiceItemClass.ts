@@ -1,6 +1,6 @@
-import { ISaleItem, IPurchaseItem } from "../interfaces/invoice";
+import { IInvoiceItem } from "../interfaces/invoice";
 
-export class InvoiceItem implements ISaleItem, IPurchaseItem {
+export class InvoiceItem implements IInvoiceItem {
     id: number | null;
     item_number: number;
     nomenclature: string;
@@ -14,6 +14,7 @@ export class InvoiceItem implements ISaleItem, IPurchaseItem {
     SaleId?: number | null;
     PurchaseId?: number | null;
     createdAt?: string | null;
+    [prop: string]: any;
 
     constructor(
         highlight?: boolean,
@@ -27,8 +28,8 @@ export class InvoiceItem implements ISaleItem, IPurchaseItem {
         total?: number,
         createdAt?: string | null,
         nds_percent?: number | null,
-        SaleId?: number | null,
-        PurchaseId?: number | null
+        SaleId?: number | null | undefined,
+        PurchaseId?: number | null | undefined
     ) {
         this.id = id || null;
         this.item_number = item_number || 0;
@@ -44,6 +45,7 @@ export class InvoiceItem implements ISaleItem, IPurchaseItem {
         this.SaleId = SaleId || null;
         this.PurchaseId = PurchaseId || null;
     }
+
     getSumm(): number {
         this.summ = this.quantity * this.price;
         return this.summ;

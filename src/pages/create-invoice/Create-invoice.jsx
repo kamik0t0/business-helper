@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useCallback, useState, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PositionHeaders from "../../components/waybills-service/common/position-header/Position-headers";
 import { usePositions } from "../../components/waybills-service/common/position/hooks/usePositions";
@@ -43,10 +43,7 @@ export default function CreateInvoice({ Info, createAction }) {
 
     const [positions, setPositions] = useState([]);
 
-    const { addPosition, deletePosition } = usePositions(
-        positions,
-        setPositions
-    );
+    const [addPosition, deletePosition] = usePositions(positions, setPositions);
 
     const CreateAPI = useCreateInvoice(positions, counterparty, createAction);
 
@@ -76,7 +73,8 @@ export default function CreateInvoice({ Info, createAction }) {
                         name={Info[1]}
                         type="text"
                         defaultValue={
-                            CreateAPI.INVOICE.current.counterparty?.orgname
+                            CreateAPI.CreateInvoice.current.counterparty
+                                ?.orgname
                         }
                         getValue={CreateAPI.setCounterparty}
                     />

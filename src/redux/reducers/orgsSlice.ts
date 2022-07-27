@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { OrgsState } from "../../interfaces/organization";
 import {
+    deleteOrganization,
     getOrgsByUserId,
     postOrganization,
-    deleteOrganization,
 } from "../actions/OrgsAction";
 import { errorHanlder } from "../scripts/errorHandler";
 import { orgFilter } from "../scripts/orgFilter";

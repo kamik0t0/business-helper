@@ -1,5 +1,5 @@
-import CreateInvoice from "../create-invoice/Create-invoice";
 import { createPurchase } from "../../redux/actions/PurchasesAction";
+import CreateInvoice from "../create-invoice/Create-invoice";
 
 export default function NewPurchase() {
     return (

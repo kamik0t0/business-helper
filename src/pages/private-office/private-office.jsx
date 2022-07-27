@@ -13,7 +13,7 @@ const Office = () => {
     const { org, orgs } = useTypedSelector((state) => state.orgsReducer);
     const { isLoading } = useTypedSelector((state) => state.invoicesReducer);
 
-    const { selectUserOrg } = useOffice(orgs);
+    const selectUserOrg = useOffice(orgs);
 
     const options = useMemo(() => makeOrgsArr(orgs), [orgs]);
 

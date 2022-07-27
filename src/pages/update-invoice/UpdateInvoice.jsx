@@ -50,13 +50,10 @@ export default function UpdateInvoice({
 
     const [positions, setPositions] = useState([]);
 
-    const { requestPositions, serializeInvoiceItems } =
+    const [requestPositions, serializeInvoiceItems] =
         useRequestInvoicePositions(requestInvoiceItemsAction, setPositions);
 
-    const { addPosition, deletePosition } = usePositions(
-        positions,
-        setPositions
-    );
+    const [addPosition, deletePosition] = usePositions(positions, setPositions);
 
     const UpdateAPI = useUpdateInvoice(
         positions,

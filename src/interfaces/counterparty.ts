@@ -4,11 +4,11 @@ export interface ICounterparty {
     UserId: number | null;
     OrgId: number | undefined;
     inn: string | null;
-    kpp: string | null;
     opf: string | null;
     orgname: string | null;
     address: string | null;
-    director: string | null;
+    kpp?: string | null | undefined;
+    director?: string | null | undefined;
     // ogrn: string;
     // bank: string;
     // bik: string;
@@ -19,8 +19,8 @@ export interface ICounterparty {
     // okfs: string;
     // okved: string;
     // okpo: string;
-    // highlight: boolean;
-    [prop: string]: string | number | null | undefined;
+    highlight?: boolean | undefined;
+    [prop: string]: string | number | null | undefined | boolean;
 }
 
 export interface CounterpartiesState {
@@ -32,5 +32,4 @@ export interface CounterpartiesState {
 
 export interface ICounterpartyWithInputValueLength extends ICounterparty {
     inputValueLength?: number;
-    [prop: string]: string | number | null | undefined;
 }

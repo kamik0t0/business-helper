@@ -1,14 +1,14 @@
 import { useContext } from "react";
-import Modal from "../../../../UI/modal/modal.jsx";
+import { useLocation } from "react-router";
 import { ModalContext } from "../../../../blocks/content/Main.jsx";
+import * as CounterpartyAPI from "../../../../redux/actions/CounterpartiesAction";
+import * as OrgAPI from "../../../../redux/actions/OrgsAction";
+import { useTypedSelector } from "../../../../redux/hooks/hooks";
+import Modal from "../../../../UI/modal/modal.jsx";
 import Create from "../../create-org/Create-org.jsx";
+import Delete from "../../delete-org/Delete-org.jsx";
 import Read from "../../read-org/Read-org.jsx";
 import Update from "../../update-org/Patch-org.jsx";
-import Delete from "../../delete-org/Delete-org.jsx";
-import { useTypedSelector } from "../../../../redux/hooks/hooks";
-import { useLocation } from "react-router";
-import * as OrgAPI from "../../../../redux/actions/OrgsAction";
-import * as CounterpartyAPI from "../../../../redux/actions/CounterpartiesAction";
 
 const InlineModalStyles = { height: "25vh", width: "40vw" };
 const InlineCreateModalStyles = { height: "75vh", width: "75vw" };

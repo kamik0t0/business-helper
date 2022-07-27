@@ -2,13 +2,20 @@ import React, { memo } from "react";
 import classes from "./styles/my-input.module.css";
 import PropTypes from "prop-types";
 import classNames from "classnames/bind";
-import { useRequisiteInput } from "./hooks/useRequisiteInput";
 
 const RequisiteInput = memo(
     React.forwardRef(
-        ({ length, isNumber, defaultValue, getInputValue }, ref) => {
-            const [error, validator] = useRequisiteInput(length, isNumber);
-
+        (
+            {
+                length,
+                isNumber,
+                defaultValue,
+                getInputValue,
+                error,
+                isInputError,
+            },
+            ref
+        ) => {
             const cx = classNames.bind(classes);
             const inputClassName = cx({
                 [classes.fields__item_input]: true,
@@ -23,7 +30,7 @@ const RequisiteInput = memo(
                     maxLength={length}
                     minLength={length}
                     defaultValue={defaultValue}
-                    onInput={validator}
+                    onInput={isInputError}
                     onChange={getInputValue}
                 />
             );

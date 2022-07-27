@@ -1,4 +1,7 @@
 export interface IEvent {
     preventDefault: () => {};
-    target: { value: string | number | boolean };
+    target: {
+        innerHTML: string;
+        value: string | number | boolean;
+    };
 }

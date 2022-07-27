@@ -1,6 +1,8 @@
+import {
+    getPurchaseItemsBySaleId,
+    updatePurchaseByPurchaseId,
+} from "../../redux/actions/PurchasesAction";
 import UpdateInvoice from "../update-invoice/UpdateInvoice";
-import { getPurchaseItemsBySaleId } from "../../redux/actions/PurchasesAction";
-import { updatePurchaseByPurchaseId } from "../../redux/actions/PurchasesAction";
 
 export default function UpdatePurchase() {
     return (

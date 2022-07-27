@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CounterpartiesState } from "../../interfaces/counterparty";
+import {
+    CounterpartiesState,
+    ICounterparty,
+} from "../../interfaces/counterparty";
 import * as CounterpartyAPI from "../actions/CounterpartiesAction";
-import { ICounterparty } from "../../interfaces/counterparty";
 import { errorHanlder } from "../scripts/errorHandler";
 
 const initialState: CounterpartiesState = {

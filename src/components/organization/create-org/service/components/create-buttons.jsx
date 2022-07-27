@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import classes from "./styles/org-buttons.module.css";
 import MyButton from "../../../../../UI/input/MyButton/MyButton.jsx";
 import { ModalContext } from "../../../../../blocks/content/Main.jsx";
-import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control.js";
-import { clear } from "../../../../../utils/clear.ts";
+import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control";
+import { clear } from "../../../../../utils/clear";
 import PropTypes from "prop-types";
 
 export default function Buttons({ create }) {

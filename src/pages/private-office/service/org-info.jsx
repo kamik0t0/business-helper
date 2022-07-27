@@ -1,7 +1,7 @@
-import classes from "./styles/org-info.module.css";
-import { isOrganization } from "../../../utils/isOrganization";
-import { memo } from "react";
 import PropTypes from "prop-types";
+import { memo } from "react";
+import { isOrganization } from "../../../utils/isOrganization";
+import classes from "./styles/org-info.module.css";
 
 const OrgInfo = memo(({ USERORG }) => {
     const isORG = USERORG != null && isOrganization(USERORG);

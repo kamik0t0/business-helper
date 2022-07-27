@@ -10,12 +10,12 @@ const inlineButtonStyle = {
 };
 
 export default function PatchRequisiteField({ requisite, fieldIndex }) {
-    const [focus, prevValue, inputRef, Ok, Cancel] = usePatchField(
-        requisite,
-        fieldIndex
-    );
+    const [focus, prevValue, inputRef, Ok, Cancel, inputError, isInputError] =
+        usePatchField(requisite, fieldIndex);
+
     const defaultInputValue = prevValue.current?.innerHTML;
-    const actualRequisiteValue = inputRef.current
+
+    const actualRequisiteValue = inputRef.current?.value
         ? inputRef.current.value
         : requisite.value;
 
@@ -30,6 +30,8 @@ export default function PatchRequisiteField({ requisite, fieldIndex }) {
                             length={requisite.inputValueLength}
                             isNumber={requisite.isNumber}
                             defaultValue={defaultInputValue}
+                            error={inputError}
+                            isInputError={isInputError}
                         />
                         <div className={classes.buttons}>
                             <MyButton onClick={Ok} style={inlineButtonStyle}>

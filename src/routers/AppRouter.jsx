@@ -1,21 +1,21 @@
 import React from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import CalcForm from "../pages/Tax-calc/Tax-calc-form.jsx";
-import Tabs from "../pages/info/info.jsx";
-import Sales from "../pages/sales/Sales.jsx";
-import Purchases from "../pages/purchases/Purchases.jsx";
-import NewPurchase from "../pages/purchases/New-purchase.jsx";
-import NewSale from "../pages/sales/New-sale.jsx";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import Layout from "../blocks/layout/Layout.jsx";
+import UnAuthLayout from "../blocks/layout/noAuthLayout.jsx";
 import Login from "../pages/authorization/Authorization.jsx";
 import Forgot from "../pages/authorization/Forgot.jsx";
 import Registration from "../pages/authorization/Registration.jsx";
-import Private from "../pages/private-office/private-office.jsx";
 import Counterparties from "../pages/counterparties/counterparties.jsx";
-import UpdateSale from "../pages/sales/Update-sale.jsx";
+import Tabs from "../pages/info/info.jsx";
+import Private from "../pages/private-office/private-office.jsx";
+import NewPurchase from "../pages/purchases/New-purchase.jsx";
+import Purchases from "../pages/purchases/Purchases.jsx";
 import UpdatePurchase from "../pages/purchases/Update-purchase.jsx";
+import NewSale from "../pages/sales/New-sale.jsx";
+import Sales from "../pages/sales/Sales.jsx";
+import UpdateSale from "../pages/sales/Update-sale.jsx";
+import CalcForm from "../pages/Tax-calc/Tax-calc-form.jsx";
 import { useTypedSelector } from "../redux/hooks/hooks";
-import Layout from "../blocks/layout/Layout.jsx";
-import UnAuthLayout from "../blocks/layout/noAuthLayout.jsx";
 
 export default function AppRouter() {
     const isAuth = useTypedSelector((state) => state.authReducer.isAuth);

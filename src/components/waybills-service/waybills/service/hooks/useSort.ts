@@ -5,13 +5,18 @@ import {
     sortBySumm,
     sortById,
 } from "../scripts/sorts";
+import { IEvent } from "../../../../../interfaces/event";
+import { IInvoice } from "../../../../../interfaces/invoice";
 
-export function useSort(action, invoices) {
+export function useSort(
+    action: ([]: IInvoice[]) => void,
+    invoices: IInvoice[]
+) {
     const [sortOrder, setSortOrder] = useState(false);
 
-    const sort = (event) => {
-        const sortField = event.target.innerHTML;
-        let sortedItems;
+    const sort = (event: IEvent) => {
+        const sortField: string = event.target.innerHTML;
+        let sortedItems: IInvoice[];
         switch (sortField) {
             case "Дата":
                 sortedItems = sortByDate(invoices, sortOrder);

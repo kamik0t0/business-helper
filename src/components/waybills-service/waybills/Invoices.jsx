@@ -5,7 +5,7 @@ import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import PropTypes from "prop-types";
 import DeleteInvoice from "../delete-waybill/DeleteInvoice.jsx";
 import { ModalContext } from "../../../blocks/content/Main.jsx";
-import { modalManager } from "../../../UI/modal/service/handlers/modal-control.js";
+import { modalManager } from "../../../UI/modal/service/handlers/modal-control";
 import InvoiceHeader from "./header/Invoice-header.jsx";
 import InteractionHeader from "./header/Interaction-header.jsx";
 import InvoicesWrapper from "./waybills-wrapper.jsx";

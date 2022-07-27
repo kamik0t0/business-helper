@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IInvoice, ISaleItem } from "../../interfaces/invoice";
+import { IInvoice, IInvoiceItem } from "../../interfaces/invoice";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 
@@ -25,7 +25,7 @@ export const getSalesByOrgId = createAsyncThunk<
 });
 
 export const getSaleItemsBySaleId = createAsyncThunk<
-    ISaleItem[],
+    IInvoiceItem[],
     number,
     { rejectValue: string }
 >("sales/getSaleItems", async function (invoiceId, ThunkAPI) {
@@ -99,11 +99,13 @@ interface createInfo {
 export const createSale = createAsyncThunk<
     createInfo,
     // добавить описание обязательны полей для обновляемой накладной
-    { myOrg: { id: number }; counterparty: { id: number } },
+    { org: { id: number }; counterparty: { id: number } },
     IThunkConfig
 >(
     "sales/createSale",
     async function (sale, { rejectWithValue, dispatch, getState }) {
+        console.log(sale);
+
         try {
             if (process.env.REACT_APP_URL_SALES !== undefined) {
                 const response = await axios.post(
@@ -112,13 +114,14 @@ export const createSale = createAsyncThunk<
                     {
                         params: {
                             table: "sales",
-                            OrgId: sale.myOrg.id,
+                            OrgId: sale.org.id,
                             CounterpartyId: sale.counterparty.id,
                         },
                     }
                 );
 
                 const responseInfo = await response.data;
+                console.log(responseInfo);
 
                 if (responseInfo.created) {
                     const { id: OrgId } = getState().orgsReducer.org;
@@ -129,6 +132,8 @@ export const createSale = createAsyncThunk<
                 return responseInfo.created;
             }
         } catch (error) {
+            console.log(error);
+
             return rejectWithValue("Server Response Error");
         }
     }

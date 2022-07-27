@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useFilter } from "../../components/waybills-service/waybills/service/hooks/useFilter.js";
+import Invoices from "../../components/waybills-service/waybills/Invoices.jsx";
+import { useFilter } from "../../components/waybills-service/waybills/service/hooks/useFilter";
+import { deleteSaleBySaleId } from "../../redux/actions/SalesAction";
+import { useTypedSelector } from "../../redux/hooks/hooks";
 import MyLink from "../../UI/link/MyLink.jsx";
 import classes from "./styles/sales.module.css";
-import { useTypedSelector } from "../../redux/hooks/hooks";
-import Invoices from "../../components/waybills-service/waybills/Invoices.jsx";
-import { deleteSaleBySaleId } from "../../redux/actions/SalesAction";
 
 export default function Sales() {
     const { org } = useTypedSelector((state) => state.orgsReducer);

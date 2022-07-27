@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./reducers/authSlice";
-import orgsReducer from "./reducers/orgsSlice";
-import userReducer from "./reducers/userSlice";
 import counterpartyReducer from "./reducers/counterpartiesSlice";
 import invoicesReducer from "./reducers/InvoiceSlice";
+import orgsReducer from "./reducers/orgsSlice";
+import userReducer from "./reducers/userSlice";
 
 const store = configureStore({
     reducer: {

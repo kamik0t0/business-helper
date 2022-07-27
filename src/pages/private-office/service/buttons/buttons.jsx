@@ -1,8 +1,8 @@
 import { useContext, useMemo } from "react";
-import classes from "./styles/buttons.module.css";
-import MyButton from "../../../../UI/input/MyButton/MyButton.jsx";
 import { ModalContext } from "../../../../blocks/content/Main.jsx";
-import { modalManager } from "../../../../UI/modal/service/handlers/modal-control.js";
+import MyButton from "../../../../UI/input/MyButton/MyButton.jsx";
+import { modalManager } from "../../../../UI/modal/service/handlers/modal-control";
+import classes from "./styles/buttons.module.css";
 
 const Buttons = () => {
     const { setModalAdd, setModalRead, setModalUpdate, setModalDelete } =

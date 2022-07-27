@@ -9,7 +9,7 @@ export default function ShowRequisite({ requisite }) {
             {requisite !== null && (
                 <div className={classes.content}>
                     <div className={classes.requisit_name}>
-                        {requisite.name}
+                        {requisite.inputFieldName}
                     </div>
                     <div className={classes.requisit_value}>
                         {requisite.value}

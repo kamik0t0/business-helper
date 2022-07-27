@@ -1,5 +1,5 @@
-interface item {
-    highlight: boolean;
+export interface item {
+    highlight?: boolean;
 }
 
 export function highlightPosition(

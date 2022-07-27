@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
-import classes from "./styles/delete-buttons.module.css";
-import MyButton from "../../../../../../UI/input/MyButton/MyButton.jsx";
-import { ModalContext } from "../../../../../../blocks/content/Main.jsx";
-import { modalManager } from "../../../../../../UI/modal/service/handlers/modal-control.js";
 import PropTypes from "prop-types";
+import { useContext } from "react";
+import { ModalContext } from "../../../../../../blocks/content/Main.jsx";
+import MyButton from "../../../../../../UI/input/MyButton/MyButton.jsx";
+import { modalManager } from "../../../../../../UI/modal/service/handlers/modal-control";
+import classes from "./styles/delete-buttons.module.css";
 
 export default function Buttons({ deleteOrg }) {
     const { setModalDelete } = useContext(ModalContext);

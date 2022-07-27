@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IInvoice, IPurchaseItem } from "../../interfaces/invoice";
+import { IInvoice, IInvoiceItem } from "../../interfaces/invoice";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 
@@ -25,7 +25,7 @@ export const getPurchasesByOrgId = createAsyncThunk<
 });
 
 export const getPurchaseItemsBySaleId = createAsyncThunk<
-    IPurchaseItem[],
+    IInvoiceItem[],
     number,
     { rejectValue: string }
 >(
@@ -101,7 +101,7 @@ interface createInfo {
 export const createPurchase = createAsyncThunk<
     createInfo,
     // добавить описание обязательны полей для обновляемой накладной
-    { myOrg: { id: number }; counterparty: { id: number } },
+    { org: { id: number }; counterparty: { id: number } },
     IThunkConfig
 >(
     "purchases/createPurchase",
@@ -114,7 +114,7 @@ export const createPurchase = createAsyncThunk<
                     {
                         params: {
                             table: "purchases",
-                            OrgId: purchase.myOrg.id,
+                            OrgId: purchase.org.id,
                             CounterpartyId: purchase.counterparty.id,
                         },
                     }

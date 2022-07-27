@@ -1,14 +1,19 @@
 import { useCallback } from "react";
-import { InvoiceItem } from "../../../../../utils/InvoiceItemClass";
+import { IEvent } from "../../../../../interfaces/event";
+import { IInvoiceItem } from "../../../../../interfaces/invoice";
 import { useTypedSelector } from "../../../../../redux/hooks/hooks";
+import { InvoiceItem } from "../../../../../utils/InvoiceItemClass";
 
-export function usePositions(positions, setPositions) {
+export function usePositions(
+    positions: IInvoiceItem[],
+    setPositions: ([]) => any
+) {
     const { InvoicePositionIndex } = useTypedSelector(
         (state) => state.invoicesReducer
     );
 
     const addPosition = useCallback(
-        (event) => {
+        (event: IEvent) => {
             event.preventDefault();
             const arr = positions;
             arr.push(new InvoiceItem(false, null, arr.length + 1));
@@ -18,18 +23,14 @@ export function usePositions(positions, setPositions) {
     );
 
     const deletePosition = useCallback(
-        (event) => {
-            console.log(InvoicePositionIndex);
+        (event: IEvent) => {
             event.preventDefault();
             const arr = [...positions];
-            arr.splice(InvoicePositionIndex, 1);
+            InvoicePositionIndex && arr.splice(InvoicePositionIndex, 1);
             setPositions([...arr]);
         },
         [InvoicePositionIndex, positions.length]
     );
 
-    return {
-        addPosition,
-        deletePosition,
-    };
+    return [addPosition, deletePosition];
 }

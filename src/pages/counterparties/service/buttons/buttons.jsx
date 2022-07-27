@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./styles/buttons.module.css";
 import MyButton from "../../../../UI/input/MyButton/MyButton.jsx";
 import { ModalContext } from "../../../../blocks/content/Main.jsx";
-import { modalManager } from "../../../../UI/modal/service/handlers/modal-control.js";
+import { modalManager } from "../../../../UI/modal/service/handlers/modal-control";
 
 export default function Buttons() {
     const navigate = useNavigate();

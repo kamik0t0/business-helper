@@ -1,11 +1,11 @@
-import classes from "./styles/read-org.module.css";
+import PropTypes from "prop-types";
 import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import ShowRequisite from "./service/components/ShowRequisite.jsx";
 import { useReadOrg } from "./service/hooks/useReadOrg";
-import PropTypes from "prop-types";
+import classes from "./styles/read-org.module.css";
 
-export default function ReadOrg({ ORG }) {
-    const [hideModal, OrgData] = useReadOrg(ORG);
+export default function ReadOrg({ org }) {
+    const [hideModal, OrgData] = useReadOrg(org);
     return (
         <>
             {OrgData === null ? (
@@ -31,5 +31,5 @@ export default function ReadOrg({ ORG }) {
 }
 
 ReadOrg.propTypes = {
-    ORG: PropTypes.object,
+    org: PropTypes.object,
 };

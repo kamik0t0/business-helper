@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import { IOrg } from "../../interfaces/organization";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 import { setUserOrg } from "../reducers/orgsSlice";
-import axios from "axios";
 
 export const getOrgsByUserId = createAsyncThunk<
     IOrg[],

@@ -1,7 +1,7 @@
 import classes from "./styles/modal.module.css";
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
-import { modalManager } from "./service/handlers/modal-control.js";
+import { modalManager } from "./service/handlers/modal-control";
 
 export default function Modal({ size, active, setActive, children }) {
     const [_, hideModal] = modalManager(setActive);

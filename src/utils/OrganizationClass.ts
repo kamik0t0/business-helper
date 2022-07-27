@@ -7,11 +7,11 @@ export class Organizaton implements ICounterparty {
     UserId: number | null;
     OrgId: number | undefined;
     inn: string | null;
-    kpp: string | null;
     opf: string | null;
     orgname: string | null;
     address: string | null;
-    director: string | null;
+    kpp?: string | null | undefined;
+    director?: string | null | undefined;
     // ogrn?: string | null | undefined;
     // bank?: string | null | undefined;
     // bik?: string | null | undefined;
@@ -29,11 +29,11 @@ export class Organizaton implements ICounterparty {
         UserId: number | null,
         OrgId: number | undefined,
         inn: string | null,
-        kpp: string | null,
         opf: string | null,
         orgname: string | null,
         address: string | null,
-        director: string | null
+        kpp?: string | null | undefined,
+        director?: string | null | undefined
         // ogrn?: string | null | undefined,
         // bank?: string | null | undefined,
         // bik?: string | null | undefined,
@@ -52,8 +52,8 @@ export class Organizaton implements ICounterparty {
         this.opf = opf || null;
         this.orgname = orgname || null;
         this.inn = inn || null;
-        this.kpp = kpp || null;
         this.address = address || null;
+        this.kpp = kpp || null;
         this.director = director || null;
         // this.ogrn = ogrn || null;
         // this.bank = bank || null;

@@ -6,7 +6,6 @@ import { IRequisiteView } from "../../../../../interfaces/requisite";
 import { isOrganization } from "../../../../../utils/isOrganization";
 import { Organizaton } from "../../../../../utils/OrganizationClass";
 import { assignRequisitesValues } from "../../../common/scripts/assignRequisitesValues";
-
 import { setInputLengthLimit } from "../handlers/setInputLengthLimit";
 import { setUpdateOrgValue } from "../handlers/setUpdateOrgValue";
 
@@ -32,10 +31,10 @@ export function usePatchRequisites(
             org.UserId,
             org?.OrgId,
             org.inn,
-            org.kpp,
             org.opf,
             org.orgname,
             org.address,
+            org.kpp,
             org.director
         );
     const UpdateData = useRef(UpdatedOrg);
@@ -46,8 +45,8 @@ export function usePatchRequisites(
 
     const getUpdateValue = (
         _event: IEvent,
-        inputField: string,
-        newValue: string
+        newValue: string,
+        inputField: string
     ) => setUpdateOrgValue(newValue, inputField, UpdateData);
 
     const PatchFields: IRequisiteView[] | null | boolean =
