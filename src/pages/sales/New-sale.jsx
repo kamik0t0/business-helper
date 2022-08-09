@@ -1,13 +1,13 @@
 // компонент создания накладной
 import { createSale } from "../../redux/actions/SalesAction";
-import CreateInvoice from "../create-invoice/Create-invoice";
+import InvoiceComponent from "../create-invoice/Invoice";
 
 export default function NewSale() {
     return (
         <>
-            <CreateInvoice
+            <InvoiceComponent
                 Info={["Продажа товаров: создание", "Покупатель:"]}
-                createAction={createSale}
+                action={createSale}
             />
         </>
     );

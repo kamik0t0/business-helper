@@ -1,14 +1,14 @@
 export interface ICounterparty {
-    id: number | null | undefined;
-    createdAt: string | undefined;
+    id: number | null;
+    createdAt: string | null;
     UserId: number | null;
-    OrgId: number | undefined;
+    OrgId: number | null;
     inn: string | null;
     opf: string | null;
     orgname: string | null;
     address: string | null;
-    kpp?: string | null | undefined;
-    director?: string | null | undefined;
+    kpp: string | null;
+    director: string | null;
     // ogrn: string;
     // bank: string;
     // bik: string;

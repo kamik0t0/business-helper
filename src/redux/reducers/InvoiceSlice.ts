@@ -1,5 +1,13 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+    createSlice,
+    PayloadAction,
+    current,
+    createSerializableStateInvariantMiddleware,
+    isPlainObject,
+} from "@reduxjs/toolkit";
 import { IInvoice, IInvoiceState } from "../../interfaces/invoice";
+import { InvoicePositionConstructor } from "../../utils/InvoiceItemClass";
+import { IInvoicePosition } from "../../interfaces/invoice";
 import {
     deletePurchaseByPurchaseId,
     getPurchaseItemsBySaleId,
@@ -18,7 +26,7 @@ const initialState: IInvoiceState = {
     purchases: [],
     sales: [],
     Invoice: null,
-    InvoiceItem: null,
+    InvoicePosition: [],
     InvoicePositionIndex: null,
     isLoading: false,
     error: null,
@@ -28,26 +36,30 @@ const InvoicesSlice = createSlice({
     name: "Invoices",
     initialState,
     reducers: {
-        setInvoice(state, action: PayloadAction<IInvoice>) {
+        setSales(state, action: PayloadAction<IInvoice[]>) {
+            state.sales = action.payload;
+        },
+        setPurchases(state, action: PayloadAction<IInvoice[]>) {
+            state.purchases = action.payload;
+        },
+        setInvoice(state, action: PayloadAction<IInvoice | null>) {
             if (action.payload == null) {
                 state.Invoice = null;
                 return;
             }
             state.Invoice = action.payload;
         },
-        // setSaleItems(state, action: PayloadAction<ISaleItems[]>) {
-        //     state.InvoiceItems = action.payload;
-        // },
-        setSales(state, action: PayloadAction<IInvoice[]>) {
-            state.sales = action.payload;
+        setInvoicePositions(state, action: PayloadAction<IInvoicePosition[]>) {
+            state.InvoicePosition = action.payload;
         },
-        // setPurchaseItems(state, action: PayloadAction<IPurchaseItems[]>) {
-        //     state.InvoiceItems = action.payload;
-        // },
-        setPurchases(state, action: PayloadAction<IInvoice[]>) {
-            state.purchases = action.payload;
+        addInvoicePosition(state, action: PayloadAction<IInvoicePosition>) {
+            state.InvoicePosition?.push(action.payload);
         },
-        setPosition(state, action: PayloadAction<number>) {
+        deleteInvoicePosition(state, action: PayloadAction<number>) {
+            const number = action.payload;
+            state.InvoicePosition?.splice(number, 1);
+        },
+        setPositionNumber(state, action: PayloadAction<number>) {
             state.InvoicePositionIndex = action.payload;
         },
     },
@@ -60,7 +72,7 @@ const InvoicesSlice = createSlice({
             state.isLoading = true;
         });
         builder.addCase(getSaleItemsBySaleId.fulfilled, (state, action) => {
-            state.InvoiceItem = action.payload;
+            state.InvoicePosition = action.payload;
             state.isLoading = false;
         });
         builder.addCase(getPurchasesByOrgId.fulfilled, (state, action) => {
@@ -71,7 +83,7 @@ const InvoicesSlice = createSlice({
             state.isLoading = true;
         });
         builder.addCase(getPurchaseItemsBySaleId.fulfilled, (state, action) => {
-            state.InvoiceItem = action.payload;
+            state.InvoicePosition = action.payload;
         });
         builder.addCase(getSaleItemsBySaleId.pending, (state, action) => {
             state.isLoading = true;
@@ -110,7 +122,10 @@ export const {
     setInvoice,
     setSales,
     setPurchases,
-    setPosition,
+    setPositionNumber,
+    setInvoicePositions,
+    addInvoicePosition,
+    deleteInvoicePosition,
     // setSaleItems,
     // setPurchaseItems,
 } = InvoicesSlice.actions;

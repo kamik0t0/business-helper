@@ -1,39 +1,128 @@
-export interface IInvoice {
-    id: number;
+export class InvoiceConstructor implements IInvoice {
+    id: number | null;
+    counterpartyId: number | null;
+    OrgId: number | null;
+    orgname: string | null;
+    waybill_date: string | null;
+    inn: string | null;
+    kpp: string | null;
+    address: string | null;
+    opf: string | null;
+    // bank: string;
+    // bik: string;
+    // korr: string;
+    // acc: string;
+    cl_orgname: string | null;
+    cl_inn: string | null;
+    cl_kpp: string | null;
+    cl_opf: string | null;
+    cl_address: string | null;
+    // cl_bank: string;
+    // cl_bik: string;
+    // cl_korr: string;
+    // cl_acc: string;
+    positions: IInvoicePosition[];
+    summ: number;
+    nds: number;
+    total: number;
     createdAt: string;
-    counterpatyId: number;
-    orgname: string;
-    inn: string;
-    kpp: string;
-    bank: string;
-    bik: string;
-    korr: string;
-    acc: string;
-    address: string;
-    opf: string;
-    cl_orgname: string;
-    cl_inn: string;
-    cl_kpp: string;
-    cl_bank: string;
-    cl_bik: string;
-    cl_korr: string;
-    cl_acc: string;
-    cl_address: string;
-    waybill_date: string;
+    highlight?: boolean;
+
+    constructor(
+        id: number | null,
+        counterpartyId: number | null,
+        OrgId: number | null,
+        orgname: string | null,
+        waybill_date: string | null,
+        inn: string | null,
+        kpp: string | null,
+        address: string | null,
+        opf: string | null,
+        // bank: string,
+        // bik: string,
+        // korr: string,
+        // acc: string,
+        cl_orgname: string | null,
+        cl_inn: string | null,
+        cl_kpp: string | null,
+        cl_opf: string | null,
+        cl_address: string | null,
+        // cl_bank: string,
+        // cl_bik: string,
+        // cl_korr: string,
+        // cl_acc: string,
+        positions: IInvoicePosition[],
+        summ: number,
+        nds: number,
+        total: number,
+        createdAt: string,
+        highlight?: boolean
+    ) {
+        this.id = id || null;
+        this.counterpartyId = counterpartyId;
+        this.OrgId = OrgId;
+        this.orgname = orgname;
+        this.waybill_date = waybill_date;
+        this.inn = inn;
+        this.kpp = kpp;
+        this.address = address;
+        this.opf = opf;
+        // this.bank = bank;
+        // this.bik = bik;
+        // this.korr = korr;
+        // this.acc = acc;
+        this.cl_orgname = cl_orgname;
+        this.cl_inn = cl_inn;
+        this.cl_kpp = cl_kpp;
+        this.cl_opf = cl_opf;
+        this.cl_address = cl_address;
+        // this.cl_bank = cl_bank;
+        // this.cl_bik = cl_bik;
+        // this.cl_korr = cl_korr;
+        // this.cl_acc = cl_acc
+        this.positions = positions;
+        this.summ = summ || 0;
+        this.nds = nds || 0;
+        this.total = total || 0;
+        this.createdAt = createdAt;
+    }
+}
+
+export interface IInvoice {
+    id: number | null;
+    counterpartyId: number | null;
+    OrgId: number | null;
+    orgname: string | null;
+    waybill_date: string | null;
+    inn: string | null;
+    kpp: string | null;
+    address: string | null;
+    opf: string | null;
+    // bank: string;
+    // bik: string;
+    // korr: string;
+    // acc: string;
+    cl_orgname: string | null;
+    cl_inn: string | null;
+    cl_kpp: string | null;
+    cl_opf: string | null;
+    cl_address: string | null;
+    // cl_bank: string;
+    // cl_bik: string;
+    // cl_korr: string;
+    // cl_acc: string;
+    positions: IInvoicePosition[];
     nds: number;
     summ: number;
     total: number;
-    cl_opf: string;
-    OrgId: number;
-    cl_waybill_number: string;
+    createdAt: string;
     highlight?: boolean;
-    [prop: string]: string | number | undefined | boolean;
+    [prop: string | number]: any;
 }
 
-export interface IInvoiceItem {
+export interface IInvoicePosition {
     id: number | null;
-    createdAt?: string | null;
-    item_number: number;
+    item_number: number | null;
     nomenclature: string;
     quantity: number;
     price: number;
@@ -41,23 +130,18 @@ export interface IInvoiceItem {
     nds_percent: number;
     nds: number;
     total: number;
-    highlight?: boolean;
-    SaleId?: number | null | undefined;
+    createdAt?: string;
+    highlight?: boolean | undefined;
+    SaleId?: number | null;
     PurchaseId?: number | null | undefined;
     [prop: string]: string | number | undefined | null | boolean;
 }
 
-// export interface ISaleItem extends IInvoiceItem {
-//     SaleId?: number | null | undefined;
-// }
-// export interface IPurchaseItem extends IInvoiceItem {
-//     PurchaseId?: number | null | undefined;
-// }
 export interface IInvoiceState {
     purchases: IInvoice[];
     sales: IInvoice[];
     Invoice: IInvoice | null;
-    InvoiceItem: IInvoiceItem[] | null;
+    InvoicePosition: IInvoicePosition[] | null;
     InvoicePositionIndex: number | null;
     isLoading: boolean;
     error: string | null;

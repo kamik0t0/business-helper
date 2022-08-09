@@ -8,7 +8,7 @@ const isEqual = (prev, next) => {
     return false;
 };
 
-const MyLink = memo(({ children, path, style }) => {
+const CustomLink = memo(({ children, path, style }) => {
     return (
         <>
             <Link style={style} to={path} className={classes.link}>
@@ -18,10 +18,10 @@ const MyLink = memo(({ children, path, style }) => {
     );
 }, isEqual);
 
-MyLink.propTypes = {
+CustomLink.propTypes = {
     children: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
     style: PropTypes.object,
 };
 
-export default MyLink;
+export default CustomLink;

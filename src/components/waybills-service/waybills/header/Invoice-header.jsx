@@ -2,12 +2,6 @@ import classes from "../styles/waybill-list.module.css";
 import { memo } from "react";
 import PropTypes from "prop-types";
 
-const areEqual = (prev, next) => {
-    if (next.info === prev.info && next.sort.sortOrder === prev.sort.sortOrder)
-        return true;
-    return false;
-};
-
 const InvoiceHeader = memo(({ sort, info }) => {
     return (
         <div className={classes.waybills_list_header}>
@@ -37,7 +31,7 @@ const InvoiceHeader = memo(({ sort, info }) => {
             </div>
         </div>
     );
-}, areEqual);
+});
 
 InvoiceHeader.propTypes = {
     sort: PropTypes.object.isRequired,

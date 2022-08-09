@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import classes from "./styles/my-button.module.css";
 import PropTypes from "prop-types";
 
-const MyButton = memo(({ children, style, ...props }) => {
+const Button = memo(({ children, style, ...props }) => {
     return (
         <button style={style} className={classes.button} {...props}>
             {children}
@@ -10,9 +10,9 @@ const MyButton = memo(({ children, style, ...props }) => {
     );
 });
 
-MyButton.propTypes = {
+Button.propTypes = {
     children: PropTypes.string.isRequired,
     style: PropTypes.object,
 };
 
-export default MyButton;
+export default Button;

@@ -8,10 +8,12 @@ export function sortByDate(
 ): IInvoice[] {
     return sortOrder
         ? invoices.sort(
-              (a, b) => Date.parse(a.waybill_date) - Date.parse(b.waybill_date)
+              (a, b) =>
+                  Date.parse(a.waybill_date!) - Date.parse(b.waybill_date!)
           )
         : invoices.sort(
-              (a, b) => Date.parse(b.waybill_date) - Date.parse(a.waybill_date)
+              (a, b) =>
+                  Date.parse(b.waybill_date!) - Date.parse(a.waybill_date!)
           );
 }
 // - контрагенту
@@ -20,8 +22,8 @@ export function sortByCounterparty(
     sortOrder: boolean
 ): IInvoice[] {
     return sortOrder
-        ? invoices.sort((a, b) => a.cl_orgname.localeCompare(b.cl_orgname))
-        : invoices.sort((a, b) => b.cl_orgname.localeCompare(a.cl_orgname));
+        ? invoices.sort((a, b) => a.cl_orgname!.localeCompare(b.cl_orgname!))
+        : invoices.sort((a, b) => b.cl_orgname!.localeCompare(a.cl_orgname!));
 }
 // - сумме
 export function sortBySumm(
@@ -35,6 +37,6 @@ export function sortBySumm(
 // - id
 export function sortById(invoices: IInvoice[], sortOrder: boolean): IInvoice[] {
     return sortOrder
-        ? invoices.sort((a, b) => a.id - b.id)
-        : invoices.sort((a, b) => b.id - a.id);
+        ? invoices.sort((a, b) => a.id! - b.id!)
+        : invoices.sort((a, b) => b.id! - a.id!);
 }

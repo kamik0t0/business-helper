@@ -1,74 +1,65 @@
+import PropTypes from "prop-types";
 import { useContext, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import MyLink from "../../../../UI/link/MyLink.jsx";
-import MySelect from "../../../../UI/input/MySelect/MySelect.jsx";
-import MyInput from "../../../../UI/input/MyInput/MyInput.jsx";
-import classes from "../styles/waybill-list.module.css";
 import { ModalContext } from "../../../../blocks/content/Main";
+import { useTypedSelector } from "../../../../redux/hooks/hooks";
+import TextField from "../../../../UI/input/TextField/TextField";
+import Select from "../../../../UI/input/Select/Select";
+import Link from "../../../../UI/Link/Link.jsx";
 import { modalManager } from "../../../../UI/modal/service/handlers/modal-control";
-import PropTypes from "prop-types";
+import classes from "../styles/waybill-list.module.css";
+import { useInvoice } from "../waybill/hooks/useInvoice";
+import { filterColumns } from "./utils/filterColumns";
 
-const InteractionHeader = ({
-    column,
-    setColumn,
-    filter,
-    info,
-    params,
-    INVOICE,
-}) => {
+const InteractionHeader = ({ column, setColumn, filter, info, params }) => {
+    const { Invoice } = useTypedSelector((state) => state.invoicesReducer);
     const { setModalDelete, setModalUpdate } = useContext(ModalContext);
     const [showDeleteModal] = modalManager(setModalDelete);
     const [showUpdateModal] = modalManager(setModalUpdate);
     const { pathname } = useLocation();
+    const [_, createNewInvoice] = useInvoice();
 
-    const columns = useMemo(
-        () => [
-            {
-                value: "cl_orgname",
-                name: info[1],
-            },
-            { value: "total", name: "Сумме" },
-        ],
-        [info[1]]
-    );
+    const columns = useMemo(() => filterColumns(info[1]), [info]);
 
     return (
         <div className={classes.waybills_header}>
-            <MyLink path={pathname + "/createwaybill"}>
-                <div className={classes.waybills_header_add}>
+            <Link path={pathname + "/createwaybill"}>
+                <div
+                    onClick={createNewInvoice}
+                    className={classes.waybills_header_add}
+                >
                     <span></span>
                 </div>
-            </MyLink>
+            </Link>
             <div
                 onClick={showDeleteModal}
                 className={classes.waybills_header_delete}
             >
                 <span></span>
             </div>
-            <MyLink path={INVOICE !== null && `${pathname}/${INVOICE.id}`}>
+            <Link path={Invoice !== null && `${pathname}/${Invoice.id}`}>
                 <div className={classes.waybills_header_redact}>
                     <div
-                        onClick={INVOICE === null && showUpdateModal}
+                        onClick={Invoice === null && showUpdateModal}
                         className={classes.waybills_header_redact_icon}
                     ></div>
                 </div>
-            </MyLink>
+            </Link>
 
             <div className={classes.waybills_header_filter}>
                 <div className={classes.waybills_header_filter_name}>
                     Поиск по:
-                    <MySelect
+                    <Select
                         defaultValue="counterparty"
                         func={setColumn}
                         column={column}
                         options={columns}
                     />
                 </div>
-                <MyInput
+                <TextField
                     id="filter_input"
                     placeholder="Поиск..."
-                    type="search"
-                    getValue={filter}
+                    onChange={filter}
                     defaultValue={params}
                 />
             </div>
@@ -80,7 +71,8 @@ const InteractionHeader = ({
 export default InteractionHeader;
 
 InteractionHeader.propTypes = {
-    filterColumn: PropTypes.func,
+    column: PropTypes.string.isRequired,
+    setColumn: PropTypes.func.isRequired,
     filter: PropTypes.func.isRequired,
     info: PropTypes.array.isRequired,
     params: PropTypes.string,

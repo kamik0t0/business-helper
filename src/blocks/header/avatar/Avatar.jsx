@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { useTypedDispatch, useTypedSelector } from "../../../redux/hooks/hooks";
-import classes from "./styles/avatar.module.css";
-import MyLink from "../../../UI/link/MyLink.jsx";
 import { setAuth } from "../../../redux/reducers/authSlice";
+import Link from "../../../UI/Link/Link.jsx";
+import classes from "./styles/avatar.module.css";
 
 export default function Avatar() {
     const isAuth = useTypedSelector((state) => state.authReducer.isAuth);
@@ -52,23 +52,23 @@ export default function Avatar() {
                     onClick={hideIconMenu}
                     className={classes.header_auth_menu_item}
                 >
-                    <MyLink
+                    <Link
                         style={{ textDecoration: "none", fontSize: "1em" }}
                         path="/private"
                     >
                         Личный кабинет
-                    </MyLink>
+                    </Link>
                 </div>
                 <div
                     onClick={auth_Handler}
                     className={classes.header_auth_menu_item}
                 >
-                    <MyLink
+                    <Link
                         style={{ textDecoration: "none", fontSize: "1em" }}
                         path="/"
                     >
                         Выйти
-                    </MyLink>
+                    </Link>
                 </div>
             </div>
             <div id="enter" className={classes.displaynone} ref={enter}>
@@ -76,12 +76,12 @@ export default function Avatar() {
                     onClick={hideIconMenu}
                     className={classes.header_auth_menu_item}
                 >
-                    <MyLink
+                    <Link
                         style={{ textDecoration: "none", fontSize: "1em" }}
                         path="/login"
                     >
                         Войти
-                    </MyLink>
+                    </Link>
                 </div>
             </div>
         </div>

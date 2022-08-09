@@ -1,10 +1,10 @@
+import PropTypes from "prop-types";
 import { useContext } from "react";
-import classes from "./styles/org-buttons.module.css";
-import MyButton from "../../../../../UI/input/MyButton/MyButton.jsx";
 import { ModalContext } from "../../../../../blocks/content/Main.jsx";
+import Button from "../../../../../UI/input/Button/Button";
 import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control";
 import { clear } from "../../../../../utils/clear";
-import PropTypes from "prop-types";
+import classes from "./styles/org-buttons.module.css";
 
 export default function Buttons({ create }) {
     const { setModalAdd } = useContext(ModalContext);
@@ -13,9 +13,9 @@ export default function Buttons({ create }) {
     return (
         <>
             <div className={classes.controls}>
-                <MyButton onClick={create}>Сохранить</MyButton>
-                <MyButton onClick={clear}>Очистить</MyButton>
-                <MyButton onClick={hideModal}>Закрыть</MyButton>
+                <Button onClick={create}>Сохранить</Button>
+                <Button onClick={clear}>Очистить</Button>
+                <Button onClick={hideModal}>Закрыть</Button>
             </div>
         </>
     );

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useContext } from "react";
 import { ModalContext } from "../../../../../../blocks/content/Main.jsx";
-import MyButton from "../../../../../../UI/input/MyButton/MyButton.jsx";
+import Button from "../../../../../../UI/input/Button/Button.jsx";
 import { modalManager } from "../../../../../../UI/modal/service/handlers/modal-control";
 import classes from "./styles/delete-buttons.module.css";
 
@@ -12,8 +12,8 @@ export default function Buttons({ deleteOrg }) {
     return (
         <>
             <div className={classes.controls}>
-                <MyButton onClick={deleteOrg}>Yes</MyButton>
-                <MyButton onClick={hideModal}>No</MyButton>
+                <Button onClick={deleteOrg}>Yes</Button>
+                <Button onClick={hideModal}>No</Button>
             </div>
         </>
     );

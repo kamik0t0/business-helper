@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
-import React from "react";
-import MySelect from "../../../UI/input/MySelect/MySelect.jsx";
+import React, { memo } from "react";
+import Select from "../../../UI/input/Select/Select.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
-import Buttons from "./service/components/create-buttons.jsx";
-import CreateInputs from "./service/components/create-inputs.jsx";
+import Buttons from "./service/components/RequisiteInputField.jsx";
+import RequisiteInputFields from "./service/components/RequisiteInputFields.jsx";
 import { useCreateOrg } from "./service/hooks/useCreateOrg";
 import { useCreateRequisites } from "./service/hooks/useCreateRequisites";
 import classes from "./styles/create-org.module.css";
+
+export const TextFieldContext = React.createContext();
 
 const OPFoptions = [
     "Выберите организационно-правовую форму",
@@ -14,52 +16,51 @@ const OPFoptions = [
     "Индивидуальный предприниматель",
 ];
 
-export const CreateContext = React.createContext();
-
-export default function CreateOrg({
-    UserId,
-    OrgId = undefined,
-    action,
-    isLoading,
-}) {
+const CreateOrg = memo(({ UserId, OrgId = null, action, isLoading }) => {
     const RequisitesAPI = useCreateRequisites(UserId, OrgId);
-    const create = useCreateOrg(action, RequisitesAPI.ORG);
-
-    const CreateFuncs = {
-        getInputLengthLimit: RequisitesAPI.getInputLengthLimit,
-        getInputValue: RequisitesAPI.getInputValue,
-    };
+    const create = useCreateOrg(
+        action,
+        RequisitesAPI.orgReqs,
+        RequisitesAPI.CreateFields
+    );
 
     return (
         <>
             <div className={classes.create}>
                 <div className={classes.name}>Введите реквизиты</div>
-                <MySelect
+                <Select
                     name="Выберите ОПФ"
                     style={{ color: "#F0EBDD" }}
                     defaultValue={["Выберите организационно-правовую форму"][0]}
                     options={OPFoptions}
-                    func={RequisitesAPI.getOPF}
+                    onInput={RequisitesAPI.updateOPFProperty}
+                    onChange={RequisitesAPI.switchInputFields}
                 />
                 {isLoading ? (
                     <Loader />
                 ) : (
-                    <CreateContext.Provider value={CreateFuncs}>
-                        <CreateInputs
-                            CreateFields={RequisitesAPI.CreateFields}
-                            getRequisiteValue={RequisitesAPI.getRequisiteValue}
+                    <TextFieldContext.Provider
+                        value={{
+                            getInputValue: RequisitesAPI.getInputValue,
+                            getInputIndex: RequisitesAPI.getInputIndex,
+                        }}
+                    >
+                        <RequisiteInputFields
+                            RequisiteInputFields={RequisitesAPI.CreateFields}
                         />
-                    </CreateContext.Provider>
+                    </TextFieldContext.Provider>
                 )}
                 <Buttons create={create} />
             </div>
         </>
     );
-}
+});
+
+export default CreateOrg;
 
 CreateOrg.propTypes = {
     UserId: PropTypes.number.isRequired,
     OrgId: PropTypes.number,
     action: PropTypes.func,
-    isLoading: PropTypes.func,
+    isLoading: PropTypes.bool,
 };

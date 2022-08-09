@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
+import Button from "../../../UI/input/Button/Button.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import PatchFields from "../common/components/PatchRequisiteFieldsWrapper";
 import { usePatchOrg } from "./service/hooks/usePatchOrg";
@@ -37,10 +37,8 @@ export default function PatchOrg({ org = null, action, isLoading }) {
                     )}
 
                     <div className={classes.buttons}>
-                        <MyButton onClick={PatchAPI.update}>Обновить</MyButton>
-                        <MyButton onClick={PatchAPI.hideModal}>
-                            Закрыть
-                        </MyButton>
+                        <Button onClick={PatchAPI.update}>Обновить</Button>
+                        <Button onClick={PatchAPI.hideModal}>Закрыть</Button>
                     </div>
                 </div>
             )}

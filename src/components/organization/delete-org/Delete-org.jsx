@@ -1,5 +1,5 @@
 import classes from "./styles/delete-org.module.css";
-import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
+import Button from "../../../UI/input/Button/Button.jsx";
 import Loader from "../../../UI/Loader/Loader.jsx";
 import Buttons from "./service/components/delete-buttons/Delete-buttons.jsx";
 import { useDeleteOrg } from "./service/hooks/useDeleteOrg";
@@ -15,7 +15,7 @@ export default function DeleteOrg({ id, orgname, action, isLoading }) {
                     <div className={classes.noorg__text}>
                         Организация не выбрана
                     </div>
-                    <MyButton onClick={hideModal}>Закрыть</MyButton>
+                    <Button onClick={hideModal}>Закрыть</Button>
                 </div>
             ) : (
                 <div className={classes.delete}>
@@ -33,4 +33,5 @@ DeleteOrg.propTypes = {
     id: PropTypes.number,
     orgname: PropTypes.string,
     action: PropTypes.func,
+    isLoading: PropTypes.bool,
 };

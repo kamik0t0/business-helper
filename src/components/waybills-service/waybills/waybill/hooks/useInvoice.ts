@@ -3,8 +3,10 @@ import {
     useTypedSelector,
 } from "../../../../../redux/hooks/hooks";
 import { setInvoice } from "../../../../../redux/reducers/InvoiceSlice";
-import { highlightPosition } from "../../../../../utils/highlight";
+import { highlight } from "../../../../../utils/highlight";
 import { IInvoice } from "../../../../../interfaces/invoice";
+import { InvoiceConstructor } from "../../../../../interfaces/invoice";
+import { makeDefaultDate } from "../../../common/scripts";
 
 export const useInvoice = (
     invoiceIdnex: number,
@@ -13,11 +15,10 @@ export const useInvoice = (
     invoices: IInvoice[]
 ) => {
     const dispatch = useTypedDispatch();
-    const prevInvoice = useTypedSelector(
-        (state) => state.invoicesReducer.Invoice
+    const { counterparty: cl } = useTypedSelector(
+        (state) => state.counterpartyReducer
     );
-
-    if (prevInvoice && prevInvoice.id === invoice.id) return;
+    const { org } = useTypedSelector((state) => state.orgsReducer);
 
     const selectInvoice = () => {
         const { payload: highlightedInvoice } = dispatch(
@@ -27,13 +28,45 @@ export const useInvoice = (
                 })
             )
         );
-
-        const invoicesWithHighlight = highlightPosition(
-            invoiceIdnex,
-            highlightedInvoice,
-            [...invoices]
-        ) as IInvoice[];
-        action(invoicesWithHighlight);
+        if (highlightedInvoice !== null) {
+            const invoicesWithHighlight = highlight(
+                invoiceIdnex,
+                highlightedInvoice,
+                [...invoices]
+            ) as IInvoice[];
+            action(invoicesWithHighlight);
+        }
     };
-    return selectInvoice;
+
+    const createNewInvoice = () =>
+        dispatch(
+            setInvoice(
+                Object.assign(
+                    {},
+                    new InvoiceConstructor(
+                        null,
+                        cl?.id || null,
+                        org?.id || null,
+                        org?.orgname || null,
+                        makeDefaultDate(),
+                        org?.inn || null,
+                        org?.kpp || null,
+                        org?.address || null,
+                        org?.opf || null,
+                        cl?.orgname || null,
+                        cl?.inn || null,
+                        cl?.kpp || null,
+                        cl?.opf || null,
+                        cl?.address || null,
+                        [],
+                        0,
+                        0,
+                        0,
+                        ""
+                    )
+                )
+            )
+        );
+
+    return [selectInvoice, createNewInvoice];
 };

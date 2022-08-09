@@ -1,12 +1,15 @@
 import { useRef, useContext, useState, useEffect } from "react";
 import { PatchContext } from "../../Patch-org";
 import { setInputFocus } from "../handlers/set-focus";
-import { IRequisiteView } from "../../../../../interfaces/requisite";
+import { IRequisiteViewWithLength } from "../../../../../interfaces/requisite";
 import { IEvent } from "../../../../../interfaces/event";
 import { MutableRefObject } from "react";
 import { digitInputValidator } from "../../../../../utils/digitInputValidator";
 
-export function usePatchField(requisite: IRequisiteView, fieldIndex: number) {
+export function usePatchField(
+    requisite: IRequisiteViewWithLength,
+    fieldIndex: number
+) {
     const [focus, setFocus] = useState(false);
     const [inputError, setInputError] = useState(false);
     const { getUpdateValue, getInputLengthLimit } = useContext(PatchContext);
@@ -15,13 +18,13 @@ export function usePatchField(requisite: IRequisiteView, fieldIndex: number) {
     const prevValue: MutableRefObject<HTMLInputElement | undefined> = useRef();
 
     const isInputError = (event: IEvent) =>
-        digitInputValidator(
-            event,
-            requisite.isNumber,
-            requisite?.inputValueLength
-        )
-            ? setInputError(true)
-            : setInputError(false);
+        // digitInputValidator(
+        //     requisite.value,
+        //     event,
+        //     requisite.isNumber,
+        //     requisite?.inputValueLength
+        // )
+        1 ? setInputError(true) : setInputError(false);
 
     const Ok = (event: IEvent) => {
         getInputLengthLimit(requisite.inputValueLength);

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IInvoice, IInvoiceItem } from "../../interfaces/invoice";
+import { IInvoice, IInvoicePosition } from "../../interfaces/invoice";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 
@@ -25,7 +25,7 @@ export const getPurchasesByOrgId = createAsyncThunk<
 });
 
 export const getPurchaseItemsBySaleId = createAsyncThunk<
-    IInvoiceItem[],
+    IInvoicePosition[],
     number,
     { rejectValue: string }
 >(

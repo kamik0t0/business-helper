@@ -1,73 +1,61 @@
-import { MutableRefObject, useCallback, useRef } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router";
-import {
-    calculateInvoiceSummary,
-    getCounterpartyName,
-    getDate,
-    makeDefaultDate,
-} from "../../../components/waybills-service/common/scripts";
-import { ICounterparty } from "../../../interfaces/counterparty";
+import { getDate } from "../../../components/waybills-service/common/scripts";
 import { IEvent } from "../../../interfaces/event";
-import { IInvoiceItem } from "../../../interfaces/invoice";
-import { IInvoiceToSend } from "../../../interfaces/InvoiceToSend";
+import { IInvoice } from "../../../interfaces/invoice";
 import { useTypedDispatch, useTypedSelector } from "../../../redux/hooks/hooks";
+import { setInvoice } from "../../../redux/reducers/InvoiceSlice";
 
-export function useCreateInvoice(
-    positions: IInvoiceItem[],
-    counterparty: ICounterparty,
-    createAction: (object: IInvoiceToSend) => any
-) {
+export function useCreateInvoice(action: (object: IInvoice) => any) {
     const dispatch = useTypedDispatch();
     const navigate = useNavigate();
-
-    const { org } = useTypedSelector((state) => state.orgsReducer);
-
-    const CreateInvoice: MutableRefObject<IInvoiceToSend> = useRef({
-        waybill_date: makeDefaultDate(),
-        org: org,
-        counterparty: counterparty && counterparty,
-        OrgId: org?.id,
-    });
-
-    CreateInvoice.current.positions = positions;
-    CreateInvoice.current.summ = calculateInvoiceSummary(positions, "summ");
-    CreateInvoice.current.nds = calculateInvoiceSummary(positions, "nds");
-    CreateInvoice.current.total = calculateInvoiceSummary(positions, "total");
-
-    const create = useCallback(
-        async (event: IEvent) => {
-            event.preventDefault();
-            console.log(CreateInvoice.current);
-
-            await dispatch(createAction(CreateInvoice.current));
-            navigate(-1);
-        },
-        [dispatch, navigate, createAction]
+    const { counterparty: cl } = useTypedSelector(
+        (state) => state.counterpartyReducer
+    );
+    const { Invoice, InvoicePosition } = useTypedSelector(
+        (state) => state.invoicesReducer
     );
 
-    const setDate = useCallback((event: IEvent) => {
-        CreateInvoice.current.waybill_date = getDate(event);
-    }, []);
+    const create = async (event: IEvent) => {
+        event.preventDefault();
 
-    const setCounterpartyName = useCallback((event: IEvent) => {
-        if (CreateInvoice.current.counterparty !== undefined) {
-            CreateInvoice.current.counterparty.orgname =
-                getCounterpartyName(event);
+        if (Invoice !== null) {
+            const InvoiceToSend = Object.assign({}, Invoice, {
+                counterpartyId: cl?.id,
+                cl_orgname: cl?.orgname,
+                cl_inn: cl?.inn,
+                cl_kpp: cl?.kpp,
+                cl_opf: cl?.opf,
+                cl_address: cl?.address,
+                positions: InvoicePosition,
+            });
+
+            await dispatch(action(InvoiceToSend));
+            dispatch(setInvoice(null));
+            navigate(-1);
         }
-    }, []);
+    };
 
-    const defaultDate =
-        CreateInvoice.current.waybill_date != undefined &&
-        CreateInvoice.current.waybill_date.slice(0, -14);
+    const setDate = useCallback(
+        (event: IEvent) =>
+            dispatch(
+                setInvoice(
+                    Object.assign({}, Invoice, {
+                        waybill_date: getDate(event),
+                    })
+                )
+            ),
+        [Invoice, dispatch]
+    );
+
+    const counterpartyName = () => {
+        if (!cl?.orgname) return Invoice?.cl_orgname;
+        if (cl.orgname) return cl.orgname;
+    };
 
     return {
-        CreateInvoice,
         create,
-        defaultDate,
         setDate,
-        setCounterpartyName,
-        summ: CreateInvoice.current.summ,
-        NDS: CreateInvoice.current.nds,
-        total: CreateInvoice.current.total,
+        counterpartyName: counterpartyName(),
     };
 }

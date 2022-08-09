@@ -1,9 +1,9 @@
-import classes from "./styles/patch-fields.module.css";
-import MyButton from "../../../../../UI/input/MyButton/MyButton";
-import RequisiteInput from "../../../../../UI/input/RequisiteInput/RequisiteInput";
 import PropTypes from "prop-types";
-import { usePatchField } from "../../service/hooks/usePatchField";
+import Button from "../../../../../UI/input/Button/Button";
+import TextField from "../../../../../UI/input/TextField/TextField";
 import RequisiteFieldName from "../../../common/components/PatchRequisiteFieldName/PatchRequisiteFieldName";
+import { usePatchField } from "../../service/hooks/usePatchField";
+import classes from "./styles/patch-fields.module.css";
 
 const inlineButtonStyle = {
     width: "50px",
@@ -25,19 +25,20 @@ export default function PatchRequisiteField({ requisite, fieldIndex }) {
             {focus ? (
                 <div className={classes.fields__item}>
                     <div className={classes.redactable}>
-                        <RequisiteInput
+                        <TextField
                             ref={inputRef}
+                            type="text"
                             length={requisite.inputValueLength}
                             isNumber={requisite.isNumber}
                             defaultValue={defaultInputValue}
                             error={inputError}
-                            isInputError={isInputError}
+                            onChange={isInputError}
                         />
                         <div className={classes.buttons}>
-                            <MyButton onClick={Ok} style={inlineButtonStyle}>
+                            <Button onClick={Ok} style={inlineButtonStyle}>
                                 Ок
-                            </MyButton>
-                            <MyButton onClick={Cancel}>Отмена</MyButton>
+                            </Button>
+                            <Button onClick={Cancel}>Отмена</Button>
                         </div>
                     </div>
                 </div>

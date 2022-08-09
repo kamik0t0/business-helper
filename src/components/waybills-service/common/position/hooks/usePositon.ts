@@ -1,69 +1,89 @@
-import { InvoiceItem } from "../../../../../utils/InvoiceItemClass";
-import { highlightPosition } from "../../../../../utils/highlight";
+import { IEvent } from "../../../../../interfaces/event";
+import { IInvoicePosition } from "../../../../../interfaces/invoice";
 import {
     useTypedDispatch,
     useTypedSelector,
 } from "../../../../../redux/hooks/hooks";
-import { setPosition } from "../../../../../redux/reducers/InvoiceSlice";
-import { setInvoicePositionCalculations } from "../../scripts";
-import { IEvent } from "../../../../../interfaces/event";
-import { IInvoiceItem } from "../../../../../interfaces/invoice";
+import {
+    setInvoicePositions,
+    setPositionNumber,
+    setInvoice,
+} from "../../../../../redux/reducers/InvoiceSlice";
+import { highlight } from "../../../../../utils/highlight";
+import { assignDataToInvoice } from "../scripts/assignDataToInvoice";
+import { assignInvoiceSummary } from "../../scripts";
+import { createInvoiePosition } from "../../../../../utils/createInvoicePosition";
 
 export const usePosition = (
-    position: IInvoiceItem,
-    positionIndex: number,
-    setPositions: ([]) => any,
-    positions: IInvoiceItem[]
+    position: IInvoicePosition,
+    positionIndex: number
 ) => {
     const dispatch = useTypedDispatch();
-    const currentIndex = useTypedSelector(
-        (state) => state.invoicesReducer.InvoicePositionIndex
+    const { Invoice, InvoicePosition } = useTypedSelector(
+        (state) => state.invoicesReducer
     );
 
-    const getNomenclature = (event: IEvent): void =>
-        setPositions(
-            setInvoicePositionCalculations(
+    const getNomenclature = (event: IEvent): any => {
+        if (Invoice !== null && InvoicePosition !== null) {
+            console.log(event);
+
+            const positions: IInvoicePosition[] = assignDataToInvoice(
                 event,
+                InvoicePosition,
                 positionIndex,
-                [...positions],
                 "nomenclature"
-            )
-        );
-    const getQuantity = (event: IEvent): void =>
-        setPositions(
-            setInvoicePositionCalculations(
+            );
+            dispatch(setInvoicePositions(positions));
+        }
+    };
+    const getQuantity = (event: IEvent): void => {
+        if (Invoice !== null && InvoicePosition !== null) {
+            const positions: IInvoicePosition[] = assignDataToInvoice(
                 event,
+                InvoicePosition,
                 positionIndex,
-                [...positions],
                 "quantity"
-            )
-        );
-    const getPrice = (event: IEvent): void =>
-        setPositions(
-            setInvoicePositionCalculations(
+            );
+            dispatch(setInvoicePositions(positions));
+            dispatch(setInvoice(assignInvoiceSummary(Invoice, positions)));
+        }
+    };
+
+    const getPrice = (event: IEvent): void => {
+        if (Invoice !== null && InvoicePosition !== null) {
+            const positions: IInvoicePosition[] = assignDataToInvoice(
                 event,
+                InvoicePosition,
                 positionIndex,
-                [...positions],
                 "price"
-            )
-        );
+            );
+            dispatch(setInvoicePositions(positions));
+            dispatch(setInvoice(assignInvoiceSummary(Invoice, positions)));
+        }
+    };
 
     const selectPosition = (): void => {
-        if (currentIndex === positionIndex) return;
-        dispatch(setPosition(positionIndex));
+        dispatch(setPositionNumber(positionIndex));
 
-        const highlightedPosition = Object.assign(new InvoiceItem(), position, {
-            highlight: true,
-        });
-
-        setPositions(
-            highlightPosition(
-                positionIndex,
-                highlightedPosition,
-                [...positions],
-                true
-            )
+        const highlightedPosition = Object.assign(
+            {},
+            createInvoiePosition(),
+            position,
+            {
+                highlight: true,
+                item_number: positionIndex,
+            }
         );
+
+        if (InvoicePosition !== null) {
+            dispatch(
+                setInvoicePositions(
+                    highlight(positionIndex, highlightedPosition, [
+                        ...InvoicePosition,
+                    ])
+                )
+            );
+        }
     };
 
     return {

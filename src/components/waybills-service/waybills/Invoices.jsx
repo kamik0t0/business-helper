@@ -1,57 +1,51 @@
-import { useContext, useEffect } from "react";
-import classes from "./styles/waybill-list.module.css";
-import Modal from "../../../UI/modal/modal.jsx";
-import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
 import PropTypes from "prop-types";
-import DeleteInvoice from "../delete-waybill/DeleteInvoice.jsx";
+import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../../blocks/content/Main.jsx";
+import Button from "../../../UI/input/Button/Button.jsx";
+import Modal from "../../../UI/modal/modal.jsx";
 import { modalManager } from "../../../UI/modal/service/handlers/modal-control";
-import InvoiceHeader from "./header/Invoice-header.jsx";
+import DeleteInvoice from "../delete-waybill/DeleteInvoice.jsx";
 import InteractionHeader from "./header/Interaction-header.jsx";
-import InvoicesWrapper from "./waybills-wrapper.jsx";
+import InvoiceHeader from "./header/Invoice-header.jsx";
+import InvoicesWrapper from "./Invoices-wrapper.jsx";
+import { useFilter } from "./service/hooks/useFilter";
 import { useSort } from "./service/hooks/useSort";
-import { useTypedSelector } from "../../../redux/hooks/hooks";
+import classes from "./styles/waybill-list.module.css";
 
 const InlineModalStyles = { height: "25vh", width: "40vw" };
 
-const Invoices = ({
-    Info,
-    invoices,
-    setInvoices,
-    startSearch,
-    column,
-    setColumn,
-    filter,
-    deleteAction,
-}) => {
-    const { Invoice } = useTypedSelector((state) => state.invoicesReducer);
-
+const Invoices = ({ Info, INVOICES, deleteAction }) => {
+    const [invoices, setInvoices] = useState([...INVOICES]);
     const sort = useSort(setInvoices, [...invoices]);
 
     const { modalDelete, modalUpdate, setModalDelete, setModalUpdate } =
         useContext(ModalContext);
-
     const [_, hideUpdateModal] = modalManager(setModalUpdate);
 
+    const [column, setColumn, filter, startSearch] = useFilter(
+        INVOICES,
+        setInvoices
+    );
+
     useEffect(() => {
-        // обработка параметров строки запроса - загрузка страницы с выполненной фильтрацией
-        let regexp = new RegExp(startSearch, "g");
-        const filtered = invoices.filter(
+        const filtered = [...INVOICES].filter(
             (invoice) =>
-                invoice[column].toString().toLowerCase().search(regexp) !== -1
+                invoice[column]
+                    .toString()
+                    .toLowerCase()
+                    .search(new RegExp(startSearch, "g")) !== -1
         );
-        setInvoices(filtered);
-    }, []);
+        setInvoices([...filtered]);
+    }, [INVOICES]);
 
     return (
         <>
             <InteractionHeader
+                column={column}
                 setColumn={setColumn}
                 filter={filter}
                 info={[Info[1], Info[2]]}
                 params={startSearch}
-                INVOICE={Invoice}
-                column={column}
             />
             <InvoiceHeader sort={sort} info={Info[0]} />
             <InvoicesWrapper invoices={invoices} action={setInvoices} />
@@ -75,7 +69,7 @@ const Invoices = ({
                         <div className={classes.noorg__text}>
                             Накладная не выбрана
                         </div>
-                        <MyButton onClick={hideUpdateModal}>Закрыть</MyButton>
+                        <Button onClick={hideUpdateModal}>Закрыть</Button>
                     </div>
                 </Modal>
             )}
@@ -84,12 +78,7 @@ const Invoices = ({
 };
 Invoices.propTypes = {
     Info: PropTypes.array.isRequired,
-    invoices: PropTypes.array.isRequired,
-    setInvoices: PropTypes.func.isRequired,
-    startSearch: PropTypes.string,
-    column: PropTypes.string,
-    setColumn: PropTypes.func.isRequired,
-    filter: PropTypes.func.isRequired,
+    INVOICES: PropTypes.array.isRequired,
     deleteAction: PropTypes.func.isRequired,
 };
 

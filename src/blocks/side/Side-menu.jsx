@@ -1,6 +1,6 @@
-import classes from "./styles/side-menu.module.css";
-import MyLink from "../../UI/link/MyLink.jsx";
 import classNames from "classnames/bind";
+import Link from "../../UI/Link/Link.jsx";
+import classes from "./styles/side-menu.module.css";
 
 const SideMenu = ({ showCurtain, curtain, id }) => {
     const cx = classNames.bind(classes);
@@ -12,34 +12,31 @@ const SideMenu = ({ showCurtain, curtain, id }) => {
     return (
         <div onClick={showCurtain} className={curtainClassName}>
             <div className={classes.menu}>
-                <MyLink style={{ textDecoration: "none" }} path="/calculator">
+                <Link style={{ textDecoration: "none" }} path="/calculator">
                     Калькулятор налогов
-                </MyLink>
+                </Link>
             </div>
 
             <div className={classes.menu}>
-                <MyLink
+                <Link
                     style={{ textDecoration: "none" }}
                     path={`/counterparties/${id}`}
                 >
                     Контрагенты
-                </MyLink>
+                </Link>
             </div>
             <div className={classes.menu}>
-                <MyLink
-                    style={{ textDecoration: "none" }}
-                    path={`/sales/${id}`}
-                >
+                <Link style={{ textDecoration: "none" }} path={`/sales/${id}`}>
                     Продажи
-                </MyLink>
+                </Link>
             </div>
             <div className={classes.menu}>
-                <MyLink
+                <Link
                     style={{ textDecoration: "none" }}
                     path={`/purchases/${id}`}
                 >
                     Покупки
-                </MyLink>
+                </Link>
             </div>
         </div>
     );

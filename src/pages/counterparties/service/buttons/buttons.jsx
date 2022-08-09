@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import classes from "./styles/buttons.module.css";
-import MyButton from "../../../../UI/input/MyButton/MyButton.jsx";
 import { ModalContext } from "../../../../blocks/content/Main.jsx";
+import Button from "../../../../UI/input/Button/Button";
 import { modalManager } from "../../../../UI/modal/service/handlers/modal-control";
+import classes from "./styles/buttons.module.css";
 
 export default function Buttons() {
     const navigate = useNavigate();
@@ -21,11 +21,11 @@ export default function Buttons() {
     return (
         <>
             <div className={classes.buttons}>
-                <MyButton onClick={goBack}>Выбрать</MyButton>
-                <MyButton onClick={showCreateModal}>Добавить</MyButton>
-                <MyButton onClick={showReadModal}>Показать</MyButton>
-                <MyButton onClick={showUpdateModal}>Изменить</MyButton>
-                <MyButton onClick={showDeleteModal}>Удалить</MyButton>
+                <Button onClick={goBack}>Выбрать</Button>
+                <Button onClick={showCreateModal}>Добавить</Button>
+                <Button onClick={showReadModal}>Показать</Button>
+                <Button onClick={showUpdateModal}>Изменить</Button>
+                <Button onClick={showDeleteModal}>Удалить</Button>
             </div>
         </>
     );

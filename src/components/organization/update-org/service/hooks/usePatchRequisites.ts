@@ -2,15 +2,12 @@ import { useRef, MutableRefObject } from "react";
 import { ICounterpartyWithInputValueLength } from "../../../../../interfaces/counterparty";
 import { IEvent } from "../../../../../interfaces/event";
 import { IRequisiteView } from "../../../../../interfaces/requisite";
-
 import { isOrganization } from "../../../../../utils/isOrganization";
 import { Organizaton } from "../../../../../utils/OrganizationClass";
 import { assignRequisitesValues } from "../../../common/scripts/assignRequisitesValues";
-import { setInputLengthLimit } from "../handlers/setInputLengthLimit";
-import { setUpdateOrgValue } from "../handlers/setUpdateOrgValue";
+import { setUpdateOrgValue } from "../handlers/InputValueHandler";
 
 interface IusePatchRequisites {
-    getInputLengthLimit: (length: number) => void;
     getUpdateValue: (
         event: IEvent,
         inputField: string,
@@ -23,13 +20,13 @@ interface IusePatchRequisites {
 export function usePatchRequisites(
     org: ICounterpartyWithInputValueLength
 ): IusePatchRequisites {
-    const UpdatedOrg: ICounterpartyWithInputValueLength | null =
+    const UpdatedOrg =
         org &&
         new Organizaton(
+            org.UserId,
+            org.OrgId,
             org.id,
             org.createdAt,
-            org.UserId,
-            org?.OrgId,
             org.inn,
             org.opf,
             org.orgname,
@@ -39,9 +36,6 @@ export function usePatchRequisites(
         );
     const UpdateData = useRef(UpdatedOrg);
     const isORG = useRef(isOrganization(org));
-
-    const getInputLengthLimit = (length: number) =>
-        setInputLengthLimit(length, UpdateData);
 
     const getUpdateValue = (
         _event: IEvent,
@@ -53,7 +47,6 @@ export function usePatchRequisites(
         org !== null && assignRequisitesValues(org, isORG.current);
 
     return {
-        getInputLengthLimit,
         getUpdateValue,
         PatchFields,
         UpdateData,

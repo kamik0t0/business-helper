@@ -1,12 +1,12 @@
-import classes from "./styles/auth.module.css";
 import classNames from "classnames/bind";
-import Loader from "../../UI/Loader/Loader.jsx";
-import MyInput from "../../UI/input/MyInput/MyInput.jsx";
-import MyLink from "../../UI/link/MyLink.jsx";
-import { loaderStyle, submitStyle } from "./service/inlineStyles";
-import { useUser } from "./service/hooks/useUser";
-import { useForm } from "./service/hooks/useForm";
 import { useTypedSelector } from "../../redux/hooks/hooks";
+import TextField from "../../UI/input/TextField/TextField";
+import Link from "../../UI/Link/Link.jsx";
+import Loader from "../../UI/Loader/Loader.jsx";
+import { useForm } from "./service/hooks/useForm";
+import { useUser } from "./service/hooks/useUser";
+import { loaderStyle, submitStyle } from "./service/inlineStyles";
+import classes from "./styles/auth.module.css";
 
 export default function Registration() {
     const { reg, inputError } = useUser();
@@ -78,7 +78,7 @@ export default function Registration() {
                                         className={passVisibility}
                                     ></div>
                                 </div>
-                                <MyInput
+                                <TextField
                                     type="submit"
                                     value="Зарегистрироваться"
                                     style={submitStyle}
@@ -88,20 +88,20 @@ export default function Registration() {
 
                         <div className={classes.login_reg}>
                             <div className={classes.login_reg_registration}>
-                                <MyLink
+                                <Link
                                     style={{ color: "#0D1320" }}
                                     path="/login"
                                 >
                                     Авторизация
-                                </MyLink>
+                                </Link>
                             </div>
                             <div className={classes.login_reg_registration}>
-                                <MyLink
+                                <Link
                                     style={{ color: "#0D1320" }}
                                     path="/login/forgot"
                                 >
                                     Забыли пароль?
-                                </MyLink>
+                                </Link>
                             </div>
                         </div>
                     </form>

@@ -28,8 +28,8 @@ export function useUser() {
     const state = location.state as LocationState;
     const fromPage = state?.from?.pathname || "/";
     const search = state?.from?.search;
-    const [, , orgId, invoiceId] = fromPage.split("/");
-
+    // destination может быть либо InvoiceId либо createwaybill
+    const [, invoices, orgId, destination] = fromPage.split("/");
     // регистрация
     // -------------------------------------------------------------------------
     async function reg(
@@ -126,7 +126,6 @@ export function useUser() {
 
         if (USER != null) {
             const { payload: ORGS } = await dispatch(getOrgsByUserId(USER.id));
-
             if (typeof ORGS === "string") return setInputError(ORGS);
             // авторизация с возвратом на страницу
             if (orgId) {
@@ -143,18 +142,26 @@ export function useUser() {
                     getPurchasesByOrgId(+orgId)
                 )) as { payload: IInvoice[] };
 
-                // редирект к накладной
-                if (invoiceId) {
+                if (destination === undefined)
+                    return navigate(`${fromPage}${search}`);
+
+                // редирект к создаваемой накладной
+                if (destination === "createwaybill") {
+                    return navigate(`/${invoices}/${orgId}`, { replace: true });
+                }
+                // редирект к редактируемой накладной
+
+                if (typeof +destination === "number") {
                     const invoice: IInvoice | undefined = [
                         ...Sales,
                         ...Purchases,
-                    ].find((invoice) => invoice.id === +invoiceId);
+                    ].find((invoice) => invoice.id === +destination);
 
                     if (invoice) {
                         dispatch(setInvoice(invoice));
                     }
+                    return navigate(`${fromPage}`);
                 }
-                return navigate(`${fromPage}${search}`);
             }
         }
 

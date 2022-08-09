@@ -1,34 +1,23 @@
-export interface item {
-    highlight?: boolean;
-}
+import { IInvoicePosition, IInvoice } from "../interfaces/invoice";
+import { ICounterparty } from "../interfaces/counterparty";
 
-export function highlightPosition(
+export function highlight(
     itemIndex: number,
-    highlightedItem: item,
-    items: item[],
-    mutate?: boolean
-): item[] {
+    highlightedItem: IInvoicePosition | IInvoice | ICounterparty,
+    items: IInvoicePosition[] | IInvoice[] | ICounterparty[] | any
+): IInvoicePosition[] | IInvoice[] | ICounterparty[] | any {
     if (highlightedItem) {
         // выключить подсвеченный элемент
-        items.forEach((item: item, index: number) => {
+        items.forEach((item: any, index: number) => {
             if (item.highlight) {
-                let UnHighlightedItem;
-
-                if (mutate) {
-                    UnHighlightedItem = Object.assign(item, {
-                        highlight: false,
-                    });
-                } else {
-                    UnHighlightedItem = Object.assign({}, item, {
-                        highlight: false,
-                    });
-                }
-
+                const UnHighlightedItem = Object.assign({}, item, {
+                    highlight: false,
+                });
                 items[index] = UnHighlightedItem;
                 return;
             }
         });
-        // заменить элемент на его копию но highlight = true
+        // заменить на выделенный элемент
         items.splice(itemIndex, 1, highlightedItem);
     }
     // вернуть массив

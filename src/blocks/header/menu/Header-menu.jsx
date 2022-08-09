@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import classes from "./styles/header-menu.module.css";
-import { ContextBurger } from "../Header.jsx";
-import MyLink from "../../../UI/link/MyLink.jsx";
 import classNames from "classnames/bind";
+import React, { useContext } from "react";
+import Link from "../../../UI/Link/Link";
+import { ContextBurger } from "../Header.jsx";
+import classes from "./styles/header-menu.module.css";
 
 const HeaderMenu = () => {
     const { burger, showBurger } = useContext(ContextBurger);
@@ -14,7 +14,7 @@ const HeaderMenu = () => {
     return (
         <div onClick={showBurger} className={burgerClassName}>
             <div className={classes.header_option}>
-                <MyLink path="/">Главная</MyLink>
+                <Link path="/">Главная</Link>
             </div>
         </div>
     );

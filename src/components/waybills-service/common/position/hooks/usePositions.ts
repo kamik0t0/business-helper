@@ -1,35 +1,40 @@
 import { useCallback } from "react";
 import { IEvent } from "../../../../../interfaces/event";
-import { IInvoiceItem } from "../../../../../interfaces/invoice";
-import { useTypedSelector } from "../../../../../redux/hooks/hooks";
-import { InvoiceItem } from "../../../../../utils/InvoiceItemClass";
+import {
+    useTypedDispatch,
+    useTypedSelector,
+} from "../../../../../redux/hooks/hooks";
+import {
+    addInvoicePosition,
+    deleteInvoicePosition,
+} from "../../../../../redux/reducers/InvoiceSlice";
+import { createInvoiePosition } from "../../../../../utils/createInvoicePosition";
 
-export function usePositions(
-    positions: IInvoiceItem[],
-    setPositions: ([]) => any
-) {
-    const { InvoicePositionIndex } = useTypedSelector(
+export function usePositions() {
+    const dispatch = useTypedDispatch();
+    const { InvoicePositionIndex, InvoicePosition } = useTypedSelector(
         (state) => state.invoicesReducer
     );
 
-    const addPosition = useCallback(
-        (event: IEvent) => {
-            event.preventDefault();
-            const arr = positions;
-            arr.push(new InvoiceItem(false, null, arr.length + 1));
-            setPositions([...arr]);
-        },
-        [positions.length]
-    );
+    const addPosition = (event: IEvent) => {
+        event.preventDefault();
+        dispatch(
+            addInvoicePosition(
+                Object.assign({}, createInvoiePosition(), {
+                    item_number: InvoicePosition?.length || null,
+                })
+            )
+        );
+    };
 
     const deletePosition = useCallback(
         (event: IEvent) => {
             event.preventDefault();
-            const arr = [...positions];
-            InvoicePositionIndex && arr.splice(InvoicePositionIndex, 1);
-            setPositions([...arr]);
+            InvoicePosition != null &&
+                InvoicePositionIndex != null &&
+                dispatch(deleteInvoicePosition(InvoicePositionIndex));
         },
-        [InvoicePositionIndex, positions.length]
+        [InvoicePositionIndex, InvoicePosition?.length]
     );
 
     return [addPosition, deletePosition];

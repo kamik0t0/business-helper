@@ -1,9 +1,9 @@
-import classes from "./styles/position.module.css";
 import classNames from "classnames/bind";
-import MyInput from "../../../../UI/input/MyInput/MyInput.jsx";
 import PropTypes from "prop-types";
-import { usePosition } from "./hooks/usePositon";
+import TextField from "../../../../UI/input/TextField/TextField";
 import { toRU } from "../../../../utils/currencyFormat";
+import { usePosition } from "./hooks/usePositon";
+import classes from "./styles/position.module.css";
 
 const inputStyle = {
     display: "flex",
@@ -11,22 +11,12 @@ const inputStyle = {
     width: "100%",
 };
 
-export default function Position({
-    position,
-    positionIndex,
-    setPositions,
-    positions,
-}) {
-    const PositionAPI = usePosition(
-        position,
-        positionIndex,
-        setPositions,
-        positions
-    );
+export default function Position({ position, positionIndex }) {
+    const PositionAPI = usePosition(position, positionIndex);
 
-    const summ = position.getSumm();
-    const VAT = position.getNDS();
-    const total = position.getTotal();
+    const summ = toRU.format(position.summ);
+    const VAT = toRU.format(position.nds);
+    const total = toRU.format(position.total);
 
     const cx = classNames.bind(classes);
     const isHighlight = cx({
@@ -41,37 +31,35 @@ export default function Position({
                     {positionIndex + 1}
                 </div>
                 <div className={classes.position_nomenclature}>
-                    <MyInput
+                    <TextField
                         style={inputStyle}
                         defaultValue={"" || position.nomenclature}
-                        getValue={PositionAPI.getNomenclature}
+                        onChange={PositionAPI.getNomenclature}
                         type="text"
                     />
                 </div>
                 <div className={classes.position_quantity}>
-                    <MyInput
+                    <TextField
                         style={inputStyle}
                         defaultValue={+position.quantity || ""}
-                        getValue={PositionAPI.getQuantity}
+                        onChange={PositionAPI.getQuantity}
                         type="number"
                     />
                 </div>
                 <div className={classes.position_price}>
-                    <MyInput
+                    <TextField
                         style={inputStyle}
                         defaultValue={+position.price || ""}
-                        getValue={PositionAPI.getPrice}
+                        onChange={PositionAPI.getPrice}
                         type="number"
                     />
                 </div>
-                <div className={classes.position_summ}>{toRU.format(summ)}</div>
+                <div className={classes.position_summ}>{summ}</div>
                 <div className={classes.position_NDSprcnt}>
                     {position.nds_percent * 100}
                 </div>
-                <div className={classes.position_NDS}>{toRU.format(VAT)}</div>
-                <div className={classes.position_total}>
-                    {toRU.format(total)}
-                </div>
+                <div className={classes.position_NDS}>{VAT}</div>
+                <div className={classes.position_total}>{total}</div>
             </div>
         </>
     );
@@ -80,5 +68,4 @@ export default function Position({
 Position.propTypes = {
     positionIndex: PropTypes.number.isRequired,
     position: PropTypes.object.isRequired,
-    positions: PropTypes.array.isRequired,
 };

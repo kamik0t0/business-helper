@@ -1,14 +1,24 @@
+import { useEffect } from "react";
 import {
     getPurchaseItemsBySaleId,
     updatePurchaseByPurchaseId,
 } from "../../redux/actions/PurchasesAction";
-import UpdateInvoice from "../update-invoice/UpdateInvoice";
+import { useTypedSelector } from "../../redux/hooks/hooks";
+import InvoiceComponent from "../create-invoice/Invoice";
+import { useRequestInvoicePositions } from "../../components/waybills-service/common/hooks/useRequestInvoicePositions";
 
 export default function UpdatePurchase() {
+    const { Invoice } = useTypedSelector((state) => state.invoicesReducer);
+    const requestPositions = useRequestInvoicePositions(
+        getPurchaseItemsBySaleId
+    );
+
+    useEffect(() => {
+        requestPositions(Invoice.id);
+    }, []);
     return (
-        <UpdateInvoice
-            Info={["Поступление: изменение", "Продавец", "Purchase", "№"]}
-            requestInvoiceItemsAction={getPurchaseItemsBySaleId}
+        <InvoiceComponent
+            Info={["Поступление: изменение", "Продавец", "Purchase"]}
             updateAction={updatePurchaseByPurchaseId}
         />
     );

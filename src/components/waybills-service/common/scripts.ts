@@ -1,12 +1,12 @@
 import { IEvent } from "../../../interfaces/event";
-import { IInvoiceItem } from "../../../interfaces/invoice";
+import { IInvoice, IInvoicePosition } from "../../../interfaces/invoice";
 
-export function setInvoicePositionCalculations(
+export function assignEnteredPositionDataToInvoice(
     event: IEvent,
     index: number,
-    positions: IInvoiceItem[],
+    positions: IInvoicePosition[],
     prop: string
-): IInvoiceItem[] {
+): IInvoicePosition[] {
     if (prop === "nomenclature") {
         const value = event.target.value;
         positions[index][prop] = value as string;
@@ -17,13 +17,33 @@ export function setInvoicePositionCalculations(
     return positions;
 }
 
+export function calculateInvoicePositions(arr: IInvoicePosition[]) {
+    arr.forEach((item) => {
+        item.summ = item.quantity * item.price;
+        item.nds = item.summ * item.nds_percent;
+        item.total = item.summ + item.nds;
+    });
+    return arr;
+}
+
+export function assignInvoiceSummary(
+    newInvoice: IInvoice,
+    positions: IInvoicePosition[]
+) {
+    return Object.assign({}, newInvoice, {
+        summ: calculateInvoiceSummary(positions, "summ"),
+        nds: calculateInvoiceSummary(positions, "nds"),
+        total: calculateInvoiceSummary(positions, "total"),
+    });
+}
+
 // Подсчёт сумм по накладной и сохранение значения для отправки
 export const calculateInvoiceSummary = (
-    positions: IInvoiceItem[],
+    positions: IInvoicePosition[],
     field: string
 ): number =>
     positions.reduce(
-        (prev: number, item: IInvoiceItem) => prev + +item[field]!,
+        (prev: number, item: IInvoicePosition) => prev + +item[field]!,
         0
     );
 

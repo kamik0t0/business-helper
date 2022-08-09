@@ -1,4 +1,4 @@
-import MyInput from "../../UI/input/MyInput/MyInput.jsx";
+import TextField from "../../UI/input/TextField/TextField";
 import PropTypes from "prop-types";
 
 // получаем callback которые изменяют state в родительском компоненте
@@ -13,20 +13,19 @@ const CalcData = ({ classes, getIncome, getSalary }) => {
             <div className={classes.inputData}>
                 <div className={classes.incomes_block}>
                     <div className={classes.inputName}>Доходы: </div>
-                    <MyInput id="incomeLE" type="text" onChange={getIncome} />
+                    <TextField id="incomeLE" type="text" onChange={getIncome} />
                 </div>
 
                 <div className={classes.costs_block}>
                     <div className={classes.inputName}>Расходы: </div>
-                    <MyInput id="costs" type="text" />
+                    <TextField id="costs" type="text" />
                 </div>
 
                 <div className={classes.salary_block}>
                     <div className={classes.inputName}>в т.ч. зарплата: </div>
-                    <MyInput
+                    <TextField
                         id="salaryCosts"
                         type="text"
-                        className={classes.inputText}
                         onChange={getSalary}
                     />
                 </div>

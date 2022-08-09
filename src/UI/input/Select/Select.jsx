@@ -1,8 +1,17 @@
 import { memo } from "react";
 import classes from "./styles/my-select.module.css";
 
-const MySelect = memo(
-    ({ styleFieldName, style, name, options, func, column, ...props }) => {
+const Select = memo(
+    ({
+        styleFieldName,
+        style,
+        name,
+        options,
+        onChange,
+        onInput,
+        column,
+        ...props
+    }) => {
         return (
             <>
                 <div className={classes.fields__item}>
@@ -16,7 +25,8 @@ const MySelect = memo(
                         </div>
                     )}
                     <select
-                        onChange={func}
+                        onChange={onChange}
+                        onInput={onInput}
                         className={classes.fields__item_input}
                         style={styleFieldName}
                         {...props}
@@ -48,4 +58,4 @@ const MySelect = memo(
         );
     }
 );
-export default MySelect;
+export default Select;

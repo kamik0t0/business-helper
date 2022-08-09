@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IInvoice, IInvoiceItem } from "../../interfaces/invoice";
+import { IInvoice, IInvoicePosition } from "../../interfaces/invoice";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 
@@ -25,7 +25,7 @@ export const getSalesByOrgId = createAsyncThunk<
 });
 
 export const getSaleItemsBySaleId = createAsyncThunk<
-    IInvoiceItem[],
+    IInvoicePosition[],
     number,
     { rejectValue: string }
 >("sales/getSaleItems", async function (invoiceId, ThunkAPI) {
@@ -36,7 +36,6 @@ export const getSaleItemsBySaleId = createAsyncThunk<
                 { SaleId: invoiceId },
                 () => ThunkAPI.dispatch(setAuth(false))
             );
-
             return SaleItems;
         }
     } catch (error) {
@@ -74,7 +73,6 @@ export const updateSaleBySaleId = createAsyncThunk<
                         },
                     }
                 );
-
                 const responseInfo = await response.data;
 
                 if (responseInfo.updated) {
@@ -82,7 +80,6 @@ export const updateSaleBySaleId = createAsyncThunk<
 
                     await dispatch(getSalesByOrgId(OrgId));
                 }
-
                 return responseInfo.updated;
             }
         } catch (error) {
@@ -96,16 +93,9 @@ interface createInfo {
     message: string;
 }
 
-export const createSale = createAsyncThunk<
-    createInfo,
-    // добавить описание обязательны полей для обновляемой накладной
-    { org: { id: number }; counterparty: { id: number } },
-    IThunkConfig
->(
+export const createSale = createAsyncThunk<createInfo, IInvoice, IThunkConfig>(
     "sales/createSale",
     async function (sale, { rejectWithValue, dispatch, getState }) {
-        console.log(sale);
-
         try {
             if (process.env.REACT_APP_URL_SALES !== undefined) {
                 const response = await axios.post(
@@ -114,26 +104,21 @@ export const createSale = createAsyncThunk<
                     {
                         params: {
                             table: "sales",
-                            OrgId: sale.org.id,
-                            CounterpartyId: sale.counterparty.id,
+                            OrgId: sale.OrgId,
+                            CounterpartyId: sale.counterpartyId,
                         },
                     }
                 );
-
                 const responseInfo = await response.data;
-                console.log(responseInfo);
 
                 if (responseInfo.created) {
-                    const { id: OrgId } = getState().orgsReducer.org;
+                    const { id } = getState().orgsReducer.org;
 
-                    await dispatch(getSalesByOrgId(OrgId));
+                    await dispatch(getSalesByOrgId(id));
                 }
-
                 return responseInfo.created;
             }
         } catch (error) {
-            console.log(error);
-
             return rejectWithValue("Server Response Error");
         }
     }

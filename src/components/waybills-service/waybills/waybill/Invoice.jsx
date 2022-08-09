@@ -11,7 +11,7 @@ const Invoice = ({ index, invoice, invoices, action }) => {
         [classes.highlight]: invoice.highlight,
     });
 
-    const selectInvoice = useInvoice(index, action, invoice, invoices);
+    const [selectInvoice] = useInvoice(index, action, invoice, invoices);
 
     const parseDate = new Date(
         Date.parse(invoice.waybill_date)
@@ -38,8 +38,9 @@ const Invoice = ({ index, invoice, invoices, action }) => {
 };
 
 Invoice.propTypes = {
+    index: PropTypes.number.isRequired,
     invoice: PropTypes.object.isRequired,
-    invoices: PropTypes.array,
+    invoices: PropTypes.array.isRequired,
     action: PropTypes.func.isRequired,
 };
 

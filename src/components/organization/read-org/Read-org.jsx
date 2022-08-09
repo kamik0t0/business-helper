@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
+import Button from "../../../UI/input/Button/Button.jsx";
 import ShowRequisite from "./service/components/ShowRequisite.jsx";
 import { useReadOrg } from "./service/hooks/useReadOrg";
 import classes from "./styles/read-org.module.css";
@@ -21,8 +21,8 @@ export default function ReadOrg({ org }) {
                         );
                     })}
                     <div className={classes.buttons}>
-                        <MyButton onClick={hideModal}>EXCEL</MyButton>
-                        <MyButton onClick={hideModal}>Закрыть</MyButton>
+                        <Button onClick={hideModal}>EXCEL</Button>
+                        <Button onClick={hideModal}>Закрыть</Button>
                     </div>
                 </div>
             )}

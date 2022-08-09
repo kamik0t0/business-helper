@@ -1,8 +1,8 @@
 import classes from "./styles/auth.module.css";
 import classNames from "classnames/bind";
 import Loader from "../../UI/Loader/Loader.jsx";
-import MyInput from "../../UI/input/MyInput/MyInput.jsx";
-import MyLink from "../../UI/link/MyLink.jsx";
+import TextField from "../../UI/input/TextField/TextField";
+import Link from "../../UI/Link/Link.jsx";
 import { useForm } from "./service/hooks/useForm";
 import { useUser } from "./service/hooks/useUser";
 import { loaderStyle, submitStyle } from "./service/inlineStyles";
@@ -96,7 +96,7 @@ export default function Forgot() {
                                     className={passVisibility}
                                 ></div>
                             </div>
-                            <MyInput
+                            <TextField
                                 type="submit"
                                 value="Новый пароль"
                                 style={submitStyle}
@@ -106,17 +106,17 @@ export default function Forgot() {
 
                     <div className={classes.login_reg}>
                         <div className={classes.login_reg_registration}>
-                            <MyLink style={{ color: "#0D1320" }} path="/login">
+                            <Link style={{ color: "#0D1320" }} path="/login">
                                 Авторизация
-                            </MyLink>
+                            </Link>
                         </div>
                         <div className={classes.login_reg_registration}>
-                            <MyLink
+                            <Link
                                 style={{ color: "#0D1320" }}
                                 path="/login/registration"
                             >
                                 Регистрация
-                            </MyLink>
+                            </Link>
                         </div>
                     </div>
                 </form>

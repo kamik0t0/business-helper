@@ -1,9 +1,9 @@
 import { createPurchase } from "../../redux/actions/PurchasesAction";
-import CreateInvoice from "../create-invoice/Create-invoice";
+import InvoiceComponent from "../create-invoice/Invoice";
 
 export default function NewPurchase() {
     return (
-        <CreateInvoice
+        <InvoiceComponent
             Info={["Покупка товаров: создание", "Поставщик:", "№"]}
             createAction={createPurchase}
         />

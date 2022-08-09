@@ -1,8 +1,13 @@
-// интерфейс описывает разворот полей ввода реквизитов, например, ограничение по длине или допустимость ввода только цифр, и также содержит наименование поля
+// интерфейс описывает поле ввода реквизитов
 export interface IRequisiteView {
     value?: string | number | undefined | null | boolean;
     inputField: string;
     inputFieldName: string;
     isNumber: boolean;
-    inputValueLength?: number | undefined;
+    focus: boolean;
+    [prop: string]: string | number | null | undefined | boolean;
+}
+
+export interface IRequisiteViewWithLength extends IRequisiteView {
+    inputValueLength: number;
 }

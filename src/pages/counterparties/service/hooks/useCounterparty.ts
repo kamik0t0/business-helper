@@ -6,7 +6,7 @@ import {
     setCounterparty,
     setCounterparties,
 } from "../../../../redux/reducers/counterpartiesSlice";
-import { highlightPosition } from "../../../../utils/highlight";
+import { highlight } from "../../../../utils/highlight";
 import { ICounterparty } from "../../../../interfaces/counterparty";
 
 export const useCounterparty = (
@@ -32,7 +32,7 @@ export const useCounterparty = (
             )
         );
 
-        const counterparties = highlightPosition(
+        const counterparties = highlight(
             counterpartyIndex,
             highlightedCounterparty,
             [...COUNTERPARTIES]

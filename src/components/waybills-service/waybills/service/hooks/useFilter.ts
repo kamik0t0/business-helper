@@ -1,10 +1,10 @@
 import { useRef } from "react";
 import { throttle } from "../scripts/throttle";
-import { useSearchParams } from "react-router-dom";
 import { useFilterColumn } from "./useFilterColumn";
 import { IInvoice } from "../../../../../interfaces/invoice";
 import { IEvent } from "../../../../../interfaces/event";
 import { MutableRefObject } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export function useFilter(invoices: IInvoice[], setInvoices: ([]) => void) {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -15,7 +15,6 @@ export function useFilter(invoices: IInvoice[], setInvoices: ([]) => void) {
     let isCooldown: MutableRefObject<boolean> = useRef(false),
         savedArgs = useRef(),
         savedThis = useRef();
-
     // фильтрация
     function filterList(event: IEvent) {
         const inputValue = event.target.value.toString().toLowerCase();
@@ -32,6 +31,5 @@ export function useFilter(invoices: IInvoice[], setInvoices: ([]) => void) {
     }
 
     const filter = throttle(filterList, isCooldown, savedArgs, savedThis);
-
     return [column, setColumn, filter, startSearch];
 }

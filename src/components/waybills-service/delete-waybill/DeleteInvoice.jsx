@@ -1,6 +1,6 @@
 import classes from "./styles/detel-waybill.module.css";
 import Loader from "../../../UI/Loader/Loader.jsx";
-import MyButton from "../../../UI/input/MyButton/MyButton.jsx";
+import Button from "../../../UI/input/Button/Button.jsx";
 import { useTypedSelector } from "../../../redux/hooks/hooks";
 import { useDeleteWaybill } from "./hooks/useDeleteWaybill";
 
@@ -22,7 +22,7 @@ export default function DeleteInvoice({ deleteAction }) {
                     <div className={classes.noorg__text}>
                         Накладная не выбрана
                     </div>
-                    <MyButton onClick={hideDeleteModal}>Закрыть</MyButton>
+                    <Button onClick={hideDeleteModal}>Закрыть</Button>
                 </div>
             ) : (
                 <div className={classes.delete}>
@@ -33,8 +33,8 @@ export default function DeleteInvoice({ deleteAction }) {
                         <Loader />
                     ) : (
                         <div className={classes.buttons}>
-                            <MyButton onClick={deleteInvoice}>Да</MyButton>
-                            <MyButton onClick={hideDeleteModal}>Нет</MyButton>
+                            <Button onClick={deleteInvoice}>Да</Button>
+                            <Button onClick={hideDeleteModal}>Нет</Button>
                         </div>
                     )}
                 </div>

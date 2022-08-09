@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
 import { ModalContext } from "../../../../blocks/content/Main.jsx";
-import MyButton from "../../../../UI/input/MyButton/MyButton.jsx";
+import Button from "../../../../UI/input/Button/Button.jsx";
 import { modalManager } from "../../../../UI/modal/service/handlers/modal-control";
 import classes from "./styles/buttons.module.css";
 
@@ -16,10 +16,10 @@ const Buttons = () => {
     return useMemo(() => {
         return (
             <div className={classes.buttons}>
-                <MyButton onClick={showCreateModal}>Добавить</MyButton>
-                <MyButton onClick={showReadModal}>Показать</MyButton>
-                <MyButton onClick={showUpdateModal}>Изменить</MyButton>
-                <MyButton onClick={showDeleteModal}>Удалить</MyButton>
+                <Button onClick={showCreateModal}>Добавить</Button>
+                <Button onClick={showReadModal}>Показать</Button>
+                <Button onClick={showUpdateModal}>Изменить</Button>
+                <Button onClick={showDeleteModal}>Удалить</Button>
             </div>
         );
     }, []);
