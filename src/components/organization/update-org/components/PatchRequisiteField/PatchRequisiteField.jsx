@@ -4,38 +4,52 @@ import TextField from "../../../../../UI/input/TextField/TextField";
 import RequisiteFieldName from "../../../common/components/PatchRequisiteFieldName/PatchRequisiteFieldName";
 import { usePatchField } from "../../service/hooks/usePatchField";
 import classes from "./styles/patch-fields.module.css";
+import { useRef } from "react";
 
 const inlineButtonStyle = {
     width: "50px",
 };
 
-export default function PatchRequisiteField({ requisite, fieldIndex }) {
-    const [focus, prevValue, inputRef, Ok, Cancel, inputError, isInputError] =
-        usePatchField(requisite, fieldIndex);
+export default function PatchRequisiteField({ requisite }) {
+    const [
+        focus,
+        updateProp,
+        Cancel,
+        error,
+        inputValidation,
+        getValue,
+        saveOldValues,
+        switchField,
+    ] = usePatchField(requisite);
 
-    const defaultInputValue = prevValue.current?.innerHTML;
-
-    const actualRequisiteValue = inputRef.current?.value
-        ? inputRef.current.value
-        : requisite.value;
+    const RedactableDiv = useRef();
 
     return (
-        <div id={fieldIndex} className={classes.content}>
+        <div
+            ref={RedactableDiv}
+            onClick={switchField}
+            className={classes.content}
+        >
             <RequisiteFieldName fieldName={requisite.inputFieldName} />
             {focus ? (
                 <div className={classes.fields__item}>
                     <div className={classes.redactable}>
                         <TextField
-                            ref={inputRef}
                             type="text"
                             length={requisite.inputValueLength}
                             isNumber={requisite.isNumber}
-                            defaultValue={defaultInputValue}
-                            error={inputError}
-                            onChange={isInputError}
+                            defaultValue={requisite.value}
+                            error={error}
+                            onInput={inputValidation}
+                            onChange={getValue}
+                            onFocus={saveOldValues}
+                            focus={focus}
                         />
                         <div className={classes.buttons}>
-                            <Button onClick={Ok} style={inlineButtonStyle}>
+                            <Button
+                                onClick={updateProp}
+                                style={inlineButtonStyle}
+                            >
                                 Ок
                             </Button>
                             <Button onClick={Cancel}>Отмена</Button>
@@ -43,9 +57,7 @@ export default function PatchRequisiteField({ requisite, fieldIndex }) {
                     </div>
                 </div>
             ) : (
-                <div ref={prevValue} className={classes.requisit_value}>
-                    {actualRequisiteValue}
-                </div>
+                <div className={classes.requisit_value}>{requisite.value}</div>
             )}
         </div>
     );

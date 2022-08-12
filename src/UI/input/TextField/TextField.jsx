@@ -69,4 +69,5 @@ TextField.propTypes = {
     onClick: PropTypes.func,
     defaultValue: PropTypes.string,
     focus: PropTypes.bool,
+    error: PropTypes.bool,
 };

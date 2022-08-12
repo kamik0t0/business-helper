@@ -1,15 +1,15 @@
-import { useContext, useRef, MutableRefObject } from "react";
+import { useContext } from "react";
 import { ModalContext } from "../../../../../blocks/content/Main.jsx";
-import { ICounterpartyWithInputValueLength } from "../../../../../interfaces/counterparty";
+import { ICounterparty } from "../../../../../interfaces/counterparty";
 import { IEvent } from "../../../../../interfaces/event";
 import { useTypedDispatch } from "../../../../../redux/hooks/hooks";
 import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control";
 import { isAnyOrgValueUpdated } from "../handlers/isAnyOrgValueUpdated";
 
 export function usePatchOrg(
-    org: ICounterpartyWithInputValueLength,
-    action: any,
-    UpdateData: MutableRefObject<ICounterpartyWithInputValueLength>
+    currentOrgReqs: ICounterparty,
+    newOrgReqs: ICounterparty,
+    action: any
 ) {
     const dispatch = useTypedDispatch();
     const { setModalUpdate } = useContext(ModalContext);
@@ -17,9 +17,9 @@ export function usePatchOrg(
 
     async function update(event: IEvent) {
         event.preventDefault();
-        if (!isAnyOrgValueUpdated(UpdateData, org))
+        if (!isAnyOrgValueUpdated(newOrgReqs, currentOrgReqs))
             return alert("Измените хотя бы одно поле!");
-        await dispatch(action(UpdateData.current));
+        await dispatch(action(newOrgReqs));
         hideModal();
     }
 

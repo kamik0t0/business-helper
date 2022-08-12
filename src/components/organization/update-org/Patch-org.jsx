@@ -11,11 +11,7 @@ export const PatchContext = React.createContext();
 
 export default function PatchOrg({ org = null, action, isLoading }) {
     const PatchRequisitesAPI = usePatchRequisites(org);
-    const PatchAPI = usePatchOrg(org, action, PatchRequisitesAPI.UpdateData);
-    const PatchFuncs = {
-        getInputLengthLimit: PatchRequisitesAPI.getInputLengthLimit,
-        getUpdateValue: PatchRequisitesAPI.getUpdateValue,
-    };
+    const PatchAPI = usePatchOrg(org, PatchRequisitesAPI.newOrgReqs, action);
 
     return (
         <>
@@ -29,7 +25,9 @@ export default function PatchOrg({ org = null, action, isLoading }) {
                     {isLoading ? (
                         <Loader />
                     ) : (
-                        <PatchContext.Provider value={PatchFuncs}>
+                        <PatchContext.Provider
+                            value={PatchRequisitesAPI.getInputValue}
+                        >
                             <PatchFields
                                 PatchFields={PatchRequisitesAPI.PatchFields}
                             />

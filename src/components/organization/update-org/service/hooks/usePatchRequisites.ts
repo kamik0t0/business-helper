@@ -1,27 +1,13 @@
-import { useRef, MutableRefObject } from "react";
-import { ICounterpartyWithInputValueLength } from "../../../../../interfaces/counterparty";
-import { IEvent } from "../../../../../interfaces/event";
+import { useState } from "react";
+import { ICounterparty } from "../../../../../interfaces/counterparty";
 import { IRequisiteView } from "../../../../../interfaces/requisite";
 import { isOrganization } from "../../../../../utils/isOrganization";
 import { Organizaton } from "../../../../../utils/OrganizationClass";
 import { assignRequisitesValues } from "../../../common/scripts/assignRequisitesValues";
-import { setUpdateOrgValue } from "../handlers/InputValueHandler";
 
-interface IusePatchRequisites {
-    getUpdateValue: (
-        event: IEvent,
-        inputField: string,
-        newValue: string
-    ) => boolean;
-    PatchFields: IRequisiteView[] | null | boolean;
-    UpdateData: MutableRefObject<ICounterpartyWithInputValueLength | null>;
-}
-
-export function usePatchRequisites(
-    org: ICounterpartyWithInputValueLength
-): IusePatchRequisites {
-    const UpdatedOrg =
-        org &&
+export function usePatchRequisites(org: ICounterparty) {
+    const isORG = isOrganization(org);
+    const [newOrgReqs, setNewOrgReqs] = useState(
         new Organizaton(
             org.UserId,
             org.OrgId,
@@ -33,22 +19,27 @@ export function usePatchRequisites(
             org.address,
             org.kpp,
             org.director
-        );
-    const UpdateData = useRef(UpdatedOrg);
-    const isORG = useRef(isOrganization(org));
+        )
+    );
 
-    const getUpdateValue = (
-        _event: IEvent,
-        newValue: string,
-        inputField: string
-    ) => setUpdateOrgValue(newValue, inputField, UpdateData);
+    const updateProperty = (
+        field: string,
+        value: string | number | boolean
+    ): void =>
+        setNewOrgReqs((newOrgReqs: ICounterparty): any => ({
+            ...newOrgReqs,
+            [field]: value,
+        }));
+
+    const getInputValue = (value: string, inputField: string, length: number) =>
+        updateProperty(inputField, value);
 
     const PatchFields: IRequisiteView[] | null | boolean =
-        org !== null && assignRequisitesValues(org, isORG.current);
+        org !== null && assignRequisitesValues(newOrgReqs, isORG);
 
     return {
-        getUpdateValue,
+        getInputValue,
         PatchFields,
-        UpdateData,
+        newOrgReqs,
     };
 }

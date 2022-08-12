@@ -1,22 +1,12 @@
-import { MutableRefObject } from "react";
 import { IEvent } from "../../../../../interfaces/event";
-import { ICounterpartyWithInputValueLength } from "../../../../../interfaces/counterparty";
 
 // Присваивает обновленные значения полям объекта
-export const setUpdateOrgValue = (
-    newValue: string,
-    inputField: string,
-    Updated: MutableRefObject<ICounterpartyWithInputValueLength>
+export const doesPropertyShouldUpdate = (
+    value: string | number | undefined | null | boolean,
+    length: number
 ): boolean => {
-    // если нет ограничения по длине, то возвращается значение - true
-    if (!Updated.current?.inputValueLength) {
-        Updated.current[inputField] = newValue.trim();
-        return true;
-    }
-    // если есть ограничение по длине и новое значение не соответствует - false
-    if (newValue.length !== Updated.current.inputValueLength) return false;
-    // если все ок - true
-    Updated.current[inputField] = newValue.trim();
+    if (!length) return true;
+    else if (typeof value === "string" && value.length !== length) return false;
     return true;
 };
 

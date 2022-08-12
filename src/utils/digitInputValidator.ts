@@ -7,7 +7,7 @@ export const digitInputValidator = (event: IEvent, isNumber: boolean) => {
     event.target.value = inputData.toString().replace(/[^0-9]/g, "");
 };
 
-export const isError = (value: string, length: number) => {
+export const isError = (value: string, length: number): boolean => {
     if (typeof value === "string" && value.toString().length === length) {
         return false;
     } else {

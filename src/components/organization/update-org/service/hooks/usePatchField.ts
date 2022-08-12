@@ -1,69 +1,59 @@
-import { useRef, useContext, useState, useEffect } from "react";
-import { PatchContext } from "../../Patch-org";
-import { setInputFocus } from "../handlers/set-focus";
-import { IRequisiteViewWithLength } from "../../../../../interfaces/requisite";
+import { useContext, useState } from "react";
 import { IEvent } from "../../../../../interfaces/event";
-import { MutableRefObject } from "react";
-import { digitInputValidator } from "../../../../../utils/digitInputValidator";
+import { IRequisiteViewWithLength } from "../../../../../interfaces/requisite";
+import {
+    digitInputValidator,
+    isError,
+} from "../../../../../utils/digitInputValidator";
+import { PatchContext } from "../../Patch-org";
+import { doesPropertyShouldUpdate } from "../handlers/InputValueHandler";
 
-export function usePatchField(
-    requisite: IRequisiteViewWithLength,
-    fieldIndex: number
-) {
+export function usePatchField(requisite: IRequisiteViewWithLength) {
     const [focus, setFocus] = useState(false);
-    const [inputError, setInputError] = useState(false);
-    const { getUpdateValue, getInputLengthLimit } = useContext(PatchContext);
+    const [oldValue, setOldValue] = useState(requisite.value);
 
-    const inputRef: MutableRefObject<HTMLInputElement | undefined> = useRef();
-    const prevValue: MutableRefObject<HTMLInputElement | undefined> = useRef();
+    const getInputValue = useContext(PatchContext);
 
-    const isInputError = (event: IEvent) =>
-        // digitInputValidator(
-        //     requisite.value,
-        //     event,
-        //     requisite.isNumber,
-        //     requisite?.inputValueLength
-        // )
-        1 ? setInputError(true) : setInputError(false);
+    const error = isError(
+        requisite.value as string,
+        requisite?.inputValueLength
+    );
 
-    const Ok = (event: IEvent) => {
-        getInputLengthLimit(requisite.inputValueLength);
-        if (inputRef.current?.value !== undefined) {
-            getUpdateValue(
-                event,
-                inputRef.current?.value,
-                requisite.inputField
-            ) && setFocus(false);
-        }
-    };
+    const inputValidation = (event: IEvent) =>
+        digitInputValidator(event, requisite.isNumber);
+
+    const updateProp = () =>
+        doesPropertyShouldUpdate(requisite.value, requisite.inputValueLength) &&
+        setFocus(false);
 
     const Cancel = () => {
-        if (inputRef.current != undefined && prevValue.current != undefined) {
-            inputRef.current.value = requisite.value as string;
-            setFocus(false);
-        } else if (inputRef.current !== undefined) {
-            inputRef.current.value = requisite.value as string;
-            setFocus(false);
-        }
+        getInputValue(
+            oldValue,
+            requisite.inputField,
+            requisite?.inputValueLength
+        );
+        setFocus(false);
     };
-    // фокусировка на input
-    useEffect(() => {
-        const RedactableDiv: HTMLInputElement | null = document.getElementById(
-            fieldIndex.toString()
-        ) as HTMLInputElement;
 
-        const focusHandler = () => {
-            setFocus(true);
-        };
+    const getValue = (event: IEvent) =>
+        getInputValue(
+            event.target.value,
+            requisite.inputField,
+            requisite?.inputValueLength
+        );
 
-        RedactableDiv?.addEventListener("click", focusHandler);
+    const saveOldValues = () => setOldValue(requisite.value);
 
-        setInputFocus(RedactableDiv || null);
+    const switchField = () => setFocus(!focus);
 
-        return () => {
-            RedactableDiv?.removeEventListener("click", focusHandler);
-        };
-    }, [fieldIndex]);
-
-    return [focus, prevValue, inputRef, Ok, Cancel, inputError, isInputError];
+    return [
+        focus,
+        updateProp,
+        Cancel,
+        error,
+        inputValidation,
+        getValue,
+        saveOldValues,
+        switchField,
+    ];
 }
