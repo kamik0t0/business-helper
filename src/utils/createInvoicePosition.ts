@@ -1,6 +1,7 @@
+import { IInvoicePosition } from "../interfaces/invoice";
 import { InvoicePositionConstructor } from "./InvoiceItemClass";
 
-export const createInvoiePosition = () =>
+export const createInvoiePosition = (): IInvoicePosition =>
     new InvoicePositionConstructor(
         null,
         0,

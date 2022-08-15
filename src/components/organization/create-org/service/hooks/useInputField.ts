@@ -2,20 +2,24 @@ import {
     isError,
     digitInputValidator,
 } from "../../../../../utils/digitInputValidator";
-import { IRequisiteViewWithLength } from "../../../../../interfaces/requisite";
-import { IEvent } from "../../../../../interfaces/event";
+import { IRequisiteView } from "../../../../../interfaces/requisite";
 import { useContext } from "react";
 import { TextFieldContext } from "../../Create-org";
 
 export const useInputField = (
-    requisite: IRequisiteViewWithLength,
+    requisite: IRequisiteView,
     fieldIndex: number
-) => {
-    const { getInputIndex, getInputValue } = useContext(TextFieldContext);
+): [
+    () => void,
+    (event: React.ChangeEvent<HTMLInputElement>) => void,
+    boolean,
+    (event: React.ChangeEvent<HTMLInputElement>) => void
+] => {
+    const { getInputIndex, getInputValue } = useContext(TextFieldContext)!;
 
     const getIndex = () => getInputIndex(fieldIndex);
 
-    const getValue = (event: IEvent) =>
+    const getValue = (event: React.ChangeEvent<HTMLInputElement>) =>
         getInputValue(event, requisite.inputField, requisite?.inputValueLength);
 
     const error = isError(
@@ -23,7 +27,7 @@ export const useInputField = (
         requisite?.inputValueLength
     );
 
-    const inputValidation = (event: IEvent) =>
+    const inputValidation = (event: React.ChangeEvent<HTMLInputElement>) =>
         digitInputValidator(event, requisite.isNumber);
 
     return [getIndex, getValue, error, inputValidation];

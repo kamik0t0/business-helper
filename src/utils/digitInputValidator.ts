@@ -1,6 +1,7 @@
-import { IEvent } from "../interfaces/event";
-
-export const digitInputValidator = (event: IEvent, isNumber: boolean) => {
+export const digitInputValidator = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    isNumber: boolean
+) => {
     event.preventDefault();
     if (!isNumber) return;
     const inputData = event.target.value;

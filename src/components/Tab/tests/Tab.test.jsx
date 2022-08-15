@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Tab from "../Tab.jsx";
+import Tab from "../Tab";
 
 test("try react tests", () => {
     render(<Menu />);

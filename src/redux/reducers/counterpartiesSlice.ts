@@ -17,7 +17,7 @@ const counterpartiesSlice = createSlice({
     name: "counterparties",
     initialState,
     reducers: {
-        setCounterparty(state, action: PayloadAction<ICounterparty>) {
+        setCounterparty(state, action: PayloadAction<ICounterparty | null>) {
             state.counterparty = action.payload;
         },
         setCounterparties(state, action: PayloadAction<ICounterparty[]>) {

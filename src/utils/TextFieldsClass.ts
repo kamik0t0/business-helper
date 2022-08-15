@@ -1,32 +1,33 @@
-import {
-    IRequisiteView,
-    IRequisiteViewWithLength,
-} from "../interfaces/requisite";
+import { IRequisiteView } from "../interfaces/requisite";
+
+/* TODO: min length & max length for each class */
 
 export class orgname implements IRequisiteView {
     inputField: string;
     inputFieldName: string;
     isNumber: boolean;
+    inputValueLength: number;
     focus: boolean;
-    value?: string | number | boolean | null | undefined;
+    value: any;
 
     constructor(value: string | null) {
         this.inputField = "orgname";
         this.inputFieldName = "Наименование:";
-        this.value = value || null;
-        this.focus = false;
+        this.inputValueLength = 10;
         this.isNumber = false;
+        this.focus = false;
+        this.value = value || null;
     }
-    [prop: string]: string | number | boolean | null | undefined;
+    [prop: string]: string | number | boolean | null | undefined | boolean;
 }
 
-export class inn implements IRequisiteViewWithLength {
+export class inn implements IRequisiteView {
     inputField: string;
     inputFieldName: string;
     isNumber: boolean;
     inputValueLength: number;
     focus: boolean;
-    value?: string | number | boolean | null | undefined;
+    value: any;
 
     constructor(value: string | null) {
         this.inputField = "inn";
@@ -39,13 +40,13 @@ export class inn implements IRequisiteViewWithLength {
     [prop: string]: string | number | boolean | null | undefined;
 }
 
-export class IEinn implements IRequisiteViewWithLength {
+export class IEinn implements IRequisiteView {
     inputField: string;
     inputFieldName: string;
     isNumber: boolean;
     inputValueLength: number;
     focus: boolean;
-    value?: string | number | boolean | null | undefined;
+    value: any;
 
     constructor(value: string | null) {
         this.inputField = "inn";
@@ -58,13 +59,13 @@ export class IEinn implements IRequisiteViewWithLength {
     [prop: string]: string | number | boolean | null | undefined;
 }
 
-export class kpp implements IRequisiteViewWithLength {
+export class kpp implements IRequisiteView {
     inputField: string;
     inputFieldName: string;
     isNumber: boolean;
     inputValueLength: number;
     focus: boolean;
-    value?: string | number | boolean | null | undefined;
+    value: any;
 
     constructor(value: string | null) {
         this.inputField = "kpp";
@@ -82,15 +83,18 @@ export class address implements IRequisiteView {
     inputFieldName: string;
     isNumber: boolean;
     focus: boolean;
-    value?: string | number | boolean | null | undefined;
+    inputValueLength: number;
+    value: any;
 
     constructor(value: string | null) {
         this.inputField = "address";
         this.inputFieldName = "Адрес:";
+        this.inputValueLength = 10;
         this.value = value || null;
         this.focus = false;
         this.isNumber = false;
     }
+
     [prop: string]: string | number | boolean | null | undefined;
 }
 
@@ -99,11 +103,13 @@ export class director implements IRequisiteView {
     inputFieldName: string;
     isNumber: boolean;
     focus: boolean;
-    value?: string | number | boolean | null | undefined;
+    inputValueLength: number;
+    value: any;
 
     constructor(value: string | null) {
         this.inputField = "director";
         this.inputFieldName = "Руководитель:";
+        this.inputValueLength = 10;
         this.value = value || null;
         this.focus = false;
         this.isNumber = false;

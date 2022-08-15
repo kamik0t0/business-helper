@@ -1,9 +1,12 @@
 import { makeDefaultDate } from "../components/waybills-service/common/scripts";
 import { ICounterparty } from "../interfaces/counterparty";
-import { InvoiceConstructor } from "../interfaces/invoice";
+import { IInvoice, InvoiceConstructor } from "../interfaces/invoice";
 import { IOrg } from "../interfaces/organization";
 
-export const createInvoiceObject = (org: IOrg, cl: ICounterparty | null) =>
+export const createInvoiceObject = (
+    org: IOrg,
+    cl: ICounterparty | null
+): IInvoice =>
     new InvoiceConstructor(
         null,
         cl?.id || null,

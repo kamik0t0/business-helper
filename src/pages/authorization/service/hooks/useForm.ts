@@ -1,22 +1,20 @@
-import { useState, useRef } from "react";
-import { IEvent } from "../../../../interfaces/event";
-import { MutableRefObject } from "react";
+import React, { useState, useRef } from "react";
 
 export function useForm() {
-    const form: MutableRefObject<HTMLFormElement | undefined> = useRef();
-    const email: MutableRefObject<string> = useRef("Cap_NEMOx86@inbox.ru");
-    const pass: MutableRefObject<string> = useRef("kdkfjdilkmf2312387");
-    const repeatPass: MutableRefObject<string> = useRef("kdkfjdilkmf2312387");
+    const form = useRef<HTMLFormElement>(null!);
+    const email = useRef<string>("Cap_NEMOx86@inbox.ru");
+    const pass = useRef<string>("kdkfjdilkmf2312387");
+    const repeatPass = useRef<string>("kdkfjdilkmf2312387");
 
     const [isVisible, setIsVisible] = useState(false);
 
-    const setEmail = (event: IEvent) => {
+    const setEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
         email.current = event.target.value as string;
     };
-    const setPass = (event: IEvent) => {
+    const setPass = (event: React.ChangeEvent<HTMLInputElement>) => {
         pass.current = event.target.value as string;
     };
-    const setRepeatedPass = (event: IEvent) => {
+    const setRepeatedPass = (event: React.ChangeEvent<HTMLInputElement>) => {
         repeatPass.current = event.target.value as string;
     };
 

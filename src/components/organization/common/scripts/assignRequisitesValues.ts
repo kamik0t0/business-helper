@@ -7,7 +7,7 @@ import {
 
 // создается массив с реквизитами обновляемой организации
 export function assignRequisitesValues(
-    org: ICounterparty,
+    org: ICounterparty | null,
     isORG: boolean
 ): IRequisiteView[] | null {
     if (org === null) return null;

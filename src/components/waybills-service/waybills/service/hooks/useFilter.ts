@@ -1,12 +1,14 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { throttle } from "../scripts/throttle";
 import { useFilterColumn } from "./useFilterColumn";
 import { IInvoice } from "../../../../../interfaces/invoice";
-import { IEvent } from "../../../../../interfaces/event";
 import { MutableRefObject } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export function useFilter(invoices: IInvoice[], setInvoices: ([]) => void) {
+export function useFilter(
+    invoices: IInvoice[],
+    setInvoices: ([]) => void
+): any[] {
     const [searchParams, setSearchParams] = useSearchParams();
     const { column, setColumn } = useFilterColumn("cl_orgname");
 
@@ -16,7 +18,7 @@ export function useFilter(invoices: IInvoice[], setInvoices: ([]) => void) {
         savedArgs = useRef(),
         savedThis = useRef();
     // фильтрация
-    function filterList(event: IEvent) {
+    function filterList(event: React.ChangeEvent<HTMLInputElement>) {
         const inputValue = event.target.value.toString().toLowerCase();
 
         setSearchParams({ search: inputValue });

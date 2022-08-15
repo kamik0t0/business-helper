@@ -1,4 +1,3 @@
-import { IEvent } from "../../../../../interfaces/event";
 import { IInvoicePosition } from "../../../../../interfaces/invoice";
 import {
     useTypedDispatch,
@@ -23,7 +22,9 @@ export const usePosition = (
         (state) => state.invoicesReducer
     );
 
-    const getNomenclature = (event: IEvent): any => {
+    const getNomenclature = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ): any => {
         if (Invoice !== null && InvoicePosition !== null) {
             console.log(event);
 
@@ -36,7 +37,7 @@ export const usePosition = (
             dispatch(setInvoicePositions(positions));
         }
     };
-    const getQuantity = (event: IEvent): void => {
+    const getQuantity = (event: React.ChangeEvent<HTMLInputElement>): void => {
         if (Invoice !== null && InvoicePosition !== null) {
             const positions: IInvoicePosition[] = assignDataToInvoice(
                 event,
@@ -49,7 +50,7 @@ export const usePosition = (
         }
     };
 
-    const getPrice = (event: IEvent): void => {
+    const getPrice = (event: React.ChangeEvent<HTMLInputElement>): void => {
         if (Invoice !== null && InvoicePosition !== null) {
             const positions: IInvoicePosition[] = assignDataToInvoice(
                 event,

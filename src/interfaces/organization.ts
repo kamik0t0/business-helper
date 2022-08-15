@@ -18,6 +18,7 @@ export interface IOrg {
     opf: string;
     orgname: string;
     position: string;
+    OrgId: number | null;
 }
 
 export interface OrgsState {
@@ -29,5 +30,5 @@ export interface OrgsState {
 
 export interface IOrgWithInputValueLength extends IOrg {
     inputValueLength?: number;
-    [prop: string]: string | number | undefined;
+    [prop: string]: string | number | undefined | null;
 }

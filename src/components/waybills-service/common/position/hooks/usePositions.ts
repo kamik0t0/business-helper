@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { IEvent } from "../../../../../interfaces/event";
 import {
     useTypedDispatch,
     useTypedSelector,
@@ -16,7 +15,7 @@ export function usePositions() {
         (state) => state.invoicesReducer
     );
 
-    const addPosition = (event: IEvent) => {
+    const addPosition = (event: React.ChangeEvent<HTMLButtonElement>) => {
         event.preventDefault();
         dispatch(
             addInvoicePosition(
@@ -28,7 +27,7 @@ export function usePositions() {
     };
 
     const deletePosition = useCallback(
-        (event: IEvent) => {
+        (event: React.ChangeEvent<HTMLButtonElement>) => {
             event.preventDefault();
             InvoicePosition != null &&
                 InvoicePositionIndex != null &&

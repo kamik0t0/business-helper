@@ -1,4 +1,4 @@
-import authTokenInterceptor from "./axiosInterceptor.js";
+import authTokenInterceptor from "./axiosInterceptor";
 import axios from "axios";
 
 const instance = axios.create();
@@ -25,7 +25,7 @@ interface IParams {
 export const getData = async function (
     url: string,
     params: IParams,
-    callDispatch: object
+    callDispatch: () => void
 ): Promise<any> {
     try {
         await authTokenInterceptor(instance, callDispatch);

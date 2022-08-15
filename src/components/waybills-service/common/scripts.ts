@@ -1,8 +1,8 @@
-import { IEvent } from "../../../interfaces/event";
+import React from "react";
 import { IInvoice, IInvoicePosition } from "../../../interfaces/invoice";
 
 export function assignEnteredPositionDataToInvoice(
-    event: IEvent,
+    event: React.ChangeEvent<HTMLInputElement>,
     index: number,
     positions: IInvoicePosition[],
     prop: string
@@ -75,8 +75,5 @@ export function makeDate(): string {
     return `T${hour}:${minute}:${seconds}.000Z`;
 }
 
-export const getDate = (event: IEvent): string =>
+export const getDate = (event: React.ChangeEvent<HTMLInputElement>): string =>
     `${event.target.value}${makeDate()}`;
-
-export const getCounterpartyName = (event: IEvent): string =>
-    event.target.value as string;

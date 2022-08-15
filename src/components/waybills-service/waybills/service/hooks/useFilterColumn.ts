@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { IEvent } from "../../../../../interfaces/event";
+import React, { useState } from "react";
 
 export function useFilterColumn(initialColumn: string = "cl_orgname"): {
     column: string;
-    setColumn: (event: IEvent) => void;
+    setColumn: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 } {
-    const [column, setState] = useState(initialColumn);
-    const setColumn = (event: IEvent) => setState(event.target.value as string);
+    const [column, setState] = useState<string>(initialColumn);
+    const setColumn = (event: React.ChangeEvent<HTMLSelectElement>) =>
+        setState(event.target.value as string);
 
     return { column, setColumn };
 }

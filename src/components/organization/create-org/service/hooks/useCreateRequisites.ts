@@ -1,6 +1,5 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ICounterparty } from "../../../../../interfaces/counterparty";
-import { IEvent } from "../../../../../interfaces/event";
 import { IRequisiteView } from "../../../../../interfaces/requisite";
 import { Organizaton } from "../../../../../utils/OrganizationClass";
 import {
@@ -40,17 +39,17 @@ export function useCreateRequisites(UserId: number, OrgId: number | null) {
             [field]: value,
         }));
 
-    const switchInputFields = (event: IEvent) => {
+    const switchInputFields = (event: React.ChangeEvent<HTMLSelectElement>) => {
         if (event.target.value === "Общество с ограниченной ответственностью")
             setIsOrg(true);
         else setIsOrg(false);
     };
 
-    const updateOPFProperty = (event: IEvent) =>
+    const updateOPFProperty = (event: React.ChangeEvent<HTMLSelectElement>) =>
         updateProperty("opf", event.target.value);
 
     const getInputValue = (
-        event: IEvent,
+        event: React.ChangeEvent<HTMLInputElement>,
         inputField: string,
         inputFieldLength?: number
     ) => InputValueHandler(event, inputField, updateProperty, inputFieldLength);

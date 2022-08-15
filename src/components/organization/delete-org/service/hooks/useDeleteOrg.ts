@@ -1,20 +1,27 @@
 import { useContext } from "react";
-import { ModalContext } from "../../../../../blocks/content/Main.jsx";
+import { ModalContext } from "../../../../../blocks/content/Main";
 import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control";
 import { useTypedDispatch } from "../../../../../redux/hooks/hooks";
-import { IEvent } from "../../../../../interfaces/event";
 
-export function useDeleteOrg(id: number, action: (id: number) => any) {
+export function useDeleteOrg(
+    id: number | null | undefined,
+    action: (id: number) => any
+): [
+    (event: React.ChangeEvent<HTMLButtonElement>) => Promise<void>,
+    () => void
+] {
     const dispatch = useTypedDispatch();
-    const { setModalDelete } = useContext(ModalContext);
+    const { setModalDelete } = useContext(ModalContext)!;
     const [_, hideModal] = modalManager(setModalDelete);
 
-    async function deleteOrg(event: IEvent) {
+    const deleteOrg = async (
+        event: React.ChangeEvent<HTMLButtonElement>
+    ): Promise<void> => {
         event.preventDefault();
 
-        await dispatch(action(id));
+        id && (await dispatch(action(id)));
         hideModal();
-    }
+    };
 
     return [deleteOrg, hideModal];
 }

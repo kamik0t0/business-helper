@@ -1,11 +1,8 @@
-import { IInvoicePosition, IInvoice } from "../interfaces/invoice";
-import { ICounterparty } from "../interfaces/counterparty";
-
-export function highlight(
+export function highlight<Item>(
     itemIndex: number,
-    highlightedItem: IInvoicePosition | IInvoice | ICounterparty,
-    items: IInvoicePosition[] | IInvoice[] | ICounterparty[] | any
-): IInvoicePosition[] | IInvoice[] | ICounterparty[] | any {
+    highlightedItem: Item | null,
+    items: Item[]
+): Item[] {
     if (highlightedItem) {
         // выключить подсвеченный элемент
         items.forEach((item: any, index: number) => {

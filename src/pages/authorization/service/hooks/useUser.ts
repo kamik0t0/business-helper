@@ -1,6 +1,5 @@
-import { MutableRefObject, useState } from "react";
+import { MouseEvent, MutableRefObject, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { IEvent } from "../../../../interfaces/event";
 import { IInvoice } from "../../../../interfaces/invoice";
 import { getCounterpatiesByOrgId } from "../../../../redux/actions/CounterpartiesAction";
 import { getOrgsByUserId } from "../../../../redux/actions/OrgsAction";
@@ -33,7 +32,7 @@ export function useUser() {
     // регистрация
     // -------------------------------------------------------------------------
     async function reg(
-        event: IEvent,
+        event: MouseEvent<HTMLFormElement>,
         email: MutableRefObject<string>,
         pass: MutableRefObject<string>
     ) {
@@ -68,7 +67,7 @@ export function useUser() {
     // восстановление
     // -------------------------------------------------------------------------
     async function recover(
-        event: IEvent,
+        event: MouseEvent<HTMLFormElement>,
         email: MutableRefObject<string>,
         pass: MutableRefObject<string>,
         repeatPass: MutableRefObject<string>
@@ -105,7 +104,7 @@ export function useUser() {
     // авторизация
     // -------------------------------------------------------------------------
     async function auth(
-        event: IEvent,
+        event: MouseEvent<HTMLFormElement>,
         email: MutableRefObject<string>,
         pass: MutableRefObject<string>
     ) {

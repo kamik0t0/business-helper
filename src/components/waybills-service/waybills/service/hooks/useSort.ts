@@ -1,11 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
     sortByDate,
     sortByCounterparty,
     sortBySumm,
     sortById,
 } from "../scripts/sorts";
-import { IEvent } from "../../../../../interfaces/event";
 import { IInvoice } from "../../../../../interfaces/invoice";
 
 export function useSort(
@@ -14,8 +13,9 @@ export function useSort(
 ) {
     const [sortOrder, setSortOrder] = useState(false);
 
-    const sort = (event: IEvent) => {
-        const sortField: string = event.target.innerHTML;
+    const sort = (event: React.MouseEvent<HTMLDivElement>): void => {
+        const sortField: string = event.currentTarget.innerHTML;
+
         let sortedItems: IInvoice[];
         switch (sortField) {
             case "Дата":

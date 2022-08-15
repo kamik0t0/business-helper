@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Menu from "../Header-menu.jsx";
+import Menu from "../Header-menu.tsx/index";
 
 test("try react tests", () => {
     render(<Menu />);

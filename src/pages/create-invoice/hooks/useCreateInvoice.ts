@@ -1,12 +1,11 @@
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router";
 import { getDate } from "../../../components/waybills-service/common/scripts";
-import { IEvent } from "../../../interfaces/event";
 import { IInvoice } from "../../../interfaces/invoice";
 import { useTypedDispatch, useTypedSelector } from "../../../redux/hooks/hooks";
 import { setInvoice } from "../../../redux/reducers/InvoiceSlice";
 
-export function useCreateInvoice(action: (object: IInvoice) => any) {
+export function useCreateInvoice(action: any) {
     const dispatch = useTypedDispatch();
     const navigate = useNavigate();
     const { counterparty: cl } = useTypedSelector(
@@ -16,19 +15,25 @@ export function useCreateInvoice(action: (object: IInvoice) => any) {
         (state) => state.invoicesReducer
     );
 
-    const create = async (event: IEvent) => {
+    const create = async (event: React.ChangeEvent) => {
         event.preventDefault();
 
         if (Invoice !== null) {
-            const InvoiceToSend = Object.assign({}, Invoice, {
-                counterpartyId: cl?.id,
-                cl_orgname: cl?.orgname,
-                cl_inn: cl?.inn,
-                cl_kpp: cl?.kpp,
-                cl_opf: cl?.opf,
-                cl_address: cl?.address,
-                positions: InvoicePosition,
-            });
+            const InvoiceToSend: IInvoice = Object.assign(
+                {},
+                Invoice,
+                {
+                    positions: InvoicePosition,
+                },
+                cl !== null && {
+                    counterpartyId: cl?.id,
+                    cl_orgname: cl?.orgname,
+                    cl_inn: cl?.inn,
+                    cl_kpp: cl?.kpp,
+                    cl_opf: cl?.opf,
+                    cl_address: cl?.address,
+                }
+            );
 
             await dispatch(action(InvoiceToSend));
             dispatch(setInvoice(null));
@@ -37,7 +42,7 @@ export function useCreateInvoice(action: (object: IInvoice) => any) {
     };
 
     const setDate = useCallback(
-        (event: IEvent) =>
+        (event: React.ChangeEvent<HTMLInputElement>) =>
             dispatch(
                 setInvoice(
                     Object.assign({}, Invoice, {
@@ -50,7 +55,7 @@ export function useCreateInvoice(action: (object: IInvoice) => any) {
 
     const counterpartyName = () => {
         if (!cl?.orgname) return Invoice?.cl_orgname;
-        if (cl.orgname) return cl.orgname;
+        else return cl.orgname;
     };
 
     return {

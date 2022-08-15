@@ -43,12 +43,12 @@ export const getSaleItemsBySaleId = createAsyncThunk<
     }
 });
 
-interface IThunkConfig {
+export interface IThunkConfig {
     rejectValue: string;
     state: { orgsReducer: { org: { id: number } } };
 }
 
-interface patchInfo {
+export interface patchInfo {
     updated: boolean;
     message: string;
 }
@@ -88,7 +88,7 @@ export const updateSaleBySaleId = createAsyncThunk<
     }
 );
 
-interface createInfo {
+export interface createInfo {
     created: boolean;
     message: string;
 }

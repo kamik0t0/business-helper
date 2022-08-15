@@ -1,9 +1,7 @@
-import { IEvent } from "../../../../../interfaces/event";
-
 // Присваивает обновленные значения полям объекта
 export const doesPropertyShouldUpdate = (
     value: string | number | undefined | null | boolean,
-    length: number
+    length: string | number | boolean | null | undefined
 ): boolean => {
     if (!length) return true;
     else if (typeof value === "string" && value.length !== length) return false;
@@ -11,7 +9,7 @@ export const doesPropertyShouldUpdate = (
 };
 
 export const InputValueHandler = (
-    event: IEvent,
+    event: React.ChangeEvent<HTMLInputElement>,
     inputField: string,
     updateProperty: (field: string, value: string | number | boolean) => void,
     inputFieldLength?: number

@@ -1,19 +1,25 @@
-interface prev {
-    add: boolean;
-    show: boolean;
-}
+import { Dispatch, SetStateAction } from "react";
+import { IModalsState } from "../../../../blocks/content/hooks/useModals";
 
-export function modalManager(setModal: (prev: object) => void) {
+export function modalManager(setModal: Dispatch<SetStateAction<IModalsState>>) {
     function showModal() {
-        setModal((prev: prev): object => ({ ...prev, show: true }));
+        setModal(
+            (prev: IModalsState): IModalsState => ({ ...prev, show: true })
+        );
         setTimeout(() => {
-            setModal((prev: prev) => ({ ...prev, add: true }));
+            setModal(
+                (prev: IModalsState): IModalsState => ({ ...prev, add: true })
+            );
         }, 0);
     }
     function hideModal() {
-        setModal((prev: prev) => ({ ...prev, add: false }));
+        setModal(
+            (prev: IModalsState): IModalsState => ({ ...prev, add: false })
+        );
         setTimeout(() => {
-            setModal((prev: prev) => ({ ...prev, show: false }));
+            setModal(
+                (prev: IModalsState): IModalsState => ({ ...prev, show: false })
+            );
         }, 500);
     }
     return [showModal, hideModal];

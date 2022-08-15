@@ -5,12 +5,12 @@ import { useTypedDispatch } from "../../../../redux/hooks/hooks";
 import { setUserOrg } from "../../../../redux/reducers/orgsSlice";
 import { getOrgByOrgName } from "../scripts/getOrgIdOrgName";
 import { IOrg } from "../../../../interfaces/organization";
-import { IEvent } from "../../../../interfaces/event";
+import React from "react";
 
 export function useOffice(orgs: IOrg[]) {
     const dispatch = useTypedDispatch();
 
-    async function selectUserOrg(event: IEvent) {
+    async function selectUserOrg(event: React.ChangeEvent<HTMLSelectElement>) {
         event.preventDefault();
         const orgname = event.target.value as string;
         const [Org] = getOrgByOrgName(orgs, orgname);

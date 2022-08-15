@@ -1,59 +1,66 @@
 import { useContext, useState } from "react";
-import { IEvent } from "../../../../../interfaces/event";
-import { IRequisiteViewWithLength } from "../../../../../interfaces/requisite";
+import { IRequisiteView } from "../../../../../interfaces/requisite";
 import {
     digitInputValidator,
     isError,
 } from "../../../../../utils/digitInputValidator";
-import { PatchContext } from "../../Patch-org";
+import { PatchProvider } from "../../Patch-org";
 import { doesPropertyShouldUpdate } from "../handlers/InputValueHandler";
 
-export function usePatchField(requisite: IRequisiteViewWithLength) {
-    const [focus, setFocus] = useState(false);
+export function usePatchField(
+    requisite: IRequisiteView
+): [
+    boolean,
+    boolean,
+    () => void,
+    () => void,
+    () => void,
+    (event: React.ChangeEvent<HTMLInputElement>) => void,
+    (event: React.ChangeEvent<HTMLInputElement>) => void,
+    (event: React.ChangeEvent<HTMLInputElement>) => void
+] {
+    const [focus, setFocus] = useState<boolean>(false);
     const [oldValue, setOldValue] = useState(requisite.value);
 
-    const getInputValue = useContext(PatchContext);
+    const getInputValue = useContext(PatchProvider)!;
 
     const error = isError(
         requisite.value as string,
-        requisite?.inputValueLength
+        requisite?.inputValueLength as number
     );
 
-    const inputValidation = (event: IEvent) =>
+    const inputValidation = (event: React.ChangeEvent<HTMLInputElement>) =>
         digitInputValidator(event, requisite.isNumber);
 
     const updateProp = () =>
-        doesPropertyShouldUpdate(requisite.value, requisite.inputValueLength) &&
-        setFocus(false);
+        doesPropertyShouldUpdate(
+            requisite.value,
+            requisite?.inputValueLength!
+        ) && setFocus(false);
 
-    const Cancel = () => {
-        getInputValue(
-            oldValue,
-            requisite.inputField,
-            requisite?.inputValueLength
-        );
+    const cancel = () => {
+        getInputValue(oldValue, requisite.inputField);
         setFocus(false);
     };
 
-    const getValue = (event: IEvent) =>
-        getInputValue(
-            event.target.value,
-            requisite.inputField,
-            requisite?.inputValueLength
-        );
+    const getValue = (event: React.ChangeEvent<HTMLInputElement>) =>
+        getInputValue(event.target.value, requisite.inputField);
 
-    const saveOldValues = () => setOldValue(requisite.value);
+    const saveOldValues = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.target.select();
+        setOldValue(requisite.value);
+    };
 
-    const switchField = () => setFocus(!focus);
+    const switchDivToText = () => setFocus(!focus);
 
     return [
         focus,
-        updateProp,
-        Cancel,
         error,
+        updateProp,
+        cancel,
+        switchDivToText,
         inputValidation,
         getValue,
         saveOldValues,
-        switchField,
     ];
 }

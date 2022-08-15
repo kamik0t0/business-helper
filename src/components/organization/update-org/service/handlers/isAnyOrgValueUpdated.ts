@@ -5,11 +5,13 @@ import { ICounterparty } from "../../../../../interfaces/counterparty";
 */
 
 export function isAnyOrgValueUpdated(
-    Updated: ICounterparty,
-    USERORG: ICounterparty
+    Updated: ICounterparty | null,
+    USERORG: ICounterparty | null
 ): boolean {
     for (const field in Updated) {
-        if (Updated[field] !== USERORG[field]) return true;
+        if (USERORG !== null) {
+            if (Updated[field] !== USERORG[field]) return true;
+        }
     }
     return false;
 }

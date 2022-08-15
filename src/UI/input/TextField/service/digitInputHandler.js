@@ -1,4 +1,4 @@
-// Валидация ввода числовых значений и alert
+// deprecated
 export function digitInputHandler(
     isNumber,
     field,

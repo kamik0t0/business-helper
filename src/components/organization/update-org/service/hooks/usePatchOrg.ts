@@ -1,27 +1,28 @@
 import { useContext } from "react";
-import { ModalContext } from "../../../../../blocks/content/Main.jsx";
+import { ModalContext } from "../../../../../blocks/content/Main";
 import { ICounterparty } from "../../../../../interfaces/counterparty";
-import { IEvent } from "../../../../../interfaces/event";
 import { useTypedDispatch } from "../../../../../redux/hooks/hooks";
 import { modalManager } from "../../../../../UI/modal/service/handlers/modal-control";
 import { isAnyOrgValueUpdated } from "../handlers/isAnyOrgValueUpdated";
 
 export function usePatchOrg(
-    currentOrgReqs: ICounterparty,
-    newOrgReqs: ICounterparty,
+    currentOrgReqs: ICounterparty | null,
+    newOrgReqs: ICounterparty | null,
     action: any
 ) {
     const dispatch = useTypedDispatch();
-    const { setModalUpdate } = useContext(ModalContext);
+    const { setModalUpdate } = useContext(ModalContext)!;
     const [, hideModal] = modalManager(setModalUpdate);
 
-    async function update(event: IEvent) {
+    const update = async (
+        event: React.ChangeEvent<HTMLButtonElement>
+    ): Promise<void> => {
         event.preventDefault();
         if (!isAnyOrgValueUpdated(newOrgReqs, currentOrgReqs))
-            return alert("Измените хотя бы одно поле!");
+            alert("Измените хотя бы одно поле!");
         await dispatch(action(newOrgReqs));
         hideModal();
-    }
+    };
 
     return {
         update,

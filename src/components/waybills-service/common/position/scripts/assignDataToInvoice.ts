@@ -1,4 +1,3 @@
-import { IEvent } from "../../../../../interfaces/event";
 import { IInvoicePosition } from "../../../../../interfaces/invoice";
 import {
     assignEnteredPositionDataToInvoice,
@@ -6,7 +5,7 @@ import {
 } from "../../scripts";
 
 export function assignDataToInvoice(
-    event: IEvent,
+    event: React.ChangeEvent<HTMLInputElement>,
     positions: IInvoicePosition[],
     positionIndex: number,
     positionField: string
