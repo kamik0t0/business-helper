@@ -1,0 +1,9 @@
+services:
+    front:
+        image: business-front
+        command: sh -c "npm install && npm start"
+        ports:
+            - 3000:3000
+        working_dir: /business-front
+        volumes:
+            - ./:/business-front

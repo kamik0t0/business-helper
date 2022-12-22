@@ -25,7 +25,7 @@ const userSlice = createSlice({
             state.data.email = action.payload.email;
             state.data.id = action.payload.id;
             state.data.message = action.payload.message;
-            state.data.token = action.payload.token;
+            state.data.token = action.payload.access;
             state.isLoading = false;
         });
         builder.addCase(UserAPI.getUser.pending, (state, action) => {

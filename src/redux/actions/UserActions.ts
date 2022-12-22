@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { IUser } from "../../interfaces/user";
+import { instance } from "../../utils/axiosInstance";
 import { setAuth } from "../reducers/authSlice";
 
 export const getUser = createAsyncThunk<IUser, object, { rejectValue: string }>(
@@ -8,7 +8,7 @@ export const getUser = createAsyncThunk<IUser, object, { rejectValue: string }>(
     async function (user, { rejectWithValue, dispatch }) {
         try {
             if (process.env.REACT_APP_URL_AUTH !== undefined) {
-                const response = await axios.post(
+                const response = await instance.post(
                     process.env.REACT_APP_URL_AUTH,
                     user
                 );
@@ -23,13 +23,13 @@ export const getUser = createAsyncThunk<IUser, object, { rejectValue: string }>(
 );
 
 export const postUser = createAsyncThunk<
-    { regerror: string; registered: boolean } | string | undefined,
+    IUser,
     object,
     { rejectValue: string }
 >("user/postUser", async function (user, { rejectWithValue }) {
     try {
         if (process.env.REACT_APP_URL_REG !== undefined) {
-            const response = await axios.post(
+            const response = await instance.post(
                 process.env.REACT_APP_URL_REG,
                 user
             );
@@ -48,7 +48,7 @@ export const updateUser = createAsyncThunk<
 >("user/updateUser", async function (user, { rejectWithValue }) {
     try {
         if (process.env.REACT_APP_URL_RECOVER !== undefined) {
-            const response = await axios.post(
+            const response = await instance.post(
                 process.env.REACT_APP_URL_RECOVER,
                 user
             );

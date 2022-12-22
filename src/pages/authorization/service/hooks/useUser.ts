@@ -27,7 +27,7 @@ export function useUser() {
     const state = location.state as LocationState;
     const fromPage = state?.from?.pathname || "/";
     const search = state?.from?.search;
-    // destination может быть либо InvoiceId либо createwaybill
+    // destination может быть либо <InvoiceId> либо createwaybill
     const [, invoices, orgId, destination] = fromPage.split("/");
     // регистрация
     // -------------------------------------------------------------------------
@@ -56,12 +56,14 @@ export function useUser() {
         }
 
         const { payload: USER } = await dispatch(UserAPI.postUser(user));
+        console.log(USER);
+
+        if (typeof USER === "object")
+            localStorage.setItem("token", USER.access);
 
         typeof USER === "string" && setInputError(USER);
-        typeof USER === "object" &&
-            USER.regerror &&
-            setInputError(USER.regerror);
-        typeof USER === "object" && USER.registered && navigate("/login");
+        typeof USER === undefined && setInputError("Registration error");
+        typeof USER === "object" && USER.id && navigate("/login");
     }
 
     // восстановление
@@ -121,9 +123,15 @@ export function useUser() {
 
         // авторизация с редиректом на главную страницу
         const { payload: USER } = await dispatch(UserAPI.getUser(user));
+
+        if (typeof USER === "object" && "access" in USER)
+            localStorage.setItem("token", USER.access);
+
         if (typeof USER === "string") return setInputError(USER);
 
         if (USER != null) {
+            console.log(USER);
+
             const { payload: ORGS } = await dispatch(getOrgsByUserId(USER.id));
             if (typeof ORGS === "string") return setInputError(ORGS);
             // авторизация с возвратом на страницу
@@ -156,9 +164,8 @@ export function useUser() {
                         ...Purchases,
                     ].find((invoice) => invoice.id === +destination);
 
-                    if (invoice) {
-                        dispatch(setInvoice(invoice));
-                    }
+                    if (invoice) dispatch(setInvoice(invoice));
+
                     return navigate(`${fromPage}`);
                 }
             }

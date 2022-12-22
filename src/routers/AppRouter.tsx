@@ -17,6 +17,8 @@ import UpdateSale from "../pages/sales/Update-sale";
 import CalcForm from "../pages/Tax-calc/Tax-calc-form";
 import { useTypedSelector } from "../redux/hooks/hooks";
 
+// TODO: переписать роутинг на enum и массив приватных и публичных маршрутов
+
 const AppRouter: React.FC = () => {
     const isAuth = useTypedSelector((state) => state.authReducer.isAuth);
     const location = useLocation();

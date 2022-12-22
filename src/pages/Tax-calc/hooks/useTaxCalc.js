@@ -3,8 +3,8 @@ import { TaxCalculatorIE, TaxCalculatorLLC } from "../service/tax-calc-class";
 
 export function useTaxCalc() {
     const [tax, setTax] = useState({
-        salary: 0,
         income: 0,
+        salary: 0,
         taxIncomeIE: 0,
         burdenIncomeIE: 0,
         taxIncomeLLC: 0,
@@ -29,10 +29,6 @@ export function useTaxCalc() {
         });
     }
 
-    /* 
-        Попытка следовать парадигме иммутабельности объектов. Внутри функций calcIncome и calcSalary создаются соответствующие инстансы, добавляются (не изменяются существующие) новые поля со значениями и все это при помощи Object.assign возвращает каждый раз новый объект. Ранее введенные данные хранятся в стейте. В качестве альтернативы можно было бы создать инстанс класса и мутировать его при вводе данных, либо просто создать объект без класса и изменять его поля.
-    */
-
     // получение дохода для всех СНО
     function calcIncome(event) {
         let value = +event.target.value;
@@ -49,6 +45,7 @@ export function useTaxCalc() {
                 salary: tax.salary || 0,
             }
         );
+        // УСН доходы ООО
         const newBusinessDataLLC = Object.assign(
             {},
             new TaxCalculatorLLC(Number(process.env.REACT_APP_SALARYTAXRATE)),
@@ -57,7 +54,6 @@ export function useTaxCalc() {
                 salary: tax.salary || 0,
             }
         );
-        // УСН доходы ООО
         results(newBusinessDataIE, newBusinessDataLLC);
     }
 
@@ -77,6 +73,7 @@ export function useTaxCalc() {
                 income: tax.income || 0,
             }
         );
+        // УСН доходы ООО
         const newBusinessDataLLC = Object.assign(
             {},
             new TaxCalculatorLLC(Number(process.env.REACT_APP_SALARYTAXRATE)),
@@ -85,7 +82,6 @@ export function useTaxCalc() {
                 income: tax.income || 0,
             }
         );
-        // УСН доходы ООО
         results(newBusinessDataIE, newBusinessDataLLC);
     }
 

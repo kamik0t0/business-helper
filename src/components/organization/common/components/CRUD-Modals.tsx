@@ -23,7 +23,6 @@ const CRUDModals: React.FC = () => {
     const { org, isLoading: isCounterpartyLoading } = useTypedSelector(
         (state) => state.orgsReducer
     );
-    console.log(org);
 
     const OrgId = org?.id || null;
     // если находимся в личном кабинете - работаем с организацией пользователя, иначе - с контрагентами организации

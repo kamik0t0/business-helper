@@ -2,8 +2,9 @@ export interface IUser {
     id: number;
     email: string;
     auth: boolean;
+    access: string;
+    refresh: string;
     message: string;
-    token: string;
 }
 
 export interface IUserInitial {

@@ -13,8 +13,8 @@ export const getPurchasesByOrgId = createAsyncThunk<
         if (process.env.REACT_APP_URL_PURCHASES !== undefined) {
             const PURCHASES = await getData(
                 process.env.REACT_APP_URL_PURCHASES,
-                { OrgId: id },
-                () => dispatch(setAuth(false))
+                { OrgId: id }
+                // () => dispatch(setAuth(false))
             );
 
             return PURCHASES;
@@ -35,8 +35,8 @@ export const getPurchaseItemsBySaleId = createAsyncThunk<
             if (process.env.REACT_APP_URL_PURCHASES !== undefined) {
                 const PurchaseItems = await getData(
                     process.env.REACT_APP_URL_PURCHASES + "/" + invoiceId,
-                    { PurchaseId: invoiceId },
-                    () => dispatch(setAuth(false))
+                    { PurchaseId: invoiceId }
+                    // () => dispatch(setAuth(false))
                 );
 
                 return PurchaseItems;

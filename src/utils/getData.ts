@@ -1,7 +1,4 @@
-import authTokenInterceptor from "./axiosInterceptor";
-import axios from "axios";
-
-const instance = axios.create();
+import { instance } from "./axiosInstance";
 
 interface IParams {
     UserId?: string | number;
@@ -18,23 +15,18 @@ interface IParams {
  * @name getData
  * @param {string} url server endpoint
  * @param {object} params url params
- * @param {func} callDispatch state change callback
- * @return {Promise<array>} requested data array
+ * @returns {Promise<array>} requested data array
  */
 
 export const getData = async function (
     url: string,
-    params: IParams,
-    callDispatch: () => void
+    params: IParams
 ): Promise<any> {
     try {
-        await authTokenInterceptor(instance, callDispatch);
         const Data = await instance.get(url, { params });
         return Data.data;
     } catch (error) {
         if (error instanceof Error) {
-            console.log(error);
-
             throw new Error(error.message);
         } else {
             throw new Error("Get Data error");

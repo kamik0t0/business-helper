@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { IInvoice, IInvoicePosition } from "../../interfaces/invoice";
+import { instance } from "../../utils/axiosInstance";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 
@@ -11,15 +11,14 @@ export const getSalesByOrgId = createAsyncThunk<
 >("sales/getSales", async function (id, { rejectWithValue, dispatch }) {
     try {
         if (process.env.REACT_APP_URL_SALES !== undefined) {
-            const SALES = await getData(
-                process.env.REACT_APP_URL_SALES,
-                { OrgId: id },
-                () => dispatch(setAuth(false))
-            );
+            const SALES = await getData(process.env.REACT_APP_URL_SALES, {
+                OrgId: id,
+            });
 
             return SALES;
         }
     } catch (error) {
+        dispatch(setAuth(false));
         return rejectWithValue("Server Response Error");
     }
 });
@@ -33,12 +32,12 @@ export const getSaleItemsBySaleId = createAsyncThunk<
         if (process.env.REACT_APP_URL_SALES !== undefined) {
             const SaleItems = await getData(
                 process.env.REACT_APP_URL_SALES + "/" + invoiceId,
-                { SaleId: invoiceId },
-                () => ThunkAPI.dispatch(setAuth(false))
+                { SaleId: invoiceId }
             );
             return SaleItems;
         }
     } catch (error) {
+        ThunkAPI.dispatch(setAuth(false));
         return ThunkAPI.rejectWithValue("Server Response Error");
     }
 });
@@ -63,7 +62,7 @@ export const updateSaleBySaleId = createAsyncThunk<
     async function (sale, { rejectWithValue, dispatch, getState }) {
         try {
             if (process.env.REACT_APP_URL_SALES !== undefined) {
-                const response = await axios.patch(
+                const response = await instance.patch(
                     process.env.REACT_APP_URL_SALES + "/" + sale.id,
                     sale,
                     {
@@ -83,6 +82,7 @@ export const updateSaleBySaleId = createAsyncThunk<
                 return responseInfo.updated;
             }
         } catch (error) {
+            dispatch(setAuth(false));
             return rejectWithValue("Server Response Error");
         }
     }
@@ -98,7 +98,7 @@ export const createSale = createAsyncThunk<createInfo, IInvoice, IThunkConfig>(
     async function (sale, { rejectWithValue, dispatch, getState }) {
         try {
             if (process.env.REACT_APP_URL_SALES !== undefined) {
-                const response = await axios.post(
+                const response = await instance.post(
                     process.env.REACT_APP_URL_SALES,
                     sale,
                     {
@@ -119,6 +119,7 @@ export const createSale = createAsyncThunk<createInfo, IInvoice, IThunkConfig>(
                 return responseInfo.created;
             }
         } catch (error) {
+            dispatch(setAuth(false));
             return rejectWithValue("Server Response Error");
         }
     }
@@ -139,7 +140,7 @@ export const deleteSaleBySaleId = createAsyncThunk<
     async function (id, { rejectWithValue, dispatch, getState }) {
         try {
             if (process.env.REACT_APP_URL_SALES !== undefined) {
-                const response = await axios.delete(
+                const response = await instance.delete(
                     process.env.REACT_APP_URL_SALES,
                     {
                         params: {
@@ -149,18 +150,16 @@ export const deleteSaleBySaleId = createAsyncThunk<
                 );
 
                 const responseInfo = await response.data;
-                console.log(responseInfo);
 
                 if (responseInfo.deleted) {
                     const { id: OrgId } = getState().orgsReducer.org;
-                    console.log(OrgId);
-
                     await dispatch(getSalesByOrgId(OrgId));
                 }
 
                 return responseInfo.deleted;
             }
         } catch (error) {
+            dispatch(setAuth(false));
             return rejectWithValue("Server Response Error");
         }
     }

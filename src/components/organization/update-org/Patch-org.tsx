@@ -1,5 +1,4 @@
 import React from "react";
-import { ICounterparty } from "../../../interfaces/counterparty";
 import Button from "../../../UI/input/Button/Button";
 import Loader from "../../../UI/Loader/Loader";
 import PatchFields from "../common/components/PatchRequisiteFieldsWrapper";

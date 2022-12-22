@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { ICounterparty } from "../../interfaces/counterparty";
+import { instance } from "../../utils/axiosInstance";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 
@@ -15,12 +15,13 @@ export const getCounterpatiesByOrgId = createAsyncThunk<
             if (process.env.REACT_APP_URL_COUNTERPARTY !== undefined) {
                 const COUNTERPARTIES = await getData(
                     process.env.REACT_APP_URL_COUNTERPARTY,
-                    { OrgId: id },
-                    () => dispatch(setAuth(false))
+                    { OrgId: id }
+                    // () => dispatch(setAuth(false))
                 );
                 return COUNTERPARTIES;
             }
         } catch (error) {
+            dispatch(setAuth(false));
             return rejectWithValue("Server Response Error");
         }
     }
@@ -47,7 +48,7 @@ export const postCounterparty = createAsyncThunk<
     async function (counterparty, { rejectWithValue, dispatch, getState }) {
         try {
             if (process.env.REACT_APP_URL_COUNTERPARTY !== undefined) {
-                const response = await axios.post(
+                const response = await instance.post(
                     process.env.REACT_APP_URL_COUNTERPARTY,
                     counterparty,
                     {
@@ -65,6 +66,7 @@ export const postCounterparty = createAsyncThunk<
                 return responseInfo.insertId;
             }
         } catch (error) {
+            dispatch(setAuth(false));
             return rejectWithValue("Server Response Error");
         }
     }
@@ -84,7 +86,7 @@ export const deleteCounterparty = createAsyncThunk<
     async function (counterpartyId, { rejectWithValue, dispatch, getState }) {
         try {
             if (process.env.REACT_APP_URL_COUNTERPARTY !== undefined) {
-                const response = await axios.delete(
+                const response = await instance.delete(
                     process.env.REACT_APP_URL_COUNTERPARTY,
                     {
                         params: {
@@ -101,6 +103,7 @@ export const deleteCounterparty = createAsyncThunk<
                 }
             }
         } catch (error) {
+            dispatch(setAuth(false));
             return rejectWithValue("Server Response Error");
         }
     }
@@ -120,7 +123,7 @@ export const patchCounterparty = createAsyncThunk<
     async function (counterparty, { rejectWithValue, dispatch, getState }) {
         try {
             if (process.env.REACT_APP_URL_COUNTERPARTY !== undefined) {
-                const response = await axios.patch(
+                const response = await instance.patch(
                     process.env.REACT_APP_URL_COUNTERPARTY,
                     counterparty,
                     {
@@ -138,6 +141,7 @@ export const patchCounterparty = createAsyncThunk<
                 return responseInfo.insertId;
             }
         } catch (error) {
+            dispatch(setAuth(false));
             return rejectWithValue("Server Response Error");
         }
     }

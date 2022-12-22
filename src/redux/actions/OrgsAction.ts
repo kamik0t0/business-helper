@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { IOrg } from "../../interfaces/organization";
 import { getData } from "../../utils/getData";
 import { setAuth } from "../reducers/authSlice";
 import { setUserOrg } from "../reducers/orgsSlice";
+import { instance } from "../../utils/axiosInstance";
 
 export const getOrgsByUserId = createAsyncThunk<
     IOrg[],
@@ -14,13 +14,12 @@ export const getOrgsByUserId = createAsyncThunk<
         if (process.env.REACT_APP_URL_PRIVATE_OFFICE !== undefined) {
             const ORGS = await getData(
                 process.env.REACT_APP_URL_PRIVATE_OFFICE,
-                { UserId: id },
-                () => dispatch(setAuth(false))
+                { UserId: id }
             );
-
             return ORGS;
         }
     } catch (error) {
+        dispatch(setAuth(false));
         return rejectWithValue("Server Response Error");
     }
 });
@@ -44,7 +43,7 @@ export const postOrganization = createAsyncThunk<
     async function (organization, { rejectWithValue, dispatch, getState }) {
         try {
             if (process.env.REACT_APP_URL_PRIVATE_OFFICE !== undefined) {
-                const response = await axios.post(
+                const response = await instance.post(
                     process.env.REACT_APP_URL_PRIVATE_OFFICE,
                     organization,
                     {
@@ -52,6 +51,7 @@ export const postOrganization = createAsyncThunk<
                             table: "Orgs",
                             foreignKey: "UserId",
                         },
+                        withCredentials: true,
                     }
                 );
                 const responseInfo = await response.data;
@@ -64,6 +64,7 @@ export const postOrganization = createAsyncThunk<
                 return responseInfo.insertId;
             }
         } catch (error) {
+            dispatch(setAuth(false));
             return rejectWithValue("Server Response Error");
         }
     }
@@ -83,7 +84,7 @@ export const deleteOrganization = createAsyncThunk<
     async function (OrgId, { rejectWithValue, dispatch, getState }) {
         try {
             if (process.env.REACT_APP_URL_PRIVATE_OFFICE !== undefined) {
-                const response = await axios.delete(
+                const response = await instance.delete(
                     process.env.REACT_APP_URL_PRIVATE_OFFICE,
                     {
                         params: {
@@ -102,6 +103,7 @@ export const deleteOrganization = createAsyncThunk<
                 }
             }
         } catch (error) {
+            dispatch(setAuth(false));
             return rejectWithValue("Server Response Error");
         }
     }
@@ -123,7 +125,7 @@ export const patchOrganization = createAsyncThunk<
             if (process.env.REACT_APP_URL_PRIVATE_OFFICE !== undefined) {
                 console.log(organization);
 
-                const response = await axios.patch(
+                const response = await instance.patch(
                     process.env.REACT_APP_URL_PRIVATE_OFFICE,
                     organization,
                     {
@@ -142,6 +144,7 @@ export const patchOrganization = createAsyncThunk<
                 return responseInfo.insertId;
             }
         } catch (error) {
+            dispatch(setAuth(false));
             return rejectWithValue("Server Response Error");
         }
     }
